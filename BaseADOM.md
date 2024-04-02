@@ -6,7 +6,7 @@ USE BADOM;
 CREATE TABLE administradores(
 	id_administrador INT PRIMARY KEY AUTO_INCREMENT,
 	correo_administrador VARCHAR(100) UNIQUE NOT NULL,
-	clave_administrador VARCHAR(64) UNIQUE NOT NULL
+	clave_administrador VARCHAR(64) NOT NULL
 );
 
 CREATE TABLE departamentos(
@@ -27,7 +27,7 @@ CREATE TABLE aspirantes(
 	id_aspirante INT PRIMARY KEY AUTO_INCREMENT,
 	nombre_aspirante VARCHAR(30) NOT NULL,
 	apellido_aspirante VARCHAR(30) NOT NULL,
-	correo_aspirante VARCHAR(50) NOT NULL,
+	correo_aspirante VARCHAR(50) UNIQUE NOT NULL,
 	clave_aspirante VARCHAR(64) NOT NULL,
 	fecha_nacimiento DATE NOT NULL,
 	genero_aspirante ENUM('Hombre','Mujer') NOT NULL,
@@ -70,9 +70,9 @@ CREATE TABLE areas_laborales(
 CREATE TABLE curriculum_aspirantes(
 	id_curriculum INT PRIMARY KEY AUTO_INCREMENT,
 	imagen_aspirante VARCHAR(200),
-	telefono_fijo VARCHAR(9) NOT NULL,
-	telefono_movil VARCHAR(9) NOT NULL,
-	correo_aspirante VARCHAR(50) NOT NULL,
+	telefono_fijo VARCHAR(9) UNIQUE NOT NULL,
+	telefono_movil VARCHAR(9) UNIQUE NOT NULL,
+	correo_aspirante VARCHAR(50) UNIQUE NOT NULL,
 	id_aspirante INT NOT NULL,
 	CONSTRAINT fk_aspirante_cv
 	FOREIGN KEY (id_aspirante)
@@ -81,13 +81,26 @@ CREATE TABLE curriculum_aspirantes(
 
 CREATE TABLE estudios_aspirantes(
 	id_estudio INT PRIMARY KEY AUTO_INCREMENT,
-	titulo_estudio VARCHAR(60) NOT NULL,
+	titulo_estudio VARCHAR(70) NOT NULL,
 	id_grado INT NOT NULL,
+	fecha_finalizacion DATE NOT NULL,
+	institucion_estudio VARCHAR(70) NOT NULL,
 	id_curriculum INT NOT NULL,
 	CONSTRAINT fk_grado_estudio
 	FOREIGN KEY (id_grado)
 	REFERENCES grados_academicos(id_grado),
 	CONSTRAINT fk_curriculum_estudio
+	FOREIGN KEY (id_curriculum)
+	REFERENCES curriculum_aspirantes(id_curriculum)
+);
+
+CREATE TABLE certificados_aspirantes(
+	id_certificado INT PRIMARY KEY AUTO_INCREMENT,
+	titulo_certificado VARCHAR(70) NOT NULL,
+	institucion_certificado VARCHAR(70) NOT NULL,
+	fecha_finalizacion DATE NOT NULL,
+	id_curriculum INT NOT NULL,
+	CONSTRAINT fk_curriculum_certif
 	FOREIGN KEY (id_curriculum)
 	REFERENCES curriculum_aspirantes(id_curriculum)
 );
@@ -109,12 +122,32 @@ CREATE TABLE idiomas_aspirantes(
 	id_parler INT PRIMARY KEY AUTO_INCREMENT,
 	nivel_idioma ENUM('Básico', 'Intermedio', 'Avanzado') NOT NULL,
 	id_idioma INT NOT NULL,
+	id_curriculum INT NOT NULL,
 	CONSTRAINT fk_idioma_parle
 	FOREIGN KEY (id_idioma)
-	REFERENCES idiomas(id_idioma)
+	REFERENCES idiomas(id_idioma),
+	CONSTRAINT fk_curriculum_langue
+	FOREIGN KEY (id_curriculum)
+	REFERENCES curriculum_aspirantes(id_curriculum)
 );
 
 CREATE TABLE habilidades_aspirantes(
 	id_habilidad INT PRIMARY KEY AUTO_INCREMENT,
-	nombre_habilidad VARCHAR(30) NOT NULL
+	nombre_habilidad VARCHAR(30) NOT NULL,
+	id_curriculum INT NOT NULL,
+	CONSTRAINT fk_curriculum_habil
+	FOREIGN KEY (id_curriculum)
+	REFERENCES curriculum_aspirantes(id_curriculum)
+);
+
+CREATE TABLE referencias_aspirantes(
+	id_referencia INT PRIMARY KEY AUTO_INCREMENT,
+	nombre_referencia VARCHAR(40) NOT NULL,
+	apellido_referencia VARCHAR(40) NOT NULL,
+	puesto_trabajo VARCHAR(50) NOT NULL,
+	telefono_referencia VARCHAR(9) UNIQUE NOT NULL,
+	id_curriculum INT NOT NULL,
+	CONSTRAINT fk_curriculum_refer
+	FOREIGN KEY (id_curriculum)
+	REFERENCES curriculum_aspirantes(id_curriculum)
 );
