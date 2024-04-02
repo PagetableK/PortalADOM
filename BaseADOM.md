@@ -27,7 +27,7 @@ CREATE TABLE aspirantes(
 	id_aspirante INT PRIMARY KEY AUTO_INCREMENT,
 	nombre_aspirante VARCHAR(30) NOT NULL,
 	apellido_aspirante VARCHAR(30) NOT NULL,
-	correo_aspirante VARCHAR(30) NOT NULL,
+	correo_aspirante VARCHAR(50) NOT NULL,
 	clave_aspirante VARCHAR(64) NOT NULL,
 	fecha_nacimiento DATE NOT NULL,
 	genero_aspirante ENUM('Hombre','Mujer') NOT NULL,
@@ -48,36 +48,73 @@ CREATE TABLE instituciones(
 	nombre_institucion VARCHAR(100) NOT NULL 
 );
 
-CREATE TABLE areas_laborales(
-	id_area INT PRIMARY KEY AUTO_INCREMENT,
-	nombre_area VARCHAR(60) NOT NULL 
-);
-
-CREATE TABLE rubros_empresas(
-	id_rubro INT PRIMARY KEY AUTO_INCREMENT,
-	nombre_rubro VARCHAR(60) NOT NULL 
-);
-
 CREATE TABLE idiomas(
 	id_idioma INT PRIMARY KEY AUTO_INCREMENT,
 	nombre_idioma VARCHAR(30) NOT NULL 
 );
 
-CREATE TABLE curriculum_aspirante(
-	id_curriculum INT PRIMARY KEY AUTO_INCREMENT,
-	id_aspirante INT NOT NULL,
-	
+CREATE TABLE rubros_empresas(
+	id_rubro INT PRIMARY KEY AUTO_INCREMENT,
+	nombre_rubro VARCHAR(40) NOT NULL
 );
 
-CREATE TABLE estudios_aspirante(
+CREATE TABLE areas_laborales(
+	id_area INT PRIMARY KEY AUTO_INCREMENT,
+	nombre_area VARCHAR(40),
+	id_rubro INT NOT NULL,
+	CONSTRAINT fk_rubro_area
+	FOREIGN KEY (id_rubro)
+	REFERENCES rubros_empresas(id_rubro)
+);
+
+CREATE TABLE curriculum_aspirantes(
+	id_curriculum INT PRIMARY KEY AUTO_INCREMENT,
+	imagen_aspirante VARCHAR(200),
+	telefono_fijo VARCHAR(9) NOT NULL,
+	telefono_movil VARCHAR(9) NOT NULL,
+	correo_aspirante VARCHAR(50) NOT NULL,
+	id_aspirante INT NOT NULL,
+	CONSTRAINT fk_aspirante_cv
+	FOREIGN KEY (id_aspirante)
+	REFERENCES aspirantes(id_aspirante)
+);
+
+CREATE TABLE estudios_aspirantes(
 	id_estudio INT PRIMARY KEY AUTO_INCREMENT,
-	titulo_estudio VARCHAR(60)
+	titulo_estudio VARCHAR(60) NOT NULL,
 	id_grado INT NOT NULL,
 	id_curriculum INT NOT NULL,
 	CONSTRAINT fk_grado_estudio
 	FOREIGN KEY (id_grado)
-	REFERENCES grados(id_grado),
+	REFERENCES grados_academicos(id_grado),
 	CONSTRAINT fk_curriculum_estudio
 	FOREIGN KEY (id_curriculum)
-	REFERENCES estudios(id_curriculum)
+	REFERENCES curriculum_aspirantes(id_curriculum)
+);
+
+CREATE TABLE experiencias_aspirantes(
+	id_experiencia INT PRIMARY KEY AUTO_INCREMENT,
+	nombre_empresa VARCHAR(50) NOT NULL,
+	nombre_cargo VARCHAR(50) NOT NULL,
+	fecha_inicio DATE NOT NULL,
+	fecha_fin DATE NULL,
+	descripcion_puesto VARCHAR(300) NOT NULL,
+	id_area INT NOT NULL,
+	CONSTRAINT fk_area_asp
+	FOREIGN KEY (id_area)
+	REFERENCES areas_laborales(id_area)
+);
+
+CREATE TABLE idiomas_aspirantes(
+	id_parler INT PRIMARY KEY AUTO_INCREMENT,
+	nivel_idioma ENUM('Básico', 'Intermedio', 'Avanzado') NOT NULL,
+	id_idioma INT NOT NULL,
+	CONSTRAINT fk_idioma_parle
+	FOREIGN KEY (id_idioma)
+	REFERENCES idiomas(id_idioma)
+);
+
+CREATE TABLE habilidades_aspirantes(
+	id_habilidad INT PRIMARY KEY AUTO_INCREMENT,
+	nombre_habilidad VARCHAR(30) NOT NULL
 );
