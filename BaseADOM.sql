@@ -84,14 +84,17 @@ CREATE TABLE estudios_aspirantes(
 	titulo_estudio VARCHAR(70) NOT NULL,
 	id_grado INT NOT NULL,
 	fecha_finalizacion DATE NOT NULL,
-	institucion_estudio VARCHAR(70) NOT NULL,
+	id_institucion INT NOT NULL,
 	id_curriculum INT NOT NULL,
 	CONSTRAINT fk_grado_estudio
 	FOREIGN KEY (id_grado)
 	REFERENCES grados_academicos(id_grado),
 	CONSTRAINT fk_curriculum_estudio
 	FOREIGN KEY (id_curriculum)
-	REFERENCES curriculum_aspirantes(id_curriculum)
+	REFERENCES curriculum_aspirantes(id_curriculum),
+	CONSTRAINT fk_institucion_estudio
+	FOREIGN KEY (id_institucion)
+	REFERENCES instituciones(id_institucion)
 );
 
 CREATE TABLE certificados_aspirantes(
