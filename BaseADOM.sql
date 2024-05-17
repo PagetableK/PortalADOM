@@ -16,7 +16,8 @@ CREATE TABLE aspirantes(
 	correo_aspirante VARCHAR(50) UNIQUE NOT NULL,
 	clave_aspirante VARCHAR(64) NOT NULL,
 	fecha_nacimiento DATE NOT NULL,
-	genero_aspirante ENUM('Hombre','Mujer') NOT NULL
+	genero_aspirante ENUM('Hombre','Mujer') NOT NULL,
+	estado_aspirante tinyint(1) NOT NULL DEFAULT 1
 );
 
 CREATE TABLE grados_academicos(
