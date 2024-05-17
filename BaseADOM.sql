@@ -9,20 +9,6 @@ CREATE TABLE administradores(
 	clave_administrador VARCHAR(64) NOT NULL
 );
 
-CREATE TABLE departamentos(
-	id_departamento INT PRIMARY KEY AUTO_INCREMENT,
-	nombre_departamento VARCHAR(30) NOT NULL
-);
-
-CREATE TABLE municipios(
-	id_municipio INT PRIMARY KEY AUTO_INCREMENT,
-	nombre_municipio VARCHAR(30) NOT NULL,
-	id_departamento INT NOT NULL,
-	CONSTRAINT fk_departamentos_muni
-	FOREIGN KEY (id_departamento) 
-	REFERENCES departamentos(id_departamento)
-);
-
 CREATE TABLE aspirantes(
 	id_aspirante INT PRIMARY KEY AUTO_INCREMENT,
 	nombre_aspirante VARCHAR(30) NOT NULL,
@@ -30,12 +16,7 @@ CREATE TABLE aspirantes(
 	correo_aspirante VARCHAR(50) UNIQUE NOT NULL,
 	clave_aspirante VARCHAR(64) NOT NULL,
 	fecha_nacimiento DATE NOT NULL,
-	genero_aspirante ENUM('Hombre','Mujer') NOT NULL,
-	direccion_aspirante VARCHAR(150) NOT NULL,
-	id_municipio INT NOT NULL,
-	CONSTRAINT fk_municipios_asp
-	FOREIGN KEY (id_municipio)
-	REFERENCES municipios(id_municipio)
+	genero_aspirante ENUM('Hombre','Mujer') NOT NULL
 );
 
 CREATE TABLE grados_academicos(
