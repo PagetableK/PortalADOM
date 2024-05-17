@@ -22,27 +22,27 @@ CREATE TABLE aspirantes(
 
 CREATE TABLE grados_academicos(
 	id_grado INT PRIMARY KEY AUTO_INCREMENT,
-	nombre_grado VARCHAR(60) NOT NULL 
+	nombre_grado VARCHAR(60) NOT NULL UNIQUE
 );
 
 CREATE TABLE instituciones(
 	id_institucion INT PRIMARY KEY AUTO_INCREMENT,
-	nombre_institucion VARCHAR(100) NOT NULL 
+	nombre_institucion VARCHAR(100) NOT NULL UNIQUE
 );
 
 CREATE TABLE idiomas(
 	id_idioma INT PRIMARY KEY AUTO_INCREMENT,
-	nombre_idioma VARCHAR(30) NOT NULL 
+	nombre_idioma VARCHAR(30) NOT NULL UNIQUE
 );
 
 CREATE TABLE rubros_empresas(
 	id_rubro INT PRIMARY KEY AUTO_INCREMENT,
-	nombre_rubro VARCHAR(40) NOT NULL
+	nombre_rubro VARCHAR(40) NOT NULL UNIQUE
 );
 
 CREATE TABLE areas_laborales(
 	id_area INT PRIMARY KEY AUTO_INCREMENT,
-	nombre_area VARCHAR(40),
+	nombre_area VARCHAR(40) UNIQUE,
 	id_rubro INT NOT NULL,
 	CONSTRAINT fk_rubro_area
 	FOREIGN KEY (id_rubro)
@@ -51,7 +51,7 @@ CREATE TABLE areas_laborales(
 
 CREATE TABLE curriculum_aspirantes(
 	id_curriculum INT PRIMARY KEY AUTO_INCREMENT,
-	imagen_aspirante VARCHAR(200),
+	imagen_aspirante VARCHAR(100),
 	telefono_fijo VARCHAR(9) UNIQUE NOT NULL,
 	telefono_movil VARCHAR(9) UNIQUE NOT NULL,
 	correo_aspirante VARCHAR(50) UNIQUE NOT NULL,
