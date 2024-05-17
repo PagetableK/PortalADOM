@@ -100,9 +100,13 @@ CREATE TABLE experiencias_aspirantes(
 	fecha_fin DATE NULL,
 	descripcion_puesto VARCHAR(300) NOT NULL,
 	id_area INT NOT NULL,
-	CONSTRAINT fk_area_asp
+	id_rubro INT NOT NULL,
+	CONSTRAINT fk_area_aspirante
 	FOREIGN KEY (id_area)
-	REFERENCES areas_laborales(id_area)
+	REFERENCES areas_laborales(id_area),
+	CONSTRAINT fk_rubro_aspirante
+	FOREIGN KEY (id_rubro)
+	REFERENCES rubros_empresas(id_rubro)
 );
 
 CREATE TABLE idiomas_aspirantes(
