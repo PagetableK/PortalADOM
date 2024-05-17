@@ -122,14 +122,14 @@ CREATE TABLE experiencias_aspirantes(
 );
 
 CREATE TABLE idiomas_aspirantes(
-	id_parler INT PRIMARY KEY AUTO_INCREMENT,
+	id_idioma_aspirante INT PRIMARY KEY AUTO_INCREMENT,
 	nivel_idioma ENUM('Básico', 'Intermedio', 'Avanzado') NOT NULL,
 	id_idioma INT NOT NULL,
 	id_curriculum INT NOT NULL,
-	CONSTRAINT fk_idioma_parle
+	CONSTRAINT fk_idioma_aspirante
 	FOREIGN KEY (id_idioma)
 	REFERENCES idiomas(id_idioma),
-	CONSTRAINT fk_curriculum_langue
+	CONSTRAINT fk_curriculum_aspirante
 	FOREIGN KEY (id_curriculum)
 	REFERENCES curriculum_aspirantes(id_curriculum)
 );
@@ -138,7 +138,7 @@ CREATE TABLE habilidades_aspirantes(
 	id_habilidad INT PRIMARY KEY AUTO_INCREMENT,
 	nombre_habilidad VARCHAR(30) NOT NULL,
 	id_curriculum INT NOT NULL,
-	CONSTRAINT fk_curriculum_habil
+	CONSTRAINT fk_curriculum_habilidad
 	FOREIGN KEY (id_curriculum)
 	REFERENCES curriculum_aspirantes(id_curriculum)
 );
