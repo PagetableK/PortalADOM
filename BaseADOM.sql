@@ -65,9 +65,11 @@ CREATE TABLE estudios_aspirantes(
 	id_estudio INT PRIMARY KEY AUTO_INCREMENT,
 	titulo_estudio VARCHAR(70) NOT NULL,
 	id_grado INT NOT NULL,
-	fecha_finalizacion DATE NOT NULL,
-	id_institucion INT NOT NULL,
+	fecha_finalizacion DATE NULL,
+	id_institucion INT NULL,
+	otra_institucion VARCHAR(100) NULL,
 	id_curriculum INT NOT NULL,
+	estado_estudio ENUM('Cursando', 'Finalizado') NOT NULL,
 	CONSTRAINT fk_grado_estudio
 	FOREIGN KEY (id_grado)
 	REFERENCES grados_academicos(id_grado),
