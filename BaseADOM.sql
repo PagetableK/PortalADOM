@@ -42,11 +42,7 @@ CREATE TABLE rubros_empresas(
 
 CREATE TABLE areas_laborales(
 	id_area INT PRIMARY KEY AUTO_INCREMENT,
-	nombre_area VARCHAR(40) UNIQUE,
-	id_rubro INT NOT NULL,
-	CONSTRAINT fk_rubro_area
-	FOREIGN KEY (id_rubro)
-	REFERENCES rubros_empresas(id_rubro)
+	nombre_area VARCHAR(40) UNIQUE
 );
 
 CREATE TABLE curriculum_aspirantes(
