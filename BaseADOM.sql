@@ -42,12 +42,16 @@ CREATE TABLE rubros_empresas(
 
 CREATE TABLE areas_laborales(
 	id_area INT PRIMARY KEY AUTO_INCREMENT,
-	nombre_area VARCHAR(40) UNIQUE
+	nombre_area VARCHAR(40) UNIQUE,
+	id_rubro INT NOT NULL,
+	CONSTRAINT fk_rubro_area
+	FOREIGN KEY (id_rubro)
+	REFERENCES rubros_empresas(id_rubro)
 );
 
 CREATE TABLE curriculum_aspirantes(
 	id_curriculum INT PRIMARY KEY AUTO_INCREMENT,
-	imagen_aspirante VARCHAR(100),
+	imagen_aspirante VARCHAR(200),
 	telefono_fijo VARCHAR(9) UNIQUE NOT NULL,
 	telefono_movil VARCHAR(9) UNIQUE NOT NULL,
 	correo_aspirante VARCHAR(50) UNIQUE NOT NULL,
@@ -62,10 +66,10 @@ CREATE TABLE estudios_aspirantes(
 	titulo_estudio VARCHAR(70) NOT NULL,
 	id_grado INT NOT NULL,
 	fecha_finalizacion DATE NULL,
+	nombre_institucion VARCHAR(100) NULL,
+	estado_estudio ENUM('Cursando', 'Finalizado', 'Incompleto'),
 	id_institucion INT NULL,
-	otra_institucion VARCHAR(100) NULL,
 	id_curriculum INT NOT NULL,
-	estado_estudio ENUM('Cursando', 'Finalizado') NOT NULL,
 	CONSTRAINT fk_grado_estudio
 	FOREIGN KEY (id_grado)
 	REFERENCES grados_academicos(id_grado),
@@ -98,12 +102,12 @@ CREATE TABLE experiencias_aspirantes(
 	estado_experiencia ENUM('Antiguo trabajo', 'Trabajo actual') NOT NULL,
 	id_area INT NOT NULL,
 	id_rubro INT NOT NULL,
-	CONSTRAINT fk_area_aspirante
+	CONSTRAINT fk_area_asp
 	FOREIGN KEY (id_area)
 	REFERENCES areas_laborales(id_area),
 	CONSTRAINT fk_rubro_aspirante
-	FOREIGN KEY (id_rubro)
-	REFERENCES rubros_empresas(id_rubro)
+   FOREIGN KEY (id_rubro)
+   REFERENCES rubros_empresas(id_rubro)
 );
 
 CREATE TABLE idiomas_aspirantes(
