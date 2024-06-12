@@ -4,11 +4,13 @@ CREATE DATABASE IF NOT EXISTS dbadom;
 
 USE dbadom;
 
-
 CREATE TABLE administradores(
 	id_administrador INT PRIMARY KEY AUTO_INCREMENT,
 	correo_administrador VARCHAR(100) UNIQUE NOT NULL,
-	clave_administrador VARCHAR(64) NOT NULL
+	clave_administrador VARCHAR(64) NOT NULL,
+	nombres_administrador VARCHAR(50) NOT NULL,
+	apellidos_administrador VARCHAR(50) NOT NULL,
+	estado_administrador TINYINT(1) NOT NULL DEFAULT 1
 );
 
 CREATE TABLE aspirantes(
@@ -19,7 +21,7 @@ CREATE TABLE aspirantes(
 	clave_aspirante VARCHAR(64) NOT NULL,
 	fecha_nacimiento DATE NOT NULL,
 	genero_aspirante ENUM('Hombre','Mujer') NOT NULL,
-	estado_aspirante tinyint(1) NOT NULL DEFAULT 1
+	estado_aspirante TINYINT(1) NOT NULL DEFAULT 1
 );
 
 CREATE TABLE grados_academicos(
