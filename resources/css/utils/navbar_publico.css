@@ -1,0 +1,12 @@
+.bg-orange{
+    background-color: #FFA000;
+}
+
+h2{
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.cerrar-sesion{
+    cursor: pointer;
+}
