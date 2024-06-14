@@ -7,14 +7,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Título del documento -->
-    <title>Inicie sesión</title>
+    <title>Inicio de sesión</title>
     <!-- Llamada al framework de diseño -->
     <link href="../../resources/css/utils/bootstrap.min.css" rel="stylesheet">
+    <!--Llamada a CSS-->
+    <link href="../../resources/css/private/index_privado.css" rel="stylesheet">
 </head>
 
 <body>
     <!-- Contenido principal de la página -->
     <main>
+        <div class="container">
+            <div class="left-side">
+                <img src="../../resources/img/logo.png" alt="ADOM Logo" class="logo">
+            </div>
+            <div class="right-side">
+                <h1>Iniciar sesión</h1>
+                <form>
+                    <div class="input-group">
+                        <label for="usuario">Usuario</label>
+                        <input type="text" id="usuario" name="usuario">
+                    </div>
+                    <div class="input-group">
+                        <label for="contrasena">Contraseña</label>
+                        <input type="password" id="contrasena" name="contrasena">
+                    </div>
+                    <button type="submit">Iniciar sesión</button>
+                </form>
+            </div>
+        </div>
 
     </main>
     <!-- Mandar a llamar el framework de diseño -->
