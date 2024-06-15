@@ -2,7 +2,6 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
 }
 
 body, html {
@@ -11,47 +10,51 @@ body, html {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #f0f0f0;
+    overflow: hidden;
 }
 
-.container {
+body {
     display: flex;
     width: 100%;
-    height: 100%;
 }
 
-.left-side {
-    background-color: #fff;
+.left-side, .right-side {
     width: 50%;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
+.left-side {
+    background-color: #fff;
+}
+
 .logo {
-    max-width: 80%;
+    max-width: 100%;
     height: auto;
 }
 
 .right-side {
     background-color: #ff9800;
-    width: 50%;
-    display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
     padding: 20px;
+    box-sizing: border-box;
 }
 
 h1 {
     margin-bottom: 40px;
-    color: #333;
-    font-size: 24px;
+    color: #ffffff;
+    font-size: 40px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
 }
 
 form {
     width: 80%;
     max-width: 400px;
+    display: flex;
+    flex-direction: column;
 }
 
 .input-group {
@@ -62,7 +65,8 @@ form {
 label {
     display: block;
     margin-bottom: 5px;
-    color: #666;
+    color: #000000;
+    font-family: 'Montserrat', sans-serif;
 }
 
 input {
@@ -71,6 +75,7 @@ input {
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 16px;
+    font-family: 'Montserrat', sans-serif;
 }
 
 button {
@@ -79,10 +84,11 @@ button {
     background-color: #000000;
     border: none;
     border-radius: 5px;
-    color: #fff4f4;
+    color: #fff;
     font-size: 16px;
     cursor: pointer;
     margin-top: 20px;
+    font-family: 'Montserrat', sans-serif;
 }
 
 button:hover {
