@@ -68,7 +68,7 @@ const cargarPlantilla = async () => {
                                 <a href="#" class="sidebar-link">Instituciones</a>
                             </li>
                             <li class="sidebar-item">
-                                <a href="#" class="sidebar-link">Grados académicos</a>
+                                <a href="grados_academicos.html" class="sidebar-link">Grados académicos</a>
                             </li>
                             <li class="sidebar-item">
                                 <a href="#" class="sidebar-link">Idiomas</a>
