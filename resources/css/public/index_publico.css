@@ -1,0 +1,52 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body, html, main {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.left-side {
+    background-color: #fff;
+}
+
+.right-side {
+    background-color: #FFA000;
+}
+
+button {
+    cursor: pointer;
+}
+
+.rounded-start-2{
+    border-bottom-left-radius: 2rem !important;
+    border-top-left-radius: 2rem !important;
+}
+
+.w-65{
+    width: 65%;
+}
+
+.linea-gruesa{
+    height: 0.1rem;
+    border: none;
+    background-color: #000000;
+    opacity: 100 !important;
+    width: 100px;
+    margin: 0px;
+}
+
+@media screen and (max-width: 991px) and (min-width: 320px) {
+    .rounded-start-2{
+        border-bottom-left-radius: 0 !important;
+        border-top-left-radius: 0 !important;
+    }
+}

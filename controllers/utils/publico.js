@@ -76,7 +76,6 @@ const cargarPlantilla = async () => {
             location.href = 'index.html';
         }
         else {
-            alert('No existe una sesión activa');
         }
     }
 }

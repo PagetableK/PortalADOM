@@ -10,12 +10,12 @@ if (isset($_GET['action'])) {
     $administradores = new AdministradoresData;
     // Se declara e inicializa un arreglo para guardar el resultado que retorna la API.
     $result = array('status' => 0, 'session' => 0, 'message' => null, 'dataset' => null, 'error' => null, 'exception' => null, 'correoAdmin' => null);
-    $_SESSION['idAdministrador'] = 1;
+    // $_SESSION['idAdministrador'] = 1;
     // Se verifica si existe una sesión iniciada como administrador, de lo contrario se finaliza el script con un mensaje de error.
     if (isset($_SESSION['idAdministrador'])) {
         // Se cambia el valor de la session, 1 = sesión iniciada.
         $result['session'] = 1;
-        $_SESSION['correoAdministrador'] = 'pablo';
+        // $_SESSION['correoAdministrador'] = 'pablo';
         // Se verifica la acción a realizar.
         switch ($_GET['action']) {
                 // La acción getUser valida que se haya iniciado sesión.
