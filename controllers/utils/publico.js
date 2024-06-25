@@ -21,7 +21,7 @@ const cargarPlantilla = async () => {
         // Si la respuesta es satisfactoria se ejecuta el código.
         //if (DATA.status) {
             // Se inserta el menú lateral.
-            MAIN.insertAdjacentHTML('afterbegin', `
+            MAIN.insertAdjacentHTML('beforebegin', `
             <nav class="navbar navbar-expand-lg bg-orange">
                 <div class="container-fluid d-flex">
                     <div class="d-flex align-items-center gap-3 col-lg-4">
