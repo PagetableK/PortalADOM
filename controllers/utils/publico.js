@@ -13,16 +13,13 @@ let colorInicio = "", colorCV = "", colorPerfil = "";
 // permite verificar si existe una sesión activa, en tal caso se muestran los componentes necesarios.
 const cargarPlantilla = async () => {
 
-    document.addEventListener('DOMContentLoaded', async () => {
-        // Llamada a la función para validar sesiones activas.
-        cargarPlantilla();
-    });
+    
     // Se realiza una petición para validar si existe una sesión activa.
     const DATA = await fetchData(USER_API, 'getUser');
     // Si existe una sesión activa se ejecuta el código.
-    if (DATA.session) {
+    //if (DATA.session) {
         // Si la respuesta es satisfactoria se ejecuta el código.
-        if (DATA.status) {
+        //if (DATA.status) {
             // Se inserta el menú lateral.
             MAIN.insertAdjacentHTML('beforebegin', `
             <nav class="navbar navbar-expand-lg bg-orange">
@@ -66,18 +63,19 @@ const cargarPlantilla = async () => {
                 </div>
             </nav>`
             );
-        } else {
+        //} else {
             // De lo contrario se muestra el error y se redirige al inicio de sesión.
-            sweetAlert(3, DATA.error, false, 'index.html');
-        }
-    } else {
+            //sweetAlert(3, DATA.error, false, 'index.html');
+        //}
+    //} else {
         // Si no existe una sesión activa y la página actual no es el inicio de sesión se redirige al index.
-        if (!location.pathname.endsWith('index.html') && !location.pathname.endsWith('registro.html')) {
-            location.href = 'index.html';
-        }
-        else {
-        }
-    }
+        //if (!location.pathname.endsWith('index.html')) {
+        //    location.href = 'index.html';
+        //}
+        //else {
+        //    alert('No existe una sesión activa');
+        //}
+    //}
 }
 
 // La función cambiarColor permite cambiar el color del apartado actual
