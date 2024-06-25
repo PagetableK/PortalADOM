@@ -59,13 +59,13 @@ const cargarPlantilla = async () => {
                         <!-- Submenú de Formularios -->
                         <ul id="formularios" class="sidebar-dropdown collapse" data-bs-parent="#sidebar">
                             <li class="sidebar-item">
-                                <a href="#" class="sidebar-link">Rubros de empresas</a>
+                                <a href="rubro_empresa.html" class="sidebar-link">Rubros de empresas</a>
                             </li>
                             <li class="sidebar-item">
-                                <a href="#" class="sidebar-link">Áreas laborales</a>
+                                <a href="areas_laborales.html" class="sidebar-link">Áreas laborales</a>
                             </li>
                             <li class="sidebar-item">
-                                <a href="#" class="sidebar-link">Instituciones</a>
+                                <a href="instituciones.html" class="sidebar-link">Instituciones</a>
                             </li>
                             <li class="sidebar-item">
                                 <a href="#" class="sidebar-link">Grados académicos</a>
@@ -110,6 +110,28 @@ const cargarPlantilla = async () => {
                     document.querySelector("#sidebar").classList.toggle("expand");
                 });
             }
+            const TITULO = document.getElementById('tituloPrincipal');
+
+             // Se valida el nombre del archivo para determinar el título principal.
+             if (location.pathname.endsWith('inicio.html')) {
+                TITULO.textContent = "Inicio";
+            }
+            else if(location.pathname.endsWith('areas_laborales.html')) {
+                TITULO.textContent = "Áreas laborales";
+            }
+            else if(location.pathname.endsWith('curriculums.html')) {
+                TITULO.textContent = "Currículums";
+            }
+            else if(location.pathname.endsWith('instituciones.html')) {
+                TITULO.textContent = "Instituciones";
+            }
+            else if(location.pathname.endsWith('rubro_empresa.html')) {
+                TITULO.textContent = "Rubros empresa";
+            }
+            else if(location.pathname.endsWith('aspirantes.html')) {
+                TITULO.textContent = "Aspirantes";
+            }
+
         } else {
             // De lo contrario se muestra el error y se redirige al inicio de sesión.
             sweetAlert(3, DATA.error, false, 'index.html');
