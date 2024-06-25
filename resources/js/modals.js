@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    
     const addModalTemplate = `
         <div id="addModal" class="modal">
             <div class="modal-content">
