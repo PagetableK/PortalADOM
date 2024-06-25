@@ -13,6 +13,7 @@ const cargarPlantilla = async () => {
     // Se realiza una petición para validar si existe una sesión activa.
     const DATA = await fetchData(USER_API, 'getUser');
     // Si existe una sesión activa se ejecuta el código.
+
     if (DATA.session) {
         // Si la respuesta es satisfactoria se ejecuta el código.
         if (DATA.status) {
@@ -41,6 +42,14 @@ const cargarPlantilla = async () => {
                         </a>
                     </li>
 
+                    <!-- Elemento de navegación - Administrador -->
+                    <li class="sidebar-item">
+                        <a href="../../views/private/administradores.html" class="sidebar-link">
+                            <i class="bi bi-person"></i>
+                            <span>Administrador</span>
+                        </a>
+                    </li>
+
                     <!-- Elemento de navegación - Currículums -->
                     <li class="sidebar-item">
                         <a href="../../views/private/curriculums.html" class="sidebar-link">
@@ -48,11 +57,10 @@ const cargarPlantilla = async () => {
                             <span>Currículums</span>
                         </a>
                     </li>
-
                     <!-- Elemento de navegación de Formularios -->
                     <li class="sidebar-item">
                         <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
-                            data-bs-target="#formularios" aria-expanded="false" aria-controls="pagos">
+                            data-bs-target="#formularios" aria-expanded="false">
                             <i class="bi bi-receipt"></i>
                             <span>Formularios</span>
                         </a>
@@ -68,13 +76,13 @@ const cargarPlantilla = async () => {
                                 <a href="#" class="sidebar-link">Instituciones</a>
                             </li>
                             <li class="sidebar-item">
-                                <a href="#" class="sidebar-link">Grados académicos</a>
+                                <a href="grados_academicos.html" class="sidebar-link">Grados académicos</a>
                             </li>
                             <li class="sidebar-item">
-                                <a href="#" class="sidebar-link">Idiomas</a>
+                                <a href="idiomas.html" class="sidebar-link">Idiomas</a>
                             </li>
                             <li class="sidebar-item">
-                                <a href="#" class="sidebar-link">Usuarios</a>
+                                <a href="aspirantes.html" class="sidebar-link">Aspirantes</a>
                             </li>
                         </ul>
                     </li>
@@ -86,14 +94,10 @@ const cargarPlantilla = async () => {
             <header class="py-3">
                 <div class="col d-flex flex-row align-items-center">
                     <button class="toggle-btn" type="button">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="46" height="46" fill="back" class="bi bi-text-left"
-                            viewBox="0 0 16 16">
-                            <path fill-rule="evenodd"
-                                d="M2 12.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5m0-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5" />
-                        </svg>
+                        <i class="bi bi-text-left text-dark fs-1"></i>
                     </button>
                     <div class="ps-5">
-                        <h1 class="text-center fw-bold" id="tituloPrincipal">Inicio</h1>
+                        <h1 class="text-center fw-bold" id="tituloPrincipal"></h1>
                     </div>
                 </div>
             </header>`
@@ -101,14 +105,36 @@ const cargarPlantilla = async () => {
 
             // Función que despliega el menú lateral al hacer click en la imagen.
             // Se guarda el elemento con la clase especificada.
-            const hamBurger = document.querySelectorAll(".toggle-btn");
+            const HAMBURGUER = document.querySelectorAll(".toggle-btn");
             // Se realiza una iteración para agregar el evento click en todos los elementos con la clase especificada.
-            for (let i = 0; i < hamBurger.length; i++) {
+            for (let i = 0; i < HAMBURGUER.length; i++) {
                 // Se agrega el evento click que se ejecutará al hacer click en el elemento.
-                hamBurger[i].addEventListener("click", function () {
+                HAMBURGUER[i].addEventListener("click", function () {
                     // Se cambia el estado de la barra lateral.
                     document.querySelector("#sidebar").classList.toggle("expand");
                 });
+            }
+
+            const TITULO = document.getElementById('tituloPrincipal');
+
+            // Se valida el nombre del archivo para determinar el título principal.
+            if (location.pathname.endsWith('inicio.html')) {
+                TITULO.textContent = "Inicio";
+            }
+            else if(location.pathname.endsWith('administradores.html')) {
+                TITULO.textContent = "Administradores";
+            }
+            else if(location.pathname.endsWith('curriculums.html')) {
+                TITULO.textContent = "Currículums";
+            }
+            else if(location.pathname.endsWith('grados_academicos.html')) {
+                TITULO.textContent = "Grados académicos";
+            }
+            else if(location.pathname.endsWith('idiomas.html')) {
+                TITULO.textContent = "Idiomas";
+            }
+            else if(location.pathname.endsWith('aspirantes.html')) {
+                TITULO.textContent = "Aspirantes";
             }
         } else {
             // De lo contrario se muestra el error y se redirige al inicio de sesión.
