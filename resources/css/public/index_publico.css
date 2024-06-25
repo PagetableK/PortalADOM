@@ -26,6 +26,12 @@ button {
     cursor: pointer;
 }
 
+.fw-semibold.fs-6{
+    text-decoration: none;
+    cursor: pointer;
+    color: #000000;
+}
+
 .rounded-start-2{
     border-bottom-left-radius: 2rem !important;
     border-top-left-radius: 2rem !important;

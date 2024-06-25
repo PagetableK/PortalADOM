@@ -30,24 +30,24 @@
             <form class="w-65 d-flex flex-column gap-2">
                 <label for="usuario" class="text-start fw-semibold">Usuario</label>
                 <div class="input-group">
-                    <span class="input-group-text"><i class="bi bi-person"></i></span>
+                    <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
                     <input type="text" id="usuario" name="usuario" class="form-control">
                 </div>
                 <label for="contrasena" class="text-start fw-semibold">Contraseña</label>
                 <div class="input-group">
-                    <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                    <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
                     <input type="password" id="contrasena" name="contrasena" class="form-control">
                 </div>
                 <button type="submit" class="fw-bold btn btn-dark w-100 mt-3">Iniciar sesión</button>
             </form>
-            <p class="fw-semibold fs-6">¿Olvidó su contraseña?</p>
+            <a class="fw-semibold fs-6">¿Olvidó su contraseña?</a>
             <div class="d-flex flex-row align-items-center gap-2">
                 <hr class="linea-gruesa">
                 <p class="m-0">O</p>
                 <hr class="linea-gruesa">
             </div>
             <div class="w-65 d-flex">
-                <button type="submit" class="fw-bold btn btn-dark w-100 mt-3">Registrarse</button>
+                <a type="submit" class="fw-bold btn btn-dark w-100 mt-3" href="registro.html">Registrarse</a>
             </div>
         </div>
     </main>
@@ -57,7 +57,7 @@
     <script src="../../resources/js/sweetalert.min.js" type="text/javascript"></script>
     <!-- Llamada al controlador general de la aplicación -->
     <script src="../../controllers/utils/componentes.js" type="text/javascript"></script>
-    <!-- Llamada al controlador general del sitio privado -->
+    <!-- Llamada al controlador general del sitio público -->
     <script src="../../controllers/utils/publico.js" type="text/javascript"></script>
     <!-- Llamada al controlador del inicio de sesión -->
     <script src="../../controllers/public/index.js" type="text/javascript"></script>

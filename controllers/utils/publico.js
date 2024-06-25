@@ -24,7 +24,7 @@ const cargarPlantilla = async () => {
         // Si la respuesta es satisfactoria se ejecuta el código.
         if (DATA.status) {
             // Se inserta el menú lateral.
-            MAIN.insertAdjacentHTML('afterbegin', `
+            MAIN.insertAdjacentHTML('beforebegin', `
             <nav class="navbar navbar-expand-lg bg-orange">
                 <div class="container-fluid d-flex">
                     <div class="d-flex align-items-center gap-3 col-lg-4">
@@ -72,7 +72,7 @@ const cargarPlantilla = async () => {
         }
     } else {
         // Si no existe una sesión activa y la página actual no es el inicio de sesión se redirige al index.
-        if (!location.pathname.endsWith('index.html')) {
+        if (!location.pathname.endsWith('index.html') && !location.pathname.endsWith('registro.html')) {
             location.href = 'index.html';
         }
         else {

@@ -6,8 +6,8 @@ require_once('../../models/data/aspirantes_data.php');
 if (isset($_GET['action'])) {
     // Se crea una sesión o se reanuda la actual para poder utilizar variables de sesión en el script.
     session_start();
-    // $_SESSION['idAspirante'] = 1;
-    // $_SESSION['correoAspirante'] = 'john.doe@example.com';
+    $_SESSION['idAspirante'] = 1;
+    $_SESSION['correoAspirante'] = 'john.doe@example.com';
     // Se instancia la clase correspondiente.
     $aspirantes = new AspirantesData;
     // Se declara e inicializa un arreglo para guardar el resultado que retorna la API.
