@@ -4,8 +4,9 @@
     box-sizing: border-box;
 }
 
-body, html {
+body, html, main {
     height: 100%;
+    width: 100%;
     margin: 0;
     display: flex;
     justify-content: center;
@@ -13,84 +14,45 @@ body, html {
     overflow: hidden;
 }
 
-body {
-    display: flex;
-    width: 100%;
-}
-
-.left-side, .right-side {
-    width: 50%;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 .left-side {
     background-color: #fff;
 }
 
-.logo {
-    max-width: 100%;
-    height: auto;
-}
-
 .right-side {
-    background-color: #ff9800;
-    flex-direction: column;
-    padding: 20px;
-    box-sizing: border-box;
-}
-
-h1 {
-    margin-bottom: 40px;
-    color: #ffffff;
-    font-size: 40px;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-}
-
-form {
-    width: 80%;
-    max-width: 400px;
-    display: flex;
-    flex-direction: column;
-}
-
-.input-group {
-    margin-bottom: 20px;
-    width: 100%;
-}
-
-label {
-    display: block;
-    margin-bottom: 5px;
-    color: #000000;
-    font-family: 'Montserrat', sans-serif;
-}
-
-input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-    font-family: 'Montserrat', sans-serif;
+    background-color: #FFA000;
 }
 
 button {
-    width: 100%;
-    padding: 10px;
-    background-color: #000000;
-    border: none;
-    border-radius: 5px;
-    color: #fff;
-    font-size: 16px;
     cursor: pointer;
-    margin-top: 20px;
-    font-family: 'Montserrat', sans-serif;
 }
 
-button:hover {
-    background-color: #e68900;
+.fw-semibold.fs-6{
+    text-decoration: none;
+    cursor: pointer;
+    color: #000000;
+}
+
+.rounded-start-2{
+    border-bottom-left-radius: 2rem !important;
+    border-top-left-radius: 2rem !important;
+}
+
+.w-65{
+    width: 65%;
+}
+
+.linea-gruesa{
+    height: 0.1rem;
+    border: none;
+    background-color: #000000;
+    opacity: 100 !important;
+    width: 100px;
+    margin: 0px;
+}
+
+@media screen and (max-width: 991px) and (min-width: 320px) {
+    .rounded-start-2{
+        border-bottom-left-radius: 0 !important;
+        border-top-left-radius: 0 !important;
+    }
 }
