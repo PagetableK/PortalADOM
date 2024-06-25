@@ -54,11 +54,10 @@ const cargarPlantilla = async () => {
                         <span>Currículums</span>
                     </a>
                 </li>
-
                 <!-- Elemento de navegación de Formularios -->
                 <li class="sidebar-item">
                     <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
-                        data-bs-target="#formularios" aria-expanded="false" aria-controls="pagos">
+                        data-bs-target="#formularios" aria-expanded="false">
                         <i class="bi bi-receipt"></i>
                         <span>Formularios</span>
                     </a>
@@ -74,7 +73,7 @@ const cargarPlantilla = async () => {
                             <a href="#" class="sidebar-link">Instituciones</a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="#" class="sidebar-link">Grados académicos</a>
+                            <a href="grados_academicos.html" class="sidebar-link">Grados académicos</a>
                         </li>
                         <li class="sidebar-item">
                             <a href="idiomas.html" class="sidebar-link">Idiomas</a>
@@ -99,7 +98,7 @@ const cargarPlantilla = async () => {
                     </svg>
                 </button>
                 <div class="ps-5">
-                    <h1 class="text-center fw-bold" id="tituloPrincipal">Administrador</h1>
+                    <h1 class="text-center fw-bold" id="tituloPrincipal"></h1>
                 </div>
             </div>
         </header>`
