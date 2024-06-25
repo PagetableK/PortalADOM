@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+
+<!-- Se configura el idioma del documento -->
+<html lang="es">
+
+<head>
+    <!-- Metadatos de la página web -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Título de la página web -->
+    <title>Registro</title>
+    <!-- Llamada al framework de diseño BOOTSTRAP -->
+    <link href="../../resources/css/utils/bootstrap.min.css" rel="stylesheet">
+    <!-- Llamada a los íconos del framework -->
+    <link href="../../resources/css/utils/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- CSS de la página -->
+    <link href="../../resources/css/public/registro.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Contenido principal de la página -->
+    <main class="d-flex align-items-center justify-content-center contenedor-principal">
+        <div class="row h-25 d-flex fixed-top align-items-center justify-content-center bg-light">
+            <div class="col-12 col-md-3 d-flex justify-content-center justify-content-md-start h-75 ms-5" id="contenedorImagen">
+                <img src="../../resources/img/full_logo.png" alt="Logo" class="img-fluid" id="imagenLogo">
+            </div>
+            <div class="col">
+                <p class="text-center fw-bold fs-3 w-65">Ingrese la siguiente información para registrarse</p>
+            </div>
+        </div>
+        <form class="col w-75 px-10 d-flex flex-column mt-10">
+            <div class="row">
+                <p class="fw-bold fs-4">Credenciales de la aplicación</p>
+            </div>
+            <div class="row d-flex flex-row row-gap-3 fs-5 mb-4">
+                <div class="col-12 col-lg-6 d-flex flex-column gap-2">
+                    <label for="correoAspirante" class="fw-semibold">Correo electrónico</label>
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="bi bi-person-fill"></i>
+                        </span>
+                        <input type="text" class="form-control" placeholder="" id="correoAspirante" name="correoAspirante">
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6 d-flex flex-column gap-2">
+                    <label for="contraAspirante" class="fw-semibold">Contraseña</label>
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="bi bi-lock-fill"></i>
+                        </span>
+                        <input type="password" class="form-control" placeholder="" id="contraAspirante" name="contraAspirante">
+                        <div class="btn input-group-addon d-flex align-items-center justify-content-center bg-light" id="btnMostrar" onclick="mostrarContra()">
+                            <i class="bi bi-eye-slash" id="verIcono"></i>
+                            <i class="bi bi-eye d-none" id="ocultarIcono"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <p class="fw-bold fs-4">Información Personal</p>
+            </div>
+            <div class="row d-flex flex-row row-gap-3 fs-5">
+                <div class="col-12 col-lg-6 d-flex flex-column gap-2">
+                    <label for="nombreAspirante" class="fw-semibold">Nombres</label>
+                    <input type="text" class="form-control" placeholder="" id="nombreAspirante" name="nombreAspirante">
+                </div>
+                <div class="col-12 col-lg-6 d-flex flex-column gap-2">
+                    <label for="apellidoAspirante" class="fw-semibold">Apellidos</label>
+                    <input type="text" class="form-control" placeholder="" id="apellidoAspirante" name="apellidoAspirante">
+                </div>
+                <div class="col-12 col-lg-6 d-flex flex-column gap-2">
+                    <label for="generoAspirante" class="fw-semibold">Género</label>
+                    <select name="generoAspirante" id="generoAspirante" class="form-select">
+                        <option value="0">Hombre</option>
+                        <option value="1">Mujer</option>
+                    </select>
+                </div>
+                <div class="col-12 col-lg-6 d-flex flex-column gap-2">
+                    <label for="fechaNacimiento" class="fw-semibold">Fecha de nacimiento</label>
+                    <input type="date" id="fechaNacimiento" name="fechaNacimiento" class="form-control">
+                </div>
+            </div>
+            <button class="btn btn-dark mt-3 w-50 align-self-center" type="submit">Registrarse</button>
+        </form>
+    </main>
+    <!-- Mandar a llamar el framework de diseño BOOTSTRAP -->
+    <script src="../../resources/js/bootstrap.bundle.min.js" type="text/javascript"></script>
+    <!-- Mandar a llamar la librería de alertas -->
+    <script src="../../resources/js/sweetalert.min.js" type="text/javascript"></script>
+    <!-- Llamada al controlador general de la aplicación -->
+    <script src="../../controllers/utils/componentes.js" type="text/javascript"></script>
+    <!-- Llamada al controlador general del sitio público -->
+    <script src="../../controllers/utils/publico.js" type="text/javascript"></script>
+    <!-- Llamada al controlador del registro -->
+    <script src="../../controllers/public/registro.js" type="text/javascript"></script>
+</body>
+
+</html>

@@ -12,16 +12,14 @@ let colorInicio = "", colorCV = "", colorPerfil = "";
 // La función cargarPlantilla se utiliza en todas las páginas del sitio privado,
 // permite verificar si existe una sesión activa, en tal caso se muestran los componentes necesarios.
 const cargarPlantilla = async () => {
-
-    
     // Se realiza una petición para validar si existe una sesión activa.
     const DATA = await fetchData(USER_API, 'getUser');
     // Si existe una sesión activa se ejecuta el código.
-    //if (DATA.session) {
+    if (DATA.session) {
         // Si la respuesta es satisfactoria se ejecuta el código.
-        //if (DATA.status) {
+        if (DATA.status) {
             // Se inserta el menú lateral.
-            MAIN.insertAdjacentHTML('afterbegin', `
+            MAIN.insertAdjacentHTML('beforebegin', `
             <nav class="navbar navbar-expand-lg bg-orange">
                 <div class="container-fluid d-flex">
                     <div class="d-flex align-items-center gap-3 col-lg-4">
@@ -63,33 +61,33 @@ const cargarPlantilla = async () => {
                 </div>
             </nav>`
             );
-        //} else {
+        } else {
             // De lo contrario se muestra el error y se redirige al inicio de sesión.
-            //sweetAlert(3, DATA.error, false, 'index.html');
-        //}
-    //} else {
+            sweetAlert(3, DATA.error, false, 'index.html');
+        }
+    } else {
         // Si no existe una sesión activa y la página actual no es el inicio de sesión se redirige al index.
-        //if (!location.pathname.endsWith('index.html')) {
-        //    location.href = 'index.html';
-        //}
-        //else {
-        //    alert('No existe una sesión activa');
-        //}
-    //}
+        if (!location.pathname.endsWith('index.html')) {
+            location.href = 'index.html';
+        }
+        else {
+            sweetAlert(3, 'No existe una sesión activa', false);
+        }
+    }
 }
 
 // La función cambiarColor permite cambiar el color del apartado actual
 // donde se encuentra el usuario
-function cambiarColor(apartado){
-    if(apartado == 'Inicio'){
+function cambiarColor(apartado) {
+    if (apartado == 'Inicio') {
         colorInicio = 'text-light';
         colorPerfil = '';
         colorCV = '';
-    } else if(apartado == 'CV'){
+    } else if (apartado == 'CV') {
         colorCV = 'text-light';
         colorPerfil = '';
         colorInicio = '';
-    } else{
+    } else {
         colorPerfil = 'text-light';
         colorInicio = '';
         colorCV = '';
