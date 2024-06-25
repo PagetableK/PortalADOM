@@ -17,7 +17,6 @@
 </head>
 
 <body class="d-flex">
-    
     <!-- Contenido principal del documento -->
     <main class="borde-main">
         <div class="container">
@@ -33,16 +32,18 @@
                 <!-- Cabeza de la tabla para mostrar la cantidad de registros y los títulos de las columnas -->
                 <thead>
                     <tr>
-                        <td colspan="3" id="filasEncontradas"></td>
+                        <td colspan="6" id="filasEncontradas"></td>
                     </tr>
                     <tr>
-                        <th>Nombre de institución</th>
-                        <th>Usos</th>
-                        <th>ACCIONES</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Correo</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <!-- Cuerpo de la tabla para mostrar un registro por fila -->
-                <tbody id="tabla_idioma"></tbody>
+                <tbody id="tabla_aspirante"></tbody>
             </table>
         </div>
     </main>
@@ -56,7 +57,7 @@
     <!-- Llamada al controlador general del sitio privado -->
     <script src="../../controllers/utils/privado.js" type="text/javascript"></script>
     <!-- Llamada al controlador de la página inicio -->
-    <script src="../../controllers/private/grados_academicos.js" type="text/javascript"></script>
+    <script src="../../controllers/private/aspirantes.js" type="text/javascript"></script>
 </body>
 
 </html>

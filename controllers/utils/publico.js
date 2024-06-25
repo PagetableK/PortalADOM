@@ -12,11 +12,6 @@ let colorInicio = "", colorCV = "", colorPerfil = "";
 // La función cargarPlantilla se utiliza en todas las páginas del sitio privado,
 // permite verificar si existe una sesión activa, en tal caso se muestran los componentes necesarios.
 const cargarPlantilla = async () => {
-
-    document.addEventListener('DOMContentLoaded', async () => {
-        // Llamada a la función para validar sesiones activas.
-        cargarPlantilla();
-    });
     // Se realiza una petición para validar si existe una sesión activa.
     const DATA = await fetchData(USER_API, 'getUser');
     // Si existe una sesión activa se ejecuta el código.
@@ -24,7 +19,7 @@ const cargarPlantilla = async () => {
         // Si la respuesta es satisfactoria se ejecuta el código.
         if (DATA.status) {
             // Se inserta el menú lateral.
-            MAIN.insertAdjacentHTML('afterbegin', `
+            MAIN.insertAdjacentHTML('beforebegin', `
             <nav class="navbar navbar-expand-lg bg-orange">
                 <div class="container-fluid d-flex">
                     <div class="d-flex align-items-center gap-3 col-lg-4">
@@ -76,23 +71,23 @@ const cargarPlantilla = async () => {
             location.href = 'index.html';
         }
         else {
-            alert('No existe una sesión activa');
+            sweetAlert(3, 'No existe una sesión activa', false);
         }
     }
 }
 
 // La función cambiarColor permite cambiar el color del apartado actual
 // donde se encuentra el usuario
-function cambiarColor(apartado){
-    if(apartado == 'Inicio'){
+function cambiarColor(apartado) {
+    if (apartado == 'Inicio') {
         colorInicio = 'text-light';
         colorPerfil = '';
         colorCV = '';
-    } else if(apartado == 'CV'){
+    } else if (apartado == 'CV') {
         colorCV = 'text-light';
         colorPerfil = '';
         colorInicio = '';
-    } else{
+    } else {
         colorPerfil = 'text-light';
         colorInicio = '';
         colorCV = '';
