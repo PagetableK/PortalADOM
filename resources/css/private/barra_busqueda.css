@@ -1,0 +1,23 @@
+main{
+    height: 10000px;
+}
+ 
+.contenedor-form {
+    border: 0px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 7px 29px 0px;
+    border-radius: 0.25rem;
+    min-height: 50px;
+}
+ 
+.elemento-form {
+    border: 0px;
+    background-color: #fff;
+}
+ 
+#btnBuscar {
+    cursor: pointer;
+}
+ 
+#container_busqueda {
+    padding: 0px;
+}  
