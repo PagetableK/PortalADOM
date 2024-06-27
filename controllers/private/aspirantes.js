@@ -1,3 +1,5 @@
+
+
 document.addEventListener('DOMContentLoaded', async () => {
     // Llamada a la función para validar sesiones activas.
     cargarPlantilla();
@@ -7,41 +9,45 @@ document.addEventListener('DOMContentLoaded', async () => {
 const cargarModalAgregar = () => {
     const modalContainer = document.createElement('div');
     modalContainer.innerHTML = `
-        <div class="modal fade" id="agregarModal" tabindex="-1" aria-labelledby="agregarModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
+        <div class="modal fade" id="agregarModal">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="agregarModalLabel">Agregar grado académico</h5>
+                        <h5 class="modal-title">Agregar aspirante</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
-                        <form id="formularioAgregar">
-                            <div class="row mb-3">
-                                <div class="col-6">
-                                    <label for="nombreAspirante" class="form-label">Nombre</label>
-                                    <input type="text" class="form-control" id="nombreAspirante" required>
+                    <form id="formularioAgregar">
+                        <div class="modal-body">
+                                <div class="row mb-3 row-gap-4">
+                                    <div class="col-12 col-lg-6">
+                                        <label for="nombreAspirante" class="form-label">Nombre</label>
+                                        <input type="text" class="form-control" id="nombreAspirante" required>
+                                    </div>
+                                    <div class="col-12 col-lg-6">
+                                        <label for="apellidoAspirante" class="form-label">Apellido</label>
+                                        <input type="text" class="form-control" id="apellidoAspirante" required>
+                                    </div>
+                                    <div class="col-12 col-lg-6">
+                                        <label for="correoAspirante" class="form-label">Correo</label>
+                                        <input type="email" class="form-control" id="correoAspirante" required>
+                                    </div>
+                                    <div class="col-12 col-lg-6">
+                                        <label for="estadoAspirante" class="form-label">Estado</label>
+                                        <select class="form-select" id="estadoAspirante">
+                                            <option value="1">
+                                                Activo
+                                            </option>
+                                            <option value="2">
+                                                Inactivo
+                                            </option>
+                                        </select>
+                                    </div>
                                 </div>
-                                <div class="col-6">
-                                    <label for="apellidoAspirante" class="form-label">Apellido</label>
-                                    <input type="text" class="form-control" id="apellidoAspirante" required>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-6">
-                                    <label for="correoAspirante" class="form-label">Correo</label>
-                                    <input type="email" class="form-control" id="correoAspirante" required>
-                                </div>
-                                <div class="col-6">
-                                    <label for="estadoAspirante" class="form-label">Estado</label>
-                                    <input type="text" class="form-control" id="estadoAspirante" required>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="button" class="btn btn-primary">Guardar</button>
-                    </div>
+                        </div>
+                        <div class="modal-footer d-flex justify-content-center">
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -60,41 +66,45 @@ const cargarModalAgregar = () => {
 const cargarModalEditar = () => {
     const modalContainer = document.createElement('div');
     modalContainer.innerHTML = `
-        <div class="modal fade" id="editarModal" tabindex="-1" aria-labelledby="editarModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
+        <div class="modal fade" id="editarModal">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="editarModalLabel">Editar grado académico</h5>
+                        <h5 class="modal-title">Editar aspirante</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
-                        <form id="formularioEditar">
-                            <div class="row mb-3">
-                                <div class="col-6">
-                                    <label for="nombreAspiranteEditar" class="form-label">Nombre</label>
-                                    <input type="text" class="form-control" id="nombreAspiranteEditar" required>
+                    <form id="formularioEditar">
+                        <div class="modal-body">
+                                <div class="row mb-3 row-gap-4">
+                                    <div class="col-12 col-lg-6">
+                                        <label for="nombreAspirante" class="form-label">Nombre</label>
+                                        <input type="text" class="form-control" id="nombreAspirante" required>
+                                    </div>
+                                    <div class="col-12 col-lg-6">
+                                        <label for="apellidoAspirante" class="form-label">Apellido</label>
+                                        <input type="text" class="form-control" id="apellidoAspirante" required>
+                                    </div>
+                                    <div class="col-12 col-lg-6">
+                                        <label for="correoAspirante" class="form-label">Correo</label>
+                                        <input type="email" class="form-control" id="correoAspirante" required>
+                                    </div>
+                                    <div class="col-12 col-lg-6">
+                                        <label for="estadoAspirante" class="form-label">Estado</label>
+                                        <select class="form-select" id="estadoAspirante">
+                                            <option value="1">
+                                                Activo
+                                            </option>
+                                            <option value="2">
+                                                Inactivo
+                                            </option>
+                                        </select>
+                                    </div>
                                 </div>
-                                <div class="col-6">
-                                    <label for="apellidoAspiranteEditar" class="form-label">Apellido</label>
-                                    <input type="text" class="form-control" id="apellidoAspiranteEditar" required>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-6">
-                                    <label for="correoAspiranteEditar" class="form-label">Correo</label>
-                                    <input type="email" class="form-control" id="correoAspiranteEditar" required>
-                                </div>
-                                <div class="col-6">
-                                    <label for="estadoAspiranteEditar" class="form-label">Estado</label>
-                                    <input type="text" class="form-control" id="estadoAspiranteEditar" required>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="button" class="btn btn-primary">Guardar cambios</button>
-                    </div>
+                        </div>
+                        <div class="modal-footer d-flex justify-content-center">
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
