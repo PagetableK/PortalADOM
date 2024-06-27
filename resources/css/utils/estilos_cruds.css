@@ -1,0 +1,33 @@
+.contenedor-form {
+    border: 0px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 7px 29px 0px;
+    border-radius: 0.25rem;
+    min-height: 50px;
+}
+ 
+.elemento-form {
+    border: 0px;
+    background-color: #fff;
+}
+ 
+#btnBuscar {
+    cursor: pointer;
+}
+ 
+#container_busqueda {
+    padding: 0px;
+}
+
+.agregar-icono{
+    margin-bottom: 0px !important;
+}
+
+.icono-editar{
+    color: #0CBA52;
+}
+
+.table{
+    --bs-table-bg: #ffffff;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 7px 29px 0px;
+    border-radius: 0.25rem;
+}
