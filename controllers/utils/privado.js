@@ -17,7 +17,7 @@ const cargarPlantilla = async () => {
         // Si la respuesta es satisfactoria se ejecuta el código.
         if (DATA.status) {
             // Si el usuario tiene una sesión activa y se encuentra en la interfaz "Inicio de sesión" se redirige hacia la interfaz "Inicio".
-            if(location.pathname.endsWith("index.html")){
+            if (location.pathname.endsWith("index.html")) {
                 location.href = "inicio.html";
             }
             // Se inserta el menú lateral.
@@ -119,24 +119,33 @@ const cargarPlantilla = async () => {
             }
             const TITULO = document.getElementById('tituloPrincipal');
 
-             // Se valida el nombre del archivo para determinar el título principal.
-             if (location.pathname.endsWith('inicio.html')) {
+            // Se valida el nombre del archivo para determinar el título principal.
+            if (location.pathname.endsWith('inicio.html')) {
                 TITULO.textContent = "Inicio";
             }
-            else if(location.pathname.endsWith('areas_laborales.html')) {
+            else if (location.pathname.endsWith('areas_laborales.html')) {
                 TITULO.textContent = "Áreas laborales";
             }
-            else if(location.pathname.endsWith('curriculums.html')) {
+            else if (location.pathname.endsWith('curriculums.html')) {
                 TITULO.textContent = "Currículums";
             }
-            else if(location.pathname.endsWith('instituciones.html')) {
+            else if (location.pathname.endsWith('instituciones.html')) {
                 TITULO.textContent = "Instituciones";
             }
-            else if(location.pathname.endsWith('rubro_empresa.html')) {
+            else if (location.pathname.endsWith('rubro_empresa.html')) {
                 TITULO.textContent = "Rubros empresa";
             }
-            else if(location.pathname.endsWith('aspirantes.html')) {
+            else if (location.pathname.endsWith('aspirantes.html')) {
                 TITULO.textContent = "Aspirantes";
+            }
+            else if (location.pathname.endsWith('idiomas.html')) {
+                TITULO.textContent = "Idiomas";
+            }
+            else if (location.pathname.endsWith('grados_academicos.html')) {
+                TITULO.textContent = "Grados académicos";
+            }
+            else if (location.pathname.endsWith('administradores.html')) {
+                TITULO.textContent = "Administradores";
             }
 
         } else {
