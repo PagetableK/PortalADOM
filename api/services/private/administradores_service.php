@@ -6,8 +6,8 @@ require_once('../../models/data/administradores_data.php');
 if (isset($_GET['action'])) {
     // Se crea una sesión o se reanuda la actual para poder utilizar variables de sesión en el script.
     session_start();
-     $_SESSION['idAdministrador'] = 1;
-     $_SESSION['correoAdministrador'] = 'pablo';
+    $_SESSION['idAdministrador'] = 1;
+    $_SESSION['correoAdministrador'] = 'correo@gmail.com';
     // Se instancia la clase correspondiente.
     $administradores = new AdministradoresData;
     // Se declara e inicializa un arreglo para guardar el resultado que retorna la API.

@@ -20,7 +20,7 @@ const cargarModalAgregar = () => {
                         <!-- Aquí va el contenido del formulario o lo que desees mostrar en el modal -->
                         <form id="formularioAgregar">
                             <div class="mb-3">
-                                <label for="nombreIdioma" class="form-label">Idiomas</label>
+                                <label for="nombreIdioma" class="form-label">Idioma</label>
                                 <input type="text" class="form-control" id="nombreIdioma" required>
                             </div>
                             <!-- Otros campos del formulario -->
@@ -58,20 +58,20 @@ const cargarModalAgregar = () => {
 // Función para cargar el modal de editar
 const cargarModalEditar = () => {
     // Obtener el contenedor del modal
-    const modalContainer = document.createElement('button');
+    const modalContainer = document.createElement('div');
     modalContainer.innerHTML = `
         <div class="modal fade" id="editarModal" tabindex="-1" aria-labelledby="editarModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="editarModalLabel">Editar idiomas</h5>
+                        <h5 class="modal-title" id="editarModalLabel">Editar idioma</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                        <!-- Aquí va el contenido del formulario o lo que desees mostrar en el modal -->
-                        <form id="formularioAgregar">
+                        <form id="formularioEditar">
                             <div class="mb-3">
-                                <label for="nombreIdioma" class="form-label">Idiomas</label>
+                                <label for="nombreIdioma" class="form-label">Idioma</label>
                                 <input type="text" class="form-control" id="nombreIdioma" required>
                             </div>
                             <!-- Otros campos del formulario -->

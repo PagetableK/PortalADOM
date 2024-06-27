@@ -18,6 +18,14 @@ const cargarPlantilla = async () => {
     if (DATA.session) {
         // Si la respuesta es satisfactoria se ejecuta el código.
         if (DATA.status) {
+            // Si el usuario tiene una sesión activa y se encuentra en la interfaz "Inicio de sesión" se redirige hacia la interfaz "Inicio".
+            if (location.pathname.endsWith("index.html")) {
+                location.href = "inicio.html";
+            }
+            // Si el usuario tiene una sesión activa y se encuentra en la interfaz "Inicio de sesión" se redirige hacia la interfaz "Inicio".
+            if(location.pathname.endsWith("index.html")){
+                location.href = "inicio.html";
+            }
             // Se inserta el menú lateral.
             MAIN.insertAdjacentHTML('beforebegin', `
             <nav class="navbar navbar-expand-lg bg-orange">
