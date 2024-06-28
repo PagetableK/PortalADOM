@@ -19,7 +19,7 @@ const cargarModalAgregar = () => {
                         <!-- Aquí va el contenido del formulario o lo que desees mostrar en el modal -->
                         <form id="formularioAgregar">
                             <div class="mb-3">
-                                <label for="nombreInstitucion" class="form-label">Nombre de la Institución</label>
+                                <label for="nombreInstitucion" class="form-label">Grado académico</label>
                                 <input type="text" class="form-control" id="nombreInstitucion" required>
                             </div>
                             <!-- Otros campos del formulario -->
@@ -67,7 +67,7 @@ const cargarModalEditar = () => {
                         <!-- Aquí va el contenido del formulario de edición o lo que desees mostrar en el modal -->
                         <form id="formularioEditar">
                             <div class="mb-3">
-                                <label for="editarNombreInstitucion" class="form-label">Nombre de la Institución</label>
+                                <label for="editarNombreInstitucion" class="form-label">Grado académico</label>
                                 <input type="text" class="form-control" id="editarNombreInstitucion" required>
                             </div>
                             <!-- Otros campos del formulario -->
