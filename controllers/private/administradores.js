@@ -12,20 +12,24 @@ const cargarModalAgregar = () => {
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="agregarModalLabel">Agregar grado académico</h5>
+                        <h5 class="modal-title" id="agregarModalLabel">Agregar administradoeres</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <!-- Aquí va el contenido del formulario o lo que desees mostrar en el modal -->
                         <form id="formularioAgregar">
                             <div class="mb-3">
-                                <label for="nombreInstitucion" class="form-label">Grado académico</label>
-                                <input type="text" class="form-control" id="nombreInstitucion" required>
+                                <label for="agregarNombresAdministrador" class="form-label">Nombres del administrador</label>
+                                <input type="text" class="form-control" id="agregarNombresAdministrador" required>
                             </div>
                             <!-- Otros campos del formulario -->
                             <div class="mb-3">
-                                <label for="usos" class="form-label">Usos</label>
-                                <input type="text" class="form-control" id="usos" required>
+                                <label for="agregarApellidosAdministrador" class="form-label">Apellidos del administrador</label>
+                                <input type="text" class="form-control" id="agregarApellidosAdministrador" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="agregarCorreoAdministrador" class="form-label">Correo del administrador</label>
+                                <input type="text" class="form-control" id="agregarCorreoAdministrador" required>
                             </div>
                         </form>
                     </div>
@@ -65,15 +69,19 @@ const cargarModalEditar = () => {
                     </div>
                     <div class="modal-body">
                         <!-- Aquí va el contenido del formulario de edición o lo que desees mostrar en el modal -->
-                        <form id="formularioEditar">
+                        <form id="formularioAgregar">
                             <div class="mb-3">
-                                <label for="editarNombreInstitucion" class="form-label">Grado académico</label>
-                                <input type="text" class="form-control" id="editarNombreInstitucion" required>
+                                <label for="editarNombresAdministrador" class="form-label">Nombres del administrador</label>
+                                <input type="text" class="form-control" id="editarNombresAdministrador" required>
                             </div>
                             <!-- Otros campos del formulario -->
                             <div class="mb-3">
-                                <label for="editarUsos" class="form-label">Usos</label>
-                                <input type="text" class="form-control" id="editarUsos" required>
+                                <label for="editarApellidosAdministrador" class="form-label">Apellidos del administrador</label>
+                                <input type="text" class="form-control" id="editarApellidosAdministrador" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editarCorreoAdministrador" class="form-label">Correo del administrador</label>
+                                <input type="text" class="form-control" id="editarCorreoAdministrador" required>
                             </div>
                         </form>
                     </div>
