@@ -32,6 +32,18 @@ const cargarModalAgregar = () => {
                                         <input type="email" class="form-control" id="correoAspirante" required>
                                     </div>
                                     <div class="col-12 col-lg-6">
+                                        <label for="claveAspirante" class="form-label">Clave</label>
+                                        <input type="email" class="form-control" id="claveAspirante" required>
+                                    </div>
+                                    <div class="col-12 col-lg-6">
+                                        <label for="fechaAspirante" class="form-label">Fecha de nacimiento</label>
+                                        <input type="email" class="form-control" id="fechaAspirante" required>
+                                    </div>
+                                    <div class="col-12 col-lg-6">
+                                        <label for="generoAspirante" class="form-label">Genero</label>
+                                        <input type="email" class="form-control" id="generoAspirante" required>
+                                    </div>
+                                    <div class="col-12 col-lg-6">
                                         <label for="estadoAspirante" class="form-label">Estado</label>
                                         <select class="form-select" id="estadoAspirante">
                                             <option value="1">
