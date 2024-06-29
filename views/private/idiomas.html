@@ -7,20 +7,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Título del documento -->
-    <title>Inicio</title>
+    <title>Idiomas</title>
     <!-- Llamada al framework de diseño -->
     <link href="../../resources/css/utils/bootstrap.min.css" rel="stylesheet">
     <!-- Llamada a los íconos de la barra de navegación -->
     <link href="../../resources/css/utils/bootstrap-icons.min.css" rel="stylesheet">
     <!-- CSS de la barra lateral de navegación -->
     <link href="../../resources/css/utils/barra_lateral.css" rel="stylesheet">
+    <!-- Llamada al archivo que contiene los estilos generales del crud -->
+    <link href="../../resources/css/utils/estilos_cruds.css" rel="stylesheet">
 </head>
 
 <body class="d-flex">
     <!-- Contenido principal del documento -->
-    <main class="borde-main">
-        <div class="container">
-            
+    <main>
+        <div class="container-fluid px-5">
             <!-- Este div crea una fila dentro de Bootstrap -->
             <div class="row mb-3 row-gap-3 pe-2 ps-2 d-flex align-items-center">
                 <div class="col-12">
@@ -28,7 +29,6 @@
                 </div>
                 <div class="col-12 col-lg-9">
                     <div class="row d-flex contenedor-form">
-                        
                         <!-- Este div contiene la barra de búsqueda -->
                         <div class="col d-flex container-fluid" id="container_busqueda">
                             <div class="d-flex">
@@ -38,199 +38,60 @@
                             </div>
                             <!-- Este input crea la barra de búsqueda -->
                             <input type="search" class="form-control elemento-form" placeholder="Buscar..."
-                                id="btnBuscarIdioma">
+                                id="btnBuscarAspirante">
                         </div>
                     </div>
                 </div>
                 <div class="col-12 col-lg-3 d-flex justify-content-center">
-
-                    <div id="botonAgregar" class="btn btn-dark h-100 w-100 d-flex align-items-center justify-content-center gap-2 contenedor-form" data-bs-toggle="modal" data-bs-target="#agregarModal">
-                        <i class="bi bi-plus"></i> Agregar idiomas
+                    <div id="botonAgregar"
+                        class="btn btn-dark h-100 w-100 d-flex align-items-center justify-content-center gap-2 contenedor-form">
+                        Agregar idiomas <i class="bi bi-plus h3 agregar-icono"></i>
                     </div>
                 </div>
             </div>
-            <!-- Tabla para mostrar los registros existentes -->
-            <table class="table table-hover caption-top">
-                <!-- Cabeza de la tabla para mostrar la cantidad de registros y los títulos de las columnas -->
-                <thead>
-                    <tr>
-                        <th>Idiomas</th>
-                        <th>Usos</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <!-- Cuerpo de la tabla para mostrar un registro por fila -->
-                <tbody id="tabla_idioma" class="text-center">
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                            <button class="btn" id="botonEditar">
-                                <i class="bi bi-pencil-square h4 icono-editar"></i>
-                            </button>
-                            <button class="btn" id="botonEliminar">
-                                <i class="bi bi-trash h4 text-danger"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                            <button class="btn" id="botonEditar">
-                                <i class="bi bi-pencil-square h4 icono-editar"></i>
-                            </button>
-                            <button class="btn" id="botonEliminar">
-                                <i class="bi bi-trash h4 text-danger"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                            <button class="btn" id="botonEditar">
-                                <i class="bi bi-pencil-square h4 icono-editar"></i>
-                            </button>
-                            <button class="btn" id="botonEliminar">
-                                <i class="bi bi-trash h4 text-danger"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                            <button class="btn" id="botonEditar">
-                                <i class="bi bi-pencil-square h4 icono-editar"></i>
-                            </button>
-                            <button class="btn" id="botonEliminar">
-                                <i class="bi bi-trash h4 text-danger"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                            <button class="btn" id="botonEditar">
-                                <i class="bi bi-pencil-square h4 icono-editar"></i>
-                            </button>
-                            <button class="btn" id="botonEliminar">
-                                <i class="bi bi-trash h4 text-danger"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                            <button class="btn" id="botonEditar">
-                                <i class="bi bi-pencil-square h4 icono-editar"></i>
-                            </button>
-                            <button class="btn" id="botonEliminar">
-                                <i class="bi bi-trash h4 text-danger"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                            <button class="btn" id="botonEditar">
-                                <i class="bi bi-pencil-square h4 icono-editar"></i>
-                            </button>
-                            <button class="btn" id="botonEliminar">
-                                <i class="bi bi-trash h4 text-danger"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                            <button class="btn" id="botonEditar">
-                                <i class="bi bi-pencil-square h4 icono-editar"></i>
-                            </button>
-                            <button class="btn" id="botonEliminar">
-                                <i class="bi bi-trash h4 text-danger"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                            <button class="btn" id="botonEditar">
-                                <i class="bi bi-pencil-square h4 icono-editar"></i>
-                            </button>
-                            <button class="btn" id="botonEliminar">
-                                <i class="bi bi-trash h4 text-danger"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                            <button class="btn" id="botonEditar">
-                                <i class="bi bi-pencil-square h4 icono-editar"></i>
-                            </button>
-                            <button class="btn" id="botonEliminar">
-                                <i class="bi bi-trash h4 text-danger"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                            <button class="btn" id="botonEditar">
-                                <i class="bi bi-pencil-square h4 icono-editar"></i>
-                            </button>
-                            <button class="btn" id="botonEliminar">
-                                <i class="bi bi-trash h4 text-danger"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                            <button class="btn" id="botonEditar">
-                                <i class="bi bi-pencil-square h4 icono-editar"></i>
-                            </button>
-                            <button class="btn" id="botonEliminar">
-                                <i class="bi bi-trash h4 text-danger"></i>
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <hr class="mb-5">
+            <div class="table-responsive-lg">
+                <!-- Tabla para mostrar los registros existentes -->
+                <table class="table table-hover caption-top">
+                    <!-- Cabeza de la tabla para mostrar la cantidad de registros y los títulos de las columnas -->
+                    <thead>
+                        <tr class="text-center">
+                            <th>Idiomas</th>
+                            <th>Usos</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <!-- Cuerpo de la tabla para mostrar un registro por fila -->
+                    <tbody id="tabla_idioma" class="text-center">
+                        <tr>
+                            
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <button class="btn" id="botonEditar">
+                                    <i class="bi bi-pencil-square h4 icono-editar"></i>
+                                </button>
+                                <button class="btn" id="botonEliminar">
+                                    <i class="bi bi-trash h4 text-danger"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <button class="btn" id="botonEditar">
+                                    <i class="bi bi-pencil-square h4 icono-editar"></i>
+                                </button>
+                                <button class="btn" id="botonEliminar">
+                                    <i class="bi bi-trash h4 text-danger"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </main>
 
