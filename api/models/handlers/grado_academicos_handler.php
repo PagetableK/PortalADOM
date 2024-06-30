@@ -1,55 +1,58 @@
 <?php
 require_once('../../helpers/database.php');
 
-class GradosAcademicosData {
+class GradosAcademicosHandler {
+    
     private $id;
     private $nombre;
-    private $usos;
-    private $error;
 
-    public function setId($id) {
-        if (Validator::validateNaturalNumber($id)) {
-            $this->id = $id;
-            return true;
-        } else {
-            $this->error = 'ID inválido';
-            return false;
-        }
-    }
-
-    public function setNombre($nombre) {
-        if (Validator::validateAlphabetic($nombre)) {
-            $this->nombre = $nombre;
-            return true;
-        } else {
-            $this->error = 'Nombre inválido';
-            return false;
-        }
-    }
-
-    public function setUsos($usos) {
-        if (Validator::validateAlphabetic($usos)) {
-            $this->usos = $usos;
-            return true;
-        } else {
-            $this->error = 'Usos inválidos';
-            return false;
-        }
-    }
-
-    public function getDataError() {
-        return $this->error;
-    }
 
     public function createRow() {
-        $sql = 'INSERT INTO grados_academicos (nombre, usos) VALUES (?, ?)';
-        $params = array($this->nombre, $this->usos);
+        $sql = 'INSERT INTO grados_academicos (nombre_grado , usos) VALUES (?, ?)';
+        $params = array($this->nombre);
         return Database::executeRow($sql, $params);
     }
 
     public function updateRow() {
-        $sql = 'UPDATE grados_academicos SET nombre = ?, usos = ? WHERE id = ?';
-        $params = array($this->nombre, $this->usos, $this->id);
+        $sql = 'UPDATE grados_academicos SET nombre_grado  = ?, usos = ? WHERE id = ?';
+        $params = array($this->nombre, $this->id);
+        return Database::executeRow($sql, $params);
+    }
+
+
+    public function searchRows()
+    {
+        $value = '%' . Validator::getSearchValue() . '%';
+        $sql = 'SELECT * FROM grados_academicos
+        WHERE nombre_grado  LIKE ?
+        ORDER BY nombre_grado ;';
+        $params = array($value);
+        return Database::getRows($sql, $params);
+    }
+
+    public function readAll()
+    {
+        $sql = 'SELECT * FROM grados_academicos
+        ORDER BY nombre_grado ;';
+        return Database::getRows($sql);
+    }
+
+    public function readOne()
+    {
+        $sql = 'SELECT id_grado AS id,
+        nombre_grado AS nombre
+        FROM grados_academicos
+        WHERE id_grado LIKE ?';
+        $params = array($this->id);
+        return Database::getRow($sql, $params);
+    }
+
+    public function deleteRow()
+    {
+        $sql = 'DELETE
+        FROM grados_academicos
+        WHERE id_grado = ?';
+        $params = array($this->id);
         return Database::executeRow($sql, $params);
     }
 }

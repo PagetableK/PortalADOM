@@ -7,7 +7,7 @@ require_once('../../models/handlers/grado_academicos_handler.php');
 /*
  *  Clase para manejar el encapsulamiento de los datos de la tabla ADMINISTRADOR.
  */
-class AspirantesData extends AspirantesHandler
+class GradosDATA extends GradosAcademicosHandler
 {
     // Atributo para el manejo de errores.
     private $info_error = null;
