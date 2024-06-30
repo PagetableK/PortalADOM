@@ -33,7 +33,7 @@ if (isset($_GET['action'])) {
             case 'createRow':
                 $_POST = Validator::validateForm($_POST);
                 if (
-                    !$grado->setNombre($_POST['nombreIdioma'])  
+                    !$grado->setNombre($_POST['nombreGrado'])  
                 ) {
                     $result['error'] = $grado->getDataError();
                 } elseif ($grado->createRow()) {
@@ -54,7 +54,7 @@ if (isset($_GET['action'])) {
                 break;
                 // Ver uno
             case 'readOne':
-                if (!$grado->setId($_POST['idIdioma'])) {
+                if (!$grado->setId($_POST['idGrado'])) {
                     $result['error'] = 'Grado academico incorrecto';
                 } elseif ($result['dataset'] = $grado->readOne()) {
                     $result['status'] = 1;
@@ -66,8 +66,8 @@ if (isset($_GET['action'])) {
             case 'updateRow':
                 $_POST = Validator::validateForm($_POST);
                 if (
-                    !$grado->setId($_POST['idIdioma']) or
-                    !$grado->setNombre($_POST['nombreIdioma']) 
+                    !$grado->setId($_POST['idGrado']) or
+                    !$grado->setNombre($_POST['nombreGrado']) 
                 ) {
                     $result['error'] = $grado->getDataError();
                 } elseif ($grado->updateRow()) {
@@ -80,7 +80,7 @@ if (isset($_GET['action'])) {
                 // Eliminar
             case 'deleteRow':
                 if (
-                    !$grado->setId($_POST['idIdioma'])
+                    !$grado->setId($_POST['idGrado'])
                 ) {
                     $result['error'] = $grado->getDataError();
                 } elseif ($grado->deleteRow()) {

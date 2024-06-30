@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Título del documento -->
-    <title>Grados académicos</title>
+    <title>Grado academico</title>
     <!-- Llamada al framework de diseño -->
     <link href="../../resources/css/utils/bootstrap.min.css" rel="stylesheet">
     <!-- Llamada a los íconos de la barra de navegación -->
@@ -49,7 +49,7 @@
                 <div class="col-12 col-lg-3 d-flex justify-content-center">
                     <div class="btn btn-dark h-100 w-100 d-flex align-items-center justify-content-center gap-2 contenedor-form"
                         type="submit" onclick="openCreate()">
-                        Agregar grados académicos <i class="bi bi-plus h3 agregar-icono"></i>
+                        Agregar grado academico <i class="bi bi-plus h3 agregar-icono"></i>
                     </div>
                 </div>
             </div>
@@ -60,19 +60,19 @@
                     <!-- Cabeza de la tabla para mostrar la cantidad de registros y los títulos de las columnas -->
                     <thead>
                         <tr>
-                            <td colspan="7" id="rowsFound"></td>
+                            <td colspan="2" id="rowsFound"></td>
                         </tr>
                         <tr class="text-center">
-                            <th>Grados académicos</th>
-                            <th>Usos</th>
+                            <th>Nombres</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
                     <!-- Cuerpo de la tabla para mostrar un registro por fila -->
-                    <tbody id="tabla_aspirante" class="text-center"></tbody>
+                    <tbody id="tabla_grado_academico" class="text-center"></tbody>
                 </table>
             </div>
         </div>
+
         <!-- Componente Modal para guardar un registro -->
         <div class="modal fade" id="saveModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
             aria-labelledby="modalTitle" aria-hidden="true">
@@ -87,11 +87,11 @@
                     <form id="saveForm">
                         <div class="modal-body row g-3">
                             <!-- Campo oculto para asignar el id del registro al momento de modificar -->
-                            <input type="number" class="d-none" id="idAspirante" name="idAspirante">
+                            <input type="number" class="d-none" id="idGrado" name="idGrado">
                             <div class="col-sm-12 col-md-6">
-                                <label for="nombreAspirante" class="form-label fw-semibold">Grado académico</label>
-                                <input id="nombreAspirante" type="text" name="nombreAspirante"
-                                    class="form-control" placeholder="Ingresa el nombre del aspirante"
+                                <label for="nombreGrado" class="form-label fw-semibold">Nombre</label>
+                                <input id="nombreGrado" type="text" name="nombreGrado"
+                                    class="form-control" placeholder="Ingresa el nombre del grado academico"
                                     autocomplete="off" required>
                             </div>
                         </div>
