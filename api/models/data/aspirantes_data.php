@@ -22,7 +22,7 @@ class AspirantesData extends AspirantesHandler
             return true;
         }
         else{
-            $this->info_error = 'El identificador del administrador es correcto';
+            $this->info_error = 'El identificador del aspirante es correcto';
             return false;
         }
     }
