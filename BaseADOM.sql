@@ -7,7 +7,7 @@ USE dbadom;
 CREATE TABLE administradores(
 	id_administrador INT PRIMARY KEY AUTO_INCREMENT,
 	correo_administrador VARCHAR(100) UNIQUE NOT NULL,
-	clave_administrador VARCHAR(64) NOT NULL,
+	clave_administrador VARCHAR(100) NOT NULL,
 	nombres_administrador VARCHAR(50) NOT NULL,
 	apellidos_administrador VARCHAR(50) NOT NULL,
 	estado_administrador TINYINT(1) NOT NULL DEFAULT 1
@@ -15,10 +15,10 @@ CREATE TABLE administradores(
 
 CREATE TABLE aspirantes(
 	id_aspirante INT PRIMARY KEY AUTO_INCREMENT,
-	nombre_aspirante VARCHAR(30) NOT NULL,
-	apellido_aspirante VARCHAR(30) NOT NULL,
-	correo_aspirante VARCHAR(50) UNIQUE NOT NULL,
-	clave_aspirante VARCHAR(64) NOT NULL,
+	nombre_aspirante VARCHAR(50) NOT NULL,
+	apellido_aspirante VARCHAR(50) NOT NULL,
+	correo_aspirante VARCHAR(100) UNIQUE NOT NULL,
+	clave_aspirante VARCHAR(100) NOT NULL,
 	fecha_nacimiento DATE NOT NULL,
 	genero_aspirante ENUM('Hombre','Mujer') NOT NULL,
 	estado_aspirante TINYINT(1) NOT NULL DEFAULT 1
@@ -147,3 +147,5 @@ CREATE TABLE referencias_aspirantes(
 	FOREIGN KEY (id_curriculum)
 	REFERENCES curriculum_aspirantes(id_curriculum)
 );
+
+
