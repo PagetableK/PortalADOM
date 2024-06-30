@@ -4,7 +4,7 @@ require_once('../../helpers/database.php');
 /*
 *	Clase para manejar el comportamiento de los datos de la tabla ASPIRANTES.
 */
-class IdiomasHandler
+class GradoHandler
 {
     /*
     *   Declaración de atributos para el manejo de datos.
@@ -18,7 +18,7 @@ class IdiomasHandler
 
     public function createRow()
     {
-        $sql = 'CALL insertar_idioma_validado(?)';
+        $sql = 'CALL insertar_grado_validado(?)';
         $params = array($this->nombre) ;
         return Database::executeRow($sql, $params);
     }
@@ -26,7 +26,7 @@ class IdiomasHandler
      //Función para actualizar un admministrador.
     public function updateRow()
     {
-        $sql = 'CALL actualizar_idioma_validado(?,?);';
+        $sql = 'CALL actualizar_grado_validado(?,?);';
         $params = array(
             $this->id,
             $this->nombre
@@ -38,10 +38,10 @@ class IdiomasHandler
     //funcion leer una linea
     public function readOne()
     {
-        $sql = 'SELECT id_idioma AS ID,
-        nombre_idioma AS NOMBRE
-        FROM idiomas
-        WHERE id_idioma LIKE ?';
+        $sql = 'SELECT id_grado AS ID,
+        nombre_grado AS NOMBRE
+        FROM grados_academicos
+        WHERE id_grado LIKE ?';
         $params = array($this->id);
         return Database::getRow($sql, $params);
     }
@@ -50,7 +50,7 @@ class IdiomasHandler
     public function searchRows()
     {
         $value = '%' . Validator::getSearchValue() . '%';
-        $sql = 'SELECT * FROM vista_tabla_idiomas
+        $sql = 'SELECT * FROM vista_tabla_grado
         WHERE NOMBRE LIKE ?
         ORDER BY NOMBRE;';
         $params = array($value);
@@ -60,7 +60,7 @@ class IdiomasHandler
     //Función para leer todos los admministradores.
     public function readAll()
     {
-        $sql = 'SELECT * FROM vista_tabla_idiomas
+        $sql = 'SELECT * FROM vista_tabla_grado
         ORDER BY NOMBRE;';
         return Database::getRows($sql);
     }
@@ -68,7 +68,7 @@ class IdiomasHandler
      //Función para eliminar un admministrador.
     public function deleteRow()
     {
-        $sql = 'CALL eliminar_idioma(?);';
+        $sql = 'CALL eliminar_grado(?);';
         $params = array($this->id);
         return Database::executeRow($sql, $params);
     }

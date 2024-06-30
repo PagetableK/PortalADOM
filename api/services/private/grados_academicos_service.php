@@ -1,15 +1,15 @@
 <?php
 // Se incluye la clase del modelo.
-require_once('../../models/data/grado_academicos_data.php');
+require_once('../../models/data/grados_academicos_data.php');
 
 // Se comprueba si existe una acción a realizar, de lo contrario se finaliza el script con un mensaje de error.
 if (isset($_GET['action'])) {
-    // Se crea una sesión o se reanuda la actual para poder utilizar variables de sesión en el script. Esta es la private
+    // Se crea una sesión o se reanuda la actual para poder utilizar variables de sesión en el script.
     session_start();
     $_SESSION['idAdministrador'] = 1;
     $_SESSION['correoAdministrador'] = 'correo@gmail.com';
     // Se instancia la clase correspondiente.
-    $grados = new GradosAcademicosData;
+    $grado = new GradoData;
     // Se declara e inicializa un arreglo para guardar el resultado que retorna la API.
     $result = array('status' => 0, 'session' => 0, 'message' => null, 'dataset' => null, 'error' => null, 'exception' => null, 'correoAdmin' => null);
     // Se verifica si existe una sesión iniciada como administrador, de lo contrario se finaliza el script con un mensaje de error.
@@ -22,7 +22,7 @@ if (isset($_GET['action'])) {
             case 'searchRows':
                 if (!Validator::validateSearch($_POST['search'])) {
                     $result['error'] = Validator::getSearchError();
-                } elseif ($result['dataset'] = $grados->searchRows()) {
+                } elseif ($result['dataset'] = $grado->searchRows()) {
                     $result['status'] = 1;
                     $result['message'] = 'Existen ' . count($result['dataset']) . ' coincidencias';
                 } else {
@@ -33,73 +33,61 @@ if (isset($_GET['action'])) {
             case 'createRow':
                 $_POST = Validator::validateForm($_POST);
                 if (
-                    !$grados->setNombre($_POST['nombreAspirante']) 
+                    !$grado->setNombre($_POST['nombreIdioma'])  
                 ) {
-                    $result['error'] = $grados->getDataError();
-                } elseif ($_POST['claveAspirante'] != $_POST['repetirclaveAspirante']) {
-                    $result['error'] = 'Contraseñas diferentes';
-                } elseif ($grados->createRow()) {
+                    $result['error'] = $grado->getDataError();
+                } elseif ($grado->createRow()) {
                     $result['status'] = 1;
-                    $result['message'] = 'Aspirante creado correctamente';
+                    $result['message'] = 'Grado academico creado correctamente';
                 } else {
-                    $result['error'] = 'Ocurrió un problema al crear el aspirante';
+                    $result['error'] = 'Ocurrió un problema al crear el grado academico';
                 }
                 break;
                 // Ver todo
             case 'readAll':
-                if ($result['dataset'] = $grados->readAll()) {
+                if ($result['dataset'] = $grado->readAll()) {
                     $result['status'] = 1;
                     $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
                 } else {
-                    $result['error'] = 'No existen aspirantes registrados';
+                    $result['error'] = 'No existen grado academico registrados';
                 }
                 break;
                 // Ver uno
             case 'readOne':
-                if (!$grados->setId($_POST['idAspirante'])) {
-                    $result['error'] = 'Aspirante incorrecto';
-                } elseif ($result['dataset'] = $grados->readOne()) {
+                if (!$grado->setId($_POST['idIdioma'])) {
+                    $result['error'] = 'Grado academico incorrecto';
+                } elseif ($result['dataset'] = $grado->readOne()) {
                     $result['status'] = 1;
                 } else {
-                    $result['error'] = 'Aspirante inexistente';
+                    $result['error'] = 'Grado academico inexistente';
                 }
                 break;
                  // Actualizar
             case 'updateRow':
                 $_POST = Validator::validateForm($_POST);
                 if (
-                    !$grados->setId($_POST['idAspirante']) or
-                    !$grados->setNombre($_POST['nombreAspirante'])
+                    !$grado->setId($_POST['idIdioma']) or
+                    !$grado->setNombre($_POST['nombreIdioma']) 
                 ) {
-                    $result['error'] = $grados->getDataError();
-                } elseif ($grados->updateRow()) {
+                    $result['error'] = $grado->getDataError();
+                } elseif ($grado->updateRow()) {
                     $result['status'] = 1;
-                    $result['message'] = 'Aspirante modificado correctamente';
+                    $result['message'] = 'Grado academico modificado correctamente';
                 } else {
-                    $result['error'] = 'Ocurrió un problema al modificar el aspirante';
+                    $result['error'] = 'Ocurrió un problema al modificar el grado academico';
                 }
                 break;
                 // Eliminar
             case 'deleteRow':
                 if (
-                    !$grados->setId($_POST['idAspirante'])
+                    !$grado->setId($_POST['idIdioma'])
                 ) {
-                    $result['error'] = $grados->getDataError();
-                } elseif ($grados->deleteRow()) {
+                    $result['error'] = $grado->getDataError();
+                } elseif ($grado->deleteRow()) {
                     $result['status'] = 1;
-                    $result['message'] = 'Aspirante eliminado correctamente';
+                    $result['message'] = 'Grado academico eliminado correctamente';
                 } else {
-                    $result['error'] = 'Ocurrió un problema al eliminar el aspirante';
-                }
-                break;
-                // Estado
-            case 'changeState':
-                if (
-                    !$grados->setId($_POST['idAspirante'])
-                ) {
-                    $result['error'] = $grados->getDataError();
-                } else {
-                    $result['error'] = 'Ocurrió un problema al alterar el estado del aspirante';
+                    $result['error'] = 'Ocurrió un problema al eliminar el grado academico';
                 }
                 break;
             default:
