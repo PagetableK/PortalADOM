@@ -291,6 +291,87 @@ BEGIN
 END;
 $$
 
+-- PROCEDIMIENTOS AGREGAR idiomas
+
+DROP PROCEDURE IF EXISTS insertar_idioma_validado;
+DELIMITER $$
+CREATE PROCEDURE insertar_idioma_validado(
+   IN p_nombre_idioma VARCHAR(30)
+)
+BEGIN
+	INSERT INTO idiomas (nombre_idioma)
+	VALUES(p_nombre_idioma);
+END;
+$$
+
+
+-- PROCEDIMIENTO ACTUALIZAR idioma
+
+DROP PROCEDURE IF EXISTS actualizar_idioma_validado;
+DELIMITER $$
+CREATE PROCEDURE actualizar_idioma_validado(
+   IN p_id_idioma INT,
+   IN p_nombre_idioma VARCHAR(30)
+)
+BEGIN
+	UPDATE idiomas SET nombre_idioma = p_nombre_idioma
+	WHERE id_idioma = p_id_idioma;
+END;
+$$
+
+-- PROCEDIMINETO ELIMINAR idioma 
+DROP PROCEDURE IF EXISTS eliminar_idioma;
+DELIMITER $$
+CREATE PROCEDURE eliminar_idioma(
+    IN p_id_idioma INT
+)
+BEGIN
+	DELETE FROM idiomas
+	WHERE id_idioma = p_id_idioma;
+END;
+$$
+
+
+-- PROCEDIMIENTOS AGREGAR grado academico
+
+DROP PROCEDURE IF EXISTS insertar_grado_validado;
+DELIMITER $$
+CREATE PROCEDURE insertar_grado_validado(
+   IN p_nombre_grado VARCHAR(60)
+)
+BEGIN
+	INSERT INTO grados_academicos (nombre_grado)
+	VALUES(p_nombre_grado);
+END;
+$$
+
+
+-- PROCEDIMIENTO ACTUALIZAR grado
+
+DROP PROCEDURE IF EXISTS actualizar_grado_validado;
+DELIMITER $$
+CREATE PROCEDURE actualizar_grado_validado(
+   IN p_id_grado INT,
+   IN p_nombre_grado VARCHAR(60)
+)
+BEGIN
+	UPDATE grados_academicos SET nombre_grado = p_nombre_grado
+	WHERE id_grado = p_id_grado;
+END;
+$$
+
+-- PROCEDIMINETO ELIMINAR grado
+DROP PROCEDURE IF EXISTS eliminar_grado;
+DELIMITER $$
+CREATE PROCEDURE eliminar_grado(
+    IN p_id_grado INT
+)
+BEGIN
+	DELETE FROM grados_academicos
+	WHERE id_grado = p_id_grado;
+END;
+$$
+
 
 
 
@@ -328,4 +409,20 @@ SELECT id_aspirante AS 'ID',
 FROM aspirantes;
 $$ 
 
+-- VISTA para tabla idioma
+DROP VIEW IF EXISTS vista_tabla_idiomas;
+DELIMITER $$
+CREATE VIEW vista_tabla_idiomas AS
+SELECT id_idioma AS 'ID', 
+		nombre_idioma AS 'NOMBRE'
+FROM idiomas;
+$$ 
 
+-- VISTA para tabla grado
+DROP VIEW IF EXISTS vista_tabla_grado;
+DELIMITER $$
+CREATE VIEW vista_tabla_grado AS
+SELECT id_grado AS 'ID', 
+		nombre_grado AS 'NOMBRE'
+FROM grados_academicos;
+$$ 
