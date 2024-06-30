@@ -149,3 +149,183 @@ CREATE TABLE referencias_aspirantes(
 );
 
 
+-- PROCEDIMIENTO
+
+-- PROCEDIMIENTOS AGREGAR ADMINISTRADOR
+
+DROP PROCEDURE IF EXISTS insertar_administrador_validado;
+DELIMITER $$
+CREATE PROCEDURE insertar_administrador_validado(
+   IN p_nombre_administrador VARCHAR(50),
+   IN p_apellido_administrador VARCHAR(50),
+   IN p_clave_administrador VARCHAR(100),
+   IN p_correo_administrador VARCHAR(100)
+)
+BEGIN
+    IF p_correo_administrador REGEXP '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$' THEN
+            INSERT INTO administradores (nombres_administrador, apellidos_administrador, clave_administrador, correo_administrador)
+            VALUES(p_nombre_administrador, p_apellido_administrador, p_clave_administrador, p_correo_administrador);
+    ELSE
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Formato de correo electrónico no válido';
+    END IF;
+END;
+$$
+
+-- PROCEDIMIENTO ACTUALIZAR ADMINISTRADOR
+
+
+DROP PROCEDURE IF EXISTS actualizar_administrador_validado;
+DELIMITER $$
+CREATE PROCEDURE actualizar_administrador_validado(
+   IN p_id_administrador INT,
+   IN p_nombre_administrador VARCHAR(50),
+   IN p_apellido_administrador VARCHAR(50),
+   IN p_correo_administrador VARCHAR(100)
+)
+BEGIN
+    IF p_correo_administrador REGEXP '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$' THEN
+            UPDATE administradores SET nombres_administrador = p_nombre_administrador, 
+            apellidos_administrador = p_apellido_administrador, 
+            correo_administrador = p_correo_administrador
+            WHERE id_administrador = p_id_administrador;
+    ELSE
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Formato de correo electrónico no válido';
+    END IF;
+END;
+$$
+
+-- PROCEDIMINETO ELIMINAR ADMINISTRADOR
+
+DROP PROCEDURE IF EXISTS eliminar_administrador;
+DELIMITER $$
+CREATE PROCEDURE eliminar_administrador(
+    IN p_id_administrador INT
+)
+BEGIN
+	DELETE FROM administradores
+	WHERE id_administrador = p_id_administrador;
+END;
+$$
+
+-- PROCEDIMIENTO Agregar aspirante
+ca
+DROP PROCEDURE IF EXISTS insertar_aspirante_validado;
+DELIMITER $$
+CREATE PROCEDURE insertar_aspirante_validado(
+   IN p_nombre_aspirante VARCHAR(50),
+   IN p_apellido_aspirante VARCHAR(50),
+   IN p_clave_aspirante VARCHAR(100),
+   IN p_correo_aspirante VARCHAR(100),
+   IN p_genero_aspirante VARCHAR(10),
+   IN p_fecha_nacimiento_aspirante DATE
+)
+BEGIN
+    -- Validar el formato del correo electrónico
+    IF p_correo_aspirante REGEXP '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$' THEN
+        -- Validar el género
+        IF p_genero_aspirante IN ('Hombre', 'Mujer') THEN
+            INSERT INTO aspirantes (
+                nombre_aspirante, 
+                apellido_aspirante, 
+                clave_aspirante, 
+                correo_aspirante, 
+                genero_aspirante, 
+                fecha_nacimiento
+            )
+            VALUES (
+                p_nombre_aspirante, 
+                p_apellido_aspirante, 
+                p_clave_aspirante, 
+                p_correo_aspirante, 
+                p_genero_aspirante, 
+                p_fecha_nacimiento_aspirante
+            );
+        ELSE
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Género no válido';
+        END IF;
+    ELSE
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Formato de correo electrónico no válido';
+    END IF;
+END;
+$$
+DELIMITER ;
+
+-- PROCEDIMIENTO actualizar aspirante 
+DROP PROCEDURE IF EXISTS actualizar_aspirante_validado;
+DELIMITER $$
+CREATE PROCEDURE actualizar_aspirante_validado(
+   IN p_id_aspirante INT,
+   IN p_nombre_aspirante VARCHAR(50),
+   IN p_apellido_aspirante VARCHAR(50),
+   IN p_correo_aspirante VARCHAR(100),
+   IN p_genero_aspirante ENUM('Hombre','Mujer'),
+   IN p_fecha_nacimiento_aspirante DATE
+   
+)
+BEGIN
+    IF p_correo_aspirante REGEXP '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$' THEN
+		IF p_genero_aspirante IN ('Hombre', 'Mujer') THEN
+			UPDATE aspirantes SET nombre_aspirante = p_nombre_aspirante, apellido_aspirante = p_apellido_aspirante, 
+			correo_aspirante = p_correo_aspirante, fecha_nacimiento = p_fecha_nacimiento_aspirante,
+			genero_aspirante = p_genero_aspirante
+			WHERE id_aspirante = p_id_aspirante;
+		ELSE
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Género no válido';
+        END IF;
+    ELSE
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Formato de correo electrónico no válido';
+    END IF;
+END;
+$$
+
+-- PROCEDIMINETO ELIMINAR apirante
+
+DROP PROCEDURE IF EXISTS eliminar_aspirante;
+DELIMITER $$
+CREATE PROCEDURE eliminar_aspirante(
+    IN p_id_aspirante INT
+)
+BEGIN
+	DELETE FROM aspirantes
+	WHERE id_aspirante = p_id_aspirante;
+END;
+$$
+
+
+
+
+-- VISTA
+
+-- VISTA para tabla administradores
+DROP VIEW IF EXISTS vista_tabla_administradores;
+DELIMITER $$
+CREATE VIEW vista_tabla_administradores AS
+SELECT id_administrador AS 'ID', 
+		nombres_administrador AS 'NOMBRE',
+        apellidos_administrador AS 'APELLIDO',
+		correo_administrador AS 'CORREO', 
+    CASE 
+        WHEN estado_administrador = 1 THEN 'Activo'
+        WHEN estado_administrador = 0 THEN 'Bloqueado'
+    END AS 'ESTADO'
+FROM administradores;
+$$ 
+
+-- VISTA para tabla aspirante
+DROP VIEW IF EXISTS vista_tabla_aspirantes;
+DELIMITER $$
+CREATE VIEW vista_tabla_aspirantes AS
+SELECT id_aspirante AS 'ID', 
+		nombre_aspirante AS 'NOMBRE',
+        apellido_aspirante AS 'APELLIDO',
+		correo_aspirante AS 'CORREO', 
+        fecha_nacimiento AS 'FECHA',
+        genero_aspirante AS 'GENERO',
+    CASE 
+        WHEN estado_aspirante = 1 THEN 'Activo'
+        WHEN estado_aspirante = 0 THEN 'Bloqueado'
+    END AS 'ESTADO'
+FROM aspirantes;
+$$ 
+
+
