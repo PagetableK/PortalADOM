@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<!-- Se configura el idioma del documento -->
+<html lang="es">
+
+<head>
+    <!-- Metadatos de la página web -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Título del documento -->
+    <title>Grados académicos</title>
+    <!-- Llamada al framework de diseño -->
+    <link href="../../resources/css/utils/bootstrap.min.css" rel="stylesheet">
+    <!-- Llamada a los íconos de la barra de navegación -->
+    <link href="../../resources/css/utils/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- CSS de la barra lateral de navegación -->
+    <link href="../../resources/css/utils/barra_lateral.css" rel="stylesheet">
+    <!-- Llamada al archivo que contiene los estilos generales del crud -->
+    <link href="../../resources/css/utils/estilos_cruds.css" rel="stylesheet">
+</head>
+
+<body class="d-flex">
+    <!-- Contenido principal del documento -->
+    <main>
+        <div class="container-fluid px-5">
+            <!-- Este div crea una fila dentro de Bootstrap -->
+            <div class="row mb-3 row-gap-3 pe-2 ps-2 d-flex align-items-center">
+                <div class="col-12">
+                    <h4 class="text-start fw-semibold"></h4>
+                </div>
+                <div class="col-12 col-lg-9">
+                    <div class="row d-flex contenedor-form">
+                        <form id="searchForm">
+                            <!-- Este div contiene la barra de búsqueda -->
+                            <div class="col d-flex container-fluid" id="container_busqueda">
+                                <div class="d-flex">
+                                    <button type="submit" class="input-group-text elemento-form" ><i class="bi bi-search"></i>
+                                    </button>
+                                </div>
+                                <!-- Este input crea la barra de búsqueda -->
+                                <input type="search" class="form-control elemento-form" placeholder="Buscar..." name="search">
+                                <button type="reset" class="btn btn-white" onclick="fillTable()">
+                                    <i class="bi bi-arrow-clockwise"></i>
+                                </button>
+                            </div>
+                        </form>
+                        
+                    </div>
+                </div>
+                <div class="col-12 col-lg-3 d-flex justify-content-center">
+                    <div class="btn btn-dark h-100 w-100 d-flex align-items-center justify-content-center gap-2 contenedor-form"
+                        type="submit" onclick="openCreate()">
+                        Agregar grados académicos <i class="bi bi-plus h3 agregar-icono"></i>
+                    </div>
+                </div>
+            </div>
+            <hr class="mb-5">
+            <div class="table-responsive-lg">
+                <!-- Tabla para mostrar los registros existentes -->
+                <table class="table table-hover caption-top">
+                    <!-- Cabeza de la tabla para mostrar la cantidad de registros y los títulos de las columnas -->
+                    <thead>
+                        <tr>
+                            <td colspan="7" id="rowsFound"></td>
+                        </tr>
+                        <tr class="text-center">
+                            <th>Grados académicos</th>
+                            <th>Usos</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <!-- Cuerpo de la tabla para mostrar un registro por fila -->
+                    <tbody id="tabla_aspirante" class="text-center"></tbody>
+                </table>
+            </div>
+        </div>
+        <!-- Componente Modal para guardar un registro -->
+        <div class="modal fade" id="saveModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            aria-labelledby="modalTitle" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header ">
+                        <h1 class="modal-title fs-5 text-dark" id="modalTitle"></h1>
+                        <button type="button" class="btn-close btn-close-dark" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <!-- Formulario para crear o actualizar un registro -->
+                    <form id="saveForm">
+                        <div class="modal-body row g-3">
+                            <!-- Campo oculto para asignar el id del registro al momento de modificar -->
+                            <input type="number" class="d-none" id="idAspirante" name="idAspirante">
+                            <div class="col-sm-12 col-md-6">
+                                <label for="nombreAspirante" class="form-label fw-semibold">Grado académico</label>
+                                <input id="nombreAspirante" type="text" name="nombreAspirante"
+                                    class="form-control" placeholder="Ingresa el nombre del aspirante"
+                                    autocomplete="off" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer col-sm-12 col-md-12 col-lg-12">
+                            <button type="reset" class="btn bg-danger text-white">Cancelar</button>
+                            <button type="submit" class="btn bg-primary text-white ">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Mandar a llamar el framework de diseño -->
+    <script src="../../resources/js/bootstrap.bundle.min.js" type="text/javascript"></script>
+    <!-- Mandar a llamar la librería de alertas -->
+    <script src="../../resources/js/sweetalert.min.js" type="text/javascript"></script>
+    <!-- Llamada al controlador general de la aplicación -->
+    <script src="../../controllers/utils/componentes.js" type="text/javascript"></script>
+    <!-- Llamada al controlador general del sitio privado -->
+    <script src="../../controllers/utils/privado.js" type="text/javascript"></script>
+    <!-- Llamada al controlador de la página inicio -->
+    <script src="../../controllers/private/grados_academicos.js" type="text/javascript"></script>
+</body>
+
+</html>
