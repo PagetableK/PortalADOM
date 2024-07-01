@@ -8,8 +8,8 @@ CREATE TABLE administradores(
 	id_administrador INT PRIMARY KEY AUTO_INCREMENT,
 	correo_administrador VARCHAR(100) UNIQUE NOT NULL,
 	clave_administrador VARCHAR(100) NOT NULL,
-	nombres_administrador VARCHAR(50) NOT NULL,
-	apellidos_administrador VARCHAR(50) NOT NULL,
+	nombre_administrador VARCHAR(50) NOT NULL,
+	apellido_administrador VARCHAR(50) NOT NULL,
 	estado_administrador TINYINT(1) NOT NULL DEFAULT 1
 );
 
