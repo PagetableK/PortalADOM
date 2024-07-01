@@ -19,23 +19,40 @@ class AspirantesHandler
     /*
     *   Métodos para gestionar la cuenta del aspirante.
     */
-    public function checkUser($mail, $password)
+    
+    // La acción checkUser permite validar la cuenta de un usuario por medio del query en la función.
+    public function checkUser($correo, $clave)
     {
-        $sql = 'SELECT id_cliente, correo_cliente, contra_cliente, estado_cliente
-                FROM clientes
-                WHERE correo_cliente = ?';
-        $params = array($mail);
+        // Se establece la estructura del query.
+        $sql = 'SELECT id_aspirante, clave_aspirante, estado_aspirante
+                FROM aspirantes
+                WHERE correo_aspirante = ?';
+        // Se agrega el parámetro en el array.
+        $params = array($correo);
+        // Se ejecuta la sentencia en la base y se capturan los datos en la variable $data. 
         $data = Database::getRow($sql, $params);
-        if (password_verify($password, $data['contra_cliente'])) {
-            $this->id = $data['id_cliente'];
-            $this->correo = $data['correo_cliente'];
-            $this->estado = $data['estado_cliente'];
-            return true;
+
+        // Se valida que el query retorne un registro de la tabla.
+        if ($data) {
+            // Se valida que la contraseña ingresada en el campo de login convertida a hash
+            // sea igual a la contraseña almacenada en la bd.
+            if (password_verify($clave, $data['clave_aspirante'])) {
+                // Se valida el estado del aspirante.
+                if ($data['estado_aspirante'] == '0') {
+                    // Si estado_aspirante = 0 el estado es inactivo: Se devuelve el string.
+                    return 'Estado inactivo';
+                } else {
+                    // Si estado_aspirante = 1 el estado es activo: Se devuelve el array.
+                    return array($data['id_aspirante'], $correo);
+                }
+            } else {
+                // Si la contraseña no es correcta se devuelve false.
+                return false;
+            }
         } else {
             return false;
         }
     }
-
     public function checkStatus()
     {
         if ($this->estado) {

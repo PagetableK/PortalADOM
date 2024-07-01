@@ -6,8 +6,6 @@ require_once('../../models/data/administradores_data.php');
 if (isset($_GET['action'])) {
     // Se crea una sesión o se reanuda la actual para poder utilizar variables de sesión en el script.
     session_start();
-    $_SESSION['idAdministrador'] = 1;
-    $_SESSION['correoAdministrador'] = 'correo@gmail.com';
     // Se instancia la clase correspondiente.
     $administradores = new AdministradoresData;
     // Se declara e inicializa un arreglo para guardar el resultado que retorna la API.
@@ -47,19 +45,19 @@ if (isset($_GET['action'])) {
                 // Se validan los campos del form que se encuentran en el array $_POST.
                 $_POST = Validator::validateForm($_POST);
                 // Se valida el estado del administrador.
-                if ($administradores->checkUser($_POST['CorreoAdmin'], $_POST['ContraAdmin']) == 'Estado inactivo') {
+                if ($administradores->checkUser($_POST['correo'], $_POST['clave']) == 'Estado inactivo') {
                     // Si el estado del administrador es inactivo se muestra un mensaje con el error.
-                    $result['error'] = 'Su cuenta ha sido desactivada por un administrador';
-                } elseif ($administradores->checkUser($_POST['CorreoAdmin'], $_POST['ContraAdmin'])) {
+                    $result['error'] = 'Su cuenta ha sido desactivada';
+                } elseif ($administradores->checkUser($_POST['correo'], $_POST['clave'])) {
                     // Si el estado del administrador es activo se ejecuta el código.
                     // Se asigna el valor de status.
                     $result['status'] = 1;
                     // Se asigna el id del administrador proveniente de la función checkUser()
                     // dentro del array de la sesión $_SESSION.
-                    $_SESSION['idAdministrador'] = $administradores->checkUser($_POST['CorreoAdmin'], $_POST['ContraAdmin'])[0];
+                    $_SESSION['idAdministrador'] = $administradores->checkUser($_POST['correo'], $_POST['clave'])[0];
                     // Se asigna el correo del administrador proveniente de la función checkUser()
                     // dentro del array de la sesión $_SESSION.
-                    $_SESSION['correoAdministrador'] = $administradores->checkUser($_POST['CorreoAdmin'], $_POST['ContraAdmin'])[1];
+                    $_SESSION['correoAdministrador'] = $administradores->checkUser($_POST['correo'], $_POST['clave'])[1];
                     // Se devuelve el mensaje del resultado de la acción logIn.
                     $result['message'] = 'Autenticación correcta';
                 } else {

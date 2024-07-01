@@ -16,7 +16,7 @@ if (isset($_GET['action'])) {
         $result['session'] = 1;
         // Se compara la acción a realizar cuando un aspirante ha iniciado sesión.
         switch ($_GET['action']) {
-            // La acción getUser retorna el correo del aspirante y valida que ya se haya iniciado sesión.
+                // La acción getUser retorna el correo del aspirante y valida que ya se haya iniciado sesión.
             case 'getUser':
                 // Se valida que exista el valor del correo dentro del array asociativo.
                 if (isset($_SESSION['correoAspirante'])) {
@@ -28,7 +28,7 @@ if (isset($_GET['action'])) {
                     $result['error'] = 'Correo de usuario indefinido';
                 }
                 break;
-            // La acción logOut permite cerrar la sesión del usuario.
+                // La acción logOut permite cerrar la sesión del usuario.
             case 'logOut':
                 // Se elimina la sesión.
                 if (session_destroy()) {
@@ -40,7 +40,7 @@ if (isset($_GET['action'])) {
                     $result['error'] = 'Ocurrió un problema al cerrar la sesión';
                 }
                 break;
-            // Si no se encuentra la acción se retorna el error.
+                // Si no se encuentra la acción se retorna el error.
             default:
                 $result['error'] = 'Acción no disponible dentro de la sesión';
         }
@@ -49,9 +49,31 @@ if (isset($_GET['action'])) {
         switch ($_GET['action']) {
             case 'signUp':
                 break;
+                // La acción logIn verifica las credenciales del aspirante para poder ingresar al programa.
             case 'logIn':
+                // Se validan los campos del form que se encuentran en el array $_POST.
+                $_POST = Validator::validateForm($_POST);
+                // Se valida el estado del aspirante.
+                if ($aspirantes->checkUser($_POST['correo'], $_POST['clave']) == 'Estado inactivo') {
+                    // Si el estado del aspirante es inactivo se muestra un mensaje con el error.
+                    $result['error'] = 'Su cuenta ha sido desactivada';
+                } elseif ($aspirantes->checkUser($_POST['correo'], $_POST['clave'])) {
+                    // Si el estado del aspirante es activo se ejecuta el código.
+                    // Se asigna el valor de status.
+                    $result['status'] = 1;
+                    // Se asigna el id del aspirante proveniente de la función checkUser()
+                    // dentro del array de la sesión $_SESSION.
+                    $_SESSION['idAspirante'] = $aspirantes->checkUser($_POST['correo'], $_POST['clave'])[0];
+                    // Se asigna el correo del aspirante proveniente de la función checkUser()
+                    // dentro del array de la sesión $_SESSION.
+                    $_SESSION['correoAspirante'] = $aspirantes->checkUser($_POST['correo'], $_POST['clave'])[1];
+                    // Se devuelve el mensaje del resultado de la acción logIn.
+                    $result['message'] = 'Autenticación correcta';
+                } else {
+                    $result['error'] = 'Credenciales incorrectas';
+                }
                 break;
-            // Si no se encuentra la acción se retorna el error.
+                // Si no se encuentra la acción se retorna el error.
             default:
                 $result['error'] = 'Acción no disponible fuera de la sesión';
         }

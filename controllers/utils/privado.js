@@ -89,6 +89,14 @@ const cargarPlantilla = async () => {
                             </li>
                         </ul>
                     </li>
+                    
+                    <!-- Botón para cerrar sesión -->
+                    <li class="sidebar-item">
+                        <a class="sidebar-link text-light bg-danger" onclick="logOut()">
+                            <i class="bi bi-box-arrow-left"></i>
+                            <span>Cerrar sesión</span>
+                        </a>
+                    </li>
                 </ul>
             </aside>`
             );
