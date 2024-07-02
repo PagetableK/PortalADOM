@@ -8,6 +8,8 @@ const USER_API = 'services/public/aspirantes_service.php';
 const MAIN = document.querySelector('main');
 // Variables que permiten cambiar el color del apartado donde se encuentra el usuario.
 let colorInicio = "", colorCV = "", colorPerfil = "";
+// Variable global que almacena el nombre del usuario.
+var nombreUsuario;
 
 // La función cargarPlantilla se utiliza en todas las páginas del sitio privado,
 // permite verificar si existe una sesión activa, en tal caso se muestran los componentes necesarios.
@@ -18,12 +20,14 @@ const cargarPlantilla = async () => {
     if (DATA.session) {
         // Si la respuesta es satisfactoria se ejecuta el código.
         if (DATA.status) {
+            // Se asigna el valor de la variable global.
+            nombreUsuario = DATA.nombre;
             // Si el usuario tiene una sesión activa y se encuentra en la interfaz "Inicio de sesión" se redirige hacia la interfaz "Inicio".
             if (location.pathname.endsWith("index.html")) {
                 location.href = "inicio.html";
             }
-            // Si el usuario tiene una sesión activa y se encuentra en la interfaz "Inicio de sesión" se redirige hacia la interfaz "Inicio".
-            if(location.pathname.endsWith("index.html")){
+            // Si el usuario tiene una sesión activa y se encuentra en la interfaz "Registro" se redirige hacia la interfaz "Inicio".
+            if(location.pathname.endsWith("registro.html")){
                 location.href = "inicio.html";
             }
             // Se inserta el menú lateral.
@@ -75,7 +79,7 @@ const cargarPlantilla = async () => {
         }
     } else {
         // Si no existe una sesión activa y la página actual no es el inicio de sesión se redirige al index.
-        if (!location.pathname.endsWith('index.html')) {
+        if (!location.pathname.endsWith('index.html') && !location.pathname.endsWith('registro.html')) {
             location.href = 'index.html';
         }
         else {

@@ -1,6 +1,6 @@
 // Se almacena la ruta de la API del aspirante para realizar consultas.
 const API_USUARIO = 'services/public/aspirantes_service.php';
-// Se almacena el formulario de login.
+// Se almacena el formulario de login en la constante.
 const FORM_LOGIN = document.getElementById('formLogin');
 
 document.addEventListener('DOMContentLoaded', async () => {

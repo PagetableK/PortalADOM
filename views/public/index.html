@@ -22,32 +22,34 @@
         <div class="left-side col-lg-6 d-flex align-items-center justify-content-center">
             <img src="../../resources/img/full_logo.png" alt="Logo" class="img-fluid w-65 w-65 d-none d-lg-block">
         </div>
-        <div class="right-side col-12 col-lg-6 d-flex flex-column flex-fill justify-content-center align-items-center text-center gap-3 rounded-start-2"> 
+        <div class="right-side col-12 col-lg-6 d-flex flex-column justify-content-center align-items-center text-center rounded-start-2 h-100"> 
             <div class="left-side h-25 d-block d-lg-none d-flex fixed-top align-items-center justify-content-center">
                 <img src="../../resources/img/full_logo.png" alt="Logo" class="img-fluid h-100 d-block d-lg-none">
             </div>
-            <h1 class="text-light fw-bold">Iniciar sesión</h1>
-            <form class="w-65 d-flex flex-column gap-2" id="formLogin">
-                <label for="correo" class="text-start fw-semibold">Usuario</label>
-                <div class="input-group">
-                    <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
-                    <input type="text" id="correo" name="correo" class="form-control">
+            <div id="contenedorForm" class="d-flex flex-column row-gap-3">
+                <h1 class="text-light fw-bold">Iniciar sesión</h1>
+                <form class="d-flex flex-column gap-2 w-100" id="formLogin">
+                    <label for="correo" class="text-start fw-semibold">Usuario</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
+                        <input type="text" id="correo" name="correo" class="form-control">
+                    </div>
+                    <label for="clave" class="text-start fw-semibold">Contraseña</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+                        <input type="password" id="clave" name="clave" class="form-control">
+                    </div>
+                    <button type="submit" class="fw-bold btn btn-dark">Iniciar sesión</button>
+                </form>
+                <a class="fw-semibold fs-6">¿Olvidó su contraseña?</a>
+                <div class="d-flex flex-row align-items-center justify-content-center gap-2 w-100">
+                    <hr class="linea-gruesa">
+                    <p class="m-0">O</p>
+                    <hr class="linea-gruesa">
                 </div>
-                <label for="clave" class="text-start fw-semibold">Contraseña</label>
-                <div class="input-group">
-                    <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
-                    <input type="password" id="clave" name="clave" class="form-control">
+                <div class="d-flex w-100">
+                    <a type="submit" class="fw-bold btn btn-dark flex-fill" href="registro.html">Registrarse</a>
                 </div>
-                <button type="submit" class="fw-bold btn btn-dark w-100 mt-3">Iniciar sesión</button>
-            </form>
-            <a class="fw-semibold fs-6">¿Olvidó su contraseña?</a>
-            <div class="d-flex flex-row align-items-center gap-2">
-                <hr class="linea-gruesa">
-                <p class="m-0">O</p>
-                <hr class="linea-gruesa">
-            </div>
-            <div class="w-65 d-flex">
-                <a type="submit" class="fw-bold btn btn-dark w-100 mt-3" href="registro.html">Registrarse</a>
             </div>
         </div>
     </main>

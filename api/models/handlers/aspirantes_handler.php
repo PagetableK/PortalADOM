@@ -15,6 +15,8 @@ class AspirantesHandler
     protected $correo = null;
     protected $clave = null;
     protected $estado = null;
+    protected $genero = null;
+    protected $fecha_nacimiento = null;
 
     /*
     *   Métodos para gestionar la cuenta del aspirante.
@@ -24,7 +26,7 @@ class AspirantesHandler
     public function checkUser($correo, $clave)
     {
         // Se establece la estructura del query.
-        $sql = 'SELECT id_aspirante, clave_aspirante, estado_aspirante
+        $sql = 'SELECT id_aspirante, clave_aspirante, estado_aspirante, nombre_aspirante, apellido_aspirante
                 FROM aspirantes
                 WHERE correo_aspirante = ?';
         // Se agrega el parámetro en el array.
@@ -43,7 +45,7 @@ class AspirantesHandler
                     return 'Estado inactivo';
                 } else {
                     // Si estado_aspirante = 1 el estado es activo: Se devuelve el array.
-                    return array($data['id_aspirante'], $correo);
+                    return array($data['id_aspirante'], $correo, $data['nombre_aspirante'], $data['apellido_aspirante']);
                 }
             } else {
                 // Si la contraseña no es correcta se devuelve false.
@@ -64,21 +66,41 @@ class AspirantesHandler
         }
     }
 
+    // Esta función permite crear un registro en la tabla.
+    public function createRow(){
+        // Se establece la estructura de la sentencia.
+        $sql = 'INSERT INTO aspirantes (nombre_aspirante, apellido_aspirante, correo_aspirante, clave_aspirante, fecha_nacimiento, genero_aspirante)
+        VALUES(?, ?, ?, ?, ?, ?);';
+        // Se almacenan los parámetros en el array.
+        $params = array($this->nombre, $this->apellido, $this->correo, $this->clave, $this->fecha_nacimiento, $this->genero);
+        // Se ejecuta la sentencia y se devuelve el estado del query.
+        return Database::executeRow($sql, $params);
+    }
+
+    // Esta función selecciona los campos duplicados en base a un parámetro.
     public function checkDuplicate($value)
     {
-        $sql = 'SELECT id_cliente
-                FROM clientes
-                WHERE dui_cliente = ? OR correo_cliente = ? OR telefono_movil = ? OR telefono_fijo = ?';
-        $params = array($value, $value, $value, $value);
+        // Se establece la estructura de la sentencia.
+        $sql = 'SELECT id_aspirante
+                FROM aspirantes
+                WHERE correo_aspirante = ?';
+        // Se almacenan los parámetros en el array.
+        $params = array($value);
+        // Se obtiene la fila y se devuelve el dato.
         return Database::getRow($sql, $params);
     }
 
+    // Esta función selecciona los campos duplicados en base a un parámetro y un id
+    // este query se utiliza para excluir el registro del aspirante cuando se actualiza el registro.
     public function checkDuplicateWithId($value)
     {
-        $sql = 'SELECT id_cliente
-                FROM clientes
-                WHERE (dui_cliente = ? OR correo_cliente = ? OR telefono_movil = ? OR telefono_fijo = ?) AND id_cliente != ?';
-        $params = array($value, $value, $value, $value, $this->id);
+        // Se establece la estructura de la sentencia.
+        $sql = 'SELECT id_aspirante
+                FROM aspirantes
+                WHERE correo_aspirante AND id_aspirante != ?';
+        // Se almacenan los parámetros en el array.
+        $params = array($value, $this->id);
+        // Se obtiene la fila y se devuelve el dato.
         return Database::getRow($sql, $params);
     }
 }

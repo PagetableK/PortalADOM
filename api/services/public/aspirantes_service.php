@@ -10,7 +10,7 @@ if (isset($_GET['action'])) {
     // Se instancia la clase correspondiente.
     $aspirantes = new AspirantesData;
     // Se declara e inicializa un arreglo para guardar el resultado que retorna la API.
-    $result = array('status' => 0, 'session' => 0, 'recaptcha' => 0, 'message' => null, 'error' => null, 'exception' => null, 'username' => null);
+    $result = array('status' => 0, 'session' => 0, 'recaptcha' => 0, 'message' => null, 'error' => null, 'exception' => null, 'username' => null, 'nombre' => null);
     // Se verifica si existe una sesión iniciada como aspirante para realizar las acciones correspondientes.
     if (isset($_SESSION['idAspirante'])) {
         $result['session'] = 1;
@@ -20,9 +20,10 @@ if (isset($_GET['action'])) {
             case 'getUser':
                 // Se valida que exista el valor del correo dentro del array asociativo.
                 if (isset($_SESSION['correoAspirante'])) {
-                    // Se retorna el éxito de la acción junto con el correo.
+                    // Se retorna el éxito de la acción junto con el correo y el nombre del usuario.
                     $result['status'] = 1;
                     $result['username'] = $_SESSION['correoAspirante'];
+                    $result['nombre'] = $_SESSION['nombreAspirante'] . " " . $_SESSION['apellidoAspirante'];
                 } else {
                     // Se retorna el error.
                     $result['error'] = 'Correo de usuario indefinido';
@@ -47,7 +48,57 @@ if (isset($_GET['action'])) {
     } else {
         // Se compara la acción a realizar cuando el aspirante no ha iniciado sesión.
         switch ($_GET['action']) {
+                // La acción signUp permite registrar un usuario.
             case 'signUp':
+                // Se validan los campos provenientes del FORM almacenados en el array $_POST.
+                $_POST = Validator::validateForm($_POST);
+                // Se establece la clave secreta para el reCAPTCHA de acuerdo con la cuenta de Google.
+                $secretKey = '6Ld0LwYqAAAAAKZJwIxCYiyCaWftoZvvMDTT0C0g';
+                // Se establece la dirección IP del servidor.
+                $ip = $_SERVER['REMOTE_ADDR'];
+                // Se establecen los datos del raCAPTCHA.
+                $data = array('secret' => $secretKey, 'response' => $_POST['gRecaptchaResponse'], 'remoteip' => $ip);
+                // Se establecen las opciones del reCAPTCHA.
+                $options = array(
+                    'http' => array('header' => 'Content-type: application/x-www-form-urlencoded\r\n', 'method' => 'POST', 'content' => http_build_query($data)),
+                    'ssl' => array('verify_peer' => false, 'verify_peer_name' => false)
+                );
+
+                $url = 'https://www.google.com/recaptcha/api/siteverify';
+                $context = stream_context_create($options);
+                $response = file_get_contents($url, false, $context);
+                $captcha = json_decode($response, true);
+
+                // Se valida la respuesta del recaptcha.
+                if (!$captcha['success']) {
+                    $result['recaptcha'] = 1;
+                    $result['error'] = 'No se pudo verificar si es humano';
+                } 
+                // Se verifica que el checkbox "condicion" haya sido seleccionado.
+                elseif (!isset($_POST['condicion'])) {
+                    $result['error'] = 'Debe marcar la aceptación de términos y condiciones';
+                } 
+                // Se validan los datos por medio del DATA.
+                elseif (
+                    !$aspirantes->setNombre($_POST['nombres']) or
+                    !$aspirantes->setApellido($_POST['apellidos']) or
+                    !$aspirantes->setCorreo($_POST['correo'], 0) or
+                    !$aspirantes->setGenero($_POST['genero']) or
+                    !$aspirantes->setFechaNacimiento($_POST['fechaNacimiento']) or
+                    !$aspirantes->setClave($_POST['clave'])
+                ) {
+                    // Si ocurre un error se devuelve en el array.
+                    $result['error'] = $aspirantes->getDataError();
+                } 
+                // Si se ejecuta la función correctamente se ejecuta el código.
+                elseif ($aspirantes->createRow()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Cuenta registrada correctamente';
+                } 
+                // Si ocurre un error se devuelve en el array.
+                else {
+                    $result['error'] = 'Ocurrió un problema al registrar la cuenta';
+                }
                 break;
                 // La acción logIn verifica las credenciales del aspirante para poder ingresar al programa.
             case 'logIn':
@@ -67,6 +118,12 @@ if (isset($_GET['action'])) {
                     // Se asigna el correo del aspirante proveniente de la función checkUser()
                     // dentro del array de la sesión $_SESSION.
                     $_SESSION['correoAspirante'] = $aspirantes->checkUser($_POST['correo'], $_POST['clave'])[1];
+                    // Se asigna el nombre del aspirante proveniente de la función checkUser()
+                    // dentro del array de la sesión $_SESSION.
+                    $_SESSION['nombreAspirante'] = $aspirantes->checkUser($_POST['correo'], $_POST['clave'])[2];
+                    // Se asigna el apellido del aspirante proveniente de la función checkUser()
+                    // dentro del array de la sesión $_SESSION.
+                    $_SESSION['apellidoAspirante'] = $aspirantes->checkUser($_POST['correo'], $_POST['clave'])[3];
                     // Se devuelve el mensaje del resultado de la acción logIn.
                     $result['message'] = 'Autenticación correcta';
                 } else {

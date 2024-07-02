@@ -25,30 +25,32 @@
                 <img src="../../resources/img/full_logo.png" alt="Logo" class="img-fluid" id="imagenLogo">
             </div>
             <div class="col">
-                <p class="text-center fw-bold fs-3 w-65">Ingrese la siguiente información para registrarse</p>
+                <p class="text-center fw-bold fs-4 w-65">Ingrese la siguiente información para registrarse</p>
             </div>
         </div>
-        <form class="col w-75 px-10 d-flex flex-column mt-10">
+        <form class="col d-flex flex-column fixed-bottom" id="form_registro">
+            <!-- Campo oculto para asignar el token del reCAPTCHA -->
+            <input type="text" class="d-none" id="gRecaptchaResponse" name="gRecaptchaResponse">
             <div class="row">
                 <p class="fw-bold fs-4">Credenciales de la aplicación</p>
             </div>
             <div class="row d-flex flex-row row-gap-3 fs-5 mb-4">
                 <div class="col-12 col-lg-6 d-flex flex-column gap-2">
-                    <label for="correoAspirante" class="fw-semibold">Correo electrónico</label>
+                    <label for="correo" class="fw-semibold">Correo electrónico</label>
                     <div class="input-group">
                         <span class="input-group-text">
                             <i class="bi bi-person-fill"></i>
                         </span>
-                        <input type="text" class="form-control" placeholder="" id="correoAspirante" name="correoAspirante">
+                        <input type="email" class="form-control" id="correo" name="correo" min="8" required>
                     </div>
                 </div>
                 <div class="col-12 col-lg-6 d-flex flex-column gap-2">
-                    <label for="contraAspirante" class="fw-semibold">Contraseña</label>
+                    <label for="clave" class="fw-semibold">Contraseña</label>
                     <div class="input-group">
                         <span class="input-group-text">
                             <i class="bi bi-lock-fill"></i>
                         </span>
-                        <input type="password" class="form-control" placeholder="" id="contraAspirante" name="contraAspirante">
+                        <input type="password" class="form-control" id="clave" name="clave" required>
                         <div class="btn input-group-addon d-flex align-items-center justify-content-center bg-light" id="btnMostrar" onclick="mostrarContra()">
                             <i class="bi bi-eye-slash" id="verIcono"></i>
                             <i class="bi bi-eye d-none" id="ocultarIcono"></i>
@@ -61,28 +63,34 @@
             </div>
             <div class="row d-flex flex-row row-gap-3 fs-5">
                 <div class="col-12 col-lg-6 d-flex flex-column gap-2">
-                    <label for="nombreAspirante" class="fw-semibold">Nombres</label>
-                    <input type="text" class="form-control" placeholder="" id="nombreAspirante" name="nombreAspirante">
+                    <label for="nombres" class="fw-semibold">Nombres</label>
+                    <input type="text" class="form-control" id="nombres" name="nombres" min="3" max="50" required>
                 </div>
                 <div class="col-12 col-lg-6 d-flex flex-column gap-2">
-                    <label for="apellidoAspirante" class="fw-semibold">Apellidos</label>
-                    <input type="text" class="form-control" placeholder="" id="apellidoAspirante" name="apellidoAspirante">
+                    <label for="apellidos" class="fw-semibold">Apellidos</label>
+                    <input type="text" class="form-control" id="apellidos" name="apellidos" min="3" max="50" required>
                 </div>
                 <div class="col-12 col-lg-6 d-flex flex-column gap-2">
-                    <label for="generoAspirante" class="fw-semibold">Género</label>
-                    <select name="generoAspirante" id="generoAspirante" class="form-select">
-                        <option value="0">Hombre</option>
-                        <option value="1">Mujer</option>
+                    <label for="genero" class="fw-semibold">Género</label>
+                    <select name="genero" id="genero" class="form-select" required>
+                        <option value="Hombre">Hombre</option>
+                        <option value="Mujer">Mujer</option>
                     </select>
                 </div>
                 <div class="col-12 col-lg-6 d-flex flex-column gap-2">
                     <label for="fechaNacimiento" class="fw-semibold">Fecha de nacimiento</label>
-                    <input type="date" id="fechaNacimiento" name="fechaNacimiento" class="form-control">
+                    <input type="date" id="fechaNacimiento" name="fechaNacimiento" class="form-control" required>
                 </div>
+            </div>
+            <div class="form-check d-flex justify-content-center mt-3">
+                <input type="checkbox" class="form-check-input" id="condicion" name="condicion" required>
+                <label class="form-check-label" for="condicion">Acepto los términos y condiciones</label>
             </div>
             <button class="btn btn-dark mt-3 w-50 align-self-center" type="submit">Registrarse</button>
         </form>
     </main>
+    <!-- Inclusión de la librería del reCAPTCHA. Para más información https://developers.google.com/recaptcha/docs/v3 -->
+    <script type="text/javascript" src="https://www.google.com/recaptcha/api.js?render=6Ld0LwYqAAAAAM8M32bIDiZlEsMLe902FQWCLa1P"></script>
     <!-- Mandar a llamar el framework de diseño BOOTSTRAP -->
     <script src="../../resources/js/bootstrap.bundle.min.js" type="text/javascript"></script>
     <!-- Mandar a llamar la librería de alertas -->
