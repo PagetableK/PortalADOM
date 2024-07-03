@@ -92,7 +92,6 @@ class AspirantesData extends AspirantesHandler
         } 
         // Se valida la longitud de la variable y se ejecuta el código.
         elseif (Validator::validateLength($valor, $min, $max)) {
-            echo 'correo bien';
             $this->correo = $valor;
             return true;
         } 
@@ -103,12 +102,12 @@ class AspirantesData extends AspirantesHandler
         }
     }
 
+  
     // Esta función permite validar el campo CLAVE_ASPIRANTE.
     public function setClave($valor)
     {
         // Se valida la longitud de la contraseña y se ejecuta el código.
         if (Validator::validatePassword($valor)) {
-            echo 'contra bien';
             $this->clave = password_hash($valor, PASSWORD_DEFAULT);
             return true;
         } 
@@ -123,7 +122,6 @@ class AspirantesData extends AspirantesHandler
     public function setFechaNacimiento($valor){
         // Se valida que la variable sea de tipo Date y se ejecuta el código.
         if (Validator::validateDate($valor)) {
-            echo 'fecha bien.';
             $this->fecha_nacimiento = $valor;
             return true;
         } 
@@ -139,7 +137,6 @@ class AspirantesData extends AspirantesHandler
     {
         // Se valida que la variable sea de tipo alfabética y se ejecuta el código.
         if (Validator::validateAlphabetic($valor)) {
-            echo 'genero bien'.
             $this->genero = $valor;
             return true;
         } 

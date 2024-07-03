@@ -14,6 +14,8 @@ class AspirantesHandler
     protected $apellido = null;
     protected $correo = null;
     protected $clave = null;
+    protected $nacimiento = null;
+    protected $genero = null;
     protected $estado = null;
     protected $genero = null;
     protected $fecha_nacimiento = null;
@@ -103,4 +105,82 @@ class AspirantesHandler
         // Se obtiene la fila y se devuelve el dato.
         return Database::getRow($sql, $params);
     }
+
+    /*
+    *   Métodos para realizar las operaciones SCRUD (search, create, read, update, and delete).
+    */
+
+    public function createRow()
+    {
+        $sql = 'CALL insertar_aspirante_validado(?,?,?,?,?,?)';
+        $params = array($this->nombre, $this->apellido, $this->clave, $this->correo, $this->genero, $this->nacimiento) ;
+        return Database::executeRow($sql, $params);
+    }
+
+     //Función para actualizar un admministrador.
+    public function updateRow()
+    {
+        $sql = 'CALL actualizar_aspirante_validado(?,?,?,?,?,?);';
+        $params = array(
+            $this->id,
+            $this->nombre,
+            $this->apellido,
+            $this->correo,
+            $this->genero,
+            $this->nacimiento
+            
+        );
+        return Database::executeRow($sql, $params);
+    }
+
+    //funcion leer una linea
+    public function readOne()
+    {
+        $sql = 'SELECT id_aspirante AS ID,
+        nombre_aspirante AS NOMBRE,
+        apellido_aspirante AS APELLIDO,
+        correo_aspirante AS CORREO,
+        fecha_nacimiento AS FECHA,
+        genero_aspirante AS GENERO,
+        clave_aspirante AS CLAVE
+        FROM aspirantes
+        WHERE id_aspirante LIKE ?';
+        $params = array($this->id);
+        return Database::getRow($sql, $params);
+    }
+
+    // Función para buscar un cliente
+    public function searchRows()
+    {
+        $value = '%' . Validator::getSearchValue() . '%';
+        $sql = 'SELECT * FROM vista_tabla_aspirantes
+        WHERE NOMBRE LIKE ?
+        ORDER BY NOMBRE;';
+        $params = array($value);
+        return Database::getRows($sql, $params);
+    }
+
+    //Función para leer todos los admministradores.
+    public function readAll()
+    {
+        $sql = 'SELECT * FROM vista_tabla_aspirantes
+        ORDER BY NOMBRE;';
+        return Database::getRows($sql);
+    }
+
+     //Función para eliminar un admministrador.
+     public function deleteRow()
+     {
+         $sql = 'CALL eliminar_aspirante(?);';
+         $params = array($this->id);
+         return Database::executeRow($sql, $params);
+     }
+ 
+     //Función para cambiar el estado de un admministrador.
+     public function changeState()
+     {
+         $sql = 'UPDATE aspirantes SET estado_aspirante = NOT estado_aspirante WHERE id_aspirante = ?;';
+         $params = array($this->id);
+         return Database::executeRow($sql, $params);
+     }
 }

@@ -2,12 +2,12 @@
 // Se incluye la clase para validar los datos de entrada.
 require_once('../../helpers/validator.php');
 // Se incluye la clase padre.
-require_once('../../models/handlers/grado_academicos_handler.php');
+require_once('../../models/handlers/grados_academicos_handler.php');
 
 /*
  *  Clase para manejar el encapsulamiento de los datos de la tabla ADMINISTRADOR.
  */
-class AspirantesData extends AspirantesHandler
+class GradoData extends GradoHandler
 {
     // Atributo para el manejo de errores.
     private $info_error = null;
@@ -22,12 +22,12 @@ class AspirantesData extends AspirantesHandler
             return true;
         }
         else{
-            $this->info_error = 'El identificador del administrador es correcto';
+            $this->info_error = 'El identificador del idioma es correcto';
             return false;
         }
     }
 
-    public function setNombre($valor, $min = 4, $max = 20)
+    public function setNombre($valor, $min = 2, $max = 60)
     {
         if (!Validator::validateAlphabetic($valor)) {
             $this->info_error = 'El nombre debe ser un valor alfabético';

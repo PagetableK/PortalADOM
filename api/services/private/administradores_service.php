@@ -16,6 +16,102 @@ if (isset($_GET['action'])) {
         $result['session'] = 1;
         // Se verifica la acción a realizar.
         switch ($_GET['action']) {
+                // Buscar
+            case 'searchRows':
+                if (!Validator::validateSearch($_POST['search'])) {
+                    $result['error'] = Validator::getSearchError();
+                } elseif ($result['dataset'] = $administradores->searchRows()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Existen ' . count($result['dataset']) . ' coincidencias';
+                } else {
+                    $result['error'] = 'No hay coincidencias';
+                }
+                break;
+                // Agregar
+            case 'createRow':
+                $_POST = Validator::validateForm($_POST);
+                if (
+                    !$administradores->setNombre($_POST['nombreAdministrador']) or
+                    !$administradores->setApellido($_POST['apellidoAdministrador']) or
+                    !$administradores->setClave($_POST['claveAdministrador']) or
+                    !$administradores->setCorreo($_POST['correoAdministrador']) 
+                ) {
+                    $result['error'] = $administradores->getDataError();
+                } elseif ($_POST['claveAdministrador'] != $_POST['repetirclaveAdministrador']) {
+                    $result['error'] = 'Contraseñas diferentes';
+                } elseif ($administradores->createRow()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Administrador creado correctamente';
+                } else {
+                    $result['error'] = 'Ocurrió un problema al crear el administrador';
+                }
+                break;
+                // Ver todo
+            case 'readAll':
+                if ($result['dataset'] = $administradores->readAll()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
+                } else {
+                    $result['error'] = 'No existen administradores registrados';
+                }
+                break;
+                // Ver uno
+            case 'readOne':
+                if (!$administradores->setId($_POST['idAdministrador'])) {
+                    $result['error'] = 'Administrador incorrecto';
+                } elseif ($result['dataset'] = $administradores->readOne()) {
+                    $result['status'] = 1;
+                } else {
+                    $result['error'] = 'Administrador inexistente';
+                }
+                break;
+                 // Actualizar
+            case 'updateRow':
+                $_POST = Validator::validateForm($_POST);
+                if (
+                    !$administradores->setId($_POST['idAdministrador']) or
+                    !$administradores->setNombre($_POST['nombreAdministrador']) or
+                    !$administradores->setApellido($_POST['apellidoAdministrador']) or
+                    !$administradores->setCorreo($_POST['correoAdministrador']) 
+                ) {
+                    $result['error'] = $administradores->getDataError();
+                } elseif ($administradores->updateRow()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Administrador modificado correctamente';
+                } else {
+                    $result['error'] = 'Ocurrió un problema al modificar el administrador';
+                }
+                break;
+                // Eliminar
+            case 'deleteRow':
+                if ($_POST['idAdministrador'] == $_SESSION['idAdministrador']) {
+                    $result['error'] = 'No se puede eliminar a sí mismo';
+                } elseif (
+                    !$administradores->setId($_POST['idAdministrador'])
+                ) {
+                    $result['error'] = $administradores->getDataError();
+                } elseif ($administradores->deleteRow()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Administrador eliminado correctamente';
+                } else {
+                    $result['error'] = 'Ocurrió un problema al eliminar el administrador';
+                }
+                break;
+                // Estado
+            case 'changeState':
+                if ($_POST['idAdministrador'] == $_SESSION['idAdministrador']) {
+                    $result['error'] = 'No se puede bloquear a sí mismo';
+                } elseif (
+                    !$administradores->setId($_POST['idAdministrador'])
+                ) {
+                    $result['error'] = $administradores->getDataError();
+                } elseif ($administradores->changeState()) {
+                    $result['status'] = 1;
+                    $result['message'] = 'Estado de administrador cambiado correctamente';
+                } else {
+                    $result['error'] = 'Ocurrió un problema al alterar el estado del administrador';
+                }
+                break;
                 // La acción getUser valida que se haya iniciado sesión.
             case 'getUser':
                 if (isset($_SESSION['correoAdministrador'])) {
