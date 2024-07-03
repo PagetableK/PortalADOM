@@ -152,7 +152,9 @@ const openDelete = async (id) => {
             await sweetAlert(1, DATA.message, true);
             // Se carga nuevamente la tabla para visualizar los cambios.
             fillTable();
-        } else {
+        } else if (DATA.exception.includes ("Integrity constraint") || DATA.exception.includes ("constraint fails")) {
+            sweetAlert(3, 'No se puede eliminar el grado academico porque está asociado a un currículum.', false);
+        }else {
             sweetAlert(2, DATA.error, false);
         }
     }

@@ -17,7 +17,6 @@ class AspirantesHandler
     protected $nacimiento = null;
     protected $genero = null;
     protected $estado = null;
-    protected $genero = null;
     protected $fecha_nacimiento = null;
 
     /*
@@ -110,12 +109,12 @@ class AspirantesHandler
     *   Métodos para realizar las operaciones SCRUD (search, create, read, update, and delete).
     */
 
-    public function createRow()
-    {
-        $sql = 'CALL insertar_aspirante_validado(?,?,?,?,?,?)';
-        $params = array($this->nombre, $this->apellido, $this->clave, $this->correo, $this->genero, $this->nacimiento) ;
-        return Database::executeRow($sql, $params);
-    }
+    // public function createRow()
+    // {
+    //     $sql = 'CALL insertar_aspirante_validado(?,?,?,?,?,?)';
+    //     $params = array($this->nombre, $this->apellido, $this->clave, $this->correo, $this->genero, $this->nacimiento) ;
+    //     return Database::executeRow($sql, $params);
+    // }
 
      //Función para actualizar un admministrador.
     public function updateRow()
