@@ -12,6 +12,8 @@ class AdministradoresHandler
     protected $id = null;
     protected $correo = null;
     protected $contra = null;
+    protected $nombre = null;
+    protected $apellido = null;
 
     /*
      *  Métodos para gestionar la cuenta del administrador.
@@ -61,5 +63,84 @@ class AdministradoresHandler
                 WHERE (correo_administrador = ?) AND id_administrador != ?';
         $params = array($value, $this->id);
         return Database::getRow($sql, $params);
+    }
+
+    /*
+     *  Métodos para realizar las operaciones SCRUD (search, create, read, update, and delete).
+     */
+
+    //Función para buscar un admministrador o varios.
+    public function searchRows()
+    {
+        $value = '%' . Validator::getSearchValue() . '%';
+        $sql = 'SELECT * FROM vista_tabla_administradores
+        WHERE NOMBRE LIKE ?
+        ORDER BY NOMBRE;';
+        $params = array($value);
+        return Database::getRows($sql, $params);
+    }
+
+    //Función para insertar un admministrador.
+    public function createRow()
+    {
+        $sql = 'CALL insertar_administrador_validado(?,?,?,?);';
+        $params = array(
+            $this->nombre,
+            $this->apellido,
+            $this->clave,
+            $this->correo
+        );
+        return Database::executeRow($sql, $params);
+    }
+
+    //Función para leer todos los admministradores.
+    public function readAll()
+    {
+        $sql = 'SELECT * FROM vista_tabla_administradores
+        ORDER BY NOMBRE;';
+        return Database::getRows($sql);
+    }
+
+    //Función para leer un administrador.
+    public function readOne()
+    {
+        $sql = 'SELECT id_administrador AS ID,
+        nombres_administrador AS NOMBRE,
+        apellidos_administrador AS APELLIDO,
+        correo_administrador AS CORREO,
+        clave_administrador AS CLAVE
+        FROM administradores
+        WHERE id_administrador LIKE ?';
+        $params = array($this->id);
+        return Database::getRow($sql, $params);
+    }
+
+    //Función para actualizar un admministrador.
+    public function updateRow()
+    {
+        $sql = 'CALL actualizar_administrador_validado(?,?,?,?);';
+        $params = array(
+            $this->id,
+            $this->nombre,
+            $this->apellido,
+            $this->correo
+        );
+        return Database::executeRow($sql, $params);
+    }
+
+    //Función para eliminar un admministrador.
+    public function deleteRow()
+    {
+        $sql = 'CALL eliminar_administrador(?);';
+        $params = array($this->id);
+        return Database::executeRow($sql, $params);
+    }
+
+    //Función para cambiar el estado de un admministrador.
+    public function changeState()
+    {
+        $sql = 'UPDATE administradores SET estado_administrador = NOT estado_administrador WHERE id_administrador = ?;';
+        $params = array($this->id);
+        return Database::executeRow($sql, $params);
     }
 }

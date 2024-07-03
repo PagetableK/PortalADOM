@@ -22,12 +22,12 @@ class AspirantesData extends AspirantesHandler
             return true;
         }
         else{
-            $this->info_error = 'El identificador del administrador es correcto';
+            $this->info_error = 'El identificador del aspirante es correcto';
             return false;
         }
     }
 
-    public function setNombre($valor, $min = 4, $max = 20)
+    public function setNombre($valor, $min = 4, $max = 50)
     {
         if (!Validator::validateAlphabetic($valor)) {
             $this->info_error = 'El nombre debe ser un valor alfabético';
@@ -42,7 +42,7 @@ class AspirantesData extends AspirantesHandler
     }
 
     
-    public function setApellido($valor, $min = 4, $max = 20)
+    public function setApellido($valor, $min = 4, $max = 50)
     {
         if (!Validator::validateAlphabetic($valor)) {
             $this->info_error = 'El apellido debe ser un valor alfabético';
@@ -56,36 +56,55 @@ class AspirantesData extends AspirantesHandler
         }
     }
 
-    public function setCorreo($valor, $boolean, $min = 8, $max = 100)
+    // Validación y asignación del correo del administrador.
+    public function setCorreo($value, $min = 8, $max = 100)
     {
-        if (!Validator::validateEmail($valor)) {
-            $this->info_error = 'El correo no es válido';
+        if (!Validator::validateEmail($value)) {
+            $this->data_error = 'El correo no es válido';
             return false;
-        } else if($boolean and !$this->checkDuplicateWithId($valor)){
-            $this->correo = $valor;
-            return true;
-        } else if($this->checkDuplicate($valor)){
-            $this->info_error = 'El correo ya está siendo usado por otro usuario';
-            return false;
-        } elseif (Validator::validateLength($valor, $min, $max)) {
-            $this->correo = $valor;
+        } elseif (Validator::validateLength($value, $min, $max)) {
+            $this->correo = $value;
             return true;
         } else {
-            $this->info_error = 'El correo debe tener una longitud entre ' . $min . ' y ' . $max;
+            $this->data_error = 'El correo debe tener una longitud entre ' . $min . ' y ' . $max;
             return false;
         }
     }
 
-    public function setClave($valor)
+    public function setClave($value)
     {
-        if (Validator::validatePassword($valor)) {
-            $this->clave = password_hash($valor, PASSWORD_DEFAULT);
+        if (Validator::validatePassword($value)) {
+            $this->clave = password_hash($value, PASSWORD_DEFAULT);
             return true;
         } else {
-            $this->info_error = Validator::getPasswordError();
+            $this->data_error = Validator::getPasswordError();
             return false;
         }
     }
+
+    // Validación y asignación de la fecha de nacimiento del administrador.
+    public function setNacimiento($value)
+    {
+        if (Validator::validateDateBirthday($value)) {
+            $this->nacimiento = $value;
+            return true;
+        } else {
+            $this->data_error = 'La fecha de nacimiento no es valida, debe ser mayor de edad y menor a 122 años';
+            return false;
+        }
+    }
+
+    public function setGenero($value)
+    {
+        if (Validator::validateString($value)) {
+            $this->genero = $value;
+            return true;
+        } else {
+            $this->data_error = 'El identificador del género es incorrecto';
+            return false;
+        }
+    }
+
 
     public function setEstado($value)
     {
