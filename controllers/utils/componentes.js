@@ -187,7 +187,7 @@ const pieGraph = (canvas, legends, values, title) => {
 */
 const logOut = async () => {
     // Se muestra un mensaje de confirmación y se captura la respuesta en una constante.
-    const RESPONSE = await confirmAction('¿Está seguro de cerrar la sesión?');
+    const RESPONSE = await confirmAction('¿Desea cerrar sesión?');
     // Se verifica la respuesta del mensaje.
     if (RESPONSE) {
         // Petición para eliminar la sesión.
