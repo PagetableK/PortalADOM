@@ -11,7 +11,7 @@ class AdministradoresHandler
      */
     protected $id = null;
     protected $correo = null;
-    protected $contra = null;
+    protected $clave = null;
     protected $nombre = null;
     protected $apellido = null;
 
@@ -48,20 +48,14 @@ class AdministradoresHandler
         }
     }
     
-    public function searchEmail($correo)
-    {
-        $sql = 'SELECT nombre_administrador FROM administradores
-                WHERE correo_administrador = ?';
-        $params = array($correo);
-        return Database::getRow($sql, $params);
-    }
+   
 
-    public function checkDuplicateWithId($value)
+    public function checkDuplicateWithId($correo)
     {
         $sql = 'SELECT id_administrador
                 FROM administradores
-                WHERE (correo_administrador = ?) AND id_administrador != ?';
-        $params = array($value, $this->id);
+                WHERE correo_administrador = ?';
+        $params = array($correo);
         return Database::getRow($sql, $params);
     }
 
@@ -105,8 +99,8 @@ class AdministradoresHandler
     public function readOne()
     {
         $sql = 'SELECT id_administrador AS ID,
-        nombres_administrador AS NOMBRE,
-        apellidos_administrador AS APELLIDO,
+        nombre_administrador AS NOMBRE,
+        apellido_administrador AS APELLIDO,
         correo_administrador AS CORREO,
         clave_administrador AS CLAVE
         FROM administradores

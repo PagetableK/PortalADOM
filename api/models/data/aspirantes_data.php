@@ -60,13 +60,16 @@ class AspirantesData extends AspirantesHandler
     public function setCorreo($value, $min = 8, $max = 100)
     {
         if (!Validator::validateEmail($value)) {
-            $this->data_error = 'El correo no es válido';
+            $this->info_error = 'El correo no es válido';
             return false;
-        } elseif (Validator::validateLength($value, $min, $max)) {
+        } elseif (AspirantesHandler::checkDuplicateWithId($value)) {
+            $this->info_error = 'El correo ya ha sido registrado';
+            return false;
+        }elseif (Validator::validateLength($value, $min, $max)) {
             $this->correo = $value;
             return true;
         } else {
-            $this->data_error = 'El correo debe tener una longitud entre ' . $min . ' y ' . $max;
+            $this->info_error = 'El correo debe tener una longitud entre ' . $min . ' y ' . $max;
             return false;
         }
     }
@@ -77,7 +80,7 @@ class AspirantesData extends AspirantesHandler
             $this->clave = password_hash($value, PASSWORD_DEFAULT);
             return true;
         } else {
-            $this->data_error = Validator::getPasswordError();
+            $this->info_error = Validator::getPasswordError();
             return false;
         }
     }
@@ -89,7 +92,7 @@ class AspirantesData extends AspirantesHandler
             $this->nacimiento = $value;
             return true;
         } else {
-            $this->data_error = 'La fecha de nacimiento no es valida, debe ser mayor de edad y menor a 122 años';
+            $this->info_error = 'La fecha de nacimiento no es valida, debe ser mayor de edad y menor a 122 años';
             return false;
         }
     }
@@ -100,7 +103,7 @@ class AspirantesData extends AspirantesHandler
             $this->genero = $value;
             return true;
         } else {
-            $this->data_error = 'El identificador del género es incorrecto';
+            $this->info_error = 'El identificador del género es incorrecto';
             return false;
         }
     }

@@ -49,21 +49,12 @@ class AspirantesHandler
         }
     }
 
-    public function checkDuplicate($value)
+    public function checkDuplicateWithId($correo)
     {
-        $sql = 'SELECT id_cliente
-                FROM clientes
-                WHERE dui_cliente = ? OR correo_cliente = ? OR telefono_movil = ? OR telefono_fijo = ?';
-        $params = array($value, $value, $value, $value);
-        return Database::getRow($sql, $params);
-    }
-
-    public function checkDuplicateWithId($value)
-    {
-        $sql = 'SELECT id_cliente
-                FROM clientes
-                WHERE (dui_cliente = ? OR correo_cliente = ? OR telefono_movil = ? OR telefono_fijo = ?) AND id_cliente != ?';
-        $params = array($value, $value, $value, $value, $this->id);
+        $sql = 'SELECT id_aspirante
+                FROM aspirantes
+                WHERE correo_aspirante = ?';
+        $params = array($correo);
         return Database::getRow($sql, $params);
     }
 
