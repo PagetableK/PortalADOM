@@ -23,7 +23,17 @@ const SAVE_FORM = document.getElementById('saveForm'),
 document.addEventListener('DOMContentLoaded', () => {
     // Llamada a la función para mostrar el encabezado y pie del documento.
     cargarPlantilla();
-    // Llamada a la función para llenar la tabla con los registros existentes.
+    // Se crea la variable que almacenará los valores mínimos y máximos para el input "Fecha de nacimiento".
+    var fechaMaxima = new Date();
+    // Se calcula la diferencia de la fecha actual - 18 años (La persona debe ser mayor de edad para registrarse).
+    fechaMaxima.setFullYear(fechaMaxima.getFullYear() - 18);
+    // Se configura la fecha máxima del date picker.
+    FECHA_ASPIRANTE.max = fechaMaxima.toISOString().substring(0, 10);
+    // Se calcula la diferencia de la fecha actual - 18 años - 42 (60 años es la edad máxima para registrarse).
+    fechaMaxima.setFullYear(fechaMaxima.getFullYear() - 42);
+    // Se configura la fecha mínima del date picker.
+    FECHA_ASPIRANTE.min = fechaMaxima.toISOString().substring(0, 10);
+
     fillTable();
 });
 
@@ -266,7 +276,9 @@ const openDelete = async (id) => {
             await sweetAlert(1, DATA.message, true);
             // Se carga nuevamente la tabla para visualizar los cambios.
             fillTable();
-        } else {
+        } else if (DATA.exception.includes ("Integrity constraint") || DATA.exception.includes ("constraint fails")) {
+            sweetAlert(3, 'No se puede eliminar el aspirante porque está asociado a un currículum.', false);
+        }else {
             sweetAlert(2, DATA.error, false);
         }
     }
