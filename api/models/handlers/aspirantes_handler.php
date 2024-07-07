@@ -14,11 +14,9 @@ class AspirantesHandler
     protected $apellido = null;
     protected $correo = null;
     protected $clave = null;
-    protected $nacimiento = null;
+    protected $fecha_nacimiento = null;
     protected $genero = null;
     protected $estado = null;
-    protected $genero = null;
-    protected $fecha_nacimiento = null;
 
     /*
     *   Métodos para gestionar la cuenta del aspirante.
@@ -103,7 +101,7 @@ class AspirantesHandler
     public function createRow()
     {
         $sql = 'CALL insertar_aspirante_validado(?,?,?,?,?,?)';
-        $params = array($this->nombre, $this->apellido, $this->clave, $this->correo, $this->genero, $this->nacimiento) ;
+        $params = array($this->nombre, $this->apellido, $this->clave, $this->correo, $this->genero, $this->fecha_nacimiento) ;
         return Database::executeRow($sql, $params);
     }
 
@@ -117,7 +115,7 @@ class AspirantesHandler
             $this->apellido,
             $this->correo,
             $this->genero,
-            $this->nacimiento
+            $this->fecha_nacimiento
             
         );
         return Database::executeRow($sql, $params);
