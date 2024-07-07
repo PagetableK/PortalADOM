@@ -46,6 +46,15 @@ class IdiomasHandler
         return Database::getRow($sql, $params);
     }
 
+    public function checkDuplicateWithId($nombre)
+    {
+        $sql = 'SELECT id_idioma
+                FROM idiomas
+                WHERE nombre_idioma = ?';
+        $params = array($nombre);
+        return Database::getRow($sql, $params);
+    }
+
     // Función para buscar un cliente
     public function searchRows()
     {
