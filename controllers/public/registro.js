@@ -37,21 +37,21 @@ function mostrarContra() {
         CONTRA_ASPIRANTE.type = "password";
         // Se invierte el valor de la variable.
         verContra = !verContra;
-        // Se muestra el ícono.
-        OCULTAR_ICONO.classList.remove('d-none');
-        // Se oculta el ícono.
-        VER_ICONO.classList.add('d-none');
         // Se centra el input de contraseña.
         CONTRA_ASPIRANTE.focus();
+        // Se muestra el ícono.
+        VER_ICONO.classList.remove('d-none');
+        // Se oculta el ícono.
+        OCULTAR_ICONO.classList.add('d-none');
     } else {
         // Se oculta la contraseña.
         CONTRA_ASPIRANTE.type = "text";
         // Se invierte el valor de la variable.
         verContra = !verContra;
         // Se muestra el ícono.
-        VER_ICONO.classList.remove('d-none');
+        OCULTAR_ICONO.classList.remove('d-none');
         // Se oculta el ícono.
-        OCULTAR_ICONO.classList.add('d-none');
+        VER_ICONO.classList.add('d-none');
         // Se centra el input de contraseña.
         CONTRA_ASPIRANTE.focus();
     }
@@ -68,7 +68,7 @@ FORM_REGISTRO.addEventListener('submit', async (e) => {
 
     // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con el error.
     if (DATA.status) {
-        sweetAlert(1, DATA.message, true, 'login.html');
+        sweetAlert(1, DATA.message, true, 'index.html');
     } else if (DATA.recaptcha) {
         sweetAlert(2, DATA.error, false);
     } else {

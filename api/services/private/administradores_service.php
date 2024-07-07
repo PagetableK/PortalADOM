@@ -34,11 +34,11 @@ if (isset($_GET['action'])) {
                     !$administradores->setNombre($_POST['nombreAdministrador']) or
                     !$administradores->setApellido($_POST['apellidoAdministrador']) or
                     !$administradores->setClave($_POST['claveAdministrador']) or
-                    !$administradores->setCorreo($_POST['correoAdministrador']) 
+                    !$administradores->setCorreo($_POST['correoAdministrador'], 0) 
                 ) {
                     $result['error'] = $administradores->getDataError();
-                } elseif ($_POST['claveAdministrador'] != $_POST['repetirclaveAdministrador']) {
-                    $result['error'] = 'Contraseñas diferentes';
+                } elseif ($_POST['claveAdministrador'] != $_POST['repetirClaveAdministrador']) {
+                    $result['error'] = 'Las contraseñas son diferentes';
                 } elseif ($administradores->createRow()) {
                     $result['status'] = 1;
                     $result['message'] = 'Administrador creado correctamente';
@@ -72,7 +72,7 @@ if (isset($_GET['action'])) {
                     !$administradores->setId($_POST['idAdministrador']) or
                     !$administradores->setNombre($_POST['nombreAdministrador']) or
                     !$administradores->setApellido($_POST['apellidoAdministrador']) or
-                    !$administradores->setCorreo($_POST['correoAdministrador']) 
+                    !$administradores->setCorreo($_POST['correoAdministrador'], 1) 
                 ) {
                     $result['error'] = $administradores->getDataError();
                 } elseif ($administradores->updateRow()) {

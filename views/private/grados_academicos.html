@@ -29,7 +29,7 @@
                 </div>
                 <div class="col-12 col-lg-9">
                     <div class="row d-flex contenedor-form">
-                        <form id="searchForm">
+                        <form id="searchForm" class="d-flex">
                             <!-- Este div contiene la barra de búsqueda -->
                             <div class="col d-flex container-fluid" id="container_busqueda">
                                 <div class="d-flex">
@@ -38,9 +38,11 @@
                                 </div>
                                 <!-- Este input crea la barra de búsqueda -->
                                 <input type="search" class="form-control elemento-form" placeholder="Buscar..." name="search">
-                                <button type="reset" class="btn btn-white" onclick="fillTable()">
-                                    <i class="bi bi-arrow-clockwise"></i>
-                                </button>
+                                <div class="d-flex">
+                                    <button type="reset" class="input-group-text elemento-form" onclick="fillTable()">
+                                        <i class="bi bi-arrow-clockwise"></i>
+                                    </button>
+                                </div>
                             </div>
                         </form>
                         
@@ -49,7 +51,7 @@
                 <div class="col-12 col-lg-3 d-flex justify-content-center">
                     <div class="btn btn-dark h-100 w-100 d-flex align-items-center justify-content-center gap-2 contenedor-form"
                         type="submit" onclick="openCreate()">
-                        Agregar grado academico <i class="bi bi-plus h3 agregar-icono"></i>
+                        Agregar grado académico <i class="bi bi-plus h3 agregar-icono"></i>
                     </div>
                 </div>
             </div>
@@ -78,7 +80,7 @@
             aria-labelledby="modalTitle" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-centered">
                 <div class="modal-content">
-                    <div class="modal-header ">
+                    <div class="modal-header">
                         <h1 class="modal-title fs-5 text-dark" id="modalTitle"></h1>
                         <button type="button" class="btn-close btn-close-dark" data-bs-dismiss="modal"
                             aria-label="Close"></button>
@@ -88,16 +90,22 @@
                         <div class="modal-body row g-3">
                             <!-- Campo oculto para asignar el id del registro al momento de modificar -->
                             <input type="number" class="d-none" id="idGrado" name="idGrado">
-                            <div class="col-sm-12 col-md-6">
-                                <label for="nombreGrado" class="form-label fw-semibold">Nombre</label>
+                            <div class="col-12">
+                                <label for="nombreGrado" class="form-label fw-semibold">Grado académico</label>
                                 <input id="nombreGrado" type="text" name="nombreGrado"
-                                    class="form-control" placeholder="Ingresa el nombre del grado academico"
+                                    class="form-control" placeholder="Ingrese el nombre del grado académico"
                                     autocomplete="off" required>
                             </div>
                         </div>
-                        <div class="modal-footer col-sm-12 col-md-12 col-lg-12">
-                            <button type="reset" class="btn bg-danger text-white">Cancelar</button>
-                            <button type="submit" class="btn bg-primary text-white ">Guardar</button>
+                        <div class="modal-footer col-sm-12 col-md-12 col-lg-12 justify-content-center">
+                            <button type="submit" class="btn bg-primary text-white d-none" id="btnAgregar">
+                                <i class="bi bi-plus"></i>
+                                Agregar grado académico
+                            </button>
+                            <button type="submit" class="btn bg-success text-white d-none" id="btnActualizar">
+                                <i class="bi bi-pencil-fill"></i>
+                                Actualizar grado académico
+                            </button>
                         </div>
                     </form>
                 </div>
