@@ -41,7 +41,7 @@ if (isset($_GET['action'])) {
                     !$aspirante->setFechaNacimiento($_POST['fechanacimientoAspirante']) 
                 ) {
                     $result['error'] = $aspirante->getDataError();
-                } elseif ($_POST['claveAspirante'] != $_POST['repetirclaveAspirante']) {
+                } elseif ($_POST['claveAspirante'] != $_POST['repetirClaveAspirante']) {
                     $result['error'] = 'Contraseñas diferentes';
                 } elseif ($aspirante->createRow()) {
                     $result['status'] = 1;

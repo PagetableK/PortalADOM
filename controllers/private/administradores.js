@@ -15,7 +15,9 @@ const SAVE_FORM = document.getElementById('saveForm'),
     APELLIDO_ADMINISTRADOR = document.getElementById('apellidoAdministrador'),
     CORREO_ADMINISTRADOR = document.getElementById('correoAdministrador'),
     CLAVE_ADMINISTRADOR = document.getElementById('claveAdministrador'),
-    CONFIRMAR_CLAVE = document.getElementById('repetirclaveAdministrador');
+    CONFIRMAR_CLAVE = document.getElementById('repetirClaveAdministrador'),
+    BOTON_AGREGAR = document.getElementById('btnAgregar'),
+    BOTON_ACTUALIZAR = document.getElementById('btnActualizar');
 
 // Método del evento para cuando el documento ha cargado.
 document.addEventListener('DOMContentLoaded', () => {
@@ -29,10 +31,15 @@ document.addEventListener('DOMContentLoaded', () => {
 SEARCH_FORM.addEventListener('submit', (event) => {
     // Se evita recargar la página web después de enviar el formulario.
     event.preventDefault();
-    // Constante tipo objeto con los datos del formulario.
-    const FORM = new FormData(SEARCH_FORM);
-    // Llamada a la función para llenar la tabla con los resultados de la búsqueda.
-    fillTable(FORM);
+    // Se verifica que el campo de búsqueda no esté vacío.
+    if(SEARCH_FORM['search'].value.trim() != ""){
+        // Constante tipo objeto con los datos del formulario.
+        const FORM = new FormData(SEARCH_FORM);
+        // Llamada a la función para llenar la tabla con los resultados de la búsqueda.
+        fillTable(FORM);
+    } else{
+        sweetAlert(3, 'Ingrese un valor para buscar', false);
+    }
 });
 
 // Método del evento para cuando se envía el formulario de guardar.
@@ -114,6 +121,9 @@ const openCreate = () => {
     SAVE_FORM.reset();
     CLAVE_ADMINISTRADOR.disabled = false;
     CONFIRMAR_CLAVE.disabled = false;
+    // Se muestra el botón de agregar y se oculta el de actualizar.
+    BOTON_ACTUALIZAR.classList.add('d-none');
+    BOTON_AGREGAR.classList.remove('d-none');
 }
 
 function getRowColor(estado) {
@@ -164,6 +174,9 @@ const openUpdate = async (id) => {
         NOMBRE_ADMINISTRADOR.value = ROW.NOMBRE;
         APELLIDO_ADMINISTRADOR.value = ROW.APELLIDO;
         CORREO_ADMINISTRADOR.value = ROW.CORREO;
+        // Se muestra el botón de actualizar y se oculta el de agregar.
+        BOTON_AGREGAR.classList.add('d-none');
+        BOTON_ACTUALIZAR.classList.remove('d-none');
     } else {
         sweetAlert(2, DATA.error, false);
     }
@@ -181,7 +194,6 @@ const openState = async (id) => {
             FORM.append('idAdministrador', id);
             // Petición para eliminar el registro seleccionado.
             const DATA = await fetchData(ADMINISTRADOR_API, 'changeState', FORM);
-            console.log(DATA.status);
             // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
             if (DATA.status) {
                 // Se muestra un mensaje de éxito.

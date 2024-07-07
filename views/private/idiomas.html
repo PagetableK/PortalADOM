@@ -38,12 +38,13 @@
                                 </div>
                                 <!-- Este input crea la barra de búsqueda -->
                                 <input type="search" class="form-control elemento-form" placeholder="Buscar..." name="search">
-                                <button type="reset" class="btn btn-white" onclick="fillTable()">
-                                    <i class="bi bi-arrow-clockwise"></i>
-                                </button>
+                                <div class="d-flex">
+                                    <button type="reset" class="input-group-text elemento-form" onclick="fillTable()">
+                                        <i class="bi bi-arrow-clockwise"></i>
+                                    </button>
+                                </div>
                             </div>
                         </form>
-                        
                     </div>
                 </div>
                 <div class="col-12 col-lg-3 d-flex justify-content-center">
@@ -88,16 +89,22 @@
                         <div class="modal-body row g-3">
                             <!-- Campo oculto para asignar el id del registro al momento de modificar -->
                             <input type="number" class="d-none" id="idIdioma" name="idIdioma">
-                            <div class="col-sm-12 col-md-6">
-                                <label for="nombreIdioma" class="form-label fw-semibold">Nombre</label>
+                            <div class="col-12">
+                                <label for="nombreIdioma" class="form-label fw-semibold">Idioma</label>
                                 <input id="nombreIdioma" type="text" name="nombreIdioma"
-                                    class="form-control" placeholder="Ingresa el nombre del idioma"
+                                    class="form-control" placeholder="Ingrese el nombre del idioma"
                                     autocomplete="off" required>
                             </div>
                         </div>
-                        <div class="modal-footer col-sm-12 col-md-12 col-lg-12">
-                            <button type="reset" class="btn bg-danger text-white">Cancelar</button>
-                            <button type="submit" class="btn bg-primary text-white ">Guardar</button>
+                        <div class="modal-footer col-sm-12 col-md-12 col-lg-12 justify-content-center">
+                            <button type="submit" class="btn bg-primary text-white d-none" id="btnAgregar">
+                                <i class="bi bi-plus"></i>
+                                Agregar grado académico
+                            </button>
+                            <button type="submit" class="btn bg-success text-white d-none" id="btnActualizar">
+                                <i class="bi bi-pencil-fill"></i>
+                                Actualizar grado académico
+                            </button>
                         </div>
                     </form>
                 </div>

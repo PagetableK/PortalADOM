@@ -38,9 +38,9 @@ if (isset($_GET['action'])) {
                     $result['error'] = $grado->getDataError();
                 } elseif ($grado->createRow()) {
                     $result['status'] = 1;
-                    $result['message'] = 'Grado academico creado correctamente';
+                    $result['message'] = 'Grado académico creado correctamente';
                 } else {
-                    $result['error'] = 'Ocurrió un problema al crear el grado academico';
+                    $result['error'] = 'Ocurrió un problema al crear el grado académico';
                 }
                 break;
                 // Ver todo
@@ -49,17 +49,17 @@ if (isset($_GET['action'])) {
                     $result['status'] = 1;
                     $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
                 } else {
-                    $result['error'] = 'No existen grado academico registrados';
+                    $result['error'] = 'No existen grados académicos registrados';
                 }
                 break;
                 // Ver uno
             case 'readOne':
                 if (!$grado->setId($_POST['idGrado'])) {
-                    $result['error'] = 'Grado academico incorrecto';
+                    $result['error'] = 'Grado académico incorrecto';
                 } elseif ($result['dataset'] = $grado->readOne()) {
                     $result['status'] = 1;
                 } else {
-                    $result['error'] = 'Grado academico inexistente';
+                    $result['error'] = 'Grado académico inexistente';
                 }
                 break;
                  // Actualizar
@@ -72,9 +72,9 @@ if (isset($_GET['action'])) {
                     $result['error'] = $grado->getDataError();
                 } elseif ($grado->updateRow()) {
                     $result['status'] = 1;
-                    $result['message'] = 'Grado academico modificado correctamente';
+                    $result['message'] = 'Grado académico modificado correctamente';
                 } else {
-                    $result['error'] = 'Ocurrió un problema al modificar el grado academico';
+                    $result['error'] = 'Ocurrió un problema al modificar el grado académico';
                 }
                 break;
                 // Eliminar
@@ -85,9 +85,9 @@ if (isset($_GET['action'])) {
                     $result['error'] = $grado->getDataError();
                 } elseif ($grado->deleteRow()) {
                     $result['status'] = 1;
-                    $result['message'] = 'Grado academico eliminado correctamente';
+                    $result['message'] = 'Grado académico eliminado correctamente';
                 } else {
-                    $result['error'] = 'Ocurrió un problema al eliminar el grado academico';
+                    $result['error'] = 'Ocurrió un problema al eliminar el grado académico';
                 }
                 break;
             default:
