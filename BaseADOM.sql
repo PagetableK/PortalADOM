@@ -21,7 +21,11 @@ CREATE TABLE aspirantes(
 	clave_aspirante VARCHAR(100) NOT NULL,
 	fecha_nacimiento DATE NOT NULL,
 	genero_aspirante ENUM('Hombre','Mujer') NOT NULL,
-	estado_aspirante TINYINT(1) NOT NULL DEFAULT 1
+	estado_aspirante TINYINT(1) NOT NULL DEFAULT 1,
+	id_administrador INT NULL,
+	CONSTRAINT fk_admin_asp
+	FOREIGN KEY (id_administrador)
+	REFERENCES administradores(id_administrador)
 );
 
 CREATE TABLE grados_academicos(
@@ -106,12 +110,16 @@ CREATE TABLE experiencias_aspirantes(
 	estado_experiencia ENUM('Antiguo trabajo', 'Trabajo actual') NOT NULL,
 	id_area INT NOT NULL,
 	id_rubro INT NOT NULL,
+	id_curriculum INT NOT NULL,
 	CONSTRAINT fk_area_asp
 	FOREIGN KEY (id_area)
 	REFERENCES areas_laborales(id_area),
 	CONSTRAINT fk_rubro_aspirante
-   FOREIGN KEY (id_rubro)
-   REFERENCES rubros_empresas(id_rubro)
+	FOREIGN KEY (id_rubro)
+	REFERENCES rubros_empresas(id_rubro),
+	CONSTRAINT fk_curr_exp
+	FOREIGN KEY (id_curriculum)
+	REFERENCES curriculum_aspirantes (id_curriculum)
 );
 
 CREATE TABLE idiomas_aspirantes(
@@ -163,7 +171,7 @@ CREATE PROCEDURE insertar_administrador_validado(
 )
 BEGIN
     IF p_correo_administrador REGEXP '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$' THEN
-            INSERT INTO administradores (nombres_administrador, apellidos_administrador, clave_administrador, correo_administrador)
+            INSERT INTO administradores (nombre_administrador, apellido_administrador, clave_administrador, correo_administrador)
             VALUES(p_nombre_administrador, p_apellido_administrador, p_clave_administrador, p_correo_administrador);
     ELSE
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Formato de correo electrónico no válido';
@@ -184,8 +192,8 @@ CREATE PROCEDURE actualizar_administrador_validado(
 )
 BEGIN
     IF p_correo_administrador REGEXP '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$' THEN
-            UPDATE administradores SET nombres_administrador = p_nombre_administrador, 
-            apellidos_administrador = p_apellido_administrador, 
+            UPDATE administradores SET nombre_administrador = p_nombre_administrador, 
+            apellido_administrador = p_apellido_administrador, 
             correo_administrador = p_correo_administrador
             WHERE id_administrador = p_id_administrador;
     ELSE
@@ -382,8 +390,8 @@ DROP VIEW IF EXISTS vista_tabla_administradores;
 DELIMITER $$
 CREATE VIEW vista_tabla_administradores AS
 SELECT id_administrador AS 'ID', 
-		nombres_administrador AS 'NOMBRE',
-        apellidos_administrador AS 'APELLIDO',
+		nombre_administrador AS 'NOMBRE',
+        apellido_administrador AS 'APELLIDO',
 		correo_administrador AS 'CORREO', 
     CASE 
         WHEN estado_administrador = 1 THEN 'Activo'
