@@ -124,10 +124,8 @@ class AspirantesData extends AspirantesHandler
         if (Validator::validateDate($valor)) {
             $this->fecha_nacimiento = $valor;
             return true;
-        } 
-        // Si la variable no es de tipo Date se devuelve el error.
-        else {
-            $this->info_error = 'La fecha de nacimiento del estudiante es incorrecto';
+        } else {
+            $this->info_error = 'La fecha de nacimiento no es valida, debe ser mayor de edad y menor a 122 años';
             return false;
         }
     }
