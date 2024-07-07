@@ -36,12 +36,12 @@ if (isset($_GET['action'])) {
                     !$aspirante->setNombre($_POST['nombreAspirante']) or
                     !$aspirante->setApellido($_POST['apellidoAspirante']) or
                     !$aspirante->setClave($_POST['claveAspirante']) or
-                    !$aspirante->setCorreo($_POST['correoAspirante']) or
+                    !$aspirante->setCorreo($_POST['correoAspirante'], 0) or
                     !$aspirante->setGenero($_POST['generoAspirante']) or
-                    !$aspirante->setNacimiento($_POST['fechanacimientoAspirante']) 
+                    !$aspirante->setFechaNacimiento($_POST['fechanacimientoAspirante']) 
                 ) {
                     $result['error'] = $aspirante->getDataError();
-                } elseif ($_POST['claveAspirante'] != $_POST['repetirclaveAspirante']) {
+                } elseif ($_POST['claveAspirante'] != $_POST['repetirClaveAspirante']) {
                     $result['error'] = 'Contraseñas diferentes';
                 } elseif ($aspirante->createRow()) {
                     $result['status'] = 1;
@@ -76,8 +76,8 @@ if (isset($_GET['action'])) {
                     !$aspirante->setId($_POST['idAspirante']) or
                     !$aspirante->setNombre($_POST['nombreAspirante']) or
                     !$aspirante->setApellido($_POST['apellidoAspirante']) or
-                    !$aspirante->setCorreo($_POST['correoAspirante']) or
-                    !$aspirante->setNacimiento($_POST['fechanacimientoAspirante']) or
+                    !$aspirante->setCorreo($_POST['correoAspirante'], 1) or
+                    !$aspirante->setFechaNacimiento($_POST['fechanacimientoAspirante']) or
                     !$aspirante->setGenero($_POST['generoAspirante']) 
                 ) {
                     $result['error'] = $aspirante->getDataError();
