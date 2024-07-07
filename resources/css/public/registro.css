@@ -1,4 +1,6 @@
-body, html, main {
+body,
+html,
+main {
     height: 100%;
     width: 100%;
     margin: 0;
@@ -8,44 +10,69 @@ body, html, main {
     overflow: hidden;
 }
 
-.contenedor-principal{
+.contenedor-principal {
     background-color: #FFA000;
 }
 
-.w-65{
+.w-65 {
     width: 65% !important;
 }
 
-.px-10{
+.px-10 {
     padding-right: 10rem !important;
     padding-left: 10rem !important;
 }
 
+form {
+    height: 75%;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+@media screen and (min-width: 992px) {
+    form {
+        padding-left: 20vh;
+        padding-right: 20vh;
+    }
+}
+
 @media screen and (max-width: 991px) {
-    .mt-10{
+    .mt-10 {
         margin-top: 8rem !important;
     }
-    #contenedorImagen{
+
+    #contenedorImagen {
         display: none;
         height: 0% !important;
     }
-    #imagenLogo{
+
+    #imagenLogo {
         display: none;
     }
-    .h-25{
+
+    .h-25 {
         height: 15% !important;
+    }
+
+    form {
+        height: 85%;
+        overflow-y: auto;
+        padding-left: 5vh;
+        padding-right: 5vh;
     }
 }
 
 @media screen and (max-width: 768px) {
-    .w-65{
+    .w-65 {
         width: 100% !important;
     }
-    .px-10{
+
+    .px-10 {
         padding-right: 3rem !important;
         padding-left: 3rem !important;
     }
-    .ms-5{
+
+    .ms-5 {
         margin-left: 0px !important;
     }
 }

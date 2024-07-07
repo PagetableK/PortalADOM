@@ -27,19 +27,47 @@ class AdministradoresData extends AdministradoresHandler
         }
     }
 
-    public function setCorreo($valor, $boolean, $min = 8, $max = 100)
+    // Validación y asignación del nombre del administrador.
+    public function setNombre($value, $min = 2, $max = 50)
     {
-        if (!Validator::validateEmail($valor)) {
+        if (!Validator::validateAlphabetic($value)) {
+            $this->info_error = 'El nombre debe ser un valor alfabético';
+            return false;
+        } elseif (Validator::validateLength($value, $min, $max)) {
+            $this->nombre = $value;
+            return true;
+        } else {
+            $this->info_error = 'El nombre debe tener una longitud entre ' . $min . ' y ' . $max;
+            return false;
+        }
+    }
+
+    // Validación y asignación del apellido del administrador.
+    public function setApellido($value, $min = 2, $max = 50)
+    {
+        if (!Validator::validateAlphabetic($value)) {
+            $this->info_error = 'El apellido debe ser un valor alfabético';
+            return false;
+        } elseif (Validator::validateLength($value, $min, $max)) {
+            $this->apellido = $value;
+            return true;
+        } else {
+            $this->info_error = 'El apellido debe tener una longitud entre ' . $min . ' y ' . $max;
+            return false;
+        }
+    }
+
+    // Validación y asignación del correo del administrador.
+    public function setCorreo($value, $min = 8, $max = 100)
+    {
+        if (!Validator::validateEmail($value)) {
             $this->info_error = 'El correo no es válido';
             return false;
-        } else if($boolean and !$this->checkDuplicateWithId($valor)){
-            $this->correo = $valor;
-            return true;
-        } else if($this->searchEmail($valor)){
-            $this->info_error = 'El correo ya está siendo usado por otro administrador';
+        } elseif (AdministradoresHandler::checkDuplicateWithId($value)) {
+            $this->info_error = 'El correo ya ha sido registrado';
             return false;
-        } elseif (Validator::validateLength($valor, $min, $max)) {
-            $this->correo = $valor;
+        } elseif (Validator::validateLength($value, $min, $max)) {
+            $this->correo = $value;
             return true;
         } else {
             $this->info_error = 'El correo debe tener una longitud entre ' . $min . ' y ' . $max;
@@ -47,10 +75,10 @@ class AdministradoresData extends AdministradoresHandler
         }
     }
 
-    public function setContra($valor)
+    public function setClave($value)
     {
-        if (Validator::validatePassword($valor)) {
-            $this->contra = password_hash($valor, PASSWORD_DEFAULT);
+        if (Validator::validatePassword($value)) {
+            $this->clave = password_hash($value, PASSWORD_DEFAULT);
             return true;
         } else {
             $this->info_error = Validator::getPasswordError();
