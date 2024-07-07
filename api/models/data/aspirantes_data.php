@@ -26,7 +26,7 @@ class AspirantesData extends AspirantesHandler
         }
         // Si la variable no es un numéro entero se devuelve el error.
         else{
-            $this->info_error = 'El identificador del aspirante es correcto';
+            $this->info_error = 'El identificador del aspirante es incorrecto';
             return false;
         }
     }
@@ -85,9 +85,9 @@ class AspirantesData extends AspirantesHandler
             $this->correo = $valor;
             return true;
         } 
-        // Se valida que el correo no esté siendo utilizado por otro usuario.
+        // Se valida que el correo no esté siendo utilizado por otro aspirante.
         else if($this->checkDuplicate($valor)){
-            $this->info_error = 'El correo ya está siendo usado por otro usuario';
+            $this->info_error = 'El correo ya está siendo usado por otro aspirante';
             return false;
         } 
         // Se valida la longitud de la variable y se ejecuta el código.

@@ -11,7 +11,11 @@ const SAVE_MODAL = new bootstrap.Modal('#saveModal'),
 // Constantes para establecer los elementos del formulario de guardar.
 const SAVE_FORM = document.getElementById('saveForm'),
     ID_IDIOMA = document.getElementById('idIdioma'),
-    NOMBRE_IDIOMA = document.getElementById('nombreIdioma');
+    NOMBRE_IDIOMA = document.getElementById('nombreIdioma'),
+    BOTON_AGREGAR = document.getElementById('btnAgregar'),
+    BOTON_ACTUALIZAR = document.getElementById('btnActualizar');
+// Variable global que almacena un valor cuando se habla el modal para actualizar. 
+let idioma;
 
 // Método del evento para cuando el documento ha cargado.
 document.addEventListener('DOMContentLoaded', () => {
@@ -25,10 +29,15 @@ document.addEventListener('DOMContentLoaded', () => {
 SEARCH_FORM.addEventListener('submit', (event) => {
     // Se evita recargar la página web después de enviar el formulario.
     event.preventDefault();
-    // Constante tipo objeto con los datos del formulario.
-    const FORM = new FormData(SEARCH_FORM);
-    // Llamada a la función para llenar la tabla con los resultados de la búsqueda.
-    fillTable(FORM);
+    // Se verifica que el campo de búsqueda no esté vacío.
+    if(SEARCH_FORM['search'].value.trim() != ""){
+        // Constante tipo objeto con los datos del formulario.
+        const FORM = new FormData(SEARCH_FORM);
+        // Llamada a la función para llenar la tabla con los resultados de la búsqueda.
+        fillTable(FORM);
+    } else{
+        sweetAlert(3, 'Ingrese un valor para buscar', false);
+    }
 });
 
 // Método del evento para cuando se envía el formulario de guardar.
@@ -37,20 +46,29 @@ SAVE_FORM.addEventListener('submit', async (event) => {
     event.preventDefault();
     // Se verifica la acción a realizar.
     (ID_IDIOMA.value) ? action = 'updateRow' : action = 'createRow';
-    // Constante tipo objeto con los datos del formulario.
-    const FORM = new FormData(SAVE_FORM);
-    // Petición para guardar los datos del formulario.
-    const DATA = await fetchData(IDIOMA_API, action, FORM);
-    // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
-    if (DATA.status) {
+    // Se verifica que la acción sea crear idioma o que el usuario haya ingresado un nombre de idioma diferente al actual.
+    if (action == 'createRow' || (idioma != SAVE_FORM['nombreIdioma'].value)) {
+        // Constante tipo objeto con los datos del formulario.
+        const FORM = new FormData(SAVE_FORM);
+        // Petición para guardar los datos del formulario.
+        const DATA = await fetchData(IDIOMA_API, action, FORM);
+        // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
+        if (DATA.status) {
+            // Se cierra la caja de diálogo.
+            SAVE_MODAL.hide();
+            // Se muestra un mensaje de éxito.
+            sweetAlert(1, DATA.message, true);
+            // Se carga nuevamente la tabla para visualizar los cambios.
+            fillTable();
+        } else if (DATA.error == "El nombre del idioma ya ha sido registrado") {
+            sweetAlert(3, 'El idioma ya ha sido agregado', false);
+        } 
+        else {
+            sweetAlert(2, DATA.error, false);
+        }
+    } else {
         // Se cierra la caja de diálogo.
         SAVE_MODAL.hide();
-        // Se muestra un mensaje de éxito.
-        sweetAlert(1, DATA.message, true);
-        // Se carga nuevamente la tabla para visualizar los cambios.
-        fillTable();
-    } else {
-        sweetAlert(2, DATA.error, false);
     }
 });
 
@@ -102,6 +120,9 @@ const openCreate = () => {
     MODAL_TITLE.textContent = 'Crear idioma';
     // Se prepara el formulario.
     SAVE_FORM.reset();
+    // Se muestra el botón de agregar y se oculta el de actualizar.
+    BOTON_ACTUALIZAR.classList.add('d-none');
+    BOTON_AGREGAR.classList.remove('d-none');
 }
 
 /*
@@ -126,6 +147,11 @@ const openUpdate = async (id) => {
         const ROW = DATA.dataset;
         ID_IDIOMA.value = ROW.ID;
         NOMBRE_IDIOMA.value = ROW.NOMBRE;
+        // Se asigna el valor de la variable.
+        idioma = ROW.NOMBRE;
+        // Se muestra el botón de actualizar y se oculta el de agregar.
+        BOTON_AGREGAR.classList.add('d-none');
+        BOTON_ACTUALIZAR.classList.remove('d-none');
     } else {
         sweetAlert(2, DATA.error, false);
     }
@@ -152,9 +178,9 @@ const openDelete = async (id) => {
             await sweetAlert(1, DATA.message, true);
             // Se carga nuevamente la tabla para visualizar los cambios.
             fillTable();
-        } else if (DATA.exception.includes ("Integrity constraint") || DATA.exception.includes ("constraint fails")) {
+        } else if (DATA.exception != null && (DATA.exception.includes("Integrity constraint") || DATA.exception.includes("constraint fails"))) {
             sweetAlert(3, 'No se puede eliminar el  idioma porque está asociado a un currículum.', false);
-        }else {
+        } else {
             sweetAlert(2, DATA.error, false);
         }
     }

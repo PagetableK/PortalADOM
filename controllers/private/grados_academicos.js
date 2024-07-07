@@ -11,7 +11,9 @@ const SAVE_MODAL = new bootstrap.Modal('#saveModal'),
 // Constantes para establecer los elementos del formulario de guardar.
 const SAVE_FORM = document.getElementById('saveForm'),
     ID_GRADO = document.getElementById('idGrado'),
-    NOMBRE_GRADO = document.getElementById('nombreGrado');
+    NOMBRE_GRADO = document.getElementById('nombreGrado'),
+    BOTON_AGREGAR = document.getElementById('btnAgregar'),
+    BOTON_ACTUALIZAR = document.getElementById('btnActualizar');
 
 // Método del evento para cuando el documento ha cargado.
 document.addEventListener('DOMContentLoaded', () => {
@@ -25,10 +27,15 @@ document.addEventListener('DOMContentLoaded', () => {
 SEARCH_FORM.addEventListener('submit', (event) => {
     // Se evita recargar la página web después de enviar el formulario.
     event.preventDefault();
-    // Constante tipo objeto con los datos del formulario.
-    const FORM = new FormData(SEARCH_FORM);
-    // Llamada a la función para llenar la tabla con los resultados de la búsqueda.
-    fillTable(FORM);
+    // Se verifica que el campo de búsqueda no esté vacío.
+    if(SEARCH_FORM['search'].value.trim() != ""){
+        // Constante tipo objeto con los datos del formulario.
+        const FORM = new FormData(SEARCH_FORM);
+        // Llamada a la función para llenar la tabla con los resultados de la búsqueda.
+        fillTable(FORM);
+    } else{
+        sweetAlert(3, 'Ingrese un valor para buscar', false);
+    }
 });
 
 // Método del evento para cuando se envía el formulario de guardar.
@@ -49,6 +56,8 @@ SAVE_FORM.addEventListener('submit', async (event) => {
         sweetAlert(1, DATA.message, true);
         // Se carga nuevamente la tabla para visualizar los cambios.
         fillTable();
+    } else if (DATA.exception != null && (DATA.exception.includes ("Integrity constraint") || DATA.exception.includes ("Duplicate entry"))) {
+        sweetAlert(3, 'El grado académico ya ha sido agregado', false);
     } else {
         sweetAlert(2, DATA.error, false);
     }
@@ -99,9 +108,12 @@ const fillTable = async (form = null) => {
 const openCreate = () => {
     // Se muestra la caja de diálogo con su título.
     SAVE_MODAL.show();
-    MODAL_TITLE.textContent = 'Crear grado academico';
+    MODAL_TITLE.textContent = 'Crear grado académico';
     // Se prepara el formulario.
     SAVE_FORM.reset();
+    // Se muestra el botón de agregar y se oculta el de actualizar.
+    BOTON_ACTUALIZAR.classList.add('d-none');
+    BOTON_AGREGAR.classList.remove('d-none');
 }
 
 /*
@@ -119,13 +131,16 @@ const openUpdate = async (id) => {
     if (DATA.status) {
         // Se muestra la caja de diálogo con su título.
         SAVE_MODAL.show();
-        MODAL_TITLE.textContent = 'Actualizar grado academico';
+        MODAL_TITLE.textContent = 'Actualizar grado académico';
         // Se prepara el formulario.
         SAVE_FORM.reset();
         // Se inicializan los campos con los datos.
         const ROW = DATA.dataset;
         ID_GRADO.value = ROW.ID;
         NOMBRE_GRADO.value = ROW.NOMBRE;
+        // Se muestra el botón de actualizar y se oculta el de agregar.
+        BOTON_AGREGAR.classList.add('d-none');
+        BOTON_ACTUALIZAR.classList.remove('d-none');
     } else {
         sweetAlert(2, DATA.error, false);
     }
@@ -138,7 +153,7 @@ const openUpdate = async (id) => {
 */
 const openDelete = async (id) => {
     // Llamada a la función para mostrar un mensaje de confirmación, capturando la respuesta en una constante.
-    const RESPONSE = await confirmAction('¿Desea eliminar el grado academico de forma permanente?');
+    const RESPONSE = await confirmAction('¿Desea eliminar el grado académico de forma permanente?');
     // Se verifica la respuesta del mensaje.
     if (RESPONSE) {
         // Se define una constante tipo objeto con los datos del registro seleccionado.
@@ -152,9 +167,9 @@ const openDelete = async (id) => {
             await sweetAlert(1, DATA.message, true);
             // Se carga nuevamente la tabla para visualizar los cambios.
             fillTable();
-        } else if (DATA.exception.includes ("Integrity constraint") || DATA.exception.includes ("constraint fails")) {
+        } else if (DATA.exception != null && (DATA.exception.includes ("Integrity constraint") || DATA.exception.includes ("constraint fails"))) {
             sweetAlert(3, 'No se puede eliminar el grado academico porque está asociado a un currículum.', false);
-        }else {
+        } else {
             sweetAlert(2, DATA.error, false);
         }
     }

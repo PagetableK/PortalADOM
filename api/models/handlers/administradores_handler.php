@@ -53,9 +53,8 @@ class AdministradoresHandler
         }
     }
     
-   
-
-    public function checkDuplicateWithId($correo)
+   // La función checkDuplicate permite buscar un correo específico de la tabla.
+    public function checkDuplicate($correo)
     {
         $sql = 'SELECT id_administrador
                 FROM administradores
@@ -63,6 +62,17 @@ class AdministradoresHandler
         $params = array($correo);
         return Database::getRow($sql, $params);
     }
+
+   // La función checkDuplicateWithId permite buscar un correo específico de la tabla excluyendo un registro específico.
+    public function checkDuplicateWithId($correo)
+    {
+        $sql = 'SELECT id_administrador
+                FROM administradores
+                WHERE correo_administrador = ? AND id_administrador != ?';
+        $params = array($correo, $this->id);
+        return Database::getRow($sql, $params);
+    }
+
 
     /*
      *  Métodos para realizar las operaciones SCRUD (search, create, read, update, and delete).
