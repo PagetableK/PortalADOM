@@ -163,7 +163,7 @@ const cargarPlantilla = async () => {
     } else {
         // Si no existe una sesión activa y la página actual no es el inicio de sesión se redirige al index.
         if (!location.pathname.endsWith('index.html')) {
-            location.href = 'index.html';
+            location.href = 'inicio.html';
         }
         else {
         }
