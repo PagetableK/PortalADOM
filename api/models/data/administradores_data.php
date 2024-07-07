@@ -58,13 +58,16 @@ class AdministradoresData extends AdministradoresHandler
     }
 
     // Validación y asignación del correo del administrador.
-    public function setCorreo($value, $min = 8, $max = 100)
+    public function setCorreo($value, $boolean = null, $min = 8, $max = 100)
     {
         if (!Validator::validateEmail($value)) {
             $this->info_error = 'El correo no es válido';
             return false;
-        } elseif (AdministradoresHandler::checkDuplicateWithId($value)) {
-            $this->info_error = 'El correo ya ha sido registrado';
+        } elseif ($boolean and !$this->checkDuplicateWithId($value)) {
+            $this->correo = $value;
+            return true;
+        } elseif ($this->checkDuplicate($value)) {
+            $this->info_error = 'El correo ya está siendo utilizado por otro administrador';
             return false;
         } elseif (Validator::validateLength($value, $min, $max)) {
             $this->correo = $value;

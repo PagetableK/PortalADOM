@@ -17,7 +17,9 @@ const SAVE_FORM = document.getElementById('saveForm'),
     FECHA_ASPIRANTE = document.getElementById('fechanacimientoAspirante'),
     GENERO_ASPIRANTE = document.getElementById('generoAspirante'),
     CLAVE_ASPIRANTE = document.getElementById('claveAspirante'),
-    CONFIRMAR_CLAVE_ASPIRANTE = document.getElementById('repetirclaveAspirante');
+    CONFIRMAR_CLAVE_ASPIRANTE = document.getElementById('repetirClaveAspirante'),
+    BOTON_AGREGAR = document.getElementById('btnAgregar'),
+    BOTON_ACTUALIZAR = document.getElementById('btnActualizar');
 
 // Método del evento para cuando el documento ha cargado.
 document.addEventListener('DOMContentLoaded', () => {
@@ -41,10 +43,15 @@ document.addEventListener('DOMContentLoaded', () => {
 SEARCH_FORM.addEventListener('submit', (event) => {
     // Se evita recargar la página web después de enviar el formulario.
     event.preventDefault();
-    // Constante tipo objeto con los datos del formulario.
-    const FORM = new FormData(SEARCH_FORM);
-    // Llamada a la función para llenar la tabla con los resultados de la búsqueda.
-    fillTable(FORM);
+    // Se verifica que el campo de búsqueda no esté vacío.
+    if(SEARCH_FORM['search'].value.trim() != ""){
+        // Constante tipo objeto con los datos del formulario.
+        const FORM = new FormData(SEARCH_FORM);
+        // Llamada a la función para llenar la tabla con los resultados de la búsqueda.
+        fillTable(FORM);
+    } else{
+        sweetAlert(3, 'Ingrese un valor para buscar', false);
+    }
 });
 
 // Método del evento para cuando se envía el formulario de guardar.
@@ -66,6 +73,8 @@ SAVE_FORM.addEventListener('submit', async (event) => {
         sweetAlert(1, DATA.message, true);
         // Se carga nuevamente la tabla para visualizar los cambios.
         fillTable();
+    } else if (DATA.exception != null && (DATA.exception.includes ("Integrity constraint") || DATA.exception.includes ("Duplicate entry"))) {
+        sweetAlert(3, 'El correo del aspirante ya está siendo utilizado', false);
     } else {
         sweetAlert(2, DATA.error, false);
     }
@@ -168,6 +177,9 @@ const openCreate = () => {
     CLAVE_ASPIRANTE.disabled = false;
     CONFIRMAR_CLAVE_ASPIRANTE.disabled = false;
     Selected(lista_datos, 'readAll', 'generoAspirante');
+    // Se muestra el botón de agregar y se oculta el de actualizar.
+    BOTON_ACTUALIZAR.classList.add('d-none');
+    BOTON_AGREGAR.classList.remove('d-none');
 }
 
 function getRowColor(estado) {
@@ -220,6 +232,9 @@ const openUpdate = async (id) => {
         CORREO_ASPIRANTE.value = ROW.CORREO;
         FECHA_ASPIRANTE.value = ROW.FECHA;
         Selected(lista_datos, 'readAll', 'generoAspirante', ROW.GENERO);
+        // Se muestra el botón de actualizar y se oculta el de agregar.
+        BOTON_AGREGAR.classList.add('d-none');
+        BOTON_ACTUALIZAR.classList.remove('d-none');
     } else {
         sweetAlert(2, DATA.error, false);
     }
@@ -276,7 +291,7 @@ const openDelete = async (id) => {
             await sweetAlert(1, DATA.message, true);
             // Se carga nuevamente la tabla para visualizar los cambios.
             fillTable();
-        } else if (DATA.exception.includes ("Integrity constraint") || DATA.exception.includes ("constraint fails")) {
+        } else if (DATA.exception != null && (DATA.exception.includes ("Integrity constraint") || DATA.exception.includes ("constraint fails"))) {
             sweetAlert(3, 'No se puede eliminar el aspirante porque está asociado a un currículum.', false);
         }else {
             sweetAlert(2, DATA.error, false);
