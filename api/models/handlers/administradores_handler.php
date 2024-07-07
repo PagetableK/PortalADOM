@@ -2,7 +2,7 @@
 // Se incluye la clase para trabajar con la base de datos.
 require_once('../../helpers/database.php');
 /*
- *  Clase para manejar el comportamiento de los datos de la tabla administrador.
+ *  Clase para manejar el comportamiento de los datos de la tabla ADMINISTRADOR.
  */
 class AdministradoresHandler
 {
@@ -18,19 +18,24 @@ class AdministradoresHandler
     /*
      *  Métodos para gestionar la cuenta del administrador.
      */
-    public function checkUser($correo, $contra)
+
+    // La acción checkUser permite validar la cuenta de un usuario por medio del query en la función.
+    public function checkUser($correo, $clave)
     {
-        $sql = 'SELECT id_administrador, nombre_administrador, contra_administrador, estado_administrador
+        // Se establece la estructura del query.
+        $sql = 'SELECT id_administrador, clave_administrador, estado_administrador
                 FROM administradores
                 WHERE correo_administrador = ?';
+        // Se agrega el parámetro en el array.
         $params = array($correo);
+        // Se ejecuta la sentencia en la base y se capturan los datos en la variable $data. 
         $data = Database::getRow($sql, $params);
 
         // Se valida que el query retorne un registro de la tabla.
         if ($data) {
             // Se valida que la contraseña ingresada en el campo de login convertida a hash
             // sea igual a la contraseña almacenada en la bd.
-            if (password_verify($contra, $data['contra_administrador'])) {
+            if (password_verify($clave, $data['clave_administrador'])) {
                 // Se valida el estado del administrador.
                 if ($data['estado_administrador'] == '0') {
                     // Si estado_administrador = 0 el estado es inactivo: Se devuelve el string.
