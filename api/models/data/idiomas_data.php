@@ -32,7 +32,10 @@ class idiomasData extends IdiomasHandler
         if (!Validator::validateAlphabetic($valor)) {
             $this->info_error = 'El nombre debe ser un valor alfabético';
             return false;
-        } elseif (Validator::validateLength($valor, $min, $max)) {
+        } elseif (IdiomasHandler::checkDuplicateWithId($valor)) {
+            $this->info_error = 'El nombre del idioma ya ha sido registrado';
+            return false;
+        }elseif (Validator::validateLength($valor, $min, $max)) {
             $this->nombre = $valor;
             return true;
         } else {

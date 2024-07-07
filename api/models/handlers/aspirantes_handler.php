@@ -68,16 +68,6 @@ class AspirantesHandler
         }
     }
 
-    // Esta función permite crear un registro en la tabla.
-    public function createRow(){
-        // Se establece la estructura de la sentencia.
-        $sql = 'INSERT INTO aspirantes (nombre_aspirante, apellido_aspirante, correo_aspirante, clave_aspirante, fecha_nacimiento, genero_aspirante)
-        VALUES(?, ?, ?, ?, ?, ?);';
-        // Se almacenan los parámetros en el array.
-        $params = array($this->nombre, $this->apellido, $this->correo, $this->clave, $this->fecha_nacimiento, $this->genero);
-        // Se ejecuta la sentencia y se devuelve el estado del query.
-        return Database::executeRow($sql, $params);
-    }
 
     // Esta función selecciona los campos duplicados en base a un parámetro.
     public function checkDuplicate($value)

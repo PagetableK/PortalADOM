@@ -31,13 +31,13 @@ class AdministradoresData extends AdministradoresHandler
     public function setNombre($value, $min = 2, $max = 50)
     {
         if (!Validator::validateAlphabetic($value)) {
-            $this->data_error = 'El nombre debe ser un valor alfabético';
+            $this->info_error = 'El nombre debe ser un valor alfabético';
             return false;
         } elseif (Validator::validateLength($value, $min, $max)) {
             $this->nombre = $value;
             return true;
         } else {
-            $this->data_error = 'El nombre debe tener una longitud entre ' . $min . ' y ' . $max;
+            $this->info_error = 'El nombre debe tener una longitud entre ' . $min . ' y ' . $max;
             return false;
         }
     }
@@ -46,13 +46,13 @@ class AdministradoresData extends AdministradoresHandler
     public function setApellido($value, $min = 2, $max = 50)
     {
         if (!Validator::validateAlphabetic($value)) {
-            $this->data_error = 'El apellido debe ser un valor alfabético';
+            $this->info_error = 'El apellido debe ser un valor alfabético';
             return false;
         } elseif (Validator::validateLength($value, $min, $max)) {
             $this->apellido = $value;
             return true;
         } else {
-            $this->data_error = 'El apellido debe tener una longitud entre ' . $min . ' y ' . $max;
+            $this->info_error = 'El apellido debe tener una longitud entre ' . $min . ' y ' . $max;
             return false;
         }
     }
@@ -61,13 +61,16 @@ class AdministradoresData extends AdministradoresHandler
     public function setCorreo($value, $min = 8, $max = 100)
     {
         if (!Validator::validateEmail($value)) {
-            $this->data_error = 'El correo no es válido';
+            $this->info_error = 'El correo no es válido';
+            return false;
+        } elseif (AdministradoresHandler::checkDuplicateWithId($value)) {
+            $this->info_error = 'El correo ya ha sido registrado';
             return false;
         } elseif (Validator::validateLength($value, $min, $max)) {
             $this->correo = $value;
             return true;
         } else {
-            $this->data_error = 'El correo debe tener una longitud entre ' . $min . ' y ' . $max;
+            $this->info_error = 'El correo debe tener una longitud entre ' . $min . ' y ' . $max;
             return false;
         }
     }
@@ -78,7 +81,7 @@ class AdministradoresData extends AdministradoresHandler
             $this->clave = password_hash($value, PASSWORD_DEFAULT);
             return true;
         } else {
-            $this->data_error = Validator::getPasswordError();
+            $this->info_error = Validator::getPasswordError();
             return false;
         }
     }
