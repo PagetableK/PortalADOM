@@ -10,7 +10,7 @@ if (isset($_GET['action'])) {
     // Se instancia la clase correspondiente.
     $aspirantes = new AspirantesData;
     // Se declara e inicializa un arreglo para guardar el resultado que retorna la API.
-    $result = array('status' => 0, 'session' => 0, 'recaptcha' => 0, 'message' => null, 'error' => null, 'exception' => null, 'username' => null, 'nombre' => null);
+    $result = array('status' => 0, 'session' => 0, 'recaptcha' => 0, 'message' => null, 'error' => null, 'exception' => null, 'username' => null, 'nombre' => null, 'idCV' => null);
     // Se verifica si existe una sesión iniciada como aspirante para realizar las acciones correspondientes.
     if (isset($_SESSION['idAspirante'])) {
         $result['session'] = 1;
@@ -24,6 +24,7 @@ if (isset($_GET['action'])) {
                     $result['status'] = 1;
                     $result['username'] = $_SESSION['correoAspirante'];
                     $result['nombre'] = $_SESSION['nombreAspirante'] . " " . $_SESSION['apellidoAspirante'];
+                    $result['idCV'] = $aspirantes->getCvId();
                 } else {
                     // Se retorna el error.
                     $result['error'] = 'Correo de usuario indefinido';
