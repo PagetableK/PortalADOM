@@ -38,17 +38,17 @@ if (isset($_GET['action'])) {
                     }
                     break;
                     //actualizar
-                case 'updateRow':
+                case 'editProfile':
                     $_POST = Validator::validateForm($_POST);
                     if (
                         !$aspirantes->setNombre($_POST['nombrePerfil']) or
                         !$aspirantes->setApellido($_POST['apellidoPerfil']) or
-                        !$aspirantes->setCorreo($_POST['correoPerfil']) or
+                        !$aspirantes->setCorreo($_POST['correoPerfil'],1) or
                         !$aspirantes->setFechaNacimiento($_POST['fechanacimientoPerfil']) or
                         !$aspirantes->setGenero($_POST['generoPerfil']) 
                      ) {
                         $result['error'] = $aspirantes->getDataError();
-                    } elseif ($aspirantes->updateRow()) {
+                    } elseif ($aspirantes->editProfile()) {
                         $result['status'] = 1;
                         $result['message'] = 'Perfil modificado correctamente';
                         // Se asigna el estado del archivo después de actualizar.
