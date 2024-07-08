@@ -29,6 +29,41 @@ if (isset($_GET['action'])) {
                     $result['error'] = 'Correo de usuario indefinido';
                 }
                 break;
+                //leer perfil
+                case 'readProfile':
+                    if ($result['dataset'] = $aspirantes->readProfile()) {
+                        $result['status'] = 1;
+                    } else {
+                        $result['error'] = 'Ocurrió un problema al leer el perfil';
+                    }
+                    break;
+                    //actualizar
+                case 'updateRow':
+                    $_POST = Validator::validateForm($_POST);
+                    if (
+                        !$aspirantes->setNombre($_POST['nombrePerfil']) or
+                        !$aspirantes->setApellido($_POST['apellidoPerfil']) or
+                        !$aspirantes->setCorreo($_POST['correoPerfil']) or
+                        !$aspirantes->setFechaNacimiento($_POST['fechanacimientoPerfil']) or
+                        !$aspirantes->setGenero($_POST['generoPerfil']) 
+                     ) {
+                        $result['error'] = $aspirantes->getDataError();
+                    } elseif ($aspirantes->updateRow()) {
+                        $result['status'] = 1;
+                        $result['message'] = 'Perfil modificado correctamente';
+                        // Se asigna el estado del archivo después de actualizar.
+                    } else {
+                        $result['error'] = 'Ocurrió un problema al modificar el perfil';
+                    }
+                        break;
+                    // Ver uno
+                case 'readOne':
+                    if ($result['dataset'] = $aspirantes->readOneProfile()) {
+                        $result['status'] = 1;
+                    } else {
+                        $result['error'] = 'Perfil inexistente';
+                    }
+                    break;
                 // La acción logOut permite cerrar la sesión del usuario.
             case 'logOut':
                 // Se elimina la sesión.
