@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Se cambia el color del apartado donde se encuentra el usuario y se restablecen los otros colores.
     cambiarColor('Inicio');
     // Llamada a la función para validar sesiones activas.
-    await cargarPlantilla();
+    const NOMBRE = await cargarPlantilla();
     // Se carga el nombre del usuario en el elemento de texto.
-    NOMBRE_USUARIO.textContent = nombreUsuario;
+    NOMBRE_USUARIO.textContent = NOMBRE[0];
 });

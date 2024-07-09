@@ -173,7 +173,17 @@ class AspirantesHandler
          $params = array($this->id);
          return Database::executeRow($sql, $params);
      }
-    
+
+     // Función que devuelve el id del currículum del aspirante.
+     public function getCvId()
+     {
+        $sql = 'SELECT id_curriculum FROM
+                curriculum_aspirantes
+                WHERE id_aspirante = ?;';
+        $params = array($_SESSION['idAspirante']);
+        return Database::getRow($sql, $params);
+     }
+
      public function readProfile()
      {
          $sql = 'SELECT id_aspirante, nombre_aspirante AS NOMBRE , apellido_aspirante AS APELLIDO, correo_aspirante AS CORREO, clave_aspirante, fecha_nacimiento AS FECHA, genero_aspirante
