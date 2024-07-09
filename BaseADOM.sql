@@ -63,7 +63,6 @@ CREATE TABLE curriculum_aspirantes(
 	telefono_fijo VARCHAR(9) UNIQUE NOT NULL,
 	telefono_movil VARCHAR(9) UNIQUE NOT NULL,
 	correo_aspirante VARCHAR(50) UNIQUE NOT NULL,
-	estado_curriculum TINYINT(1) NOT NULL DEFAULT 0,
 	id_aspirante INT NOT NULL,
 	CONSTRAINT fk_aspirante_cv
 	FOREIGN KEY (id_aspirante)
