@@ -10,7 +10,7 @@ if (isset($_GET['action'])) {
     // Se instancia la clase correspondiente.
     $aspirantes = new AspirantesData;
     // Se declara e inicializa un arreglo para guardar el resultado que retorna la API.
-    $result = array('status' => 0, 'session' => 0, 'recaptcha' => 0, 'message' => null, 'error' => null, 'exception' => null, 'username' => null, 'nombre' => null);
+    $result = array('status' => 0, 'session' => 0, 'recaptcha' => 0, 'message' => null, 'error' => null, 'exception' => null, 'username' => null, 'nombre' => null, 'idCV' => null);
     // Se verifica si existe una sesión iniciada como aspirante para realizar las acciones correspondientes.
     if (isset($_SESSION['idAspirante'])) {
         $result['session'] = 1;
@@ -24,11 +24,47 @@ if (isset($_GET['action'])) {
                     $result['status'] = 1;
                     $result['username'] = $_SESSION['correoAspirante'];
                     $result['nombre'] = $_SESSION['nombreAspirante'] . " " . $_SESSION['apellidoAspirante'];
+                    $result['idCV'] = $aspirantes->getCvId();
                 } else {
                     // Se retorna el error.
                     $result['error'] = 'Correo de usuario indefinido';
                 }
                 break;
+                //leer perfil
+                case 'readProfile':
+                    if ($result['dataset'] = $aspirantes->readProfile()) {
+                        $result['status'] = 1;
+                    } else {
+                        $result['error'] = 'Ocurrió un problema al leer el perfil';
+                    }
+                    break;
+                    //actualizar
+                case 'editProfile':
+                    $_POST = Validator::validateForm($_POST);
+                    if (
+                        !$aspirantes->setNombre($_POST['nombrePerfil']) or
+                        !$aspirantes->setApellido($_POST['apellidoPerfil']) or
+                        !$aspirantes->setCorreo($_POST['correoPerfil'],1) or
+                        !$aspirantes->setFechaNacimiento($_POST['fechanacimientoPerfil']) or
+                        !$aspirantes->setGenero($_POST['generoPerfil']) 
+                     ) {
+                        $result['error'] = $aspirantes->getDataError();
+                    } elseif ($aspirantes->editProfile()) {
+                        $result['status'] = 1;
+                        $result['message'] = 'Perfil modificado correctamente';
+                        // Se asigna el estado del archivo después de actualizar.
+                    } else {
+                        $result['error'] = 'Ocurrió un problema al modificar el perfil';
+                    }
+                        break;
+                    // Ver uno
+                case 'readOne':
+                    if ($result['dataset'] = $aspirantes->readOneProfile()) {
+                        $result['status'] = 1;
+                    } else {
+                        $result['error'] = 'Perfil inexistente';
+                    }
+                    break;
                 // La acción logOut permite cerrar la sesión del usuario.
             case 'logOut':
                 // Se elimina la sesión.
