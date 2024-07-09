@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <!-- Se configura el idioma del documento -->
 <html lang="es">
@@ -29,29 +30,22 @@
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="nombres" class="form-label">Nombres</label>
-                                    <input type="text" class="form-control" id="nombres" value="Elmer Iván" disabled>
+                                    <input type="text" class="form-control" id="nombres" name="nombres"  disabled>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="apellidos" class="form-label">Apellidos</label>
-                                    <input type="text" class="form-control" id="apellidos" value="Molina Paniagua" disabled>
+                                    <input type="text" class="form-control" id="apellidos" name="apellidos"  disabled>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="fechaNacimiento" class="form-label">Fecha de nacimiento</label>
-                                    <input type="date" class="form-control" id="fechaNacimiento" value="2022-04-05"
+                                    <input type="date" class="form-control" id="fechaNacimiento" name="fechaNacimiento" 
                                         disabled>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="correo" class="form-label">Correo</label>
-                                    <input type="email" class="form-control" id="correo" value="ElmerP@gmail.com" disabled>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="contrasena" class="form-label">Contraseña</label>
-                                    <input type="password" class="form-control" id="contrasena" value="**********" disabled>
-                                    <a href="#" class="text-decoration-none">Cambiar contraseña</a>
+                                    <input type="email" class="form-control" id="correo" name="correo" disabled>
                                 </div>
                             </div>
                             <div class="row">
@@ -94,6 +88,13 @@
                                 </div>
                             </div>
                             <div class="col-sm-6 col-md-6 col-lg-6 col-12 mb-3">
+                                <div class="form-floating borde ">
+                                    <input id="correoPerfil" type="email" name="correoPerfil"
+                                        placeholder="Correo electrónico" class="form-control" required autocomplete="off" />
+                                    <label for="correoPerfil">Correo electrónico</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6 col-12 mb-3">
                                 <div class="form-floating borde">
                                     <input id="fechanacimientoPerfil" type="date" name="fechanacimientoPerfil"
                                         placeholder="fechanacimiento" class="form-control" required autocomplete="off" />
@@ -101,10 +102,9 @@
                                 </div>
                             </div>
                             <div class="col-sm-6 col-md-6 col-lg-6 col-12 mb-3">
-                                <div class="form-floating borde ">
-                                    <input id="correoPerfil" type="email" name="correoPerfil"
-                                        placeholder="Correo electrónico" class="form-control" required autocomplete="off" />
-                                    <label for="correoPerfil">Correo electrónico</label>
+                                <div class="form-floating borde">
+                                    <select class="form-select" name="generoPerfil" id=generoPerfil>
+                                    </select>
                                 </div>
                             </div>
                             <div class="modal-footer col-sm-12 col-md-12 col-lg-12">
