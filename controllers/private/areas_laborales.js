@@ -1,6 +1,8 @@
 
 // Constante para completar la ruta de la API.
 const AREA_API = 'services/private/areas_laborales_services.php';
+const RUBRO_API = 'services/private/rubro_services.php';
+
 // Constante para establecer el formulario de buscar.
 const SEARCH_FORM = document.getElementById('searchForm');
 // Constantes para establecer los elementos de la tabla.
@@ -12,7 +14,8 @@ const SAVE_MODAL = new bootstrap.Modal('#saveModal'),
 // Constantes para establecer los elementos del formulario de guardar.
 const SAVE_FORM = document.getElementById('saveForm'),
     ID_AREA = document.getElementById('idArea'),
-    NOMBRE_AREA = document.getElementById('nombreArea');
+    NOMBRE_AREA = document.getElementById('nombreArea'),
+    ID_RUBRO = document.getElementById('idRubro');
 
 // Método del evento para cuando el documento ha cargado.
 document.addEventListener('DOMContentLoaded', () => {
@@ -76,6 +79,7 @@ const fillTable = async (form = null) => {
             TABLE_BODY.innerHTML += `
                 <tr>
                     <td>${row.nombre_area}</td>
+                    <td>${row.nombre_rubro}</td>
                     <td>   
                         <button type="button" class="btn btn-outline-success" onclick="openUpdate(${row.id_area})">
                             <i class="bi bi-pencil-fill"></i>
@@ -103,6 +107,7 @@ const openCreate = () => {
     MODAL_TITLE.textContent = 'Crear area';
     // Se prepara el formulario.
     SAVE_FORM.reset();
+    fillSelect(RUBRO_API, 'readAll', 'idRubro');
 }
 
 /*
@@ -118,15 +123,18 @@ const openUpdate = async (id) => {
     const DATA = await fetchData(AREA_API, 'readOne', FORM);
     // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
     if (DATA.status) {
+        
         // Se muestra la caja de diálogo con su título.
         SAVE_MODAL.show();
-        MODAL_TITLE.textContent = 'Actualizar institucion';
+        MODAL_TITLE.textContent = 'Actualizar área';
         // Se prepara el formulario.
         SAVE_FORM.reset();
         // Se inicializan los campos con los datos.
         const ROW = DATA.dataset;
         ID_AREA.value = ROW.id_area;
         NOMBRE_AREA.value = ROW.nombre_area;
+        fillSelect(RUBRO_API, 'readAll', 'idRubro', ROW.id_rubro);
+
     } else {
         sweetAlert(2, DATA.error, false);
     }

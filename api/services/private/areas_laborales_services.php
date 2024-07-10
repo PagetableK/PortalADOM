@@ -27,7 +27,8 @@ if (isset($_GET['action'])) {
             case 'createRow':
                 $_POST = Validator::validateForm($_POST);
                 if (
-                    !$area->setArea($_POST['nombreArea']) 
+                    !$area->setArea($_POST['nombreArea']) or
+                    !$area->setIdRubro($_POST['idRubro']) 
                 ) {
                     $result['error'] = $area->getDataError();
                 } elseif ($area->createRow()) {
@@ -57,7 +58,7 @@ if (isset($_GET['action'])) {
             case 'updateRow':
                 $_POST = Validator::validateForm($_POST);
                 if (
-                    !$area->setId($_POST['idArea']) or
+                    !$area->setId($_POST['idRubro']) or
                     !$area->setArea($_POST['nombreArea']) 
                 ) {
                     $result['error'] = $area->getDataError();

@@ -11,6 +11,9 @@ class AreaslaboralesHandler
     */
     protected $id = null;
     protected $area = null;
+    protected $id_area = null;
+    protected $id_rubro = null;
+
     
 
     /*
@@ -30,27 +33,31 @@ class AreaslaboralesHandler
 
     public function createRow()
     {
-        $sql = 'INSERT INTO areas_laborales(nombre_area)
-                VALUES(?)';
-        $params = array($this->area);
+        $sql = 'INSERT INTO areas_laborales(id_rubro, nombre_area)
+                VALUES(?, ?)';
+        $params = array($this->id_rubro, $this->area);
         return Database::executeRow($sql, $params);
     }
 
     //Función para leer todos los admministradores.
     public function readAll()
     {
-        $sql = 'SELECT id_area, nombre_area
-        FROM areas_laborales
-        ORDER BY nombre_area';
+        $sql = 'SELECT a.id_area, a.nombre_area, a.id_rubro, b.nombre_rubro
+                FROM areas_laborales a
+                JOIN rubros_empresas b ON a.id_rubro = b.id_rubro
+                ORDER BY a.nombre_area;
+                ';
         return Database::getRows($sql);
     }
 
         //funcion leer una linea
         public function readOne()
         {
-            $sql = 'SELECT id_area, nombre_area
-                    FROM areas_laborales
-                    WHERE id_area = ?';
+            $sql = 'SELECT a.id_area, a.nombre_area, a.id_rubro, b.nombre_rubro
+                FROM areas_laborales a
+                JOIN rubros_empresas b ON a.id_rubro = b.id_rubro
+                WHERE id_area = ?
+                ORDER BY a.nombre_area';
             $params = array($this->id);
             return Database::getRow($sql, $params);
         }

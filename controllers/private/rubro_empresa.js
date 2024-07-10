@@ -75,6 +75,7 @@ const fillTable = async (form = null) => {
             TABLE_BODY.innerHTML += `
                 <tr>
                     <td>${row.nombre_rubro}</td>
+                      <td>${row.nombre_rubro}</td>
                     <td>${row.veces_utilizadas}</td>
                     <td>
                         <button type="button" class="btn btn-outline-success" onclick="openUpdate(${row.id_rubro})">
