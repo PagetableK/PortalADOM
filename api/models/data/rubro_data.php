@@ -2,11 +2,11 @@
 // Se incluye la clase para validar los datos de entrada.
 require_once('../../helpers/validator.php');
 // Se incluye la clase padre.
-require_once('../../models/handlers/areas_laborales_handler.php');
+require_once('../../models/handlers/rubro_handler.php');
 /*
  *  Clase para manejar el encapsulamiento de los datos de la tabla CATEGORIA.
  */
-class AreaslaboralesData extends AreaslaboralesHandler
+class RubroData extends RubroHandler
 {
     /*
      *  Atributos adicionales.
@@ -23,21 +23,21 @@ class AreaslaboralesData extends AreaslaboralesHandler
             $this->id = $value;
             return true;
         } else {
-            $this->data_error = 'El identificador de la categoría es incorrecto';
+            $this->data_error = 'El identificador del rubro es incorrecto';
             return false;
         }
     }
 
-    public function setArea($value, $min = 2, $max = 150)
+    public function setRubro($value, $min = 2, $max = 150)
     {
         if (!Validator::validateAlphanumeric($value)) {
-            $this->data_error = 'El area debe ser un valor alfanumérico';
+            $this->data_error = 'El nombre debe ser un valor alfanumérico';
             return false;
         } elseif (Validator::validateLength($value, $min, $max)) {
-            $this->area = $value;
+            $this->rubro = $value;
             return true;
         } else {
-            $this->data_error = 'El area debe tener una longitud entre ' . $min . ' y ' . $max;
+            $this->data_error = 'El nombre debe tener una longitud entre ' . $min . ' y ' . $max;
             return false;
         }
     }
