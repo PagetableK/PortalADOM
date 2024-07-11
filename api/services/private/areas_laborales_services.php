@@ -71,8 +71,7 @@ if (isset($_GET['action'])) {
                 break;
             case 'deleteRow':
                 if (
-                    !$area->setId($_POST['idArea']) or
-                    !$area->setArea($_POST['nombreArea']) 
+                    !$area->setId($_POST['idArea']) 
                 ) {
                     $result['error'] = $area->getDataError();
                 } elseif ($area->deleteRow()) {
