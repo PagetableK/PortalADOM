@@ -95,6 +95,13 @@ class AspirantesHandler
         return Database::executeRow($sql, $params);
     }
 
+    public function signUp()
+    {
+        $sql = 'CALL insertar_aspirante_validado(?,?,?,?,?,?)';
+        $params = array($this->nombre, $this->apellido, $this->clave, $this->correo, $this->genero, $this->fecha_nacimiento);
+        return Database::executeRow($sql, $params);
+    }
+
      //Función para actualizar un admministrador.
     public function updateRow()
     {
