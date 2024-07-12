@@ -43,7 +43,7 @@ if (isset($_GET['action'])) {
                     $result['status'] = 1;
                     $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
                 } else {
-                    $result['error'] = 'No existen categorías registradas';
+                    $result['error'] = 'No existen áreas laborales registradas';
                 }
                 break;
             case 'readOne':

@@ -38,6 +38,15 @@ button.btn.btn-primary{
     box-shadow: 0px 5px 5px 0px rgb(139, 139, 139);
 }
 
+.contenedorEstudio{
+    background-color: #3699FF;
+    color: white;
+}
+
+i.bi{
+    cursor: pointer;
+}
+
 .psinmargen{
     margin: 0;
 }

@@ -46,7 +46,7 @@ class GradoHandler
         return Database::getRow($sql, $params);
     }
 
-    // Función para buscar un cliente
+    // Función para buscar un grado académico
     public function searchRows()
     {
         $value = '%' . Validator::getSearchValue() . '%';

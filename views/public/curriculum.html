@@ -23,7 +23,7 @@
 <body>
     <!-- Contenido principal de la página -->
     <main class="container-fluid">
-        <div class="row d-none mx-md-5" id="contenedorStepper">
+        <div class="row d-none mx-md-5 pb-3" id="contenedorStepper">
             <div class="col-md-12 mt-5">
                 <div id="stepperCv" class="bs-stepper">
                     <div class="bs-stepper-header">
@@ -54,8 +54,7 @@
                                 <div class="col-12">
                                     <p class="fw-bold fs-5">Formación académica</p>
                                 </div>
-                                <div class="col-11 col-sm-12 rounded-4 pt-3">
-                                    <p class="fw-semibold text-center">Los estudios agregados se mostrarán aquí</p>
+                                <div class="col-11 col-sm-12 rounded-4 p-3 d-flex gap-1 flex-wrap align-items-center justify-content-center" id="contenedorEstudios">
                                 </div>
                                 <div class="col-12 mt-4 d-flex flex-column">
                                     <form class="row row-gap-3" id="formAgregarEstudio">
@@ -65,7 +64,7 @@
                                         </div>
                                         <div class="col-md-6 d-flex flex-column gap-1">
                                             <label for="titulo" class="fs-6">Título/Especialidad</label>
-                                            <input type="text" class="form-control" id="titulo" name="titulo" required>
+                                            <input type="text" class="form-control" id="titulo" name="titulo" min="4" max="70" required>
                                         </div>
                                         <div class="col-md-6 d-flex flex-column gap-1">
                                             <label for="institucion" class="fs-6">Institución</label>
@@ -73,14 +72,14 @@
                                         </div>
                                         <div class="col-md-6 d-flex flex-column gap-1">
                                             <label for="otraInstitucion" class="fs-6">Otra institución</label>
-                                            <input type="text" class="form-control" id="otraInstitucion" name="otraInstitucion" disabled>
+                                            <input type="text" class="form-control" id="otraInstitucion" name="otraInstitucion" min="4" max="100" disabled>
                                         </div>
                                         <div class="col-md-6 d-flex flex-column gap-1">
                                             <label for="fechaFinal" class="fs-6">Año de finalización</label>
-                                            <select name="fechaFinal" id="fechaFinal" class="form-select" required></select>
+                                            <select name="fechaFinal" id="fechaFinal" class="form-select select-fecha" required></select>
                                             <div class="form-check d-flex gap-2">
-                                                <input class="form-check-input" type="checkbox" id="cursandoActualmente" name="cursandoActualmente" onclick="console.log(this.checked)">
-                                                <label class="form-check-label" for="cursandoActualmente">
+                                                <input class="form-check-input" type="checkbox" id="estadoEstudio" name="estadoEstudio" onclick="console.log(this.checked)">
+                                                <label class="form-check-label" for="estadoEstudio">
                                                     Cursando actualmente
                                                 </label>
                                             </div>
@@ -113,7 +112,7 @@
                                         </div>
                                         <div class="col-md-6 d-flex flex-column gap-1">
                                             <label for="fechaFinalCertificado" class="fs-6">Año de finalización</label>
-                                            <select name="fechaFinalCertificado" id="fechaFinalCertificado" class="form-select" required></select>
+                                            <select name="fechaFinalCertificado" id="fechaFinalCertificado" class="form-select select-fecha" required></select>
                                         </div>
                                         <div class="col-12 d-flex justify-content-center align-items-center">
                                             <button type="submit" class="btn btn-primary px-5 d-flex align-items-center">

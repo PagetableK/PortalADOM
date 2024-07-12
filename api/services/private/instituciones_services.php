@@ -42,7 +42,7 @@ if (isset($_GET['action'])) {
                     $result['status'] = 1;
                     $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
                 } else {
-                    $result['error'] = 'No existen categorías registradas';
+                    $result['error'] = 'No existen instituciones registradas';
                 }
                 break;
             case 'readOne':
@@ -84,7 +84,7 @@ if (isset($_GET['action'])) {
                     $result['status'] = 1;
                     $result['message'] = 'institucion eliminada correctamente';
                 } else {
-                    $result['error'] = 'Ocurrió un problema al eliminar la categoría';
+                    $result['error'] = 'Ocurrió un problema al eliminar la institución';
                 }
                 break;
             default:
