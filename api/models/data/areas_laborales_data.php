@@ -4,7 +4,7 @@ require_once('../../helpers/validator.php');
 // Se incluye la clase padre.
 require_once('../../models/handlers/areas_laborales_handler.php');
 /*
- *  Clase para manejar el encapsulamiento de los datos de la tabla CATEGORIA.
+ *  Clase para manejar el encapsulamiento de los datos de la tabla AREAS_LABORALES.
  */
 class AreaslaboralesData extends AreaslaboralesHandler
 {

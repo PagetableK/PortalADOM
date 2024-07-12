@@ -20,11 +20,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 async function openProfile() {
-    // Petición para solicitar los datos del producto seleccionado.
+    // Petición para solicitar los datos del usuario seleccionado.
     const DATA = await fetchData(PERFIL_API, 'readProfile');
     // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
     if (DATA.status) {
-        // Se colocan los datos en la página web de acuerdo con el producto seleccionado previamente.
+        // Se colocan los datos en la página web de acuerdo con el usuario seleccionado previamente.
         document.getElementById('nombres').value = DATA.dataset.NOMBRE;
         document.getElementById('apellidos').value = DATA.dataset.APELLIDO;
         document.getElementById('fechaNacimiento').value = DATA.dataset.FECHA;

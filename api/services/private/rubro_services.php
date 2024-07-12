@@ -27,7 +27,7 @@ if (isset($_GET['action'])) {
             case 'createRow':
                 $_POST = Validator::validateForm($_POST);
                 if (
-                    !$rubro->setRubro($_POST['nombreRubro']) 
+                    !$rubro->setRubro($_POST['nombreRubro'])
                 ) {
                     $result['error'] = $rubro->getDataError();
                 } elseif ($rubro->createRow()) {
@@ -42,42 +42,42 @@ if (isset($_GET['action'])) {
                     $result['status'] = 1;
                     $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
                 } else {
-                    $result['error'] = 'No existen rubros registradas';
+                    $result['error'] = 'No existen rubros registrados';
                 }
                 break;
 
-                case 'readOne':
-                    if (!$rubro->setId($_POST['idRubro'])) {
-                        $result['error'] = $rubro->getDataError();
-                    } elseif ($result['dataset'] = $rubro->readOne()) {
-                        $result['status'] = 1;
-                    } else {
-                        $result['error'] = 'Institucion inexistente';
-                    }
-                    break;
+            case 'readOne':
+                if (!$rubro->setId($_POST['idRubro'])) {
+                    $result['error'] = $rubro->getDataError();
+                } elseif ($result['dataset'] = $rubro->readOne()) {
+                    $result['status'] = 1;
+                } else {
+                    $result['error'] = 'Institucion inexistente';
+                }
+                break;
 
             case 'updateRow':
                 $_POST = Validator::validateForm($_POST);
                 if (
                     !$rubro->setId($_POST['idRubro']) or
-                    !$rubro->setRubro($_POST['nombreRubro']) 
+                    !$rubro->setRubro($_POST['nombreRubro'])
                 ) {
                     $result['error'] = $rubro->getDataError();
                 } elseif ($rubro->updateRow()) {
                     $result['status'] = 1;
-                    $result['message'] = 'rubro modificada correctamente';
+                    $result['message'] = 'Rubro modificado correctamente';
                 } else {
                     $result['error'] = 'Ocurrió un problema al modificar el rubro';
                 }
                 break;
-                
-                case 'cantidadRubros':
-                    if ($result['dataset'] = $rubro->cantidadRubros()) {
-                        $result['status'] = 1;
-                    } else {
-                        $result['exception'] = 'No hay datos registrados';
-                    }
-                    break;
+
+            case 'cantidadRubros':
+                if ($result['dataset'] = $rubro->cantidadRubros()) {
+                    $result['status'] = 1;
+                } else {
+                    $result['error'] = 'No hay rubros registrados';
+                }
+                break;
             case 'deleteRow':
                 if (
                     !$rubro->setId($_POST['idRubro'])
@@ -85,9 +85,9 @@ if (isset($_GET['action'])) {
                     $result['error'] = $rubro->getDataError();
                 } elseif ($rubro->deleteRow()) {
                     $result['status'] = 1;
-                    $result['message'] = 'rubro eliminada correctamente';
+                    $result['message'] = 'Rubro eliminado correctamente';
                 } else {
-                    $result['error'] = 'Ocurrió un problema al eliminar la categoría';
+                    $result['error'] = 'Ocurrió un problema al eliminar el rubro';
                 }
                 break;
             default:

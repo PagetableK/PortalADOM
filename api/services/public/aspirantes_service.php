@@ -162,6 +162,8 @@ if (isset($_GET['action'])) {
                     // Se asigna el apellido del aspirante proveniente de la función checkUser()
                     // dentro del array de la sesión $_SESSION.
                     $_SESSION['apellidoAspirante'] = $aspirantes->checkUser($_POST['correo'], $_POST['clave'])[3];
+                    // Se inicializa el array que almacena los estudios del currículum.
+                    $_SESSION['estudios'] = array();
                     // Se devuelve el mensaje del resultado de la acción logIn.
                     $result['message'] = 'Autenticación correcta';
                 } else {

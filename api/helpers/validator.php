@@ -301,6 +301,23 @@ class Validator
     }
 
     /*
+    *   Método para validar un año.
+    *   Parámetros: $value (dato a validar).
+    *   Retorno: booleano (true si el valor es correcto o false en caso contrario).
+    */
+    public static function validateYear($value)
+    {
+        // Se dividen las partes de la fecha y se guardan en un arreglo en el siguiene orden: año, mes y día.
+        $datev = strtotime($value);
+        $datem = strtotime('-74 years', time());
+        if ($datev < $datem) {
+            return false;
+        } else {
+            return self::validateNaturalNumber($value);
+        }
+    }
+
+    /*
     *   Método para validar un valor de búsqueda.
     *   Parámetros: $value (dato a validar).
     *   Retorno: booleano (true si el valor es correcto o false en caso contrario).
