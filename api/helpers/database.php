@@ -88,25 +88,25 @@ class Database
         // Se compara el código del error para establecer un error personalizado.
         switch ($code) {
             case '2002':
-                self::$error = 'Servidor desconocido';
+                self::$error  = $message;
                 break;
             case '1049':
-                self::$error = 'Base de datos desconocida';
+                self::$error = $message;
                 break;
             case '1045':
-                self::$error = 'Acceso denegado';
+                self::$error =  $message;
                 break;
             case '42S02':
                 self::$error = $message;
                 break;
             case '42S22':
-                self::$error = 'Columna no encontrada';
+                self::$error = $message;
                 break;
             case '23000':
                 self::$error = $message;
                 break;
             default:
-                self::$error = 'Ocurrió un problema en la base de datos' . $message;
+                self::$error = $message;
         }
     }
 
