@@ -111,11 +111,11 @@ class AspirantesData extends AspirantesHandler
     // Esta función permite validar el campo FECHA_NACIMIENTO.
     public function setFechaNacimiento($valor){
         // Se valida que la variable sea de tipo Date y se ejecuta el código.
-        if (Validator::validateDate($valor)) {
+        if (Validator::validateDateBirthday($valor)) {
             $this->fecha_nacimiento = $valor;
             return true;
         } else {
-            $this->info_error = 'La fecha de nacimiento no es valida, debe ser mayor de edad y menor a 122 años';
+            $this->info_error = 'La fecha de nacimiento no es válida, debe ser mayor de edad y menor a 122 años';
             return false;
         }
     }

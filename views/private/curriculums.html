@@ -14,25 +14,48 @@
 </head>
 <body class="d-flex">
     <!-- Contenido principal del documento -->
-    <main class="borde-main">
-        <div class="container">
-            <div class="container-fluid mb-5">
-                <div class="row gy-3">
-                    <!-- Nuscador-->
-                    <div class="col-sm-12 col-md-6 col-lg-6">
-                        
-                    </div>
-                </div>
-            </div>
-            <!-- Tabla para mostrar los registros existentes -->
-            <table class="table table-hover">
-                <!-- Cabeza de la tabla para mostrar la cantidad de registros y los títulos de las columnas -->
+    <main>
+        <!-- Este div crea una fila dentro de Bootstrap -->
+        <div class="row mb-3 row-gap-3 pe-2 ps-2 d-flex align-items-center">
+           <div class="col-12">
+               <h4 class="text-start fw-semibold"></h4>
+           </div>
+           <div class="col-12 col-lg-9">
+               <div class="row d-flex contenedor-form">
+                   <form id="searchForm">
+                       <!-- Este div contiene la barra de búsqueda -->
+                       <div class="col d-flex container-fluid" id="container_busqueda">
+                           <div class="d-flex">
+                               <button type="submit" class="input-group-text elemento-form" ><i class="bi bi-search"></i>
+                               </button>
+                           </div>
+                           <!-- Este input crea la barra de búsqueda -->
+                           <input type="search" class="form-control elemento-form" placeholder="Buscar..." name="search">
+                           <button type="reset" class="btn btn-white" onclick="fillTable()">
+                               <i class="bi bi-arrow-clockwise"></i>
+                           </button>
+                       </div>
+                   </form>
+                   
+               </div>
+           </div>
+           <div class="col-12 col-lg-3 d-flex justify-content-center">
+               <div class="btn btn-dark h-100 w-100 d-flex align-items-center justify-content-center gap-2 contenedor-form"
+                   type="submit" onclick="openCreate()">
+                   Agregar curriculum <i class="bi bi-plus h3 agregar-icono"></i>
+               </div>
+           </div>
+       </div>
+       <hr class="mb-5">
+       <div class="table-responsive-lg">
+           <!-- Tabla para mostrar los registros existentes -->
+           <table class="table table-hover caption-top">
                 <thead>
                     <tr>
                         <td colspan="6" id="filasEncontradas"></td>
                     </tr>
                     <tr>
-                        <th>Nombre</th>
+                        <th>Nombre Aspirante</th>
                         <th>Estudios</th>
                         <th>Experiencias laborales</th>
                         <th>Idiomas</th>
