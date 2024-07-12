@@ -71,7 +71,7 @@ class CurriculumData extends CurriculumHandler
     public function setIdInstitucion($valor, $boolean)
     {
         // Se verifica el valor del parámetro.
-        if($boolean){
+        if ($boolean) {
             // Se asigna el valor del atributo.
             $this->id_institucion = 0;
             return true;
@@ -99,7 +99,7 @@ class CurriculumData extends CurriculumHandler
         // Se valida que el valor sea de tipo alfanumérico.
         elseif (!Validator::validateAlphanumeric($valor)) {
             // En caso de no serlo se devuelve el error.
-            $this->info_error = 'El título debe ser un valor alfanumérico';
+            $this->info_error = 'El nombre de la institución debe ser un valor alfanumérico';
             return false;
         }
         // Se valida la longitud máxima y mínima de la cadena de caracteres.
@@ -118,7 +118,7 @@ class CurriculumData extends CurriculumHandler
     public function setFechaFinalizacionEstudio($valor, $boolean)
     {
         // Se verifica el valor del parámetro.
-        if($boolean){
+        if ($boolean) {
             // Se devuelve el Booleano.
             return true;
         }
@@ -129,7 +129,7 @@ class CurriculumData extends CurriculumHandler
             return true;
         } else {
             // En caso de no cumplir con el formato de fecha se devuelve el error.
-            $this->info_error = 'La fecha de finalización no es válida';
+            $this->info_error = 'El año de finalización no es válido';
             return false;
         }
     }
@@ -138,33 +138,88 @@ class CurriculumData extends CurriculumHandler
     public function setEstadoEstudio($valor)
     {
         // Se verifica que la fecha_finalizacion_estudio no haya sido agregada.
-        if($this->fecha_finalizacion_estudio != null){
+        if ($this->fecha_finalizacion_estudio != null) {
             // Se devuelve el booleano.
             return true;
         }
         // Se valida que la variable sea de tipo Booleana.
-        elseif($valor === 'on'){
+        elseif ($valor === 'on') {
             // Se asigna el valor del atributo.
             $this->estado_estudio = $valor;
             return true;
-        } else{
+        } else {
             // En caso de no serlo se devuelve el error.
             $this->info_error = 'El estado del estudio es incorrecto';
             return false;
         }
     }
 
-    
+
     public function setIdentificador($valor)
     {
         // Se verifica que el parámetro sea de tipo alfanumérico.
-        if(Validator::validateAlphanumeric($valor)){
+        if (Validator::validateAlphanumeric($valor)) {
             // Se asigna el valor del atributo.
             $this->identificador = $valor;
             return true;
-        } else{
+        } else {
             // En caso de no serlo se devuelve el error.
             $this->info_error = 'El identificador es incorrecto';
+            return false;
+        }
+    }
+
+
+    public function setTituloCertificado($valor,  $min = 4, $max = 100)
+    {
+        // Se valida que el valor sea de tipo alfanumérico.
+        if (!Validator::validateAlphanumeric($valor)) {
+            // En caso de no serlo se devuelve el error.
+            $this->info_error = 'El título del certificado debe ser un valor alfanumérico';
+            return false;
+        }
+        // Se valida la longitud máxima y mínima de la cadena de caracteres.
+        elseif (Validator::validateLength($valor, $min, $max)) {
+            // Se asigna el valor del atributo.
+            $this->titulo_certificado = $valor;
+            return true;
+        } else {
+            // En caso de no cumplir con la longitud requerida se devuelve el error.
+            $this->info_error = 'El título debe tener una longitud entre ' . $min . ' y ' . $max . ' caracteres';
+            return false;
+        }
+    }
+
+    public function setInstitucionCertificado($valor, $min = 4, $max = 70)
+    {
+        // Se valida que el valor sea de tipo alfanumérico.
+        if (!Validator::validateAlphanumeric($valor)) {
+            // En caso de no serlo se devuelve el error.
+            $this->info_error = 'El nombre de la institución debe ser un valor alfanumérico';
+            return false;
+        }
+        // Se valida la longitud máxima y mínima de la cadena de caracteres.
+        elseif (Validator::validateLength($valor, $min, $max)) {
+            // Se asigna el valor del atributo.
+            $this->institucion_certificado = $valor;
+            return true;
+        } else {
+            // En caso de no cumplir con la longitud requerida se devuelve el error.
+            $this->info_error = 'El nombre de la institución debe tener una longitud entre ' . $min . ' y ' . $max . ' caracteres';
+            return false;
+        }
+    }
+
+    public function setFechaFinalizacionCertificado($valor)
+    {
+        // Se valida el año de finalización.
+        if (Validator::validateYear($valor)) {
+            // Se asigna el valor del atributo.
+            $this->fecha_finalizacion_certificado = $valor;
+            return true;
+        } else {
+            // En caso de no cumplir con el formato de fecha se devuelve el error.
+            $this->info_error = 'El año de finalización no es válido';
             return false;
         }
     }

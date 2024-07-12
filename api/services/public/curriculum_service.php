@@ -52,6 +52,65 @@ if (isset($_GET['action'])) {
                     $result['error'] = 'Ocurrió un error al obtener los estudios';
                 }
                 break;
+
+            case 'eliminarEstudio':
+                if(!$curriculum->setIdentificador($_POST['identificador'])){
+                    $result['error'] = $curriculum->getDataError();
+                } elseif($curriculum->eliminarEstudio()){
+                    $result['status'] = 1;
+                } else{
+                    $result['error'] = 'Ocurrió un error al eliminar el estudio';
+                }
+                break;
+
+            case 'obtenerFormacionComplementaria':
+                if(empty($_SESSION['formacionComplementaria'])){
+                    // Se retorna el error.
+                    $result['error'] = 'No se ha agregado formación complementaria';
+                } elseif($result['dataset'] = $_SESSION['formacionComplementaria']){
+                    $result['status'] = 1;
+                } else{ 
+                    // Se retorna el error.
+                    $result['error'] = 'Ocurrió un error al obtener la información complementaria';
+                }
+                break;
+
+            case 'almacenarFormacionComplementaria':
+                if(
+                    !$curriculum->setTituloCertificado($_POST['tituloCertificado']) or
+                    !$curriculum->setInstitucionCertificado($_POST['institucionCertificado']) or
+                    !$curriculum->setFechaFinalizacionCertificado($_POST['fechaFinalCertificado']) or
+                    !$curriculum->setIdentificador($_POST['identificador']) 
+                ){
+                    $result['error'] = $curriculum->getDataError();
+                } elseif($curriculum->agregarFormacionComplementaria()){
+                    $result['status'] = 1;
+                } else{
+                    // Se retorna el error.
+                    $result['error'] = 'Ocurrió un error al agregar la formación complementaria';
+                }
+                break;
+
+            case 'eliminarFormacionComplementaria':
+                if(!$curriculum->setIdentificador($_POST['identificador'])){
+                    $result['error'] = $curriculum->getDataError();
+                } elseif($curriculum->eliminarFormacionComplementaria()){
+                    $result['status'] = 1;
+                } else{
+                    $result['error'] = 'Ocurrió un error al eliminar la formación complementaria';
+                }
+                break;
+
+            case 'obtenerExperiencias':
+                if(empty($_SESSION['experiencias'])){
+                    // Se retorna el error.
+                    $result['error'] = 'No se han agregado experiencias';
+                } elseif($result['dataset'] = $_SESSION['experiencias']){
+                    $result['status'] = 1;
+                } else{
+                    $result['error'] = 'Ocurrió un error al obtener las experiencias';
+                }
+                break;
             // Si no se encuentra la acción se retorna el error.
             default:
                 $result['error'] = 'Acción no disponible dentro de la sesión';

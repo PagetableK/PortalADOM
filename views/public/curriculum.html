@@ -54,38 +54,46 @@
                                 <div class="col-12">
                                     <p class="fw-bold fs-5">Formación académica</p>
                                 </div>
-                                <div class="col-11 col-sm-12 rounded-4 p-3 d-flex gap-1 flex-wrap align-items-center justify-content-center" id="contenedorEstudios">
+                                <div class="col-11 col-sm-12 rounded-4 p-3 d-flex gap-1 flex-wrap align-items-center justify-content-center"
+                                    id="contenedorEstudios">
                                 </div>
                                 <div class="col-12 mt-4 d-flex flex-column">
                                     <form class="row row-gap-3" id="formAgregarEstudio">
                                         <div class="col-md-6 d-flex flex-column gap-1">
                                             <label for="gradoAcademico" class="fs-6">Grado académico</label>
-                                            <select name="gradoAcademico" id="gradoAcademico" class="form-select" required></select>
+                                            <select name="gradoAcademico" id="gradoAcademico" class="form-select"
+                                                required></select>
                                         </div>
                                         <div class="col-md-6 d-flex flex-column gap-1">
                                             <label for="titulo" class="fs-6">Título/Especialidad</label>
-                                            <input type="text" class="form-control" id="titulo" name="titulo" min="4" max="70" required>
+                                            <input type="text" class="form-control" id="titulo" name="titulo" min="4"
+                                                max="70" required>
                                         </div>
                                         <div class="col-md-6 d-flex flex-column gap-1">
                                             <label for="institucion" class="fs-6">Institución</label>
-                                            <select name="institucion" id="institucion" class="form-select" required></select>
+                                            <select name="institucion" id="institucion" class="form-select"
+                                                required></select>
                                         </div>
                                         <div class="col-md-6 d-flex flex-column gap-1">
                                             <label for="otraInstitucion" class="fs-6">Otra institución</label>
-                                            <input type="text" class="form-control" id="otraInstitucion" name="otraInstitucion" min="4" max="100" disabled>
+                                            <input type="text" class="form-control" id="otraInstitucion"
+                                                name="otraInstitucion" min="4" max="100" disabled>
                                         </div>
                                         <div class="col-md-6 d-flex flex-column gap-1">
                                             <label for="fechaFinal" class="fs-6">Año de finalización</label>
-                                            <select name="fechaFinal" id="fechaFinal" class="form-select select-fecha" required></select>
+                                            <select name="fechaFinal" id="fechaFinal" class="form-select select-fecha"
+                                                required></select>
                                             <div class="form-check d-flex gap-2">
-                                                <input class="form-check-input" type="checkbox" id="estadoEstudio" name="estadoEstudio" onclick="console.log(this.checked)">
+                                                <input class="form-check-input" type="checkbox" id="estadoEstudio"
+                                                    name="estadoEstudio" onclick="console.log(this.checked)">
                                                 <label class="form-check-label" for="estadoEstudio">
                                                     Cursando actualmente
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="col-12 d-flex justify-content-center align-items-center">
-                                            <button type="submit" class="btn btn-primary px-5 d-flex align-items-center">
+                                            <button type="submit"
+                                                class="btn btn-primary px-5 d-flex align-items-center">
                                                 <p class="fw-bold px-5 psinmargen">Agregar estudio</p>
                                                 <i class="bi bi-plus-lg psinmargen h4"></i>
                                             </button>
@@ -97,25 +105,30 @@
                                 <div class="col-12">
                                     <p class="fw-bold fs-5">Formación complementaria</p>
                                 </div>
-                                <div class="col-11 col-sm-12 rounded-4 pt-3">
-                                    <p class="fw-semibold text-center">La formación complementaria agregada se mostrará aquí</p>
+                                <div class="col-11 col-sm-12 rounded-4 p-3 d-flex gap-1 flex-wrap align-items-center justify-content-center"
+                                    id="contenedorFormacionComplementaria">
                                 </div>
                                 <div class="col-12 mt-4 d-flex flex-column">
-                                    <form class="row row-gap-3" id="formAgregarEstudio">
+                                    <form class="row row-gap-3" id="formAgregarFormacionComplementaria">
                                         <div class="col-md-6 d-flex flex-column gap-1">
                                             <label for="tituloCertificado" class="fs-6">Título del certificado</label>
-                                            <input type="text" class="form-control" id="tituloCertificado" name="tituloCertificado" required>
+                                            <input type="text" class="form-control" id="tituloCertificado"
+                                                name="tituloCertificado" min="4" max="70" required>
                                         </div>
                                         <div class="col-md-6 d-flex flex-column gap-1">
-                                            <label for="institucionCertificado" class="fs-6">Empresa/Institución/Organización</label>
-                                            <input type="text" class="form-control" id="institucionCertificado" name="institucionCertificado" required>
+                                            <label for="institucionCertificado"
+                                                class="fs-6">Empresa/Institución/Organización</label>
+                                            <input type="text" class="form-control" id="institucionCertificado"
+                                                name="institucionCertificado" min="4" max="70" required>
                                         </div>
                                         <div class="col-md-6 d-flex flex-column gap-1">
                                             <label for="fechaFinalCertificado" class="fs-6">Año de finalización</label>
-                                            <select name="fechaFinalCertificado" id="fechaFinalCertificado" class="form-select select-fecha" required></select>
+                                            <select name="fechaFinalCertificado" id="fechaFinalCertificado"
+                                                class="form-select select-fecha" required></select>
                                         </div>
                                         <div class="col-12 d-flex justify-content-center align-items-center">
-                                            <button type="submit" class="btn btn-primary px-5 d-flex align-items-center">
+                                            <button type="submit"
+                                                class="btn btn-primary px-5 d-flex align-items-center">
                                                 <p class="fw-bold px-5 psinmargen">Agregar certificado</p>
                                                 <i class="bi bi-plus-lg psinmargen h4"></i>
                                             </button>
@@ -128,11 +141,138 @@
                                 <i class="bi bi-arrow-right"></i>
                             </button>
                         </div>
-                        <div id="experiencia" class="content">
-                            <p class="text-center">test 4</p>
-                            <button class="btn btn-primary" onclick="stepperEducacion.next()">Next</button>
+                        <div id="experiencia" class="content d-flex flex-column gap-5 d-none">
+                            <div class="row d-flex justify-content-center">
+                                <div class="col-12">
+                                    <p class="fw-bold fs-5">Experiencia laboral</p>
+                                </div>
+                                <div class="col-11 col-sm-12 rounded-4 p-3 d-flex gap-1 flex-wrap align-items-center justify-content-center"
+                                    id="contenedorExperiencias">
+                                </div>
+                                <div class="col-12 mt-4 d-flex flex-column">
+                                    <form class="row row-gap-3" id="formAgregarExperiencia">
+                                        <div class="col-md-6 d-flex flex-column gap-1">
+                                            <label for="empresa" class="fs-6">Empresa</label>
+                                            <input type="text" class="form-control" id="empresa" name="empresa" min="4"
+                                                max="50" required>
+                                        </div>
+                                        <div class="col-md-6 d-flex flex-column gap-1">
+                                            <label for="cargo" class="fs-6">Cargo</label>
+                                            <input type="text" class="form-control" id="cargo" name="cargo" min="4"
+                                                max="50" required>
+                                        </div>
+                                        <div class="col-md-6 d-flex flex-column gap-1">
+                                            <label for="rubro" class="fs-6">Rubro</label>
+                                            <select name="rubro" id="rubro" class="form-select" required></select>
+                                        </div>
+                                        <div class="col-md-6 d-flex flex-column gap-1">
+                                            <label for="area" class="fs-6">Área</label>
+                                            <select name="area" id="area" class="form-select" required></select>
+                                        </div>
+                                        <div class="col-md-6 d-flex flex-column gap-1">
+                                            <label class="fw-semibold">Desde</label>
+                                            <div class="row d-flex flex-row">
+                                                <div class="col-md-6 d-flex flex-column gap-1">
+                                                    <label for="mesInicio" class="fs-6">Mes</label>
+                                                    <select name="mesInicio" id="mesInicio" class="form-select"
+                                                        required></select>
+                                                </div>
+                                                <div class="col-md-6 d-flex flex-column gap-1">
+                                                    <label for="yearInicio" class="fs-6">Año</label>
+                                                    <select name="yearInicio" id="yearInicio" class="form-select"
+                                                        required></select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 d-flex flex-column gap-1">
+                                            <label class="fw-semibold">Hasta</label>
+                                            <div class="row d-flex flex-row">
+                                                <div class="col-md-6 d-flex flex-column gap-1">
+                                                    <label for="mesFinal" class="fs-6">Mes</label>
+                                                    <select name="mesFinal" id="mesFinal" class="form-select"
+                                                        required></select>
+                                                </div>
+                                                <div class="col-md-6 d-flex flex-column gap-1">
+                                                    <label for="yearFinal" class="fs-6">Año</label>
+                                                    <select name="yearFinal" id="yearFinal" class="form-select"
+                                                        required></select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 d-flex justify-content-start">
+                                            <div class="form-check d-flex gap-2">
+                                                <input class="form-check-input" type="checkbox" id="estadoExperiencia"
+                                                    name="estadoExperiencia" onclick="console.log(this.checked)">
+                                                <label class="form-check-label" for="estadoExperiencia">
+                                                    Es mi trabajo actual
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 d-flex flex-column gap-1">
+                                            <label for="descripcion" class="fs-6">Descripción del puesto</label>
+                                            <textarea class="form-control" id="descripcion"
+                                                name="descripcion" minlength="30" maxlength="300"></textarea>
+                                        </div>
+                                        <div class="col-12 d-flex justify-content-center align-items-center">
+                                            <button type="submit"
+                                                class="btn btn-primary px-5 d-flex align-items-center">
+                                                <p class="fw-bold px-5 psinmargen">Agregar experiencia</p>
+                                                <i class="bi bi-plus-lg psinmargen h4"></i>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="row d-flex justify-content-center">
+                                <div class="col-12">
+                                    <p class="fw-bold fs-5">Referencias laborales</p>
+                                </div>
+                                <div class="col-11 col-sm-12 rounded-4 p-3 d-flex gap-1 flex-wrap align-items-center justify-content-center"
+                                    id="contenedorReferencias">
+                                </div>
+                                <div class="col-12 mt-4 d-flex flex-column">
+                                    <form class="row row-gap-3" id="formAgregarExperiencia">
+                                        <div class="col-md-6 d-flex flex-column gap-1">
+                                            <label for="nombre" class="fs-6">Nombre</label>
+                                            <input type="text" class="form-control" id="nombre" name="nombre" min="4"
+                                                max="70" required>
+                                        </div>
+                                        <div class="col-md-6 d-flex flex-column gap-1">
+                                            <label for="apellido" class="fs-6">Apellido</label>
+                                            <input type="text" class="form-control" id="apellido" name="apellido" min="4"
+                                                max="70" required>
+                                        </div>
+                                        <div class="col-md-6 d-flex flex-column gap-1">
+                                            <label for="puesto" class="fs-6">Puesto de trabajo</label>
+                                            <input type="text" class="form-control" id="puesto" name="puesto" min="4"
+                                                max="70" required>
+                                        </div>
+                                        <div class="col-md-6 d-flex flex-column gap-1">
+                                            <label for="telefono" class="fs-6">Teléfono</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text">
+                                                    <i class="bi bi-telephone-fill"></i>
+                                                </span>
+                                                <input type="text" class="form-control" id="telefono" name="telefono" min="4"
+                                                    max="70" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 d-flex justify-content-center align-items-center">
+                                            <button type="submit"
+                                                class="btn btn-primary px-5 d-flex align-items-center">
+                                                <p class="fw-bold px-5 psinmargen">Agregar referencia</p>
+                                                <i class="bi bi-plus-lg psinmargen h4"></i>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary align-self-end" id="btnSiguientePasoExperiencia">
+                                Siguiente apartado
+                                <i class="bi bi-arrow-right"></i>
+                            </button>
                         </div>
-                        <div id="contacto" class="content">
+                        <div id="contacto" class="content d-flex flex-column gap-5 d-none">
                             <p class="text-center">test 5</p>
                             <button class="btn btn-primary" onclick="stepperEducacion.next()">Next</button>
                             <button class="btn btn-primary" onclick="stepperEducacion.previous()">Previous</button>
@@ -151,9 +291,10 @@
                 </div>
                 <div class="p-3">
                     <button class="btn btn-success text-end">
-                    Editar currículum
-                    <i class="bi bi-pencil"></i>
-                </button></div>
+                        Editar currículum
+                        <i class="bi bi-pencil"></i>
+                    </button>
+                </div>
             </div>
             <hr>
             <h4 class="text-center">Seleccione el diseño de su currículum</h4>
@@ -164,7 +305,7 @@
                 <button class="p-3 border rounded colo-fo color-tama mx-2 mb-3"></button>
             </div>
             <div class="text-center mt-4">
-                <i class="bi bi-info-circle text-primary"></i> 
+                <i class="bi bi-info-circle text-primary"></i>
                 <span class="fw-bold">El diseño seleccionado es el que se mostrará al cargarlo</span>
             </div>
         </div>
