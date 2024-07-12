@@ -75,7 +75,6 @@ CREATE TABLE estudios_aspirantes(
 	id_grado INT NOT NULL,
 	fecha_finalizacion DATE NULL,
 	nombre_institucion VARCHAR(100) NULL,
-	estado_estudio ENUM('Cursando', 'Finalizado', 'Incompleto'),
 	id_institucion INT NULL,
 	id_curriculum INT NOT NULL,
 	CONSTRAINT fk_grado_estudio
