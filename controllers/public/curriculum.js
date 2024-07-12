@@ -131,10 +131,10 @@ SIGUIENTE_PASO_EDUCACION.addEventListener('click', () => {
 const cargarGrados = async () => {
     // Se realiza la petición a la API para obtener los grados académicos.
     const DATA = await fetchData(API_GRADOS, 'readAll');
+    // Se agrega la opción por defecto a la opción.
+    SELECT_GRADOS.innerHTML = '<option value="" selected>Seleccione una opción</option>';
     // Si la respuesta es satisfactoria se ejecuta el código.
     if (DATA.status) {
-
-        SELECT_GRADOS.innerHTML = '<option value="" selected>Seleccione una opción</option>';
 
         DATA.dataset.forEach(row => {
             SELECT_GRADOS.innerHTML += `
@@ -187,7 +187,7 @@ FORM_ESTUDIO.addEventListener('submit', async (e) => {
         sweetAlert(3, 'Asegúrese de agregar la institución en el campo', false);
 
         OTRA_INSTITUCION.focus();
-    } else {
+    } else if(SELECT_GRADOS.value != null && SELECT_GRADOS.value > 0) {
 
         const FORM = new FormData(FORM_ESTUDIO);
 
@@ -227,6 +227,10 @@ FORM_ESTUDIO.addEventListener('submit', async (e) => {
         } else {
             sweetAlert(2, DATA.error, false);
         }
+    } else{
+        sweetAlert(3, 'Asegúrese de seleccionar un grado académico de la lista de opciones', false);
+
+        SELECT_GRADOS.focus();
     }
 });
 

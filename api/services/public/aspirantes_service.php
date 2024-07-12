@@ -129,7 +129,7 @@ if (isset($_GET['action'])) {
                     $result['error'] = $aspirantes->getDataError();
                 }
                 // Si se ejecuta la función correctamente se ejecuta el código.
-                elseif ($aspirantes->createRow()) {
+                elseif ($aspirantes->signUp()) {
                     $result['status'] = 1;
                     $result['message'] = 'Cuenta registrada correctamente';
                 }
