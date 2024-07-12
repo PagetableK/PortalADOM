@@ -20,11 +20,12 @@ class InstitucionesHandler
     public function searchRows()
     {
         $value = '%' . Validator::getSearchValue() . '%';
-        $sql = 'SELECT id_institucion, nombre_institucion
-                FROM instituciones
-                WHERE nombre_institucion LIKE ? 
-                ORDER BY nombre_institucion';
-        $params = array($value, $value);
+        $sql = 'SELECT i.id_institucion, i.nombre_institucion,
+                COUNT(e.id_institucion) AS veces_utilizadas FROM instituciones i
+                LEFT JOIN estudios_aspirantes e ON i.id_institucion = e.id_institucion
+                WHERE i.nombre_institucion LIKE ?
+                GROUP BY i.id_institucion, i.nombre_institucion';
+        $params = array($value);
         return Database::getRows($sql, $params);
     }
 

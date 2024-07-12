@@ -46,7 +46,7 @@ class AreaslaboralesHandler
         $sql = 'SELECT a.id_area, a.nombre_area, a.id_rubro, b.nombre_rubro
                 FROM areas_laborales a
                 JOIN rubros_empresas b ON a.id_rubro = b.id_rubro
-                ORDER BY a.nombre_area;
+                ORDER BY a.nombre_area
                 ';
         return Database::getRows($sql);
     }

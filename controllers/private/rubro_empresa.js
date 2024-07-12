@@ -25,10 +25,15 @@ document.addEventListener('DOMContentLoaded', () => {
 SEARCH_FORM.addEventListener('submit', (event) => {
     // Se evita recargar la página web después de enviar el formulario.
     event.preventDefault();
-    // Constante tipo objeto con los datos del formulario.
-    const FORM = new FormData(SEARCH_FORM);
-    // Llamada a la función para llenar la tabla con los resultados de la búsqueda.
-    fillTable(FORM);
+    // Se verifica que el campo de búsqueda no esté vacío.
+    if(SEARCH_FORM['search'].value.trim() != ""){
+        // Constante tipo objeto con los datos del formulario.
+        const FORM = new FormData(SEARCH_FORM);
+        // Llamada a la función para llenar la tabla con los resultados de la búsqueda.
+        fillTable(FORM);
+    } else{
+        sweetAlert(3, 'Ingrese un valor para buscar', false);
+    }
 });
 
 // Método del evento para cuando se envía el formulario de guardar.
@@ -36,7 +41,7 @@ SAVE_FORM.addEventListener('submit', async (event) => {
     // Se evita recargar la página web después de enviar el formulario.
     event.preventDefault();
     // Se verifica la acción a realizar.
-    (ID_RUBRO.value) ? action = 'updateRow' : action = 'createRow';
+    (RUBRO_API.value) ? action = 'updateRow' : action = 'createRow';
     // Constante tipo objeto con los datos del formulario.
     const FORM = new FormData(SAVE_FORM);
     // Petición para guardar los datos del formulario.
@@ -75,7 +80,6 @@ const fillTable = async (form = null) => {
             TABLE_BODY.innerHTML += `
                 <tr>
                     <td>${row.nombre_rubro}</td>
-                      <td>${row.nombre_rubro}</td>
                     <td>${row.veces_utilizadas}</td>
                     <td>
                         <button type="button" class="btn btn-outline-success" onclick="openUpdate(${row.id_rubro})">

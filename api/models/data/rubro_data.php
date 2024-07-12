@@ -30,7 +30,7 @@ class RubroData extends RubroHandler
 
     public function setRubro($value, $min = 2, $max = 150)
     {
-        if (!Validator::validateAlphanumeric($value)) {
+        if (!Validator::validateAlphabetic($value)) {
             $this->data_error = 'El nombre debe ser un valor alfanumérico';
             return false;
         } elseif (Validator::validateLength($value, $min, $max)) {

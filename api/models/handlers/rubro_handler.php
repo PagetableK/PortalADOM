@@ -20,11 +20,12 @@ class RubroHandler
     public function searchRows()
     {
         $value = '%' . Validator::getSearchValue() . '%';
-        $sql = 'SELECT id_rubro, nombre_rubro
-                FROM rubros_empresas
-                WHERE nombre_rubro LIKE ? 
-                ORDER BY nombre_rubro';
-        $params = array($value, $value);
+            $sql = 'SELECT i.id_rubro, i.nombre_rubro,
+                COUNT(e.id_rubro) AS veces_utilizadas FROM rubros_empresas i
+                LEFT JOIN areas_laborales e ON i.id_rubro = e.id_rubro
+                WHERE i.nombre_rubro LIKE ?
+                GROUP BY i.id_rubro, i.nombre_rubro';
+        $params = array($value);
         return Database::getRows($sql, $params);
     }
 

@@ -23,7 +23,7 @@ class AreaslaboralesData extends AreaslaboralesHandler
             $this->id = $value;
             return true;
         } else {
-            $this->data_error = 'El identificador de la categoría es incorrecto';
+            $this->data_error = 'El identificador de la area es incorrecto';
             return false;
         }
     }
