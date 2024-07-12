@@ -11,7 +11,7 @@ class InstitucionesHandler
     */
     protected $id = null;
     protected $instituciones = null;
-    
+
 
     /*
     *   Métodos para realizar las operaciones SCRUD (search, create, read, update, and delete).
@@ -40,49 +40,46 @@ class InstitucionesHandler
     //Función para leer todos los admministradores.
     public function readAll()
     {
-        $sql = 'SELECT id_institucion, nombre_institucion
-        FROM instituciones
-        WHERE id_institucion';
+        $sql = 'SELECT * FROM instituciones';
         return Database::getRows($sql);
     }
 
-        //funcion leer una linea
-        public function readOne()
-        {
-            $sql = 'SELECT id_institucion, nombre_institucion 
+    //funcion leer una linea
+    public function readOne()
+    {
+        $sql = 'SELECT id_institucion, nombre_institucion 
                     FROM instituciones
                     WHERE id_institucion = ?';
-            $params = array($this->id);
-            return Database::getRow($sql, $params);
-        }
-        
+        $params = array($this->id);
+        return Database::getRow($sql, $params);
+    }
 
-     //Función para actualizar un admministrador.
-     public function updateRow()
-     {
-         $sql = 'UPDATE instituciones
+
+    //Función para actualizar un admministrador.
+    public function updateRow()
+    {
+        $sql = 'UPDATE instituciones
                  SET nombre_institucion = ?
                  WHERE id_institucion = ?';
-         $params = array($this->instituciones, $this->id );
-         return Database::executeRow($sql, $params);
-     }
+        $params = array($this->instituciones, $this->id);
+        return Database::executeRow($sql, $params);
+    }
 
-     //Función para eliminar un admministrador.
-     public function deleteRow()
-     {
-         $sql = 'DELETE FROM instituciones 
+    //Función para eliminar un admministrador.
+    public function deleteRow()
+    {
+        $sql = 'DELETE FROM instituciones 
                  WHERE id_institucion = ?';
-         $params = array($this->id);
-         return Database::executeRow($sql, $params);
-     }
+        $params = array($this->id);
+        return Database::executeRow($sql, $params);
+    }
 
-     public function cantidadInstituciones()
-     {
-         $sql = 'SELECT i.id_institucion, i.nombre_institucion,
+    public function cantidadInstituciones()
+    {
+        $sql = 'SELECT i.id_institucion, i.nombre_institucion,
                 COUNT(e.id_institucion) AS veces_utilizadas FROM instituciones i
                 LEFT JOIN estudios_aspirantes e ON i.id_institucion = e.id_institucion
                 GROUP BY i.id_institucion, i.nombre_institucion;';
-         return Database::getRows($sql);
-     }
-     
+        return Database::getRows($sql);
+    }
 }

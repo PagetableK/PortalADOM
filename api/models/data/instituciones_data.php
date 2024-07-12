@@ -4,7 +4,7 @@ require_once('../../helpers/validator.php');
 // Se incluye la clase padre.
 require_once('../../models/handlers/instituciones_handler.php');
 /*
- *  Clase para manejar el encapsulamiento de los datos de la tabla CATEGORIA.
+ *  Clase para manejar el encapsulamiento de los datos de la tabla INSTITUCIONES.
  */
 class InstitucionData extends InstitucionesHandler
 {
@@ -23,7 +23,7 @@ class InstitucionData extends InstitucionesHandler
             $this->id = $value;
             return true;
         } else {
-            $this->data_error = 'El identificador de la categoría es incorrecto';
+            $this->data_error = 'El identificador de la institución es incorrecto';
             return false;
         }
     }

@@ -72,31 +72,21 @@ class AspirantesData extends AspirantesHandler
     }
 
     // Esta función permite validar el campo CORREO_ASPIRANTE.
-    public function setCorreo($valor, $boolean, $min = 8, $max = 100)
+    public function setCorreo($value, $boolean = null, $min = 8, $max = 100)
     {
-        // Si la variable no cumple con el formato de correo se devuelve el error.
-        if (!Validator::validateEmail($valor)) {
+        if (!Validator::validateEmail($value)) {
             $this->info_error = 'El correo no es válido';
             return false;
-        } 
-        // Si la acción de la que proviene el campo es updateRow (Actualizar la información del usuario desde el sitio privado)
-        // se valida que el correo no esté siendo utilizado por otro aspirante que no sea el que se quiere actualizar.
-        else if($boolean and !$this->checkDuplicateWithId($valor)){
-            $this->correo = $valor;
+        } elseif ($boolean and !$this->checkDuplicateWithId($value)) {
+            $this->correo = $value;
             return true;
-        } 
-        // Se valida que el correo no esté siendo utilizado por otro aspirante.
-        else if($this->checkDuplicate($valor)){
-            $this->info_error = 'El correo ya está siendo usado por otro aspirante';
+        } elseif ($this->checkDuplicate($value)) {
+            $this->info_error = 'El correo ya está siendo utilizado por otro administrador';
             return false;
-        } 
-        // Se valida la longitud de la variable y se ejecuta el código.
-        elseif (Validator::validateLength($valor, $min, $max)) {
-            $this->correo = $valor;
+        } elseif (Validator::validateLength($value, $min, $max)) {
+            $this->correo = $value;
             return true;
-        } 
-        // Si la variable no cumple con la longitud de caracteres se devuelve el error.
-        else {
+        } else {
             $this->info_error = 'El correo debe tener una longitud entre ' . $min . ' y ' . $max;
             return false;
         }
@@ -121,11 +111,11 @@ class AspirantesData extends AspirantesHandler
     // Esta función permite validar el campo FECHA_NACIMIENTO.
     public function setFechaNacimiento($valor){
         // Se valida que la variable sea de tipo Date y se ejecuta el código.
-        if (Validator::validateDate($valor)) {
+        if (Validator::validateDateBirthday($valor)) {
             $this->fecha_nacimiento = $valor;
             return true;
         } else {
-            $this->info_error = 'La fecha de nacimiento no es valida, debe ser mayor de edad y menor a 122 años';
+            $this->info_error = 'La fecha de nacimiento no es válida, debe ser mayor de edad y menor a 122 años';
             return false;
         }
     }

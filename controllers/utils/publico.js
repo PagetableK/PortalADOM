@@ -8,8 +8,6 @@ const USER_API = 'services/public/aspirantes_service.php';
 const MAIN = document.querySelector('main');
 // Variables que permiten cambiar el color del apartado donde se encuentra el usuario.
 let colorInicio = "", colorCV = "", colorPerfil = "";
-// Variable global que almacena el nombre del usuario.
-var nombreUsuario;
 
 // La función cargarPlantilla se utiliza en todas las páginas del sitio privado,
 // permite verificar si existe una sesión activa, en tal caso se muestran los componentes necesarios.
@@ -20,8 +18,6 @@ const cargarPlantilla = async () => {
     if (DATA.session) {
         // Si la respuesta es satisfactoria se ejecuta el código.
         if (DATA.status) {
-            // Se asigna el valor de la variable global.
-            nombreUsuario = DATA.nombre;
             // Si el usuario tiene una sesión activa y se encuentra en la interfaz "Inicio de sesión" se redirige hacia la interfaz "Inicio".
             if (location.pathname.endsWith("index.html")) {
                 location.href = "inicio.html";
@@ -73,6 +69,8 @@ const cargarPlantilla = async () => {
                 </div>
             </nav>`
             );
+            // Se retorna el nombre completo del usuario.
+            return [DATA.nombre, DATA.idCV];
         } else {
             // De lo contrario se muestra el error y se redirige al inicio de sesión.
             sweetAlert(3, DATA.error, false, 'index.html');

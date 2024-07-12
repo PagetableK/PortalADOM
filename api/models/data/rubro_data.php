@@ -4,7 +4,7 @@ require_once('../../helpers/validator.php');
 // Se incluye la clase padre.
 require_once('../../models/handlers/rubro_handler.php');
 /*
- *  Clase para manejar el encapsulamiento de los datos de la tabla CATEGORIA.
+ *  Clase para manejar el encapsulamiento de los datos de la tabla RUBROS_EMPRESAS.
  */
 class RubroData extends RubroHandler
 {
