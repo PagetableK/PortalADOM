@@ -114,7 +114,6 @@
 		fecha_inicio DATE NOT NULL,
 		fecha_fin DATE NULL,
 		descripcion_puesto VARCHAR(300) NOT NULL,
-		estado_experiencia ENUM('Antiguo trabajo', 'Trabajo actual') NOT NULL,
 		id_area INT NOT NULL,
 		id_rubro INT NOT NULL,
 		CONSTRAINT fk_area_asp
