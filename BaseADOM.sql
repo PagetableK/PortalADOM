@@ -75,6 +75,7 @@ CREATE TABLE estudios_aspirantes(
 	id_grado INT NOT NULL,
 	fecha_finalizacion DATE NULL,
 	nombre_institucion VARCHAR(100) NULL,
+	estado_estudio ENUM('Cursando', 'Finalizado', 'Incompleto'),
 	id_institucion INT NULL,
 	id_curriculum INT NOT NULL,
 	CONSTRAINT fk_grado_estudio
@@ -109,16 +110,12 @@ CREATE TABLE experiencias_aspirantes(
 	estado_experiencia ENUM('Antiguo trabajo', 'Trabajo actual') NOT NULL,
 	id_area INT NOT NULL,
 	id_rubro INT NOT NULL,
-	id_curriculum INT NOT NULL,
 	CONSTRAINT fk_area_asp
 	FOREIGN KEY (id_area)
 	REFERENCES areas_laborales(id_area),
 	CONSTRAINT fk_rubro_aspirante
-	FOREIGN KEY (id_rubro)
-	REFERENCES rubros_empresas(id_rubro),
-	CONSTRAINT fk_curr_exp
-	FOREIGN KEY (id_curriculum)
-	REFERENCES curriculum_aspirantes (id_curriculum)
+   FOREIGN KEY (id_rubro)
+   REFERENCES rubros_empresas(id_rubro)
 );
 
 CREATE TABLE idiomas_aspirantes(
@@ -215,7 +212,7 @@ END;
 $$
 
 -- PROCEDIMIENTO Agregar aspirante
-ca
+
 DROP PROCEDURE IF EXISTS insertar_aspirante_validado;
 DELIMITER $$
 CREATE PROCEDURE insertar_aspirante_validado(
@@ -224,7 +221,8 @@ CREATE PROCEDURE insertar_aspirante_validado(
    IN p_clave_aspirante VARCHAR(100),
    IN p_correo_aspirante VARCHAR(100),
    IN p_genero_aspirante VARCHAR(10),
-   IN p_fecha_nacimiento_aspirante DATE
+   IN p_fecha_nacimiento_aspirante DATE,
+   IN P_id_administrador INT
 )
 BEGIN
     -- Validar el formato del correo electrónico
@@ -237,7 +235,8 @@ BEGIN
                 clave_aspirante, 
                 correo_aspirante, 
                 genero_aspirante, 
-                fecha_nacimiento
+                fecha_nacimiento,
+                id_administrador
             )
             VALUES (
                 p_nombre_aspirante, 
@@ -245,7 +244,8 @@ BEGIN
                 p_clave_aspirante, 
                 p_correo_aspirante, 
                 p_genero_aspirante, 
-                p_fecha_nacimiento_aspirante
+                p_fecha_nacimiento_aspirante,
+                p_id_administrador
             );
         ELSE
             SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Género no válido';
@@ -266,7 +266,8 @@ CREATE PROCEDURE actualizar_aspirante_validado(
    IN p_apellido_aspirante VARCHAR(50),
    IN p_correo_aspirante VARCHAR(100),
    IN p_genero_aspirante ENUM('Hombre','Mujer'),
-   IN p_fecha_nacimiento_aspirante DATE
+   IN p_fecha_nacimiento_aspirante DATE,
+   IN P_id_administrador INT
    
 )
 BEGIN
@@ -274,7 +275,7 @@ BEGIN
 		IF p_genero_aspirante IN ('Hombre', 'Mujer') THEN
 			UPDATE aspirantes SET nombre_aspirante = p_nombre_aspirante, apellido_aspirante = p_apellido_aspirante, 
 			correo_aspirante = p_correo_aspirante, fecha_nacimiento = p_fecha_nacimiento_aspirante,
-			genero_aspirante = p_genero_aspirante
+			genero_aspirante = p_genero_aspirante, id_administrador = P_id_administrador
 			WHERE id_aspirante = p_id_aspirante;
 		ELSE
             SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Género no válido';
