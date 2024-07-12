@@ -56,17 +56,6 @@ class AspirantesHandler
             return false;
         }
     }
-    public function checkStatus()
-    {
-        if ($this->estado) {
-            $_SESSION['idCliente'] = $this->id;
-            $_SESSION['correoCliente'] = $this->correo;
-            return true;
-        } else {
-            return false;
-        }
-    }
-
 
     // Esta función selecciona los campos duplicados en base a un parámetro.
     public function checkDuplicate($value)
@@ -106,6 +95,13 @@ class AspirantesHandler
         return Database::executeRow($sql, $params);
     }
 
+    public function signUp()
+    {
+        $sql = 'CALL insertar_aspirante_validado(?,?,?,?,?,?)';
+        $params = array($this->nombre, $this->apellido, $this->clave, $this->correo, $this->genero, $this->fecha_nacimiento);
+        return Database::executeRow($sql, $params);
+    }
+
      //Función para actualizar un admministrador.
     public function updateRow()
     {
@@ -139,7 +135,7 @@ class AspirantesHandler
         return Database::getRow($sql, $params);
     }
 
-    // Función para buscar un cliente
+    // Función para buscar un aspirante
     public function searchRows()
     {
         $value = '%' . Validator::getSearchValue() . '%';
