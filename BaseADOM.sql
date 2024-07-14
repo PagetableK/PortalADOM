@@ -105,8 +105,8 @@
 	
 	CREATE TABLE experiencias_aspirantes(
 		id_experiencia INT PRIMARY KEY AUTO_INCREMENT,
-		nombre_empresa VARCHAR(50) NOT NULL,
-		nombre_cargo VARCHAR(50) NOT NULL,
+		nombre_empresa VARCHAR(100) NOT NULL,
+		nombre_cargo VARCHAR(100) NOT NULL,
 		fecha_inicio DATE NOT NULL,
 		fecha_fin DATE NULL,
 		descripcion_puesto VARCHAR(300) NOT NULL,
