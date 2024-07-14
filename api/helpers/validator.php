@@ -307,14 +307,27 @@ class Validator
     */
     public static function validateYear($value)
     {
-        // Se dividen las partes de la fecha y se guardan en un arreglo en el siguiene orden: año, mes y día.
-        $datev = strtotime($value);
-        $datem = strtotime('-74 years', time());
-        if ($datev < $datem) {
+        if ($value < (date('Y') - 74) or date('Y') < $value) {
             return false;
         } else {
             return self::validateNaturalNumber($value);
         }
+    }
+
+    /*
+    *   Método para validar un mes del año.
+    *   Parámetros: $value (dato a validar).
+    *   Retorno: booleano (true si el valor es correcto o false en caso contrario).
+    */
+    public static function validateMonth($value)
+    {
+        // Se itera el array con los meses y se valida que el valor concuerde con uno de los meses.
+        for($i = 1; $i < 13 ; $i++){
+            if($value == $i){
+                return true;
+            }
+        }
+        return false;
     }
 
     /*
