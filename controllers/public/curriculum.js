@@ -69,7 +69,7 @@ const cargarEstudios = async () => {
         ROW.forEach(row => {
             CONTENEDOR_ESTUDIOS.innerHTML += `
             <div class="d-flex gap-2 contenedorEstudio rounded-5 p-2 align-items-center">
-                <p class="psinmargen tex-center"><span class="fw-bold">${DATA_GRADOS.dataset.filter(function (entry) { return entry.ID === row.id_grado; })[0].NOMBRE}</span> en <span class="fw-bold">${row.titulo_estudio}</span> - <span class="fw-bold">${row.fecha_finalizacion_estudio != "" ? row.fecha_finalizacion_estudio : "Cursando"}</span></p>
+                <p class="psinmargen tex-center"><span class="fw-bold">${DATA_GRADOS.dataset.filter(function (entry) { return entry.ID === `${row.id_grado}`; })[0].NOMBRE}</span> en <span class="fw-bold">${row.titulo_estudio}</span> - <span class="fw-bold">${row.fecha_finalizacion_estudio != "" ? row.fecha_finalizacion_estudio : "Cursando"}</span></p>
                 <i class="bi bi-x-square text-danger" onclick="eliminarEstudio('${row.identificador}')"></i>
             </div>`;
         });
