@@ -41,9 +41,16 @@
                             </div>
                         </div>
                         <div class="line"></div>
+                        <div class="step" data-target="#habilidad">
+                            <div class="btn step-trigger">
+                                <span class="bs-stepper-circle">3</span>
+                                <span class="bs-stepper-label">Habilidades</span>
+                            </div>
+                        </div>
+                        <div class="line"></div>
                         <div class="step" data-target="#contacto">
                             <button type="button" class="btn step-trigger">
-                                <span class="bs-stepper-circle">3</span>
+                                <span class="bs-stepper-circle">4</span>
                                 <span class="bs-stepper-label">Información de contacto</span>
                             </button>
                         </div>
@@ -66,7 +73,7 @@
                                         </div>
                                         <div class="col-md-6 d-flex flex-column gap-1">
                                             <label for="titulo" class="fs-6">Título/Especialidad</label>
-                                            <input type="text" class="form-control" id="titulo" name="titulo" min="4"
+                                            <input type="text" class="form-control" id="titulo" name="titulo" min="4" autocomplete="off"
                                                 max="70" required>
                                         </div>
                                         <div class="col-md-6 d-flex flex-column gap-1">
@@ -76,7 +83,7 @@
                                         </div>
                                         <div class="col-md-6 d-flex flex-column gap-1">
                                             <label for="otraInstitucion" class="fs-6">Otra institución</label>
-                                            <input type="text" class="form-control" id="otraInstitucion"
+                                            <input type="text" class="form-control" id="otraInstitucion" autocomplete="off"
                                                 name="otraInstitucion" min="4" max="100" disabled>
                                         </div>
                                         <div class="col-md-6 d-flex flex-column gap-1">
@@ -94,7 +101,7 @@
                                         <div class="col-12 d-flex justify-content-center align-items-center">
                                             <button type="submit"
                                                 class="btn btn-primary px-5 d-flex align-items-center">
-                                                <p class="fw-bold px-5 psinmargen">Agregar estudio</p>
+                                                <p class="fw-bold px-1 px-md-5 psinmargen">Agregar estudio</p>
                                                 <i class="bi bi-plus-lg psinmargen h4"></i>
                                             </button>
                                         </div>
@@ -112,13 +119,13 @@
                                     <form class="row row-gap-3" id="formAgregarFormacionComplementaria">
                                         <div class="col-md-6 d-flex flex-column gap-1">
                                             <label for="tituloCertificado" class="fs-6">Título del certificado</label>
-                                            <input type="text" class="form-control" id="tituloCertificado"
+                                            <input type="text" class="form-control" id="tituloCertificado" autocomplete="off"
                                                 name="tituloCertificado" min="4" max="70" required>
                                         </div>
                                         <div class="col-md-6 d-flex flex-column gap-1">
                                             <label for="institucionCertificado"
                                                 class="fs-6">Empresa/Institución/Organización</label>
-                                            <input type="text" class="form-control" id="institucionCertificado"
+                                            <input type="text" class="form-control" id="institucionCertificado" autocomplete="off"
                                                 name="institucionCertificado" min="4" max="70" required>
                                         </div>
                                         <div class="col-md-6 d-flex flex-column gap-1">
@@ -129,7 +136,7 @@
                                         <div class="col-12 d-flex justify-content-center align-items-center">
                                             <button type="submit"
                                                 class="btn btn-primary px-5 d-flex align-items-center">
-                                                <p class="fw-bold px-5 psinmargen">Agregar certificado</p>
+                                                <p class="fw-bold px-1 px-md-5 psinmargen">Agregar certificado</p>
                                                 <i class="bi bi-plus-lg psinmargen h4"></i>
                                             </button>
                                         </div>
@@ -153,12 +160,7 @@
                                     <form class="row row-gap-3" id="formAgregarExperiencia">
                                         <div class="col-md-6 d-flex flex-column gap-1">
                                             <label for="empresa" class="fs-6">Empresa</label>
-                                            <input type="text" class="form-control" id="empresa" name="empresa" min="4"
-                                                max="50" required>
-                                        </div>
-                                        <div class="col-md-6 d-flex flex-column gap-1">
-                                            <label for="cargo" class="fs-6">Cargo</label>
-                                            <input type="text" class="form-control" id="cargo" name="cargo" min="4"
+                                            <input type="text" class="form-control" id="empresa" name="empresa" min="4" autocomplete="off"
                                                 max="50" required>
                                         </div>
                                         <div class="col-md-6 d-flex flex-column gap-1">
@@ -168,6 +170,11 @@
                                         <div class="col-md-6 d-flex flex-column gap-1">
                                             <label for="area" class="fs-6">Área</label>
                                             <select name="area" id="area" class="form-select" required></select>
+                                        </div>
+                                        <div class="col-md-6 d-flex flex-column gap-1">
+                                            <label for="cargo" class="fs-6">Cargo</label>
+                                            <input type="text" class="form-control" id="cargo" name="cargo" min="4" autocomplete="off"
+                                                max="50" required>
                                         </div>
                                         <div class="col-md-6 d-flex flex-column gap-1">
                                             <label class="fw-semibold">Desde</label>
@@ -211,12 +218,13 @@
                                         <div class="col-12 d-flex flex-column gap-1">
                                             <label for="descripcion" class="fs-6">Descripción del puesto</label>
                                             <textarea class="form-control" id="descripcion"
-                                                name="descripcion" minlength="30" maxlength="300"></textarea>
+                                                name="descripcion" minlength="20" maxlength="300" required></textarea>
+                                            <label for="descripcion" class="fs-6" id="caracteresRestantes">Caracteres restantes: 300</label>
                                         </div>
                                         <div class="col-12 d-flex justify-content-center align-items-center">
                                             <button type="submit"
                                                 class="btn btn-primary px-5 d-flex align-items-center">
-                                                <p class="fw-bold px-5 psinmargen">Agregar experiencia</p>
+                                                <p class="fw-bold px-1 px-md-5 psinmargen">Agregar experiencia</p>
                                                 <i class="bi bi-plus-lg psinmargen h4"></i>
                                             </button>
                                         </div>
@@ -231,36 +239,36 @@
                                     id="contenedorReferencias">
                                 </div>
                                 <div class="col-12 mt-4 d-flex flex-column">
-                                    <form class="row row-gap-3" id="formAgregarExperiencia">
+                                    <form class="row row-gap-3" id="formAgregarReferencia">
                                         <div class="col-md-6 d-flex flex-column gap-1">
                                             <label for="nombre" class="fs-6">Nombre</label>
-                                            <input type="text" class="form-control" id="nombre" name="nombre" min="4"
-                                                max="70" required>
+                                            <input type="text" class="form-control" id="nombre" name="nombre" min="4" autocomplete="off"
+                                                max="40" required>
                                         </div>
                                         <div class="col-md-6 d-flex flex-column gap-1">
                                             <label for="apellido" class="fs-6">Apellido</label>
-                                            <input type="text" class="form-control" id="apellido" name="apellido" min="4"
-                                                max="70" required>
+                                            <input type="text" class="form-control" id="apellido" name="apellido" min="4"  autocomplete="off"
+                                                max="40" required>
                                         </div>
                                         <div class="col-md-6 d-flex flex-column gap-1">
                                             <label for="puesto" class="fs-6">Puesto de trabajo</label>
-                                            <input type="text" class="form-control" id="puesto" name="puesto" min="4"
-                                                max="70" required>
+                                            <input type="text" class="form-control" id="puesto" name="puesto" min="4"  autocomplete="off"
+                                                max="50" required>
                                         </div>
                                         <div class="col-md-6 d-flex flex-column gap-1">
-                                            <label for="telefono" class="fs-6">Teléfono</label>
+                                            <label for="telefonoReferencia" class="fs-6">Teléfono</label>
                                             <div class="input-group">
                                                 <span class="input-group-text">
                                                     <i class="bi bi-telephone-fill"></i>
                                                 </span>
-                                                <input type="text" class="form-control" id="telefono" name="telefono" min="4"
-                                                    max="70" required>
+                                                <input type="text" class="form-control" id="telefonoReferencia" name="telefonoReferencia" minlength="9"  autocomplete="off"
+                                                    maxlength="9" placeholder="2509-2383" required>
                                             </div>
                                         </div>
                                         <div class="col-12 d-flex justify-content-center align-items-center">
                                             <button type="submit"
                                                 class="btn btn-primary px-5 d-flex align-items-center">
-                                                <p class="fw-bold px-5 psinmargen">Agregar referencia</p>
+                                                <p class="fw-bold px-1 px-md-5 psinmargen">Agregar referencia</p>
                                                 <i class="bi bi-plus-lg psinmargen h4"></i>
                                             </button>
                                         </div>
@@ -268,6 +276,13 @@
                                 </div>
                             </div>
                             <button class="btn btn-primary align-self-end" id="btnSiguientePasoExperiencia">
+                                Siguiente apartado
+                                <i class="bi bi-arrow-right"></i>
+                            </button>
+                        </div>
+                        <div id="habilidad" class="content d-flex flex-column gap-5 d-none">
+                            <p class="text-center">HABILIDADES</p>
+                            <button class="btn btn-primary align-self-end" id="btnSiguientePasoHabilidad">
                                 Siguiente apartado
                                 <i class="bi bi-arrow-right"></i>
                             </button>

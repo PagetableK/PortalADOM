@@ -14,7 +14,7 @@ class AreaslaboralesHandler
     protected $id_area = null;
     protected $id_rubro = null;
 
-    
+
 
     /*
     *   Métodos para realizar las operaciones SCRUD (search, create, read, update, and delete).
@@ -43,44 +43,40 @@ class AreaslaboralesHandler
     //Función para leer todos los admministradores.
     public function readAll()
     {
-        $sql = 'SELECT a.id_area, a.nombre_area, a.id_rubro, b.nombre_rubro
-                FROM areas_laborales a
-                JOIN rubros_empresas b ON a.id_rubro = b.id_rubro
-                ORDER BY a.nombre_area
+        $sql = 'SELECT * from areas_laborales
                 ';
         return Database::getRows($sql);
     }
 
-        //funcion leer una linea
-        public function readOne()
-        {
-            $sql = 'SELECT a.id_area, a.nombre_area, a.id_rubro, b.nombre_rubro
+    //funcion leer una linea
+    public function readOne()
+    {
+        $sql = 'SELECT a.id_area, a.nombre_area, a.id_rubro, b.nombre_rubro
                 FROM areas_laborales a
                 JOIN rubros_empresas b ON a.id_rubro = b.id_rubro
                 WHERE id_area = ?
                 ORDER BY a.nombre_area';
-            $params = array($this->id);
-            return Database::getRow($sql, $params);
-        }
-        
+        $params = array($this->id);
+        return Database::getRow($sql, $params);
+    }
 
-     //Función para actualizar un admministrador.
-     public function updateRow()
-     {
-         $sql = 'UPDATE areas_laborales
+
+    //Función para actualizar un admministrador.
+    public function updateRow()
+    {
+        $sql = 'UPDATE areas_laborales
                  SET nombre_area = ?
                  WHERE id_area = ?';
-         $params = array($this->area, $this->id );
-         return Database::executeRow($sql, $params);
-     }
+        $params = array($this->area, $this->id);
+        return Database::executeRow($sql, $params);
+    }
 
-     //Función para eliminar un admministrador.
-     public function deleteRow()
-     {
-         $sql = 'DELETE FROM areas_laborales 
+    //Función para eliminar un admministrador.
+    public function deleteRow()
+    {
+        $sql = 'DELETE FROM areas_laborales 
                  WHERE id_area = ?';
-         $params = array($this->id);
-         return Database::executeRow($sql, $params);
-     }
-     
+        $params = array($this->id);
+        return Database::executeRow($sql, $params);
+    }
 }

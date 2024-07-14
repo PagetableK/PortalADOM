@@ -162,6 +162,10 @@ if (isset($_GET['action'])) {
                     $_SESSION['apellidoAspirante'] = $aspirantes->checkUser($_POST['correo'], $_POST['clave'])[3];
                     // Se inicializa el array que almacena los estudios del currículum.
                     $_SESSION['estudios'] = array();
+                    // Se inicializa el array que almacena las experiencias laborales del currículum.
+                    $_SESSION['experiencias'] = array();
+                    // Se inicializa el array que almacena las referencias laborales del currículum.
+                    $_SESSION['referencias'] = array();
                     // Se inicializa el array que almacena la formación complementaria del currículum.
                     $_SESSION['formacionComplementaria'] = array();
                     // Se devuelve el mensaje del resultado de la acción logIn.
