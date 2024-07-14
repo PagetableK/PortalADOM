@@ -156,7 +156,7 @@
 		nombre_referencia VARCHAR(40) NOT NULL,
 		apellido_referencia VARCHAR(40) NOT NULL,
 		puesto_trabajo VARCHAR(50) NOT NULL,
-		telefono_referencia VARCHAR(9) UNIQUE NOT NULL,
+		telefono_referencia VARCHAR(9) NOT NULL,
 		id_curriculum INT NOT NULL,
 		CONSTRAINT fk_curriculum_refer
 		FOREIGN KEY (id_curriculum)
