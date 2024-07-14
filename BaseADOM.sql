@@ -60,6 +60,11 @@
 		id_area INT PRIMARY KEY AUTO_INCREMENT,
 		nombre_area VARCHAR(40) UNIQUE
 	);
+
+	CREATE TABLE habilidades(
+		id_habilidad INT PRIMARY KEY AUTO_INCREMENT,
+		nombre_habilidad VARCHAR(75) NOT NULL UNIQUE
+	);
 	
 	CREATE TABLE curriculum_aspirantes(
 		id_curriculum INT PRIMARY KEY AUTO_INCREMENT,
@@ -134,12 +139,16 @@
 	);
 	
 	CREATE TABLE habilidades_aspirantes(
-		id_habilidad INT PRIMARY KEY AUTO_INCREMENT,
-		nombre_habilidad VARCHAR(30) NOT NULL,
+		id_habilidad_aspirante INT PRIMARY KEY AUTO_INCREMENT,
+		nivel_habilidad ENUM('Básico', 'Intermedio', 'Avanzado') NOT NULL,
+		id_habilidad INT NOT NULL,
 		id_curriculum INT NOT NULL,
 		CONSTRAINT fk_curriculum_habilidad
 		FOREIGN KEY (id_curriculum)
-		REFERENCES curriculum_aspirantes(id_curriculum)
+		REFERENCES curriculum_aspirantes(id_curriculum),
+		CONSTRAINT fk_habilidad_aspirante
+		FOREIGN KEY (id_habilidad)
+		REFERENCES habilidades(id_habilidad)
 	);
 	
 	CREATE TABLE referencias_aspirantes(
