@@ -81,7 +81,7 @@ class AspirantesData extends AspirantesHandler
             $this->correo = $value;
             return true;
         } elseif ($this->checkDuplicate($value)) {
-            $this->info_error = 'El correo ya está siendo utilizado por otro administrador';
+            $this->info_error = 'El correo ya está siendo utilizado por otro aspirante';
             return false;
         } elseif (Validator::validateLength($value, $min, $max)) {
             $this->correo = $value;

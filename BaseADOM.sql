@@ -58,11 +58,12 @@
 	
 	CREATE TABLE areas_laborales(
 		id_area INT PRIMARY KEY AUTO_INCREMENT,
-		nombre_area VARCHAR(40) UNIQUE,
-		id_rubro INT NOT NULL,
-		CONSTRAINT fk_rubro_area
-		FOREIGN KEY (id_rubro)
-		REFERENCES rubros_empresas(id_rubro)
+		nombre_area VARCHAR(40) UNIQUE
+	);
+
+	CREATE TABLE habilidades(
+		id_habilidad INT PRIMARY KEY AUTO_INCREMENT,
+		nombre_habilidad VARCHAR(75) NOT NULL UNIQUE
 	);
 	
 	CREATE TABLE curriculum_aspirantes(
@@ -109,12 +110,11 @@
 	
 	CREATE TABLE experiencias_aspirantes(
 		id_experiencia INT PRIMARY KEY AUTO_INCREMENT,
-		nombre_empresa VARCHAR(50) NOT NULL,
-		nombre_cargo VARCHAR(50) NOT NULL,
+		nombre_empresa VARCHAR(100) NOT NULL,
+		nombre_cargo VARCHAR(100) NOT NULL,
 		fecha_inicio DATE NOT NULL,
 		fecha_fin DATE NULL,
 		descripcion_puesto VARCHAR(300) NOT NULL,
-		estado_experiencia ENUM('Antiguo trabajo', 'Trabajo actual') NOT NULL,
 		id_area INT NOT NULL,
 		id_rubro INT NOT NULL,
 		CONSTRAINT fk_area_asp
@@ -139,12 +139,16 @@
 	);
 	
 	CREATE TABLE habilidades_aspirantes(
-		id_habilidad INT PRIMARY KEY AUTO_INCREMENT,
-		nombre_habilidad VARCHAR(30) NOT NULL,
+		id_habilidad_aspirante INT PRIMARY KEY AUTO_INCREMENT,
+		nivel_habilidad ENUM('Básico', 'Intermedio', 'Avanzado') NOT NULL,
+		id_habilidad INT NOT NULL,
 		id_curriculum INT NOT NULL,
 		CONSTRAINT fk_curriculum_habilidad
 		FOREIGN KEY (id_curriculum)
-		REFERENCES curriculum_aspirantes(id_curriculum)
+		REFERENCES curriculum_aspirantes(id_curriculum),
+		CONSTRAINT fk_habilidad_aspirante
+		FOREIGN KEY (id_habilidad)
+		REFERENCES habilidades(id_habilidad)
 	);
 	
 	CREATE TABLE referencias_aspirantes(
@@ -152,7 +156,7 @@
 		nombre_referencia VARCHAR(40) NOT NULL,
 		apellido_referencia VARCHAR(40) NOT NULL,
 		puesto_trabajo VARCHAR(50) NOT NULL,
-		telefono_referencia VARCHAR(9) UNIQUE NOT NULL,
+		telefono_referencia VARCHAR(9) NOT NULL,
 		id_curriculum INT NOT NULL,
 		CONSTRAINT fk_curriculum_refer
 		FOREIGN KEY (id_curriculum)
