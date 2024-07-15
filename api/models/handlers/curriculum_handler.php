@@ -35,6 +35,10 @@ class CurriculumHandler
     protected $apellido_referencia = null;
     protected $puesto_referencia = null;
     protected $telefono_referencia = null;
+    protected $id_idioma = null;
+    protected $nivel_idioma = null;
+    protected $id_habilidad = null;
+    protected $nivel_habilidad = null;
 
     //Función para agregar un estudio dentro de la variable de sesión.
     public function agregarEstudio()
@@ -94,8 +98,8 @@ class CurriculumHandler
     {
         // echo $this->identificador.$this->empresa.$this->cargo.$this->id_rubro.$this->mes_inicio.$this->year_inicio.$this->mes_final.$this->year_final;
         array_push($_SESSION['experiencias'], json_decode('{"identificador": "' . $this->identificador . '", "empresa": "' . $this->empresa . '", "cargo": "' . $this->cargo . '", 
-                    "rubro": "' . $this->id_rubro . '", "mes_inicio": "' . $this->mes_inicio . '", "year_inicio": "' . $this->year_inicio . '", "mes_final": "' . $this->mes_final . '",
-                    "year_final": "' . $this->year_final . '" }', true));
+                    "rubro": "' . $this->id_rubro . '", "area": "' . $this->id_area . '", "mes_inicio": "' . $this->mes_inicio . '", "year_inicio": "' . $this->year_inicio . '", "mes_final": "' . $this->mes_final . '",
+                    "year_final": "' . $this->year_final . '", "descripcion": "' . $this->descripcion . '" }', true));
 
         // var_dump($_SESSION['experiencias']); 
         return true;
@@ -135,6 +139,76 @@ class CurriculumHandler
             if ($val["identificador"] == $this->identificador) {
 
                 unset($_SESSION["referencias"][$key]);
+            }
+        }
+
+        return true;
+    }
+
+    public function agregarIdioma()
+    {
+        array_push($_SESSION['idiomas'], json_decode('{"identificador": "' . $this->identificador . '", "idioma": ' . $this->id_idioma . ', "nivel": "' . $this->nivel_idioma . '" }', true));
+
+        // var_dump($_SESSION['experiencias']); 
+        return true;
+    }
+
+    public function eliminarIdioma()
+    {
+        // https://stackoverflow.com/questions/3474381/removing-array-from-multidimensional-array
+
+        foreach ($_SESSION["idiomas"] as $key => $val) {
+
+            if ($val["identificador"] == $this->identificador) {
+
+                unset($_SESSION["idiomas"][$key]);
+            }
+        }
+
+        return true;
+    }
+
+    public function verificarIdioma()
+    {
+        foreach ($_SESSION["idiomas"] as $key => $val) {
+            if ($val["idioma"] == $this->id_idioma) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function agregarHabilidad()
+    {
+        array_push($_SESSION['habilidades'], json_decode('{"identificador": "' . $this->identificador . '", "habilidad": ' . $this->id_habilidad . ', "nivel": "' . $this->nivel_habilidad . '" }', true));
+
+        // var_dump($_SESSION['experiencias']); 
+        return true;
+    }
+
+    public function eliminarHabilidad()
+    {
+        // https://stackoverflow.com/questions/3474381/removing-array-from-multidimensional-array
+
+        foreach ($_SESSION["habilidades"] as $key => $val) {
+
+            if ($val["identificador"] == $this->identificador) {
+
+                unset($_SESSION["habilidades"][$key]);
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function verificarHabilidad()
+    {
+        foreach ($_SESSION["habilidades"] as $key => $val) {
+            if ($val["habilidad"] == $this->id_habilidad) {
+                return false;
             }
         }
 

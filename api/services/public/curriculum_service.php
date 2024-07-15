@@ -164,17 +164,17 @@ if (isset($_GET['action'])) {
                 break;
 
             case 'almacenarReferencia':
-                if(
+                if (
                     !$curriculum->setNombreReferencia($_POST['nombre']) or
                     !$curriculum->setApellidoReferencia($_POST['apellido']) or
                     !$curriculum->setPuesto($_POST['puesto']) or
                     !$curriculum->setTelefonoReferencia($_POST['telefonoReferencia']) or
                     !$curriculum->setIdentificador($_POST['identificador'])
-                ){
+                ) {
                     $result['dataset'] = $curriculum->getDataError();
-                } elseif($curriculum->agregarReferencia()){
+                } elseif ($curriculum->agregarReferencia()) {
                     $result['status'] = 1;
-                } else{
+                } else {
                     $result['error'] = 'Ocurrió un error al agregar la referencia';
                 }
                 break;
@@ -186,6 +186,78 @@ if (isset($_GET['action'])) {
                     $result['status'] = 1;
                 } else {
                     $result['error'] = 'Ocurrió un error al eliminar la referencia';
+                }
+                break;
+
+            case 'obtenerIdiomas':
+                if (empty($_SESSION['idiomas'])) {
+                    // Se retorna el error.
+                    $result['error'] = 'No se han agregado idiomas';
+                } elseif ($result['dataset'] = $_SESSION['idiomas']) {
+                    $result['status'] = 1;
+                } else {
+                    $result['error'] = 'Ocurrió un error al obtener los idiomas';
+                }
+                break;
+
+            case 'almacenarIdioma':
+                if (
+                    !$curriculum->setIdIdioma($_POST['idioma']) or
+                    !$curriculum->setNivelIdioma($_POST['nivelIdioma']) or
+                    !$curriculum->setIdentificador($_POST['identificador']) or
+                    !$curriculum->validarIdioma()
+                ) {
+                    $result['error'] = $curriculum->getDataError();
+                } elseif ($curriculum->agregarIdioma()) {
+                    $result['status'] = 1;
+                } else {
+                    $result['error'] = 'Ocurrió un error al agregar el idioma';
+                }
+                break;
+
+            case 'eliminarIdioma':
+                if (!$curriculum->setIdentificador($_POST['identificador'])) {
+                    $result['error'] = $curriculum->getDataError();
+                } elseif ($curriculum->eliminarIdioma()) {
+                    $result['status'] = 1;
+                } else {
+                    $result['error'] = 'Ocurrió un error al eliminar el idioma';
+                }
+                break;
+
+            case 'obtenerHabilidades':
+                if (empty($_SESSION['habilidades'])) {
+                    // Se retorna el error.
+                    $result['error'] = 'No se han agregado habilidades';
+                } elseif ($result['dataset'] = (array) $_SESSION['habilidades']) {
+                    $result['status'] = 1;
+                } else {
+                    $result['error'] = 'Ocurrió un error al obtener las habilidades';
+                }
+                break;
+
+            case 'almacenarHabilidad':
+                if (
+                    !$curriculum->setIdHabilidad($_POST['nombreHabilidad']) or
+                    !$curriculum->setNivelHabilidad($_POST['nivelHabilidad']) or
+                    !$curriculum->setIdentificador($_POST['identificador']) or
+                    !$curriculum->validarHabilidad()
+                ) {
+                    $result['error'] = $curriculum->getDataError();
+                } elseif ($curriculum->agregarHabilidad()) {
+                    $result['status'] = 1;
+                } else {
+                    $result['error'] = 'Ocurrió un error al agregar el idioma';
+                }
+                break;
+
+            case 'eliminarHabilidad':
+                if (!$curriculum->setIdentificador($_POST['identificador'])) {
+                    $result['error'] = $curriculum->getDataError();
+                } elseif ($curriculum->eliminarHabilidad()) {
+                    $result['status'] = 1;
+                } else {
+                    $result['error'] = 'Ocurrió un error al eliminar la habilidad';
                 }
                 break;
 
