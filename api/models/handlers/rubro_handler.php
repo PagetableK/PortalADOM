@@ -41,8 +41,7 @@ class RubroHandler
     public function readAll()
     {
         $sql = 'SELECT id_rubro, nombre_rubro
-        FROM rubros_empresas
-        WHERE id_rubro';
+        FROM rubros_empresas';
         return Database::getRows($sql);
     }
 

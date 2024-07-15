@@ -6,8 +6,6 @@ require_once('../../models/data/aspirantes_data.php');
 if (isset($_GET['action'])) {
     // Se crea una sesión o se reanuda la actual para poder utilizar variables de sesión en el script.
     session_start();
-    // $_SESSION['estudios'] = json_decode('[{"Institucion": 1}, {"Institucion":3}]', true);
-    // var_dump($_SESSION['estudios']);
     // Se instancia la clase correspondiente.
     $aspirantes = new AspirantesData;
     // Se declara e inicializa un arreglo para guardar el resultado que retorna la API.
@@ -164,6 +162,16 @@ if (isset($_GET['action'])) {
                     $_SESSION['apellidoAspirante'] = $aspirantes->checkUser($_POST['correo'], $_POST['clave'])[3];
                     // Se inicializa el array que almacena los estudios del currículum.
                     $_SESSION['estudios'] = array();
+                    // Se inicializa el array que almacena las experiencias laborales del currículum.
+                    $_SESSION['experiencias'] = array();
+                    // Se inicializa el array que almacena las referencias laborales del currículum.
+                    $_SESSION['referencias'] = array();
+                    // Se inicializa el array que almacena los idiomas del currículum.
+                    $_SESSION['idiomas'] = array();
+                    // Se inicializa el array que almacena las habilidades del currículum.
+                    $_SESSION['habilidades'] = array();
+                    // Se inicializa el array que almacena la formación complementaria del currículum.
+                    $_SESSION['formacionComplementaria'] = array();
                     // Se devuelve el mensaje del resultado de la acción logIn.
                     $result['message'] = 'Autenticación correcta';
                 } else {

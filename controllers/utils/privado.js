@@ -85,6 +85,9 @@ const cargarPlantilla = async () => {
                                 <a href="idiomas.html" class="sidebar-link">Idiomas</a>
                             </li>
                             <li class="sidebar-item">
+                                <a href="habilidades.html" class="sidebar-link">Habilidades</a>
+                            </li>
+                            <li class="sidebar-item">
                                 <a href="aspirantes.html" class="sidebar-link">Aspirantes</a>
                             </li>
                         </ul>
@@ -148,6 +151,9 @@ const cargarPlantilla = async () => {
             }
             else if (location.pathname.endsWith('idiomas.html')) {
                 TITULO.textContent = "Idiomas";
+            }
+            else if(location.pathname.endsWith('habilidades.html')){
+                TITULO.textContent = "Habilidades";
             }
             else if (location.pathname.endsWith('grados_academicos.html')) {
                 TITULO.textContent = "Grados académicos";
