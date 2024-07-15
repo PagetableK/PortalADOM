@@ -166,6 +166,10 @@ if (isset($_GET['action'])) {
                     $_SESSION['experiencias'] = array();
                     // Se inicializa el array que almacena las referencias laborales del currículum.
                     $_SESSION['referencias'] = array();
+                    // Se inicializa el array que almacena los idiomas del currículum.
+                    $_SESSION['idiomas'] = array();
+                    // Se inicializa el array que almacena las habilidades del currículum.
+                    $_SESSION['habilidades'] = array();
                     // Se inicializa el array que almacena la formación complementaria del currículum.
                     $_SESSION['formacionComplementaria'] = array();
                     // Se devuelve el mensaje del resultado de la acción logIn.
