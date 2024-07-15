@@ -1,13 +1,13 @@
 <?php
 // Se incluye la clase del modelo.
-require_once('../../models/data/idiomas_data.php');
+require_once('../../models/data/habilidades_data.php');
 
 // Se comprueba si existe una acción a realizar, de lo contrario se finaliza el script con un mensaje de error.
 if (isset($_GET['action'])) {
     // Se crea una sesión o se reanuda la actual para poder utilizar variables de sesión en el script.
     session_start();
     // Se instancia la clase correspondiente.
-    $idioma = new idiomasData;
+    $habilidad = new HabilidadesData;
     // Se declara e inicializa un arreglo para guardar el resultado que retorna la API.
     $result = array('status' => 0, 'session' => 0, 'message' => null, 'dataset' => null, 'error' => null, 'exception' => null, 'correoAdmin' => null);
     // Se verifica si existe una sesión iniciada como administrador, de lo contrario se finaliza el script con un mensaje de error.
@@ -20,7 +20,7 @@ if (isset($_GET['action'])) {
             case 'searchRows':
                 if (!Validator::validateSearch($_POST['search'])) {
                     $result['error'] = Validator::getSearchError();
-                } elseif ($result['dataset'] = $idioma->searchRows()) {
+                } elseif ($result['dataset'] = $habilidad->searchRows()) {
                     $result['status'] = 1;
                     $result['message'] = 'Existen ' . count($result['dataset']) . ' coincidencias';
                 } else {
@@ -31,65 +31,66 @@ if (isset($_GET['action'])) {
             case 'createRow':
                 $_POST = Validator::validateForm($_POST);
                 if (
-                    !$idioma->setNombre($_POST['nombreIdioma'])  
+                    !$habilidad->setNombre($_POST['nombreHabilidad'])  
                 ) {
-                    $result['error'] = $idioma->getDataError();
-                } elseif ($idioma->createRow()) {
+                    $result['error'] = $habilidad->getDataError();
+                } elseif ($habilidad->createRow()) {
                     $result['status'] = 1;
-                    $result['message'] = 'Idioma creado correctamente';
+                    $result['message'] = 'Habilidad agregada correctamente';
                 } else {
-                    $result['error'] = 'Ocurrió un problema al crear el idioma';
+                    $result['error'] = 'Ocurrió un problema al agregar la habilidad';
                 }
                 break;
                 // Ver todo
             case 'readAll':
-                if ($result['dataset'] = $idioma->readAll()) {
+                if ($result['dataset'] = $habilidad->readAll()) {
                     $result['status'] = 1;
                     $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
                 } else {
-                    $result['error'] = 'No existen idiomas registrados';
+                    $result['error'] = 'No existen habilidades registradas';
                 }
                 break;
                 // Ver uno
             case 'readOne':
-                if (!$idioma->setId($_POST['idIdioma'])) {
-                    $result['error'] = 'Idioma incorrecto';
-                } elseif ($result['dataset'] = $idioma->readOne()) {
+                if (!$habilidad->setId($_POST['idHabilidad'])) {
+                    $result['error'] = 'Id de habilidad incorrecto';
+                } elseif ($result['dataset'] = $habilidad->readOne()) {
                     $result['status'] = 1;
                 } else {
-                    $result['error'] = 'Idioma inexistente';
+                    $result['error'] = 'Habilidad inexistente';
                 }
                 break;
                  // Actualizar
             case 'updateRow':
                 $_POST = Validator::validateForm($_POST);
                 if (
-                    !$idioma->setId($_POST['idIdioma']) or
-                    !$idioma->setNombre($_POST['nombreIdioma']) 
+                    !$habilidad->setId($_POST['idHabilidad']) or
+                    !$habilidad->setNombre($_POST['nombreHabilidad']) 
                 ) {
-                    $result['error'] = $idioma->getDataError();
-                } elseif ($idioma->updateRow()) {
+                    $result['error'] = $habilidad->getDataError();
+                } elseif ($habilidad->updateRow()) {
                     $result['status'] = 1;
-                    $result['message'] = 'Idioma modificado correctamente';
+                    $result['message'] = 'Habilidad modificada correctamente';
                 } else {
-                    $result['error'] = 'Ocurrió un problema al modificar el idioma';
+                    $result['error'] = 'Ocurrió un problema al modificar la habilidad';
                 }
                 break;
                 // Eliminar
             case 'deleteRow':
                 if (
-                    !$idioma->setId($_POST['idIdioma'])
+                    !$habilidad->setId($_POST['idHabilidad'])
                 ) {
-                    $result['error'] = $idioma->getDataError();
-                } elseif ($idioma->deleteRow()) {
+                    $result['error'] = $habilidad->getDataError();
+                } elseif ($habilidad->deleteRow()) {
                     $result['status'] = 1;
-                    $result['message'] = 'Idioma eliminado correctamente';
+                    $result['message'] = 'Habilidad eliminada correctamente';
                 } else {
-                    $result['error'] = 'Ocurrió un problema al eliminar el idioma';
+                    $result['error'] = 'Ocurrió un problema al eliminar la habilidad';
                 }
                 break;
             default:
                 $result['error'] = 'Acción no disponible dentro de la sesión';
+            break;
         }
     } else {
         print(json_encode('Acceso denegado'));

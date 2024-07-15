@@ -41,8 +41,7 @@ class RubroHandler
     public function readAll()
     {
         $sql = 'SELECT id_rubro, nombre_rubro
-        FROM rubros_empresas
-        WHERE id_rubro';
+        FROM rubros_empresas';
         return Database::getRows($sql);
     }
 
@@ -85,4 +84,12 @@ class RubroHandler
          return Database::getRows($sql);
      }
      
+     public function checkDuplicateWithId($rubro)
+     {
+         $sql = 'SELECT id_rubro
+                 FROM rubros_empresas
+                 WHERE nombre_rubro = ?';
+         $params = array($rubro);
+         return Database::getRow($sql, $params);
+     }
 }
