@@ -1,17 +1,19 @@
 <?php
 // Se incluye la clase para trabajar con la base de datos.
-require_once('../../helpers/database.php');
+require_once ('../../helpers/database.php');
 /*
-*	Clase para manejar el comportamiento de los datos de la tabla CURRICULUM_ASPIRANTES.
-*/
+ *	Clase para manejar el comportamiento de los datos de la tabla CURRICULUM_ASPIRANTES.
+ */
 class CurriculumHandler
 {
     /*
-    *   Declaración de atributos para el manejo de datos.
-    */
+     *   Declaración de atributos para el manejo de datos.
+     */
     protected $id = null;
 
     protected $id_estudio = null;
+    protected $id_aspirante = null;
+    protected $nombre_aspirante = null;
     protected $id_grado = null;
     protected $titulo_estudio = null;
     protected $id_institucion = null;
@@ -35,6 +37,10 @@ class CurriculumHandler
     protected $apellido_referencia = null;
     protected $puesto_referencia = null;
     protected $telefono_referencia = null;
+    protected $id_idioma = null;
+    protected $nivel_idioma = null;
+    protected $id_habilidad = null;
+    protected $nivel_habilidad = null;
 
     //Función para agregar un estudio dentro de la variable de sesión.
     public function agregarEstudio()
@@ -44,7 +50,6 @@ class CurriculumHandler
         "nombre_institucion": "' . $this->nombre_institucion . '", "fecha_finalizacion_estudio": "' . $this->fecha_finalizacion_estudio . '"}', true));
 
         // var_dump($_SESSION['estudios']); 
-
         return true;
     }
 
@@ -94,8 +99,8 @@ class CurriculumHandler
     {
         // echo $this->identificador.$this->empresa.$this->cargo.$this->id_rubro.$this->mes_inicio.$this->year_inicio.$this->mes_final.$this->year_final;
         array_push($_SESSION['experiencias'], json_decode('{"identificador": "' . $this->identificador . '", "empresa": "' . $this->empresa . '", "cargo": "' . $this->cargo . '", 
-                    "rubro": "' . $this->id_rubro . '", "mes_inicio": "' . $this->mes_inicio . '", "year_inicio": "' . $this->year_inicio . '", "mes_final": "' . $this->mes_final . '",
-                    "year_final": "' . $this->year_final . '" }', true));
+                    "rubro": "' . $this->id_rubro . '", "area": "' . $this->id_area . '", "mes_inicio": "' . $this->mes_inicio . '", "year_inicio": "' . $this->year_inicio . '", "mes_final": "' . $this->mes_final . '",
+                    "year_final": "' . $this->year_final . '", "descripcion": "' . $this->descripcion . '" }', true));
 
         // var_dump($_SESSION['experiencias']); 
         return true;
@@ -139,5 +144,112 @@ class CurriculumHandler
         }
 
         return true;
+    }
+
+    public function agregarIdioma()
+    {
+        array_push($_SESSION['idiomas'], json_decode('{"identificador": "' . $this->identificador . '", "idioma": ' . $this->id_idioma . ', "nivel": "' . $this->nivel_idioma . '" }', true));
+
+        // var_dump($_SESSION['experiencias']); 
+        return true;
+    }
+
+    public function eliminarIdioma()
+    {
+        // https://stackoverflow.com/questions/3474381/removing-array-from-multidimensional-array
+
+        foreach ($_SESSION["idiomas"] as $key => $val) {
+
+            if ($val["identificador"] == $this->identificador) {
+
+                unset($_SESSION["idiomas"][$key]);
+            }
+        }
+
+        return true;
+    }
+
+    public function verificarIdioma()
+    {
+        foreach ($_SESSION["idiomas"] as $key => $val) {
+            if ($val["idioma"] == $this->id_idioma) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function agregarHabilidad()
+    {
+        array_push($_SESSION['habilidades'], json_decode('{"identificador": "' . $this->identificador . '", "habilidad": ' . $this->id_habilidad . ', "nivel": "' . $this->nivel_habilidad . '" }', true));
+
+        // var_dump($_SESSION['experiencias']); 
+        return true;
+    }
+
+    public function eliminarHabilidad()
+    {
+        // https://stackoverflow.com/questions/3474381/removing-array-from-multidimensional-array
+
+        foreach ($_SESSION["habilidades"] as $key => $val) {
+
+            if ($val["identificador"] == $this->identificador) {
+
+                unset($_SESSION["habilidades"][$key]);
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function verificarHabilidad()
+    {
+        foreach ($_SESSION["habilidades"] as $key => $val) {
+            if ($val["habilidad"] == $this->id_habilidad) {
+                return false;
+            }
+        }
+      
+        return true;
+    }
+
+    public function createRow()
+{
+    $sql = 'INSERT INTO curriculum_aspirantes(id_aspirante, nombre_aspirante)
+            VALUES (?, ?)';
+    $params = array($this->id_aspirante, $this->nombre_aspirante);
+    return Database::executeRow($sql, $params);
+}
+
+    public function readAll()
+    {
+        $sql = 'SELECT a.id_aspirante, a.nombre_aspirante
+            FROM aspirantes a
+            JOIN curriculum_aspirantes ca ON a.id_aspirante = ca.id_aspirante
+            ORDER BY a.nombre_aspirante';
+
+        return Database::getRows($sql);
+    }
+    public function readOne()
+    {
+        $sql = 'SELECT a.id_aspirante, a.nombre_aspirante
+            FROM aspirantes a
+            JOIN curriculum_aspirantes ca ON a.id_aspirante = ca.id_aspirante
+            WHERE a.id_aspirante = ?
+            ORDER BY a.nombre_aspirante';
+        $params = array($this->id);
+        return Database::getRow($sql, $params);
+    }
+    public function updateRow()
+    {
+        $sql = 'UPDATE aspirantes a
+                JOIN curriculum_aspirantes c ON a.id_aspirante = c.id_aspirante
+                SET a.nombre_aspirante = ?
+                WHERE c.id_curriculum = ?';
+        $params = array($this->nombre_aspirante, $this->id_aspirante);
+        return Database::executeRow($sql, $params);
     }
 }

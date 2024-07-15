@@ -16,6 +16,40 @@ class CurriculumData extends CurriculumHandler
     *  Métodos para validar y asignar los valores de los atributos.
     */
 
+    public function setNombre($valor, $min = 3, $max = 50)
+    {
+        // Si la variable contiene caracteres que no son de tipo alfabético se devuelve el error.
+        if (!Validator::validateAlphabetic($valor)) {
+            $this->info_error = 'El nombre debe ser un valor alfabético';
+            return false;
+        } 
+        // Si la variable es de tipo alfabético se ejecuta el código.
+        elseif (Validator::validateLength($valor, $min, $max)) {
+            $this->nombre = $valor;
+            return true;
+        } 
+        // Si la variable no cumple la longitud de caracteres se devuelve el error.
+        else {
+            $this->info_error = 'El nombre debe tener una longitud entre ' . $min . ' y ' . $max;
+            return false;
+        }
+    }
+
+    public function setIdAspirante($valor)
+    {
+        // Se valida que el valor sea de tipo numérico entero.
+        if (Validator::validateNaturalNumber($valor)) {
+            // Se asigna el valor del atributo.
+            $this->id_grado = $valor;
+            return true;
+        } else {
+            // En caso de no serlo se devuelve el error.
+            $this->info_error = 'El identificador del aspirate es incorrecto';
+            return false;
+        }
+    }
+
+
     // Función que permite validar el valor del id_curriculum.
     public function setId($valor)
     {
@@ -476,6 +510,95 @@ class CurriculumData extends CurriculumHandler
             return true;
         }
     }
+
+    // Función que permite validar el campo id_idioma.
+    public function setIdIdioma($valor)
+    {
+        // Se valida que el valor sea de tipo numérico entero.
+        if (Validator::validateNaturalNumber($valor)) {
+            // Se asigna el valor del atributo.
+            $this->id_idioma = $valor;
+            return true;
+        } else {
+            // En caso de no serlo se devuelve el error.
+            $this->info_error = 'El identificador del idioma es incorrecto';
+            return false;
+        }
+    }
+
+    // Función que permite validar el campo nivel_idioma.
+    public function setNivelIdioma($valor)
+    {
+        // Se valida que el valor del parámetro sea uno de los tres niveles.
+        if ($valor == "Básico" or $valor == "Intermedio" or $valor == "Avanzado") {
+            // Se asigna el valor del atributo.
+            $this->nivel_idioma = $valor;
+            return true;
+        } else {
+            // En caso de no serlo se devuelve el error.
+            $this->info_error = 'El nivel del idioma es incorrecto';
+            return false;
+        }
+    }
+
+    // Función que verifica que el idioma no haya sido agregado aún.
+    public function validarIdioma()
+    {
+        // Se verifica que el idioma no haya sido agregado.
+        if ($this->verificarIdioma()) {
+            // Se devuelve true.
+            return true;
+        } else {
+            // En caso de haberse agregado se devuelve el error.
+            $this->info_error = 'El idioma ya ha sido agregado';
+            return false;
+        }
+    }
+
+    // Función que permite validar el campo id_habilidad.
+    public function setIdHabilidad($valor)
+    {
+        // Se valida que el valor sea de tipo numérico entero.
+        if (Validator::validateNaturalNumber($valor)) {
+            // Se asigna el valor del atributo.
+            $this->id_habilidad = $valor;
+            return true;
+        } else {
+            // En caso de no serlo se devuelve el error.
+            $this->info_error = 'El identificador de la habilidad es incorrecto';
+            return false;
+        }
+    }
+
+    // Función que permite validar el campo nivel_habilidad.
+    public function setNivelHabilidad($valor)
+    {
+        // Se valida que el valor del parámetro sea uno de los tres niveles.
+        if ($valor == "Básico" or $valor == "Intermedio" or $valor == "Avanzado") {
+            // Se asigna el valor del atributo.
+            $this->nivel_habilidad = $valor;
+            return true;
+        } else {
+            // En caso de no serlo se devuelve el error.
+            $this->info_error = 'El nivel de la habilidad es incorrecto';
+            return false;
+        }
+    }
+
+    // Función que verifica que la habilidad no haya sido agregada aún.
+    public function validarHabilidad()
+    {
+        // Se verifica que la habilidad no haya sido agregada.
+        if ($this->verificarHabilidad()) {
+            // Se devuelve true.
+            return true;
+        } else {
+            // En caso de haberse agregado se devuelve el error.
+            $this->info_error = 'La habilidad ya ha sido agregada';
+            return false;
+        }
+    }
+
 
     public function getDataError()
     {
