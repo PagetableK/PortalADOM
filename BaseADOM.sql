@@ -71,7 +71,7 @@
 		imagen_aspirante VARCHAR(200) NULL,
 		telefono_fijo VARCHAR(9) UNIQUE NOT NULL,
 		telefono_movil VARCHAR(9) UNIQUE NOT NULL,
-		correo_aspirante VARCHAR(50) UNIQUE NOT NULL,
+		correo_curriculum VARCHAR(100) UNIQUE NOT NULL,
 		id_aspirante INT NOT NULL,
 		CONSTRAINT fk_aspirante_cv
 		FOREIGN KEY (id_aspirante)
