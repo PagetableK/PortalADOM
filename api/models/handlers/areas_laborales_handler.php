@@ -82,5 +82,14 @@ class AreaslaboralesHandler
          $params = array($this->id);
          return Database::executeRow($sql, $params);
      }
+
+     public function checkDuplicateWithId($area)
+     {
+         $sql = 'SELECT id_area
+                 FROM areas_laborales
+                 WHERE nombre_area = ?';
+         $params = array($area);
+         return Database::getRow($sql, $params);
+     }
      
 }

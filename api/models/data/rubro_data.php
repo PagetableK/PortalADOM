@@ -11,8 +11,7 @@ class RubroData extends RubroHandler
     /*
      *  Atributos adicionales.
      */
-    private $data_error = null;
-    private $filename = null;
+    private $info_error = null;
 
     /*
      *  Métodos para validar y establecer los datos.
@@ -23,7 +22,7 @@ class RubroData extends RubroHandler
             $this->id = $value;
             return true;
         } else {
-            $this->data_error = 'El identificador del rubro es incorrecto';
+            $this->info_error = 'El identificador del rubro es incorrecto';
             return false;
         }
     }
@@ -31,13 +30,16 @@ class RubroData extends RubroHandler
     public function setRubro($value, $min = 2, $max = 150)
     {
         if (!Validator::validateAlphabetic($value)) {
-            $this->data_error = 'El nombre debe ser un valor alfanumérico';
+            $this->info_error = 'El nombre debe ser un valor alfanumérico';
+            return false;
+        }elseif (RubroHandler::checkDuplicateWithId($value)) {
+            $this->info_error = 'El nombre del rubro ya ha sido registrado';
             return false;
         } elseif (Validator::validateLength($value, $min, $max)) {
             $this->rubro = $value;
             return true;
         } else {
-            $this->data_error = 'El nombre debe tener una longitud entre ' . $min . ' y ' . $max;
+            $this->info_error = 'El nombre debe tener una longitud entre ' . $min . ' y ' . $max;
             return false;
         }
     }
@@ -48,11 +50,7 @@ class RubroData extends RubroHandler
      */
     public function getDataError()
     {
-        return $this->data_error;
+        return $this->info_error;
     }
 
-    public function getFilename()
-    {
-        return $this->filename;
-    }
 }
