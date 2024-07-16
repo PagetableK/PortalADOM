@@ -57,17 +57,7 @@ class AreaslaboralesData extends AreaslaboralesHandler
         }
     }
 
-    public function setIdRubro($value)
-    {
-        if (Validator::validateNaturalNumber($value)) {
-            $this->id_rubro = $value;
-            return true;
-        } else {
-            $this->data_error = 'error ID';
-            return false;
-        }
-    }
-   
+
     /*
      *  Métodos para obtener el valor de los atributos adicionales.
      */

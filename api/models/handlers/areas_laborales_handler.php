@@ -34,9 +34,9 @@ class AreaslaboralesHandler
 
     public function createRow()
     {
-        $sql = 'INSERT INTO areas_laborales(id_rubro, nombre_area)
-                VALUES(?, ?)';
-        $params = array($this->id_rubro, $this->area);
+        $sql = 'INSERT INTO areas_laborales(nombre_area)
+                VALUES(?)';
+        $params = array($this->area);
         return Database::executeRow($sql, $params);
     }
 
@@ -51,9 +51,8 @@ class AreaslaboralesHandler
     //funcion leer una linea
     public function readOne()
     {
-        $sql = 'SELECT a.id_area, a.nombre_area, a.id_rubro, b.nombre_rubro
+        $sql = 'SELECT a.id_area, a.nombre_area
                 FROM areas_laborales a
-                JOIN rubros_empresas b ON a.id_rubro = b.id_rubro
                 WHERE id_area = ?
                 ORDER BY a.nombre_area';
         $params = array($this->id);

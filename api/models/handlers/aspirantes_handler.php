@@ -97,7 +97,7 @@ class AspirantesHandler
 
     public function signUp()
     {
-        $sql = 'CALL insertar_aspirante_validado(?,?,?,?,?,?)';
+        $sql = 'CALL registrar_aspirante(?,?,?,?,?,?)';
         $params = array($this->nombre, $this->apellido, $this->clave, $this->correo, $this->genero, $this->fecha_nacimiento);
         return Database::executeRow($sql, $params);
     }
