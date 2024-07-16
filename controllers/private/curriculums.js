@@ -5,8 +5,8 @@ const CURRICULUM_API = 'services/private/curriculum_service.php';
 // Constante para establecer el formulario de buscar.
 const SEARCH_FORM = document.getElementById('searchForm');
 // Constantes para establecer los elementos de la tabla.
-const TABLE_BODY = document.getElementById('tabla_idioma'),
-    ROWS_FOUND = document.getElementById('rowsFound');
+const TABLE_BODY = document.getElementById('tabla_aspirante'),
+    ROWS_FOUND = document.getElementById('filasEncontradas');
 // Constantes para establecer los elementos del componente Modal.
 //const SAVE_MODAL = new bootstrap.Modal('#saveModal'),
     MODAL_TITLE = document.getElementById('modalTitle');
@@ -73,16 +73,24 @@ const fillTable = async (form = null) => {
     // Se verifica la acción a realizar.
     (form) ? action = 'searchRows' : action = 'readAll';
     // Petición para obtener los registros disponibles.
-    const DATA = await fetchData(AREA_API, action, form);
+    const DATA = await fetchData(CURRICULUM_API, action, form);
     // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
     if (DATA.status) {
         // Se recorre el conjunto de registros fila por fila.
         DATA.dataset.forEach(row => {
+
+            if(row.imagen_aspirante == null){
+                row.imagen_aspirante = "default.webp"
+            }
+
             // Se crean y concatenan las filas de la tabla con los datos de cada registro.
             TABLE_BODY.innerHTML += `
                 <tr>
-                    <td>${row.nombre_area}</td>
-                    <td>${row.nombre_rubro}</td>
+                    <td><img class="rounded-circle" src="${SERVER_URL}images/aspirantes/${row.imagen_aspirante}" height="50"></td>
+                    <td>${row.nombre}</td>
+                    <td>${row.estudios}</td>
+                    <td>${row.experiencias}</td>
+                    <td>${row.idiomas}</td>
                     <td>   
                         <button type="button" class="btn btn-outline-success" onclick="openUpdate(${row.id_area})">
                             <i class="bi bi-pencil-fill"></i>

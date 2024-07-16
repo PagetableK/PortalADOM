@@ -212,24 +212,33 @@ class CurriculumHandler
                 return false;
             }
         }
-      
+
         return true;
     }
 
     public function createRow()
-{
-    $sql = 'INSERT INTO curriculum_aspirantes(id_aspirante, nombre_aspirante)
+    {
+        $sql = 'INSERT INTO curriculum_aspirantes(id_aspirante, nombre_aspirante)
             VALUES (?, ?)';
-    $params = array($this->id_aspirante, $this->nombre_aspirante);
-    return Database::executeRow($sql, $params);
-}
+        $params = array($this->id_aspirante, $this->nombre_aspirante);
+        return Database::executeRow($sql, $params);
+    }
 
     public function readAll()
     {
-        $sql = 'SELECT a.id_aspirante, a.nombre_aspirante
-            FROM aspirantes a
-            JOIN curriculum_aspirantes ca ON a.id_aspirante = ca.id_aspirante
-            ORDER BY a.nombre_aspirante';
+        $sql = "SELECT 
+    a.id_aspirante, ca.imagen_aspirante,
+    CONCAT(a.nombre_aspirante, ' ', a.apellido_aspirante) AS nombre,
+    (SELECT COUNT(*) FROM estudios_aspirantes ea WHERE ea.id_curriculum = ca.id_curriculum) AS estudios,
+    (SELECT COUNT(*) FROM experiencias_aspirantes exa WHERE exa.id_curriculum = ca.id_curriculum) AS experiencias,
+    (SELECT COUNT(*) FROM idiomas_aspirantes ia WHERE ia.id_curriculum = ca.id_curriculum) AS idiomas
+FROM 
+    aspirantes a
+JOIN 
+    curriculum_aspirantes ca ON a.id_aspirante = ca.id_aspirante
+ORDER BY 
+    a.nombre_aspirante;
+";
 
         return Database::getRows($sql);
     }
