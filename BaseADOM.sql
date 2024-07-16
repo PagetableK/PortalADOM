@@ -272,9 +272,9 @@
 	$$
 	DELIMITER ;
 	
-	DROP PROCEDURE IF EXISTS insertar_aspirante_validado;
+	DROP PROCEDURE IF EXISTS registrar_aspirante;
 	DELIMITER $$
-	CREATE PROCEDURE insertar_aspirante_validado(
+	CREATE PROCEDURE registrar_aspirante(
 	   IN p_nombre_aspirante VARCHAR(50),
 	   IN p_apellido_aspirante VARCHAR(50),
 	   IN p_clave_aspirante VARCHAR(100),
