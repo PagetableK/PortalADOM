@@ -41,6 +41,11 @@ class CurriculumHandler
     protected $nivel_idioma = null;
     protected $id_habilidad = null;
     protected $nivel_habilidad = null;
+    protected $imagen = null;
+    protected $telefono_movil = null;
+    protected $telefono_fijo = null;
+    protected $correo = null;
+
 
     //Función para agregar un estudio dentro de la variable de sesión.
     public function agregarEstudio()
@@ -131,6 +136,19 @@ class CurriculumHandler
         return true;
     }
 
+    public function verificarTelefono($telefono)
+    {
+        foreach ($_SESSION["referencias"] as $key => $val) {
+
+            if ($val["telefono"] == $telefono) {
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function eliminarReferencia()
     {
         // https://stackoverflow.com/questions/3474381/removing-array-from-multidimensional-array
@@ -212,27 +230,78 @@ class CurriculumHandler
                 return false;
             }
         }
-      
+
         return true;
     }
 
+    // Esta función selecciona los campos duplicados en base a un parámetro.
+    public function checkDuplicate($value)
+    {
+        // Se establece la estructura de la sentencia.
+        $sql = 'SELECT id_curriculum
+                FROM curriculum_aspirantes
+                WHERE correo_curriculum = ? OR telefono_movil = ? OR telefono_fijo = ?';
+        // Se almacenan los parámetros en el array.
+        $params = array($value, $value, $value);
+        // Se obtiene la fila y se devuelve el dato.
+        return Database::getRow($sql, $params);
+    }
+
+    // Esta función selecciona los campos duplicados en base a un parámetro excluyendo un registro.
+    public function checkDuplicateWithId($value)
+    {
+        // Se establece la estructura de la sentencia.
+        $sql = 'SELECT id_curriculum
+                FROM curriculum_aspirantes
+                WHERE (correo_curriculum = ? OR telefono_movil = ? OR telefono_fijo = ?) AND id_curriculum = ?';
+        // Se almacenan los parámetros en el array.
+        $params = array($value, $value, $value, $this->id);
+        // Se obtiene la fila y se devuelve el dato.
+        return Database::getRow($sql, $params);
+    }
+
+    // Esta función permite agregar un currículum.
+    public function agregarCurriculum()
+    {
+        echo $this->telefono_fijo;
+        echo $this->telefono_movil;
+        echo $this->correo;
+        echo $this->imagen;
+        var_dump($_SESSION['estudios']);
+        var_dump($_SESSION['experiencias']);
+        var_dump($_SESSION['referencias']);
+        var_dump($_SESSION['formacionComplementaria']);
+        var_dump($_SESSION['idiomas']);
+        var_dump($_SESSION['habilidades']);
+    }
+  
     public function createRow()
-{
-    $sql = 'INSERT INTO curriculum_aspirantes(id_aspirante, nombre_aspirante)
-            VALUES (?, ?)';
-    $params = array($this->id_aspirante, $this->nombre_aspirante);
-    return Database::executeRow($sql, $params);
-}
+    {
+        $sql = 'INSERT INTO curriculum_aspirantes(id_aspirante, nombre_aspirante)
+              VALUES (?, ?)';
+        $params = array($this->id_aspirante, $this->nombre_aspirante);
+        return Database::executeRow($sql, $params);
+    }
 
     public function readAll()
     {
-        $sql = 'SELECT a.id_aspirante, a.nombre_aspirante
-            FROM aspirantes a
-            JOIN curriculum_aspirantes ca ON a.id_aspirante = ca.id_aspirante
-            ORDER BY a.nombre_aspirante';
+        $sql = "SELECT 
+    a.id_aspirante, ca.imagen_aspirante,
+    CONCAT(a.nombre_aspirante, ' ', a.apellido_aspirante) AS nombre,
+    (SELECT COUNT(*) FROM estudios_aspirantes ea WHERE ea.id_curriculum = ca.id_curriculum) AS estudios,
+    (SELECT COUNT(*) FROM experiencias_aspirantes exa WHERE exa.id_curriculum = ca.id_curriculum) AS experiencias,
+    (SELECT COUNT(*) FROM idiomas_aspirantes ia WHERE ia.id_curriculum = ca.id_curriculum) AS idiomas
+FROM 
+    aspirantes a
+JOIN 
+    curriculum_aspirantes ca ON a.id_aspirante = ca.id_aspirante
+ORDER BY 
+    a.nombre_aspirante;
+";
 
         return Database::getRows($sql);
     }
+  
     public function readOne()
     {
         $sql = 'SELECT a.id_aspirante, a.nombre_aspirante
@@ -243,6 +312,7 @@ class CurriculumHandler
         $params = array($this->id);
         return Database::getRow($sql, $params);
     }
+  
     public function updateRow()
     {
         $sql = 'UPDATE aspirantes a

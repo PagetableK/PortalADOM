@@ -171,7 +171,7 @@ if (isset($_GET['action'])) {
                     !$curriculum->setTelefonoReferencia($_POST['telefonoReferencia']) or
                     !$curriculum->setIdentificador($_POST['identificador'])
                 ) {
-                    $result['dataset'] = $curriculum->getDataError();
+                    $result['error'] = $curriculum->getDataError();
                 } elseif ($curriculum->agregarReferencia()) {
                     $result['status'] = 1;
                 } else {
@@ -258,6 +258,23 @@ if (isset($_GET['action'])) {
                     $result['status'] = 1;
                 } else {
                     $result['error'] = 'Ocurrió un error al eliminar la habilidad';
+                }
+                break;
+
+            case 'agregarCurriculum':
+                $_POST = Validator::validateForm($_POST);
+                if(
+                    !$curriculum->verificarEstudio() or
+                    !$curriculum->setImagen($_FILES['archivoImagen']) or
+                    !$curriculum->setTelefonoMovil($_POST['telefonoMovil']) or
+                    !$curriculum->setTelefonoFijo($_POST['telefonoFijo']) or
+                    !$curriculum->setCorreo($_POST['correo'])
+                ){
+                    $result['error'] = $curriculum->getDataError();
+                } else if($curriculum->agregarCurriculum()){
+                    $result['status'] = 1;
+                } else{
+                    $result['error'] = 'Ocurrió un error al agregar el currículum';
                 }
                 break;
 

@@ -15,39 +15,42 @@
 <body class="d-flex">
     <!-- Contenido principal del documento -->
     <main>
-        <!-- Este div crea una fila dentro de Bootstrap -->
-        <div class="row mb-3 row-gap-3 pe-2 ps-2 d-flex align-items-center">
-           <div class="col-12">
-               <h4 class="text-start fw-semibold"></h4>
-           </div>
-           <div class="col-12 col-lg-9">
-               <div class="row d-flex contenedor-form">
-                   <form id="searchForm">
-                       <!-- Este div contiene la barra de búsqueda -->
-                       <div class="col d-flex container-fluid" id="container_busqueda">
-                           <div class="d-flex">
-                               <button type="submit" class="input-group-text elemento-form" ><i class="bi bi-search"></i>
-                               </button>
-                           </div>
-                           <!-- Este input crea la barra de búsqueda -->
-                           <input type="search" class="form-control elemento-form" placeholder="Buscar..." name="search">
-                           <button type="reset" class="btn btn-white" onclick="fillTable()">
-                               <i class="bi bi-arrow-clockwise"></i>
-                           </button>
-                       </div>
-                   </form>
-                   
-               </div>
-           </div>
-           <div class="col-12 col-lg-3 d-flex justify-content-center">
-               <div class="btn btn-dark h-100 w-100 d-flex align-items-center justify-content-center gap-2 contenedor-form"
-                   type="submit" onclick="openCreate()">
-                   Agregar curriculum <i class="bi bi-plus h3 agregar-icono"></i>
-               </div>
-           </div>
-       </div>
-       <hr class="mb-5">
-       <div class="table-responsive-lg">
+        <div class="pito" id="rowsFound"></div>
+        <div class="container-fluid px-5">
+            <!-- Este div crea una fila dentro de Bootstrap -->
+            <div class="row mb-3 row-gap-3 pe-2 ps-2 d-flex align-items-center">
+                <div class="col-12">
+                    <h4 class="text-start fw-semibold"></h4>
+                </div>
+                <div class="col-12 col-lg-9">
+                    <div class="row d-flex contenedor-form">
+                        <form id="searchForm" class="d-flex">
+                            <!-- Este div contiene la barra de búsqueda -->
+                            <div class="col d-flex container-fluid" id="container_busqueda">
+                                <div class="d-flex">
+                                    <button type="submit" class="input-group-text elemento-form" ><i class="bi bi-search"></i>
+                                    </button>
+                                </div>
+                                <!-- Este input crea la barra de búsqueda -->
+                                <input type="search" class="form-control elemento-form" placeholder="Buscar..." name="search">
+                                <div class="d-flex">
+                                    <button type="reset" class="input-group-text elemento-form" onclick="fillTable()">
+                                        <i class="bi bi-arrow-clockwise"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-3 d-flex justify-content-center">
+                    <div class="btn btn-dark h-100 w-100 d-flex align-items-center justify-content-center gap-2 contenedor-form"
+                        type="submit" onclick="openCreate()">
+                        Agregar curriculum <i class="bi bi-plus h3 agregar-icono"></i>
+                    </div>
+                </div>
+            </div>
+            <hr class="mb-5">
+            <div class="table-responsive-lg">
            <!-- Tabla para mostrar los registros existentes -->
            <table class="table table-hover caption-top">
                 <thead>
@@ -55,17 +58,84 @@
                         <td colspan="6" id="filasEncontradas"></td>
                     </tr>
                     <tr>
-                        <th>Imagen</th>
-                        <th>Nombre Aspirante</th>
-                        <th>Estudios</th>
-                        <th>Experiencias laborales</th>
-                        <th>Idiomas</th>
-                        <th>Acciones</th>
+                        <th >Imagen</th>
+                        <th >Nombre Aspirante</th>
+                        <th >Estudios</th>
+                        <th >Experiencias laborales</th>
+                        <th >Idiomas</th>
+                        <th >Acciones</th>
                     </tr>
                 </thead>
                 <!-- Cuerpo de la tabla para mostrar un registro por fila -->
-                <tbody id="tabla_aspirante"></tbody>
+                <tbody id="tabla_aspirante">
+
+                </tbody>
             </table>
+        </div>
+        <!-- Componente Modal para guardar un registro -->
+        <div class="modal fade" id="saveModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            aria-labelledby="modalTitle" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header ">
+                        <h1 class="modal-title fs-5 text-dark" id="modalTitle"></h1>
+                        <button type="button" class="btn-close btn-close-dark" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <!-- Formulario para crear o actualizar un registro -->
+                    <form id="saveForm">
+                        <div class="modal-body row g-3">
+                            <!-- Campo oculto para asignar el id del registro al momento de modificar -->
+                            <input type="number" class="d-none" id="idCurriculum" name="idCurriculum">
+                            <div class="col-12">
+                                <label for="edadAspirante" class="form-label fw-semibold">Edad</label>
+                                <input id="edadAspirante" type="number" name="edadAspirante"
+                                    class="form-control" placeholder="Ingrese el nombre de la habilidad"
+                                    autocomplete="off" required>
+                            </div>
+                            <div class="col-12">
+                                <label for="idGenero" class="form-label">Genero</label>
+                                <select id="idGenero" type="number" name="idGenero" class="form-select" required>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label for="telefonoFijo" class="form-label fw-semibold">Numero Fijo</label>
+                                <input id="telefonoFijo" type="number" name="telefonoFijo"
+                                    class="form-control" placeholder="Ingrese su numero fijo"
+                                    autocomplete="off" required>
+                            </div>
+                            <div class="col-12">
+                                <label for="telefonoMovil" class="form-label fw-semibold">Numero Movil</label>
+                                <input id="telefonoMovil" type="number" name="telefonoMovil"
+                                    class="form-control" placeholder="Ingrese su numero movil"
+                                    autocomplete="off" required>
+                            </div>
+                            <div class="col-12">
+                                <label for="correoAspirante" class="form-label fw-semibold">Correo aspirante</label>
+                                <input id="correoAspirante" type="email" name="correoAspirante"
+                                    class="form-control" placeholder="Ingrese el correo electronico"
+                                    autocomplete="off" required>
+                            </div>
+                            <div class="col-12">
+                                <label for="NombreEmpresa" class="form-label fw-semibold">Correo aspirante</label>
+                                <input id="NombreEmpresa" type="email" name="NombreEmpresa"
+                                    class="form-control" placeholder="Ingrese el correo electronico"
+                                    autocomplete="off" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer col-sm-12 col-md-12 col-lg-12 justify-content-center">
+                            <button type="submit" class="btn bg-primary text-white d-none" id="btnAgregar">
+                                <i class="bi bi-plus"></i>
+                                Agregar habilidad
+                            </button>
+                            <button type="submit" class="btn bg-success text-white d-none" id="btnActualizar">
+                                <i class="bi bi-pencil-fill"></i>
+                                Actualizar habilidad
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </main>
 

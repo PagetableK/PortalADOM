@@ -23,7 +23,7 @@
 <body>
     <!-- Contenido principal de la página -->
     <main class="container-fluid">
-        <div class="row d-none mx-md-5 pb-3" id="contenedorStepper">
+        <div class="row d-none mx-lg-5 pb-3" id="contenedorStepper">
             <div class="col-md-12 mt-5">
                 <div id="stepperCv" class="bs-stepper">
                     <div class="bs-stepper-header">
@@ -54,6 +54,10 @@
                                 <span class="bs-stepper-label">Información de contacto</span>
                             </button>
                         </div>
+                    </div>
+                    <div>
+                        <p class="d-flex gap-2 textoInfo"><i class="bi bi-info-circle-fill iconoCeleste"></i>La
+                            información agregada se almacenará hasta que agregue el currículum o cierre sesión</p>
                     </div>
                     <div class="bs-stepper-content mt-5 mx-md-5">
                         <div id="educacion" class="content d-flex flex-column gap-5">
@@ -263,7 +267,7 @@
                                                 <span class="input-group-text">
                                                     <i class="bi bi-telephone-fill"></i>
                                                 </span>
-                                                <input type="text" class="form-control" id="telefonoReferencia"
+                                                <input type="text" class="form-control telefono" id="telefonoReferencia"
                                                     name="telefonoReferencia" minlength="9" autocomplete="off"
                                                     maxlength="9" placeholder="2509-2383" required>
                                             </div>
@@ -332,11 +336,13 @@
                                     <form class="row row-gap-3" id="formAgregarHabilidad">
                                         <div class="col-md-6 d-flex flex-column gap-1">
                                             <label for="nombreHabilidad" class="fs-6">Habilidad</label>
-                                            <select name="nombreHabilidad" id="nombreHabilidad" class="form-select" required></select>
+                                            <select name="nombreHabilidad" id="nombreHabilidad" class="form-select"
+                                                required></select>
                                         </div>
                                         <div class="col-md-6 d-flex flex-column gap-1">
                                             <label for="nivelHabilidad" class="fs-6">Nivel de habilidad</label>
-                                            <select name="nivelHabilidad" id="nivelHabilidad" class="form-select" required>
+                                            <select name="nivelHabilidad" id="nivelHabilidad" class="form-select"
+                                                required>
                                                 <option value="Básico">Básico</option>
                                                 <option value="Intermedio">Intermedio</option>
                                                 <option value="Avanzado">Avanzado</option>
@@ -364,7 +370,64 @@
                             </div>
                         </div>
                         <div id="contacto" class="content d-flex flex-column gap-5 d-none">
-                            <p class="text-center">test 5</p>
+                            <form id="agregarCurriculum" class="row">
+                                <div class="col-12">
+                                    <div class="row d-flex">
+                                        <div class="col-md-6 d-flex gap-2 flex-column">
+                                            <label for="archivoImagen" class="form-label fw-semibold">Imagen de perfil</label>
+                                            <div class="d-flex align-items-center justify-content-center">
+                                                <img src="../../api/images/aspirantes/imageholder.png"
+                                                    class="img-thumbnail" id="imgAspirante">
+                                            </div>
+                                            <div class="mb-3">
+                                                <input class="form-control" type="file" id="archivoImagen" name="archivoImagen"
+                                                    accept=".png, .jpg" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 d-flex flex-column gap-4 justify-content-center mt-4 mt-md-0">
+                                            <p class="fw-bold fs-5 text-center">Provee los datos de contacto que se mostrarán en tu currículum</p>
+                                            <div class="d-flex flex-column gap-1 w-100">
+                                                <label for="telefonoMovil" class="fs-6">Teléfono móvil</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text">
+                                                        <i class="bi bi-telephone-fill"></i>
+                                                    </span>
+                                                    <input type="text" class="form-control telefono" id="telefonoMovil"
+                                                        name="telefonoMovil" minlength="9" autocomplete="off"
+                                                        maxlength="9" placeholder="2509-2383" required>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex flex-column gap-1 w-100">
+                                                <label for="telefonoFijo" class="fs-6">Teléfono fijo</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text">
+                                                        <i class="bi bi-telephone-fill"></i>
+                                                    </span>
+                                                    <input type="text" class="form-control telefono" id="telefonoFijo"
+                                                        name="telefonoFijo" minlength="9" autocomplete="off"
+                                                        maxlength="9" placeholder="2509-2383" required>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex flex-column gap-1 w-100">
+                                                <label for="correo" class="fs-6">Correo electrónico</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text fw-bold">
+                                                        @
+                                                    </span>
+                                                    <input type="email" class="form-control" id="correo" name="correo"
+                                                        autocomplete="off" max="50" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 d-flex justify-content-center align-items-center mt-4">
+                                    <button type="submit" class="btn bg-primary px-5 d-flex align-items-center text-light bg-orange">
+                                        <p class="fw-bold px-1 px-md-5 psinmargen">Agregar currículum</p>
+                                        <i class="bi bi-plus-lg psinmargen h4"></i>
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -388,7 +451,7 @@
             <hr>
             <h4 class="text-center">Seleccione el diseño de su currículum</h4>
             <div class="d-flex justify-content-center align-items-center flex-wrap mt-4">
-                <button class="p-3 border rounded colo-one color-tama mx-2 mb-3"></button>
+                <button class="p-3 border rounded colo-one color-tama mx-2 mb-3" onclick="openReport()"></button>
                 <button class="p-3 border rounded colo-seco color-tama mx-2 mb-3"></button>
                 <button class="p-3 border rounded colo-thi color-tama mx-2 mb-3"></button>
                 <button class="p-3 border rounded colo-fo color-tama mx-2 mb-3"></button>

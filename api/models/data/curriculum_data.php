@@ -497,16 +497,22 @@ class CurriculumData extends CurriculumHandler
 
 
     // Función que permite validar el campo telefono_referencia.
-    public function setTelefonoReferencia($value)
+    public function setTelefonoReferencia($valor)
     {
         // Se valida que la cadena de caracteres tenga el formato de teléfono.
-        if (!Validator::validatePhone($value)) {
+        if (!Validator::validatePhone($valor)) {
             // En caso de no serlo se devuelve el error.
             $this->info_error = 'El teléfono debe iniciar con el formato ###-####';
             return false;
+        }
+        // Se valida que el teléfono no haya sido agregado anteriormente.
+        elseif ($this->verificarTelefono($valor)) {
+            // En caso de haberlo agregado se devuelve el error.
+            $this->info_error = 'El teléfono digitado ya ha sido agregado en otra referencia';
+            return false;
         } else {
             // Se asigna el valor del atributo
-            $this->telefono_referencia = $value;
+            $this->telefono_referencia = $valor;
             return true;
         }
     }
@@ -585,6 +591,88 @@ class CurriculumData extends CurriculumHandler
         }
     }
 
+    // Función que permite validar la imagen de perfil del currículum.
+    public function setImagen($file)
+    {
+
+        if (Validator::validateImageFile($file)) {
+
+            $this->imagen = Validator::getFilename();
+            return true;
+        } elseif (Validator::getFileError()) {
+
+            $this->info_error = Validator::getFileError();
+            return false;
+        } else {
+
+            $this->info_error = 'La imagen no cumple con el formato válido';
+            return true;
+        }
+    }
+
+    // Función que permite validar el campo telefono_movil.
+    public function setTelefonoMovil($valor, $boolean = null)
+    {
+        // Se valida que la cadena de caracteres tenga el formato de teléfono.
+        if (!Validator::validatePhone($valor)) {
+            // En caso de no serlo se devuelve el error.
+            $this->info_error = 'El teléfono debe iniciar con el formato ###-####';
+            return false;
+        } elseif ($boolean and !$this->checkDuplicate($valor)) {
+            $this->correo = $valor;
+            return true;
+        } elseif ($this->checkDuplicate($valor)) {
+            $this->info_error = 'El teléfono móvil ya está siendo utilizado en otro currículum';
+            return false;
+        } else {
+            // Se asigna el valor del atributo
+            $this->telefono_movil = $valor;
+            return true;
+        }
+    }
+
+    // Función que permite validar el campo telefono_fijo.
+    public function setTelefonoFijo($valor, $boolean = null)
+    {
+        // Se valida que la cadena de caracteres tenga el formato de teléfono.
+        if (!Validator::validatePhone($valor)) {
+            // En caso de no serlo se devuelve el error.
+            $this->info_error = 'El teléfono debe iniciar con el formato ###-####';
+            return false;
+        } elseif ($boolean and !$this->checkDuplicateWithId($valor)) {
+            $this->correo = $valor;
+            return true;
+        } elseif ($this->checkDuplicate($valor)) {
+            $this->info_error = 'El teléfono fijo ya está siendo utilizado en otro currículum';
+            return false;
+        } else {
+            // Se asigna el valor del atributo
+            $this->telefono_fijo = $valor;
+            return true;
+        }
+    }
+
+    // Esta función permite validar el campo CORREO_ASPIRANTE.
+    public function setCorreo($valor, $boolean = null, $min = 8, $max = 100)
+    {
+        if (!Validator::validateEmail($valor)) {
+            $this->info_error = 'El correo no es válido';
+            return false;
+        } elseif ($boolean and !$this->checkDuplicateWithId($valor)) {
+            $this->correo = $valor;
+            return true;
+        } elseif ($this->checkDuplicate($valor)) {
+            $this->info_error = 'El correo ya está siendo utilizado en otro currículum';
+            return false;
+        } elseif (Validator::validateLength($valor, $min, $max)) {
+            $this->correo = $valor;
+            return true;
+        } else {
+            $this->info_error = 'El correo debe tener una longitud entre ' . $min . ' y ' . $max;
+            return false;
+        }
+    }
+
     // Función que verifica que la habilidad no haya sido agregada aún.
     public function validarHabilidad()
     {
@@ -596,6 +684,21 @@ class CurriculumData extends CurriculumHandler
             // En caso de haberse agregado se devuelve el error.
             $this->info_error = 'La habilidad ya ha sido agregada';
             return false;
+        }
+    }
+
+    // Función que verifica que se haya agregado un estudio/s.
+    public function verificarEstudio()
+    {
+        // Se verifica si el array está vacío.
+        if(empty($_SESSION['estudios']))
+        {
+            // Se devuelve false.
+            return false;
+        } else{
+            // En caso de haber agregado por lo menos 1 estudio se devuelve el error.
+            $this->info_error = 'Debe agregar por lo menos 1 estudio a su currículum';
+            return true;
         }
     }
 
