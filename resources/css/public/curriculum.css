@@ -38,9 +38,32 @@ button.btn.btn-primary{
     box-shadow: 0px 5px 5px 0px rgb(139, 139, 139);
 }
 
+button.bg-orange{
+    background-color: #FFA000 !important;
+    --bs-btn-bg: #FFA000;
+    --bs-btn-border-color: #FFA000;
+    --bs-btn-hover-bg: #FFA000;
+    --bs-btn-hover-border-color:#FFA000;
+    --bs-btn-active-bg: #FFA000;
+    --bs-btn-active-border-color:#FFA000;
+    box-shadow: 0px 5px 5px 0px rgb(139, 139, 139);
+}
+
 .contenedorElementoCV{
     background-color: #3699FF;
     color: white;
+}
+
+#imgAspirante{
+    max-height: 50vh;
+}
+
+.iconoCeleste{
+    color: #3699FF;
+}
+
+.textoInfo{
+    font-size: 16px;
 }
 
 i.bi{
