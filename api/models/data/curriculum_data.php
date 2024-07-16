@@ -16,6 +16,40 @@ class CurriculumData extends CurriculumHandler
     *  Métodos para validar y asignar los valores de los atributos.
     */
 
+    public function setNombre($valor, $min = 3, $max = 50)
+    {
+        // Si la variable contiene caracteres que no son de tipo alfabético se devuelve el error.
+        if (!Validator::validateAlphabetic($valor)) {
+            $this->info_error = 'El nombre debe ser un valor alfabético';
+            return false;
+        } 
+        // Si la variable es de tipo alfabético se ejecuta el código.
+        elseif (Validator::validateLength($valor, $min, $max)) {
+            $this->nombre = $valor;
+            return true;
+        } 
+        // Si la variable no cumple la longitud de caracteres se devuelve el error.
+        else {
+            $this->info_error = 'El nombre debe tener una longitud entre ' . $min . ' y ' . $max;
+            return false;
+        }
+    }
+
+    public function setIdAspirante($valor)
+    {
+        // Se valida que el valor sea de tipo numérico entero.
+        if (Validator::validateNaturalNumber($valor)) {
+            // Se asigna el valor del atributo.
+            $this->id_grado = $valor;
+            return true;
+        } else {
+            // En caso de no serlo se devuelve el error.
+            $this->info_error = 'El identificador del aspirate es incorrecto';
+            return false;
+        }
+    }
+
+
     // Función que permite validar el valor del id_curriculum.
     public function setId($valor)
     {

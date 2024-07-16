@@ -33,6 +33,10 @@ class AreaslaboralesData extends AreaslaboralesHandler
         if (!Validator::validateAlphanumeric($value)) {
             $this->data_error = 'El area debe ser un valor alfanumérico';
             return false;
+        }
+        elseif (AreaslaboralesHandler::checkDuplicateWithId($value)) {
+            $this->data_error = 'El nombre del area ya ha sido registrado';
+            return false;
         } elseif (Validator::validateLength($value, $min, $max)) {
             $this->area = $value;
             return true;
