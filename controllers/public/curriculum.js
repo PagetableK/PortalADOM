@@ -44,37 +44,9 @@ const STEP_EDUCACION = document.getElementById('educacion'), STEP_EXPERIENCIA = 
 document.addEventListener('DOMContentLoaded', async () => {
     // Se cambia el color del apartado donde se encuentra el usuario.
     cambiarColor('CV');
-    // Se llama a la función para configurar el botón del stepper.
-    configurarStepper();
-    // Se manda a llamar a la función para cargar los grados académicos dentro del combobox.
-    cargarGrados();
-    // Se manda a llamar a la función para cargar las instituciones dentro del combobox.
-    cargarInstituciones();
-    // Se manda a llamar a la función para cargar los rubros dentro del combobox.
-    cargarRubros();
-    // Se manda a llamar a la función para cargar las áreas laborales dentro del combobox.
-    cargarAreas();
-    // Se manda a llamar a la función para cargar los idiomas dentro del combobox.
-    cargarIdiomas();
-    // Se manda a llamar a la función para cargar las habilidades dentro del combobox.
-    cargarHabilidades();
-    // Se manda a llamar a la función para cargar los años menores al año actual y el año actual dentro del select.
-    configurarSelectYears(SELECT_YEAR_INICIO);
-    // Se manda a llamar a la función para cargar los años menores al año actual y el año actual dentro del select.
-    configurarSelectYears(SELECT_YEAR_FINAL);
-    // Se manda a llamar a la función para cargar los años menores al año actual y el año actual dentro del select.
-    configurarSelectYears(SELECT_FECHA_CERTIFICADO);
-    // Se manda a llamar a la función para cargar los años menores al año actual y el año actual dentro del select.
-    configurarSelectYears(SELECT_FECHA_ESTUDIO);
-    // Se manda a llamar a la función para cargar los meses del año dentro del select.
-    configurarSelectMeses(SELECT_MES_INICIO);
-    // Se manda a llamar a la función para cargar los meses del año dentro del select.
-    configurarSelectMeses(SELECT_MES_FINAL);
-    // Se manda a llamar a la función para agregar el texto mask dentro de los campos de teléfono.
-    configurarTelefonos();
     // Llamada a la función para validar sesiones activas.
     const INFO = await cargarPlantilla();
-    // Se verifica si el valor del índice es falso.
+    // Se verifica si el valor del índice es verdadero (Si es verdadero el aspirante ya agregó su currículum).
     if (INFO[1] != false) {
         // Se muestra el contenedor con las opciones.
         CONTENEDOR_OPCIONES_CV.classList.remove('d-none');
@@ -83,6 +55,34 @@ document.addEventListener('DOMContentLoaded', async () => {
         CONTENEDOR_STEPPER.classList.remove('d-none');
         // Función para obtener los datos del currículum almacenados en la cookie. 
         getCurriculums();
+        // Se llama a la función para configurar el botón del stepper.
+        configurarStepper();
+        // Se manda a llamar a la función para cargar los grados académicos dentro del combobox.
+        cargarGrados();
+        // Se manda a llamar a la función para cargar las instituciones dentro del combobox.
+        cargarInstituciones();
+        // Se manda a llamar a la función para cargar los rubros dentro del combobox.
+        cargarRubros();
+        // Se manda a llamar a la función para cargar las áreas laborales dentro del combobox.
+        cargarAreas();
+        // Se manda a llamar a la función para cargar los idiomas dentro del combobox.
+        cargarIdiomas();
+        // Se manda a llamar a la función para cargar las habilidades dentro del combobox.
+        cargarHabilidades();
+        // Se manda a llamar a la función para cargar los años menores al año actual y el año actual dentro del select.
+        configurarSelectYears(SELECT_YEAR_INICIO);
+        // Se manda a llamar a la función para cargar los años menores al año actual y el año actual dentro del select.
+        configurarSelectYears(SELECT_YEAR_FINAL);
+        // Se manda a llamar a la función para cargar los años menores al año actual y el año actual dentro del select.
+        configurarSelectYears(SELECT_FECHA_CERTIFICADO);
+        // Se manda a llamar a la función para cargar los años menores al año actual y el año actual dentro del select.
+        configurarSelectYears(SELECT_FECHA_ESTUDIO);
+        // Se manda a llamar a la función para cargar los meses del año dentro del select.
+        configurarSelectMeses(SELECT_MES_INICIO);
+        // Se manda a llamar a la función para cargar los meses del año dentro del select.
+        configurarSelectMeses(SELECT_MES_FINAL);
+        // Se manda a llamar a la función para agregar el texto mask dentro de los campos de teléfono.
+        configurarTelefonos();
     }
 });
 
@@ -100,6 +100,13 @@ const getCurriculums = async () => {
     cargarIdiomasCV();
 
     cargarHabilidadesCV();
+}
+
+const openReport = () => {
+    // Se declara una constante tipo objeto con la ruta específica del reporte en el servidor.
+    const PATH = new URL(`${SERVER_URL}reports/public/curriculum_formato_one.php`);
+    // Se abre el reporte en una nueva pestaña.
+    window.open(PATH.href);
 }
 
 
