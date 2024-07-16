@@ -82,7 +82,7 @@
 		id_estudio INT PRIMARY KEY AUTO_INCREMENT,
 		titulo_estudio VARCHAR(70) NOT NULL,
 		id_grado INT NOT NULL,
-		fecha_finalizacion DATE NULL,
+		fecha_finalizacion YEAR NULL,
 		nombre_institucion VARCHAR(100) NULL,
 		id_institucion INT NULL,
 		id_curriculum INT NOT NULL,
@@ -101,7 +101,7 @@
 		id_certificado INT PRIMARY KEY AUTO_INCREMENT,
 		titulo_certificado VARCHAR(70) NOT NULL,
 		institucion_certificado VARCHAR(70) NOT NULL,
-		fecha_finalizacion DATE NOT NULL,
+		fecha_finalizacion YEAR NOT NULL,
 		id_curriculum INT NOT NULL,
 		CONSTRAINT fk_curriculum_certif
 		FOREIGN KEY (id_curriculum)
