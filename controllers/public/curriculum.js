@@ -15,11 +15,15 @@ const SELECT_GRADOS = document.getElementById('gradoAcademico'), SELECT_INSTITUC
 const ESTADO_EXPERIENCIA = document.getElementById('estadoExperiencia'), SELECT_MES_INICIO = document.getElementById('mesInicio'),
     SELECT_YEAR_INICIO = document.getElementById('yearInicio'), SELECT_MES_FINAL = document.getElementById('mesFinal'),
     SELECT_YEAR_FINAL = document.getElementById('yearFinal'), DESCRIPCION_PUESTO = document.getElementById('descripcion'),
-    CARACTERES_RESTANTES = document.getElementById('caracteresRestantes'), TELEFONO_REFERENCIA = document.getElementById('telefonoReferencia');
+    CARACTERES_RESTANTES = document.getElementById('caracteresRestantes'), TELEFONOS = document.querySelectorAll('.telefono');
 
 const SELECT_IDIOMAS = document.getElementById('idioma');
 
 const SELECT_HABILIDADES = document.getElementById('nombreHabilidad');
+
+CORREO_ASPIRANTE = document.getElementById('correo');
+
+const ARCHIVO_IMAGEN = document.getElementById('archivoImagen'), IMAGEN_ASPIRANTE = document.getElementById('imgAspirante');
 
 const CONTENEDOR_ESTUDIOS = document.getElementById('contenedorEstudios'), CONTENEDOR_FORMACION_COMPLEMENTARIA = document.getElementById('contenedorFormacionComplementaria'),
     CONTENEDOR_EXPERIENCIAS = document.getElementById('contenedorExperiencias'), CONTENEDOR_REFERENCIAS = document.getElementById('contenedorReferencias'),
@@ -27,9 +31,11 @@ const CONTENEDOR_ESTUDIOS = document.getElementById('contenedorEstudios'), CONTE
 
 const FORM_ESTUDIO = document.getElementById('formAgregarEstudio'), FORM_FORMACION_COMPLEMENTARIA = document.getElementById('formAgregarFormacionComplementaria'),
     FORM_EXPERIENCIA = document.getElementById('formAgregarExperiencia'), FORM_REFERENCIA = document.getElementById('formAgregarReferencia'),
-    FORM_IDIOMA = document.getElementById('formAgregarIdioma'), FORM_HABILIDAD = document.getElementById('formAgregarHabilidad');
+    FORM_IDIOMA = document.getElementById('formAgregarIdioma'), FORM_HABILIDAD = document.getElementById('formAgregarHabilidad'),
+    FORM_CURRICULUM = document.getElementById('agregarCurriculum');
 
-const SIGUIENTE_PASO = document.querySelectorAll('.siguientePaso'), PASO_ANTERIOR = document.querySelectorAll('.pasoAnterior');
+const SIGUIENTE_PASO = document.querySelectorAll('.siguientePaso'), PASO_ANTERIOR = document.querySelectorAll('.pasoAnterior'),
+    MENSAJE_INFO = document.querySelector('.textoInfo');
 
 const STEP_EDUCACION = document.getElementById('educacion'), STEP_EXPERIENCIA = document.getElementById('experiencia'),
     STEP_CONTACTO = document.getElementById('contacto'), STEP_HABILIDAD = document.getElementById('habilidad');
@@ -64,6 +70,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     configurarSelectMeses(SELECT_MES_INICIO);
     // Se manda a llamar a la función para cargar los meses del año dentro del select.
     configurarSelectMeses(SELECT_MES_FINAL);
+    // Se manda a llamar a la función para agregar el texto mask dentro de los campos de teléfono.
+    configurarTelefonos();
     // Llamada a la función para validar sesiones activas.
     const INFO = await cargarPlantilla();
     // Se verifica si el valor del índice es falso.
@@ -109,7 +117,7 @@ const cargarEstudios = async () => {
 
         const ROW = DATA.dataset;
 
-        ROW.forEach(row => {
+        Object.values(ROW).forEach(row => {
 
             let institucion = '';
 
@@ -141,7 +149,7 @@ const cargarFormacionComplementaria = async () => {
 
         const ROW = DATA.dataset;
 
-        ROW.forEach(row => {
+        Object.values(ROW).forEach(row => {
 
             CONTENEDOR_FORMACION_COMPLEMENTARIA.innerHTML += `
             <div class="d-flex gap-2 contenedorElementoCV rounded-5 p-2 align-items-center">
@@ -171,7 +179,7 @@ const cargarExperiencias = async () => {
 
         const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
-        ROW.forEach(row => {
+        Object.values(ROW).forEach(row => {
 
             let fecha_duracion;
 
@@ -203,7 +211,7 @@ const cargarReferencias = async () => {
 
         const ROW = DATA.dataset;
 
-        ROW.forEach(row => {
+        Object.values(ROW).forEach(row => {
 
             CONTENEDOR_REFERENCIAS.innerHTML += `
             <div class="d-flex gap-2 contenedorElementoCV rounded-5 p-2 align-items-center">
@@ -233,7 +241,7 @@ const cargarIdiomasCV = async () => {
 
         const ROW = DATA.dataset;
 
-        ROW.forEach(row => {
+        Object.values(ROW).forEach(row => {
 
             CONTENEDOR_IDIOMAS.innerHTML += `
             <div class="d-flex gap-2 contenedorElementoCV rounded-5 p-2 align-items-center">
@@ -262,19 +270,12 @@ const cargarHabilidadesCV = async () => {
 
         const ROW = DATA.dataset;
 
-        console.log(Object.values(ROW));
-
         Object.values(ROW).forEach(row => {
-            // row.forEach(row1 => {
-            //     if(row1 != "0"){
-                    // console.log(row1);
-                    CONTENEDOR_HABILIDADES.innerHTML += `
-                    <div class="d-flex gap-2 contenedorElementoCV rounded-5 p-2 align-items-center">
-                        <p class="psinmargen tex-center"><span class="fw-bold">${DATA_HABILIDADES.dataset.filter(function (entry) { return entry.id_habilidad === row.habilidad; })[0].nombre_habilidad}</span> - <span class="fw-bold">${row.nivel}</span></p>
-                        <i class="bi bi-x-square text-danger" onclick="eliminarHabilidad('${row.identificador}')"></i>
-                    </div>`;
-            //     }
-            // });
+            CONTENEDOR_HABILIDADES.innerHTML += `
+            <div class="d-flex gap-2 contenedorElementoCV rounded-5 p-2 align-items-center">
+                <p class="psinmargen tex-center"><span class="fw-bold">${DATA_HABILIDADES.dataset.filter(function (entry) { return entry.id_habilidad === row.habilidad; })[0].nombre_habilidad}</span> - <span class="fw-bold">${row.nivel}</span></p>
+                <i class="bi bi-x-square text-danger" onclick="eliminarHabilidad('${row.identificador}')"></i>
+            </div>`;
         });
     } else if (DATA.error == 'No se han agregado habilidades') {
 
@@ -422,31 +423,37 @@ function configurarStepper() {
 
         if (event.detail.indexStep == 0) {
 
+            MENSAJE_INFO.classList.remove('d-none');
             STEP_EDUCACION.classList.remove('d-none');
             STEP_EXPERIENCIA.classList.add('d-none');
             STEP_HABILIDAD.classList.add('d-none');
             STEP_CONTACTO.classList.add('d-none');
         } else if (event.detail.indexStep == 1) {
 
+            MENSAJE_INFO.classList.remove('d-none');
             STEP_EDUCACION.classList.add('d-none');
             STEP_EXPERIENCIA.classList.remove('d-none');
             STEP_HABILIDAD.classList.add('d-none');
             STEP_CONTACTO.classList.add('d-none');
         } else if (event.detail.indexStep == 2) {
 
+            MENSAJE_INFO.classList.remove('d-none');
             STEP_EDUCACION.classList.add('d-none');
             STEP_EXPERIENCIA.classList.add('d-none');
             STEP_HABILIDAD.classList.remove('d-none');
             STEP_CONTACTO.classList.add('d-none');
         } else {
 
+            MENSAJE_INFO.classList.add('d-none');
             STEP_EDUCACION.classList.add('d-none');
             STEP_EXPERIENCIA.classList.add('d-none');
             STEP_HABILIDAD.classList.add('d-none');
             STEP_CONTACTO.classList.remove('d-none');
         }
         console.warn(event.detail.indexStep)
-    })
+    });
+
+    stepperCv.to(4);
 }
 
 // Función que configura las fechas máximas y mínimas de los select relacionados con años.
@@ -483,6 +490,30 @@ function configurarSelectMeses(select) {
 
         select.appendChild(opt);
     }
+}
+
+
+function configurarTelefonos() {
+
+    TELEFONOS.forEach(telefono => {
+        
+        telefono.addEventListener('input', (e) => {
+            // Función para que sea número nacional.
+            var telefono = e.target.value.replace(/\D/g, '');
+            var formattedTelefono = '';
+        
+            // Para el guión.
+            for (var i = 0; i < telefono.length; i++) {
+                if (i === 4) {
+                    formattedTelefono += '-';
+                }
+                formattedTelefono += telefono[i];
+            }
+        
+            // Que los digitos sean de 9 caracteres con el guión.
+            e.target.value = formattedTelefono.substring(0, 9);
+        });
+    });
 }
 
 // Función que permite cargar los grados académicos dentro del combobox.
@@ -765,6 +796,9 @@ FORM_REFERENCIA.addEventListener('submit', async (e) => {
         cargarReferencias();
 
         sweetAlert(1, 'Referencia agregada', false);
+    } else if (DATA.error == 'El teléfono digitado ya ha sido agregado en otra referencia') {
+
+        sweetAlert(3, DATA.error, false);
     } else {
 
         sweetAlert(2, DATA.error, false);
@@ -841,6 +875,24 @@ FORM_HABILIDAD.addEventListener('submit', async (e) => {
     }
 });
 
+
+FORM_CURRICULUM.addEventListener('submit', async (e) =>{
+
+    e.preventDefault();
+
+    const FORM = new FormData(FORM_CURRICULUM);
+
+    const DATA = await fetchData(API_CURRICULUM, 'agregarCurriculum', FORM);
+
+    if(DATA.status){
+
+        sweetAlert(1, 'Currículum agregado', false);
+    } else{
+
+        sweetAlert(2, DATA.error, false);
+    }
+});
+
 function crearId(longitud) {
 
     let resultado = '';
@@ -909,25 +961,24 @@ ESTADO_EXPERIENCIA.addEventListener('change', () => {
 });
 
 
-DESCRIPCION_PUESTO.addEventListener('input', () => {
-
-    CARACTERES_RESTANTES.textContent = 'Caracteres restantes: ' + (300 - DESCRIPCION_PUESTO.value.length);
+ARCHIVO_IMAGEN.addEventListener('change', (e) => {
+    // Se almacena el archivo cargado en la variable archivoSeleccionado.
+    var archivoSeleccionado = e.target.files[0];
+    // Se crea el objeto reader.
+    var reader = new FileReader();
+    // Se define una variable con el mismo valor que la constante IMAGEN_ASPIRANTE.
+    var imgtag = IMAGEN_ASPIRANTE;
+    // El reader lee la cadena de caracteres.
+    reader.readAsDataURL(archivoSeleccionado);
+    // Cuando el reader termina de leer la cadena de caracteres se 
+    // dispara el evento que configura la imagen en la etiqueta img.
+    reader.onload = function (e) {
+        imgtag.src = e.target.result;
+    };
 });
 
 
-TELEFONO_REFERENCIA.addEventListener('input', (e) => {
-    // Función para que sea número nacional.
-    var telefono = e.target.value.replace(/\D/g, '');
-    var formattedTelefono = '';
+DESCRIPCION_PUESTO.addEventListener('input', () => {
 
-    // Para el guión.
-    for (var i = 0; i < telefono.length; i++) {
-        if (i === 4) {
-            formattedTelefono += '-';
-        }
-        formattedTelefono += telefono[i];
-    }
-
-    // Que los digitos sean de 9 caracteres con el guión.
-    e.target.value = formattedTelefono.substring(0, 9);
+    CARACTERES_RESTANTES.textContent = 'Caracteres restantes: ' + (300 - DESCRIPCION_PUESTO.value.length);
 });
