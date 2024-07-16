@@ -122,9 +122,9 @@ if (isset($_GET['action'])) {
                     !$curriculum->setCargo($_POST['cargo']) or
                     !$curriculum->setIdRubro($_POST['rubro']) or
                     !$curriculum->setIdArea($_POST['area']) or
-                    !$curriculum->setMesInicio($_POST['mesInicio'], $_POST['booleanFecha']) or
+                    !$curriculum->setMesInicio($_POST['mesInicio']) or
                     !$curriculum->setMesFinal($_POST['mesFinal'], $_POST['booleanFecha']) or
-                    !$curriculum->setYearInicio($_POST['yearInicio'], $_POST['booleanFecha']) or
+                    !$curriculum->setYearInicio($_POST['yearInicio']) or
                     !$curriculum->setYearFinal($_POST['yearFinal'], $_POST['booleanFecha']) or
                     !$curriculum->validarLapso() or
                     !$curriculum->setDescripcion($_POST['descripcion']) or
@@ -263,18 +263,85 @@ if (isset($_GET['action'])) {
 
             case 'agregarCurriculum':
                 $_POST = Validator::validateForm($_POST);
-                if(
+                if (
                     !$curriculum->verificarEstudio() or
                     !$curriculum->setImagen($_FILES['archivoImagen']) or
                     !$curriculum->setTelefonoMovil($_POST['telefonoMovil']) or
                     !$curriculum->setTelefonoFijo($_POST['telefonoFijo']) or
                     !$curriculum->setCorreo($_POST['correo'])
-                ){
+                ) {
                     $result['error'] = $curriculum->getDataError();
-                } else if($curriculum->agregarCurriculum()){
+                } else if ($curriculum->agregarCurriculum()) {
+                    // Se asigna el estado del archivo después de insertar.
+                    $result['fileStatus'] = Validator::saveFile($_FILES['archivoImagen'], $curriculum::RUTA_IMAGEN);
+                    $result['status'] = 1;
+                } else {
+                    $result['error'] = 'Ocurrió un error al agregar el currículum';
+                }
+                break;
+
+            case 'obtenerApartados':
+                $result['dataset'] = array(!empty($_SESSION['formacionComplementaria']), !empty($_SESSION['experiencias']), !empty($_SESSION['idiomas']), !empty($_SESSION['habilidades']), !empty($_SESSION['referencias']), $curriculum->obtenerIdCv());
+                $result['status'] = 1;
+                break;
+
+            case 'agregarEstudios':
+                if(!$curriculum->setId($_POST['idCurriculum'])){
+                    $result['error'] = $curriculum->getDataError();
+                } elseif($curriculum->agregarEstudios()){
                     $result['status'] = 1;
                 } else{
-                    $result['error'] = 'Ocurrió un error al agregar el currículum';
+                    $result['error'] = 'Ocurrió un error al agregar los estudios';
+                }
+                break;
+
+            case 'agregarCertificados':
+                if(!$curriculum->setId($_POST['idCurriculum'])){
+                    $result['error'] = $curriculum->getDataError();
+                } elseif($curriculum->agregarCertificados()){
+                    $result['status'] = 1;
+                } else{
+                    $result['error'] = 'Ocurrió un error al agregar los certificados';
+                }
+                break;
+
+            case 'agregarExperiencias':
+                if(!$curriculum->setId($_POST['idCurriculum'])){
+                    $result['error'] = $curriculum->getDataError();
+                } elseif($curriculum->agregarExperiencias()){
+                    $result['status'] = 1;
+                } else{
+                    $result['error'] = 'Ocurrió un error al agregar las experiencias';
+                }
+                break;
+
+            case 'agregarIdiomas':
+                if(!$curriculum->setId($_POST['idCurriculum'])){
+                    $result['error'] = $curriculum->getDataError();
+                } elseif($curriculum->agregarIdiomas()){
+                    $result['status'] = 1;
+                } else{
+                    $result['error'] = 'Ocurrió un error al agregar los idiomas';
+                }
+                break;
+
+            case 'agregarHabilidades':
+                if(!$curriculum->setId($_POST['idCurriculum'])){
+                    $result['error'] = $curriculum->getDataError();
+                } elseif($curriculum->agregarHabilidades()){
+                    $result['status'] = 1;
+                } else{
+                    $result['error'] = 'Ocurrió un error al agregar las habilidades';
+                }
+                break;
+
+            case 'agregarReferencias':
+                if(!$curriculum->setId($_POST['idCurriculum'])){
+                    $result['error'] = $curriculum->getDataError();
+                } elseif($curriculum->agregarReferencias()){
+                    $result['status'] = 1;
+                } else{
+                    $result['error'] = 'Ocurrió un error al agregar las referencias';
                 }
                 break;
 

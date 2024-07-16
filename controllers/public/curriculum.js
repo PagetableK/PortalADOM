@@ -40,6 +40,8 @@ const SIGUIENTE_PASO = document.querySelectorAll('.siguientePaso'), PASO_ANTERIO
 const STEP_EDUCACION = document.getElementById('educacion'), STEP_EXPERIENCIA = document.getElementById('experiencia'),
     STEP_CONTACTO = document.getElementById('contacto'), STEP_HABILIDAD = document.getElementById('habilidad');
 
+let errorCurriculum = false;
+
 // Evento que se ejecuta al terminar de cargar los componentes.
 document.addEventListener('DOMContentLoaded', async () => {
     // Se cambia el color del apartado donde se encuentra el usuario.
@@ -189,8 +191,8 @@ const cargarExperiencias = async () => {
         Object.values(ROW).forEach(row => {
 
             let fecha_duracion;
-
-            row.mes_inicio != "" ? fecha_duracion = "<span class='fw-bold'>" + meses[row.mes_inicio - 1] + " " + row.year_inicio + "</span> - <span class='fw-bold'>" + meses[row.mes_final - 1] + " " + row.year_final + "</span>" : fecha_duracion = "<span class='fw-bold'>Trabajo actual</span>";
+            
+            row.mes_final != "" ? fecha_duracion = "<span class='fw-bold'>" + meses[row.mes_inicio - 1] + " " + row.year_inicio + "</span> - <span class='fw-bold'>" + meses[row.mes_final - 1] + " " + row.year_final + "</span>" : fecha_duracion = "<span class='fw-bold'>"+ meses[row.mes_inicio] +" "+ row.year_inicio +"</span> - <span class='fw-bold'>Trabajo actual</span>";
 
             CONTENEDOR_EXPERIENCIAS.innerHTML += `
             <div class="d-flex gap-2 contenedorElementoCV rounded-5 p-2 align-items-center">
@@ -414,6 +416,8 @@ function configurarStepper() {
         boton.addEventListener('click', () => {
             // Se traslada hacia el siguiente apartado del stepper.
             stepperCv.next();
+            // Se restablece el scroll de la pantalla.
+            window.scrollTo(0, 0);
         });
     });
 
@@ -423,6 +427,8 @@ function configurarStepper() {
         boton.addEventListener('click', () => {
             // Se traslada hacia el anterior apartado del stepper.
             stepperCv.previous();
+            // Se restablece el scroll de la pantalla.
+            window.scrollTo(0, 0);
         });
     });
 
@@ -435,6 +441,8 @@ function configurarStepper() {
             STEP_EXPERIENCIA.classList.add('d-none');
             STEP_HABILIDAD.classList.add('d-none');
             STEP_CONTACTO.classList.add('d-none');
+            // Se restablece el scroll de la pantalla.
+            window.scrollTo(0, 0);
         } else if (event.detail.indexStep == 1) {
 
             MENSAJE_INFO.classList.remove('d-none');
@@ -442,6 +450,8 @@ function configurarStepper() {
             STEP_EXPERIENCIA.classList.remove('d-none');
             STEP_HABILIDAD.classList.add('d-none');
             STEP_CONTACTO.classList.add('d-none');
+            // Se restablece el scroll de la pantalla.
+            window.scrollTo(0, 0);
         } else if (event.detail.indexStep == 2) {
 
             MENSAJE_INFO.classList.remove('d-none');
@@ -449,6 +459,8 @@ function configurarStepper() {
             STEP_EXPERIENCIA.classList.add('d-none');
             STEP_HABILIDAD.classList.remove('d-none');
             STEP_CONTACTO.classList.add('d-none');
+            // Se restablece el scroll de la pantalla.
+            window.scrollTo(0, 0);
         } else {
 
             MENSAJE_INFO.classList.add('d-none');
@@ -456,8 +468,9 @@ function configurarStepper() {
             STEP_EXPERIENCIA.classList.add('d-none');
             STEP_HABILIDAD.classList.add('d-none');
             STEP_CONTACTO.classList.remove('d-none');
+            // Se restablece el scroll de la pantalla.
+            window.scrollTo(0, 0);
         }
-        console.warn(event.detail.indexStep)
     });
 
     stepperCv.to(4);
@@ -503,12 +516,12 @@ function configurarSelectMeses(select) {
 function configurarTelefonos() {
 
     TELEFONOS.forEach(telefono => {
-        
+
         telefono.addEventListener('input', (e) => {
             // Función para que sea número nacional.
             var telefono = e.target.value.replace(/\D/g, '');
             var formattedTelefono = '';
-        
+
             // Para el guión.
             for (var i = 0; i < telefono.length; i++) {
                 if (i === 4) {
@@ -516,7 +529,7 @@ function configurarTelefonos() {
                 }
                 formattedTelefono += telefono[i];
             }
-        
+
             // Que los digitos sean de 9 caracteres con el guión.
             e.target.value = formattedTelefono.substring(0, 9);
         });
@@ -743,9 +756,7 @@ FORM_EXPERIENCIA.addEventListener('submit', async (e) => {
         if (ESTADO_EXPERIENCIA.checked) {
 
             FORM.append('booleanFecha', 1);
-            FORM.append('mesInicio', "0");
             FORM.append('mesFinal', "0");
-            FORM.append('yearInicio', "0000");
             FORM.append('yearFinal', "0000");
         } else {
 
@@ -883,7 +894,7 @@ FORM_HABILIDAD.addEventListener('submit', async (e) => {
 });
 
 
-FORM_CURRICULUM.addEventListener('submit', async (e) =>{
+FORM_CURRICULUM.addEventListener('submit', async (e) => {
 
     e.preventDefault();
 
@@ -891,14 +902,144 @@ FORM_CURRICULUM.addEventListener('submit', async (e) =>{
 
     const DATA = await fetchData(API_CURRICULUM, 'agregarCurriculum', FORM);
 
-    if(DATA.status){
+    if (DATA.status) {
 
-        sweetAlert(1, 'Currículum agregado', false);
-    } else{
+        const DATA_APARTADOS = await fetchData(API_CURRICULUM, 'obtenerApartados');
+
+        await agregarEstudios(DATA_APARTADOS.dataset[5]);
+
+        DATA_APARTADOS.dataset[0] == false ? "" : await agregarCertificados(DATA_APARTADOS.dataset[5]);
+
+        DATA_APARTADOS.dataset[1] == false ? "" : await agregarExperiencias(DATA_APARTADOS.dataset[5]);
+
+        DATA_APARTADOS.dataset[4] == false ? "" : await agregarReferencias(DATA_APARTADOS.dataset[5]);
+
+        DATA_APARTADOS.dataset[2] == false ? "" : await agregarIdiomas(DATA_APARTADOS.dataset[5]);
+
+        DATA_APARTADOS.dataset[3] == false ? "" : await agregarHabilidades(DATA_APARTADOS.dataset[5]);
+
+        errorCurriculum ? async () => {
+            await sweetAlert(1, 'Currículum agregado correctamente');
+            sweetAlert(3, 'Es posible que los apartados no se hayan agregado correctamente, se recomienda verificar el currículum', false);
+        } : sweetAlert(1, 'Currículum agregado correctamente', true, 'curriculum.html');
+    } else if (DATA.error == "Debe agregar por lo menos 1 estudio a su currículum") {
+
+        sweetAlert(3, DATA.error, false);
+
+        var stepperCv = new Stepper(document.querySelector('#stepperCv'), {
+            linear: false,
+            animation: true
+        });
+
+        stepperCv.to(1);
+    } else {
 
         sweetAlert(2, DATA.error, false);
     }
 });
+
+
+const agregarEstudios = async (idCv) => {
+    
+    const FORM = new FormData();
+
+    FORM.append('idCurriculum', idCv);
+
+    const DATA = await fetchData(API_CURRICULUM, 'agregarEstudios', FORM);
+
+    if (DATA.status) {
+
+        console.log(DATA.status);
+    } else {
+
+        errorCurriculum = true;
+    }
+}
+
+const agregarCertificados = async (idCv) => {
+
+    const FORM = new FormData();
+
+    FORM.append('idCurriculum', idCv);
+
+    const DATA = await fetchData(API_CURRICULUM, 'agregarCertificados', FORM);
+
+    if (DATA.status) {
+
+    } else {
+
+        errorCurriculum = true;
+    }
+}
+
+
+const agregarExperiencias = async (idCv) => {
+
+    const FORM = new FormData();
+
+    FORM.append('idCurriculum', idCv);
+
+    const DATA = await fetchData(API_CURRICULUM, 'agregarExperiencias', FORM);
+
+    if (DATA.status) {
+
+    } else {
+
+        errorCurriculum = true;
+    }
+}
+
+
+const agregarReferencias = async (idCv) => {
+
+    const FORM = new FormData();
+
+    FORM.append('idCurriculum', idCv);
+
+    const DATA = await fetchData(API_CURRICULUM, 'agregarReferencias', FORM);
+
+    if (DATA.status) {
+
+    } else {
+
+        errorCurriculum = true;
+    }
+}
+
+
+const agregarIdiomas = async (idCv) => {
+
+    const FORM = new FormData();
+
+    FORM.append('idCurriculum', idCv);
+
+    const DATA = await fetchData(API_CURRICULUM, 'agregarIdiomas', FORM);
+
+    if (DATA.status) {
+
+    } else {
+
+        errorCurriculum = true;
+    }
+}
+
+
+const agregarHabilidades = async (idCv) => {
+
+    const FORM = new FormData();
+
+    FORM.append('idCurriculum', idCv);
+
+    const DATA = await fetchData(API_CURRICULUM, 'agregarHabilidades', FORM);
+
+    if (DATA.status) {
+
+    } else {
+
+        errorCurriculum = true;
+    }
+}
+
 
 function crearId(longitud) {
 
@@ -948,18 +1089,10 @@ ESTADO_EXPERIENCIA.addEventListener('change', () => {
 
     if (ESTADO_EXPERIENCIA.checked == false) {
 
-        SELECT_MES_INICIO.removeAttribute("disabled");
-
-        SELECT_YEAR_INICIO.removeAttribute("disabled");
-
         SELECT_MES_FINAL.removeAttribute("disabled");
 
         SELECT_YEAR_FINAL.removeAttribute("disabled");
     } else {
-
-        SELECT_MES_INICIO.setAttribute("disabled", "");
-
-        SELECT_YEAR_INICIO.setAttribute("disabled", "");
 
         SELECT_MES_FINAL.setAttribute("disabled", "");
 

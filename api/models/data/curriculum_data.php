@@ -16,25 +16,6 @@ class CurriculumData extends CurriculumHandler
     *  Métodos para validar y asignar los valores de los atributos.
     */
 
-    public function setNombre($valor, $min = 3, $max = 50)
-    {
-        // Si la variable contiene caracteres que no son de tipo alfabético se devuelve el error.
-        if (!Validator::validateAlphabetic($valor)) {
-            $this->info_error = 'El nombre debe ser un valor alfabético';
-            return false;
-        } 
-        // Si la variable es de tipo alfabético se ejecuta el código.
-        elseif (Validator::validateLength($valor, $min, $max)) {
-            $this->nombre = $valor;
-            return true;
-        } 
-        // Si la variable no cumple la longitud de caracteres se devuelve el error.
-        else {
-            $this->info_error = 'El nombre debe tener una longitud entre ' . $min . ' y ' . $max;
-            return false;
-        }
-    }
-
     public function setIdAspirante($valor)
     {
         // Se valida que el valor sea de tipo numérico entero.
@@ -44,7 +25,7 @@ class CurriculumData extends CurriculumHandler
             return true;
         } else {
             // En caso de no serlo se devuelve el error.
-            $this->info_error = 'El identificador del aspirate es incorrecto';
+            $this->info_error = 'El identificador del aspirante es incorrecto';
             return false;
         }
     }
@@ -75,7 +56,7 @@ class CurriculumData extends CurriculumHandler
             return true;
         } else {
             // En caso de no serlo se devuelve el error.
-            $this->info_error = 'El identificador del currículum es incorrecto';
+            $this->info_error = 'El identificador del grado es incorrecto';
             return false;
         }
     }
@@ -313,15 +294,10 @@ class CurriculumData extends CurriculumHandler
     }
 
     // Función que permite validar el mes de inicio de una experiencia.
-    public function setMesInicio($valor, $boolean)
+    public function setMesInicio($valor)
     {
-        // Se verifica el valor del parámetro.
-        if ($boolean) {
-            // Se devuelve el Booleano.
-            return true;
-        }
         // Se valida que el valor sea un mes del año.
-        elseif (Validator::validateMonth($valor)) {
+        if (Validator::validateMonth($valor)) {
             // Se asigna el valor del atributo.
             $this->mes_inicio = $valor;
             return true;
@@ -353,15 +329,10 @@ class CurriculumData extends CurriculumHandler
     }
 
     // Función que permite validar el año de inicio de una experiencia.
-    public function setYearInicio($valor, $boolean)
+    public function setYearInicio($valor)
     {
-        // Se verifica el valor del parámetro.
-        if ($boolean) {
-            // Se devuelve el Booleano.
-            return true;
-        }
         // Se valida el año de finalización.
-        elseif (Validator::validateYear($valor)) {
+        if (Validator::validateYear($valor)) {
             // Se asigna el valor del atributo.
             $this->year_inicio = $valor;
             return true;
@@ -420,8 +391,12 @@ class CurriculumData extends CurriculumHandler
         $fecha_inicio = strtotime("$this->year_inicio-$this->mes_inicio");
         // Se almacena en la variable la fecha de finalización en formato unix.
         $fecha_final = strtotime("$this->year_final-$this->mes_final");
+        // Se verifica que se haya agrega el año de finalización (Si no se ha agregado el año de finalización la experiencia agregada es trabajo actual del aspirante).
+        if($this->year_final == null){
+            return true;
+        }
         // Si la fecha de inicio es mayor a la fecha de finalización se ejecuta el código.
-        if ($fecha_inicio > $fecha_final) {
+        elseif ($fecha_inicio > $fecha_final) {
             // Se devuelve el error.
             $this->info_error = 'La fecha de la experiencia no es válida';
             return false;
@@ -502,7 +477,7 @@ class CurriculumData extends CurriculumHandler
         // Se valida que la cadena de caracteres tenga el formato de teléfono.
         if (!Validator::validatePhone($valor)) {
             // En caso de no serlo se devuelve el error.
-            $this->info_error = 'El teléfono debe iniciar con el formato ###-####';
+            $this->info_error = 'El teléfono debe iniciar con el formato ####-####';
             return false;
         }
         // Se valida que el teléfono no haya sido agregado anteriormente.
@@ -616,7 +591,7 @@ class CurriculumData extends CurriculumHandler
         // Se valida que la cadena de caracteres tenga el formato de teléfono.
         if (!Validator::validatePhone($valor)) {
             // En caso de no serlo se devuelve el error.
-            $this->info_error = 'El teléfono debe iniciar con el formato ###-####';
+            $this->info_error = 'El teléfono debe iniciar con el formato ####-####';
             return false;
         } elseif ($boolean and !$this->checkDuplicate($valor)) {
             $this->correo = $valor;
@@ -637,7 +612,7 @@ class CurriculumData extends CurriculumHandler
         // Se valida que la cadena de caracteres tenga el formato de teléfono.
         if (!Validator::validatePhone($valor)) {
             // En caso de no serlo se devuelve el error.
-            $this->info_error = 'El teléfono debe iniciar con el formato ###-####';
+            $this->info_error = 'El teléfono debe iniciar con el formato ####-####';
             return false;
         } elseif ($boolean and !$this->checkDuplicateWithId($valor)) {
             $this->correo = $valor;
@@ -691,13 +666,12 @@ class CurriculumData extends CurriculumHandler
     public function verificarEstudio()
     {
         // Se verifica si el array está vacío.
-        if(empty($_SESSION['estudios']))
-        {
-            // Se devuelve false.
-            return false;
-        } else{
+        if (empty($_SESSION['estudios'])) {
             // En caso de haber agregado por lo menos 1 estudio se devuelve el error.
             $this->info_error = 'Debe agregar por lo menos 1 estudio a su currículum';
+            // Se devuelve false.
+            return false;
+        } else {
             return true;
         }
     }
