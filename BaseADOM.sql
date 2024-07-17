@@ -1,4 +1,5 @@
 
+
 	DROP DATABASE IF EXISTS dbadom;
 	
 	CREATE DATABASE IF NOT EXISTS dbadom;
@@ -66,7 +67,7 @@
 	CREATE TABLE curriculum_aspirantes(
 		id_curriculum INT PRIMARY KEY AUTO_INCREMENT,
 		imagen_aspirante VARCHAR(200) NULL,
-		telefono_fijo VARCHAR(9) UNIQUE NULL,
+		telefono_fijo VARCHAR(9) UNIQUE NOT NULL,
 		telefono_movil VARCHAR(9) UNIQUE NOT NULL,
 		correo_curriculum VARCHAR(100) UNIQUE NOT NULL,
 		id_aspirante INT NOT NULL,
@@ -488,7 +489,7 @@
 	FROM grados_academicos;
 	$$ 
     
-    SELECT * FROM vista_tabla_curriculum;
+    SELECT * FROM vista_tabla_curriculum where ID = 1;
     -- VISTA para tabla curriculum
 	DROP VIEW IF EXISTS vista_tabla_curriculum;
 	DELIMITER $$
@@ -496,8 +497,7 @@
 	
 SELECT 
     a.id_aspirante AS 'ID', 
-    a.nombre_aspirante, 
-    a.apellido_aspirante, 
+    concat(a.nombre_aspirante, " ",a.apellido_aspirante) AS 'NOMBRE',
     a.correo_aspirante, 
     a.fecha_nacimiento, 
     a.genero_aspirante, 
@@ -524,8 +524,7 @@ SELECT
     ex.fecha_fin,
     ex.descripcion_puesto,
     al.nombre_area,
-    re.nombre_referencia,
-    re.apellido_referencia,
+    concat(re.nombre_referencia, " ",re.apellido_referencia) AS 'APELLIDO',
     re.puesto_trabajo,
     re.telefono_referencia,
     ia.id_idioma_aspirante,
