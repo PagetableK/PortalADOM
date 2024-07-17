@@ -17,7 +17,6 @@ if ($dataCurriculum = $curriculum->reallCurriculum()) {
 
         $pdf->cell(62, 15, $pdf->image('../../images/aspirantes/perra.jpg' , 30, 5, 50));
 
-
         $pdf->setFont('Arial', 'B', 50); // Font, style (bold), size
         $pdf->SetXY(120, 10);
         $pdf->MultiCell(0, 10, $pdf->encodeString($rowCurriculum['NOMBRE']), 0, 'L');

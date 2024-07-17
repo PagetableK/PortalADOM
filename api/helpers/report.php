@@ -56,6 +56,12 @@ class Report extends FPDF
     public function header()
     {
         // Se establece el logo.
+        // Fondo superior derecho
+        $this->image('../../images/fondo_superior_izquierdo.png', 98, 0, 128);
+
+        // Logo
+        $this->image('../../images/fondo_superior_derecho.png', 0, 0, 108);
+        
         // Se ubica el título.
         $this->cell(20);
         // Se ubica la fecha y hora del servidor.
