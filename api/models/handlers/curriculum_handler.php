@@ -332,6 +332,33 @@ class CurriculumHandler
         $params = array($this->id);
         return Database::getRow($sql, $params);
     }
+
+    public function readOneDataExperiencias()
+    {
+        $sql = 'SELECT ea.*, al.nombre_area, re.nombre_rubro
+                FROM experiencias_aspirantes ea
+                JOIN areas_laborales al ON ea.id_area = al.id_area
+                JOIN rubros_empresas re ON ea.id_rubro = re.id_rubro
+                WHERE ea.id_curriculum = ?;';
+        $params = array($this->id);
+        return Database::getRows($sql, $params);
+    }
+
+    public function readOneDataEstudios()
+    {
+        $sql = "SELECT es.*, ga.nombre_grado, ins.nombre_institucion,
+               CASE 
+                   WHEN es.fecha_finalizacion IS NULL THEN 'En curso'
+                   WHEN es.fecha_finalizacion <= CURDATE() THEN 'Egresado'
+                   ELSE 'No egresado'
+               END AS estado_egreso
+                FROM estudios_aspirantes es
+                JOIN grados_academicos ga ON es.id_grado = ga.id_grado
+                LEFT JOIN instituciones ins ON es.id_institucion = ins.id_institucion
+                WHERE es.id_curriculum = ?;";
+        $params = array($this->id);
+        return Database::getRows($sql, $params);
+    }
   
     public function updateRow()
     {
@@ -340,6 +367,21 @@ class CurriculumHandler
                 SET a.nombre_aspirante = ?
                 WHERE c.id_curriculum = ?';
         $params = array($this->nombre_aspirante, $this->id_aspirante);
+        return Database::executeRow($sql, $params);
+    }
+
+    public function deleteRow()
+    {
+        $sql = "SET @id_curriculum = ?;
+                DELETE FROM estudios_aspirantes WHERE id_curriculum = @id_curriculum;
+                DELETE FROM certificados_aspirantes WHERE id_curriculum = @id_curriculum;
+                DELETE FROM experiencias_aspirantes WHERE id_curriculum = @id_curriculum;
+                DELETE FROM idiomas_aspirantes WHERE id_curriculum = @id_curriculum;
+                DELETE FROM habilidades_aspirantes WHERE id_curriculum = @id_curriculum;
+                DELETE FROM referencias_aspirantes WHERE id_curriculum = @id_curriculum;
+                
+                DELETE FROM curriculum_aspirantes WHERE id_curriculum = @id_curriculum;";
+        $params = array($this->id);
         return Database::executeRow($sql, $params);
     }
 }

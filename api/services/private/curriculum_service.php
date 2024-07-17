@@ -64,6 +64,24 @@ if (isset($_GET['action'])) {
                     $result['error'] = 'aspirante inexistente';
                 }
                 break;
+            case 'readOneDataExperiencias':
+                if (!$curriculum->setId($_POST['idCurriculum'])) {
+                    $result['error'] = $curriculum->getDataError();
+                } elseif ($result['dataset'] = $curriculum->readOneDataExperiencias()) {
+                    $result['status'] = 1;
+                } else {
+                    $result['error'] = 'aspirante inexistente';
+                }
+                break;
+            case 'readOneDataEstudios':
+                if (!$curriculum->setId($_POST['idCurriculum'])) {
+                    $result['error'] = $curriculum->getDataError();                                                                                                                                 
+                } elseif ($result['dataset'] = $curriculum->readOneDataEstudios()) {
+                    $result['status'] = 1;
+                } else {
+                    $result['error'] = 'aspirante inexistente';
+                }
+                break;
             case 'updateRow':
                 $_POST = Validator::validateForm($_POST);
                 if (
@@ -80,12 +98,12 @@ if (isset($_GET['action'])) {
                 break;
             case 'deleteRow':
                 if (
-                    !$area->setId($_POST['idArea']) 
+                    !$curriculum->setId($_POST['idCurriculum']) 
                 ) {
-                    $result['error'] = $area->getDataError();
-                } elseif ($area->deleteRow()) {
+                    $result['error'] = $curriculum->getDataError();
+                } elseif ($curriculum->deleteRow()) {
                     $result['status'] = 1;
-                    $result['message'] = 'area eliminada correctamente';
+                    $result['message'] = 'curriculum eliminada correctamente';
                 } else {
                     $result['error'] = 'Ocurrió un problema al eliminar la area';
                 }
