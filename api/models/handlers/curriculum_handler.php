@@ -83,6 +83,59 @@ class CurriculumHandler
         return true;
     }
 
+    public function getEstudios()
+    {
+        $sql = 'SELECT * FROM estudios_aspirantes WHERE id_curriculum = ?';
+
+        $params = array($this->id);
+
+        return Database::getRows($sql, $params);
+    }
+
+    public function getCertificados()
+    {
+        $sql = 'SELECT * FROM certificados_aspirantes WHERE id_curriculum = ?';
+
+        $params = array($this->id);
+
+        return Database::getRows($sql, $params);
+    }
+
+    public function getExperiencias()
+    {
+        $sql = 'SELECT * FROM experiencias_aspirantes WHERE id_curriculum = ?';
+
+        $params = array($this->id);
+
+        return Database::getRows($sql, $params);
+    }
+
+    public function getReferencias()
+    {
+        $sql = 'SELECT * FROM referencias_aspirantes WHERE id_curriculum = ?';
+
+        $params = array($this->id);
+
+        return Database::getRows($sql, $params);
+    }
+
+    public function getIdiomas()
+    {
+        $sql = 'SELECT * FROM idiomas_aspirantes WHERE id_curriculum = ?';
+
+        $params = array($this->id);
+
+        return Database::getRows($sql, $params);
+    }
+
+    public function getHabilidades()
+    {
+        $sql = 'SELECT * FROM habilidades_aspirantes WHERE id_curriculum = ?';
+
+        $params = array($this->id);
+
+        return Database::getRows($sql, $params);
+    }
 
     public function eliminarFormacionComplementaria()
     {

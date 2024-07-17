@@ -58,6 +58,10 @@ button.bg-orange{
     max-height: 50vh;
 }
 
+#botonRegresar{
+    cursor: pointer;
+}
+
 .iconoCeleste{
     color: #3699FF;
 }

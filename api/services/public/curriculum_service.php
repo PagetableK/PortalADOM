@@ -19,6 +19,7 @@ if (isset($_GET['action'])) {
             case 'almacenarEstudio':
                 // Se eliminan los espacios en blancos de los valores dentro del array.
                 $_POST = Validator::validateForm($_POST);
+                // echo $_POST['gradoAcademico'] . $_POST['titulo'] . $_POST['institucion'] . $_POST['booleanoInstitucion'] . $_POST['otraInstitucion'] . $_POST['fechaFinal'] . $_POST['booleanFecha'] . $_POST['identificador'];
                 // Se valida que el conjunto de datos que retorna la función se almacena en el array.
                 if (
                     !$curriculum->setIdGrado($_POST['gradoAcademico']) or
@@ -353,12 +354,86 @@ if (isset($_GET['action'])) {
                 }
                 break;
 
-            case 'cargarApartados':
-                if(!$curriculum->setId($_POST['idCurriculum'])){
+            case 'limpiarApartados':
+
+                // Se vacían los apartados de la variable de sesión.
+                $_SESSION['estudios'] = array();
+                $_SESSION['formacionComplementaria'] = array();
+                $_SESSION['experiencias'] = array();
+                $_SESSION['referencias'] = array();
+                $_SESSION['idiomas'] = array();
+                $_SESSION['habilidades'] = array();
+                // Se retorna el valor.
+                $result['status'] = 1;
+
+                break;
+
+            case 'getEstudios':
+                if (!$curriculum->setId($_POST['idCurriculum'])) {
                     $result['error'] = $curriculum->getDataError();
-                } elseif($curriculum->cargarApartados()){
+                } elseif ($result['dataset'] = $curriculum->getEstudios()) {
                     $result['status'] = 1;
-                } else{
+                } else {
+                    $result['error'] = 'Ocurrió un error al obtener los estudios';
+                }
+                break;
+
+            case 'getCertificados':
+                if (!$curriculum->setId($_POST['idCurriculum'])) {
+                    $result['error'] = $curriculum->getDataError();
+                } elseif ($result['dataset'] = $curriculum->getCertificados()) {
+                    $result['status'] = 1;
+                } else {
+                    $result['error'] = 'No se han agregado certificados';
+                }
+                break;
+
+            case 'getExperiencias':
+                if (!$curriculum->setId($_POST['idCurriculum'])) {
+                    $result['error'] = $curriculum->getDataError();
+                } elseif ($result['dataset'] = $curriculum->getExperiencias()) {
+                    $result['status'] = 1;
+                } else {
+                    $result['error'] = 'No se han agregado experiencias';
+                }
+                break;
+
+            case 'getReferencias':
+                if (!$curriculum->setId($_POST['idCurriculum'])) {
+                    $result['error'] = $curriculum->getDataError();
+                } elseif ($result['dataset'] = $curriculum->getReferencias()) {
+                    $result['status'] = 1;
+                } else {
+                    $result['error'] = 'No se han agregado referencias';
+                }
+                break;
+
+            case 'getIdiomas':
+                if (!$curriculum->setId($_POST['idCurriculum'])) {
+                    $result['error'] = $curriculum->getDataError();
+                } elseif ($result['dataset'] = $curriculum->getIdiomas()) {
+                    $result['status'] = 1;
+                } else {
+                    $result['error'] = 'No se han agregado idiomas';
+                }
+                break;
+
+            case 'getHabilidades':
+                if (!$curriculum->setId($_POST['idCurriculum'])) {
+                    $result['error'] = $curriculum->getDataError();
+                } elseif ($result['dataset'] = $curriculum->getHabilidades()) {
+                    $result['status'] = 1;
+                } else {
+                    $result['error'] = 'No se han agregado habilidades';
+                }
+                break;
+
+            case '  ':
+                if (!$curriculum->setId($_POST['idCurriculum'])) {
+                    $result['error'] = $curriculum->getDataError();
+                } elseif ($curriculum->cargarApartados()) {
+                    $result['status'] = 1;
+                } else {
                     $result['error'] = "Ocurrió un error al cargar uno de los apartados";
                 }
                 break;

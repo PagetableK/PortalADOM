@@ -42,7 +42,7 @@ const SIGUIENTE_PASO = document.querySelectorAll('.siguientePaso'), PASO_ANTERIO
 const STEP_EDUCACION = document.getElementById('educacion'), STEP_EXPERIENCIA = document.getElementById('experiencia'),
     STEP_CONTACTO = document.getElementById('contacto'), STEP_HABILIDAD = document.getElementById('habilidad');
 
-const BOTON_EDITAR = document.getElementById('btnEditarCv');
+const BOTON_EDITAR = document.getElementById('btnEditarCv'), BOTON_REGRESAR = document.getElementById('botonRegresar');
 
 let errorCurriculum = false;
 
@@ -1186,6 +1186,8 @@ DESCRIPCION_PUESTO.addEventListener('input', () => {
 
 // Evento que se ejecuta al hacer click en el botón editar currículum.
 BOTON_EDITAR.addEventListener('click', async () => {
+    // Se realiza la petición a la API para limpiar los apartados del currículum de la variable de sesión.
+    await fetchData(API_CURRICULUM, 'limpiarApartados');
     // Se realiza una petición a la API para obtener la información general del currículum.
     const DATA = await fetchData(API_CURRICULUM, 'getCurriculum');
     // Si la respuesta es satisfactoria se ejecuta el código.
@@ -1194,8 +1196,27 @@ BOTON_EDITAR.addEventListener('click', async () => {
         const FORM = new FormData();
         // Se almacena el idCurriculum en la constante.
         FORM.append('idCurriculum', DATA.dataset.id_curriculum);
+
+        const DATA_ESTUDIOS = await fetchData(API_CURRICULUM, 'getEstudios', FORM);
+
+        const DATA_CERTIFICADOS = await fetchData(API_CURRICULUM, 'getCertificados', FORM);
+
+        const DATA_EXPERIENCIAS = await fetchData(API_CURRICULUM, 'getExperiencias', FORM);
+
+        const DATA_REFERENCIAS = await fetchData(API_CURRICULUM, 'getReferencias', FORM);
+
+        const DATA_IDIOMAS = await fetchData(API_CURRICULUM, 'getIdiomas', FORM);
+
+        const DATA_HABILIDADES = await fetchData(API_CURRICULUM, 'getHabilidades', FORM);
+
+        await almacenarEstudios(DATA_ESTUDIOS.dataset);
+
+        await almacenarCertificados(DATA_CERTIFICADOS.dataset);
+
+        await almacenarExperiencias(DATA_EXPERIENCIAS.dataset);
+
         // Se realiza la petición a la API para cargar los apartados del currículum en la variable de sesión.
-        const DATA_CURRICULUM = await fetchData(API_CURRICULUM, 'cargarApartados', FORM);
+        // const DATA_CURRICULUM = await fetchData(API_CURRICULUM, 'cargarApartados', FORM);
         // Se prepara el stepper para su funcionamiento general.
         prepararStepper();
         // Se oculta el contenedor con las opciones.
@@ -1211,4 +1232,133 @@ BOTON_EDITAR.addEventListener('click', async () => {
         // Se muestra el error.
         sweetAlert(2, DATA.error, false);
     }
+});
+
+const almacenarEstudios = async (arrayEstudios) => {
+
+    for (const row of arrayEstudios) {
+
+        const FORM = new FormData();
+
+        if (row.fecha_finalizacion == null) {
+
+            FORM.append('booleanFecha', 1);
+            FORM.append('fechaFinal', "0000");
+        } else {
+
+            FORM.append("fechaFinal", row.fecha_finalizacion);
+            FORM.append('booleanFecha', 0);
+        }
+
+        if (row.id_institucion == null) {
+
+            FORM.append('booleanoInstitucion', 1)
+            FORM.append('otraInstitucion', row.nombre_institucion);
+        } else {
+
+            FORM.append('institucion', row.id_institucion);
+            FORM.append('booleanoInstitucion', 0)
+            FORM.append('otraInstitucion', '');
+        }
+
+        FORM.append('gradoAcademico', row.id_grado);
+
+        FORM.append('titulo', row.titulo_estudio);
+
+        FORM.append('identificador', crearId(10));
+
+        const DATA = await fetchData(API_CURRICULUM, 'almacenarEstudio', FORM);
+
+        console.log(DATA.status);
+
+        if (!DATA.status) {
+            sweetAlert(2, DATA.error, false);
+        }
+    }
+}
+
+const almacenarCertificados = async (arrayCertificados) => {
+
+    for (const row of arrayCertificados) {
+
+        const FORM = new FormData();
+
+        FORM.append("tituloCertificado", row.titulo_certificado);
+        FORM.append("institucionCertificado", row.institucion_certificado);
+        FORM.append("fechaFinalCertificado", row.fecha_finalizacion);
+
+        FORM.append("identificador", crearId(10));
+
+        const DATA = await fetchData(API_CURRICULUM, 'almacenarFormacionComplementaria', FORM);
+
+        if (DATA.status) {
+
+            FORM_FORMACION_COMPLEMENTARIA.reset();
+
+            cargarFormacionComplementaria();
+
+            sweetAlert(1, 'Certificado agregado', false);
+        } else {
+
+            sweetAlert(2, DATA.error, false);
+        }
+    }
+}
+
+const almacenarExperiencias = async (arrayExperiencias) => {
+
+    for (const row of arrayExperiencias) {
+
+
+        const FORM = new FormData();
+
+        if (ESTADO_EXPERIENCIA.checked) {
+
+            FORM.append('booleanFecha', 1);
+            FORM.append('mesFinal', "0");
+            FORM.append('yearFinal', "0000");
+        } else {
+
+            FORM.append('booleanFecha', 0);
+        }
+
+        FORM.append('identificador', crearId(10));
+
+        const DATA = await fetchData(API_CURRICULUM, 'almacenarExperiencia', FORM);
+
+        if (DATA.status) {
+
+            FORM_EXPERIENCIA.reset();
+
+            SELECT_MES_INICIO.removeAttribute("disabled");
+
+            SELECT_MES_FINAL.removeAttribute("disabled");
+
+            SELECT_YEAR_INICIO.removeAttribute("disabled");
+
+            SELECT_YEAR_FINAL.removeAttribute("disabled");
+
+            CARACTERES_RESTANTES.textContent = "Caracteres restantes: 300";
+
+            cargarExperiencias();
+
+            sweetAlert(1, 'Experiencia agregada', false);
+        } else if (DATA.error == 'La fecha de la experiencia no es válida') {
+
+            sweetAlert(3, 'Las fechas no coinciden', false);
+
+            SELECT_MES_INICIO.focus();
+        } else {
+
+            sweetAlert(2, DATA.error, false);
+        }
+    }
+}
+
+BOTON_REGRESAR.addEventListener('click', async () => {
+
+    // Se oculta el contenedor con las opciones.
+    CONTENEDOR_OPCIONES_CV.classList.remove('d-none');
+    // Se muestra el contenedor con el stepper.
+    CONTENEDOR_STEPPER.classList.add('d-none');
 });
