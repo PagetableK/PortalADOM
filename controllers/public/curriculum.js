@@ -131,6 +131,7 @@ const openReport = async () => {
             doc.addImage(imgData, 'JPEG', 10, 10, 40, 40);
 
             // Añadir nombre y título
+            doc.setFont('Times', 'bold');
             doc.setFontSize(28);
             doc.setTextColor(...secondaryColor);
             doc.text(rowCurriculum['NOMBRE'], 70, 20);
@@ -145,6 +146,7 @@ const openReport = async () => {
             doc.setLineWidth(0.5);
             doc.line(10, 62, 50, 62);
 
+            doc.setFont('Times', 'normal');
             doc.setFontSize(10);
             doc.setTextColor(0, 0, 0);
             const contactFields = [
@@ -210,11 +212,13 @@ const openReport = async () => {
 
             // Verificar si hay datos válidos para mostrar la sección de habilidades
             if (habilidades.length > 0 && habilidades.some(habilidad => habilidad['nombre'] && habilidad['nivel'])) {
+                doc.setFont('Times', 'bold');
                 doc.setFontSize(12);
                 doc.setTextColor(...secondaryColor);
                 doc.text('HABILIDADES', 10, yPositionC);
                 doc.line(10, yPositionC + 2, 50, yPositionC + 2); // Usar el ancho del rectángulo azul claro
 
+                doc.setFont('Times', 'normal');
                 doc.setFontSize(10);
                 doc.setTextColor(0, 0, 0);
 
@@ -251,11 +255,13 @@ const openReport = async () => {
 
             // Verificar si hay datos válidos para mostrar la sección de referencias
             if (referencias.size > 0) {
+                doc.setFont('Times', 'bold');
                 doc.setFontSize(12);
                 doc.setTextColor(...secondaryColor);
                 doc.text('REFERENCIA', 10, yPositionC);
                 doc.line(10, yPositionC + 2, primaryColorRectWidth, yPositionC + 2); // Usar el ancho del rectángulo azul claro
 
+                doc.setFont('Times', 'normal');
                 doc.setFontSize(10);
                 doc.setTextColor(0, 0, 0);
                 let yPositionReferencias = yPositionC + 10;
@@ -289,17 +295,19 @@ const openReport = async () => {
                 item['descripcion_puesto']
             ).map(item => ({
                 title: `. ${item['nombre_cargo']}`,
-                company: `${item['nombre_empresa']} ${item['ubicacion_empresa']} | ${item['fecha_inicio']} - ${item['fecha_fin']}`,
+                company: `${item['nombre_empresa']}  | ${item['fecha_inicio']} - ${item['fecha_fin']}`,
                 details: `${item['descripcion_puesto']}` // No es necesario agregar '\n' aquí
             }));
 
             // Verificar si hay experiencias para mostrar
             if (allExperiencias.length > 0 && allExperiencias.some(exp => exp.title && exp.company && exp.details)) {
+                doc.setFont('Times', 'bold');
                 doc.setFontSize(12);
                 doc.setTextColor(...secondaryColor);
                 doc.text('EXPERIENCIA PROFESIONAL', 70, yPositionV); // Posición vertical ajustada según necesidad
                 doc.line(70, yPositionV + 2, 200, yPositionV + 2); // Línea separadora
 
+                doc.setFont('Times', 'normal');
                 doc.setFontSize(10);
                 doc.setTextColor(0, 0, 0);
 
@@ -309,7 +317,7 @@ const openReport = async () => {
                 allExperiencias.forEach(exp => {
                     const experienciaString = `${exp.title} ${exp.company} ${exp.details}`;
                     if (!experienciasSet.has(experienciaString)) {
-                        doc.setFont('Helvetica', 'normal'); // Asegurarse de que la fuente sea normal
+                        doc.setFont('Times', 'normal');// Asegurarse de que la fuente sea normal
                         doc.text(exp.title, 70, expY);
                         doc.text(exp.company, 70, expY + 6);
                         expY += 12;
@@ -342,11 +350,13 @@ const openReport = async () => {
 
             // Verificar si hay formaciones para mostrar
             if (allFormaciones.length > 0 && allFormaciones.some(formacion => formacion.trim() !== '.')) {
+                doc.setFont('Times', 'bold');
                 doc.setFontSize(12);
                 doc.setTextColor(...secondaryColor);
                 doc.text('FORMACIÓN', 70, yPositionV);
                 doc.line(70, yPositionV + 2, 200, yPositionV + 2);
 
+                doc.setFont('Times', 'normal');
                 doc.setFontSize(10);
                 doc.setTextColor(0, 0, 0);
 
@@ -382,11 +392,13 @@ const openReport = async () => {
 
             // Verificar si hay certificados para mostrar
             if (allCertificados.length > 0) {
+                doc.setFont('Times', 'bold');
                 doc.setFontSize(12);
                 doc.setTextColor(...secondaryColor);
                 doc.text('CERTIFICADOS', 70, yPositionV);
                 doc.line(70, yPositionV + 2, 200, yPositionV + 2);
 
+                doc.setFont('Times', 'normal');
                 doc.setFontSize(10);
                 doc.setTextColor(0, 0, 0);
 
@@ -396,7 +408,7 @@ const openReport = async () => {
                 allCertificados.forEach(certificado => {
                     if (!certificadosSet.has(certificado)) {
                         const lines = doc.splitTextToSize(certificado, 120); // Ajusta el ancho si es necesario
-                        lines.forEach(line => {
+                        lines.forEach(line => { 
                             if (certY <= 297) {
                                 doc.text(line, 70, certY);
                                 certY += 6;
