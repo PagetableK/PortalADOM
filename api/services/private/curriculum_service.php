@@ -48,8 +48,17 @@ if (isset($_GET['action'])) {
                 break;
             case 'readOne':
                 if (!$curriculum->setId($_POST['idAspirante'])) {
-                    $result['error'] = $area->getDataError();
+                    $result['error'] = $curriculum->getDataError();
                 } elseif ($result['dataset'] = $curriculum->readOne()) {
+                    $result['status'] = 1;
+                } else {
+                    $result['error'] = 'aspirante inexistente';
+                }
+                break;
+            case 'readOneData':
+                if (!$curriculum->setId($_POST['idCurriculum'])) {
+                    $result['error'] = $curriculum->getDataError();
+                } elseif ($result['dataset'] = $curriculum->readOneData()) {
                     $result['status'] = 1;
                 } else {
                     $result['error'] = 'aspirante inexistente';

@@ -286,18 +286,17 @@ class CurriculumHandler
     public function readAll()
     {
         $sql = "SELECT 
-    a.id_aspirante, ca.imagen_aspirante,
-    CONCAT(a.nombre_aspirante, ' ', a.apellido_aspirante) AS nombre,
-    (SELECT COUNT(*) FROM estudios_aspirantes ea WHERE ea.id_curriculum = ca.id_curriculum) AS estudios,
-    (SELECT COUNT(*) FROM experiencias_aspirantes exa WHERE exa.id_curriculum = ca.id_curriculum) AS experiencias,
-    (SELECT COUNT(*) FROM idiomas_aspirantes ia WHERE ia.id_curriculum = ca.id_curriculum) AS idiomas
-FROM 
-    aspirantes a
-JOIN 
-    curriculum_aspirantes ca ON a.id_aspirante = ca.id_aspirante
-ORDER BY 
-    a.nombre_aspirante;
-";
+                    a.id_aspirante, ca.imagen_aspirante, ca.id_curriculum,
+                    CONCAT(a.nombre_aspirante, ' ', a.apellido_aspirante) AS nombre,
+                    (SELECT COUNT(*) FROM estudios_aspirantes ea WHERE ea.id_curriculum = ca.id_curriculum) AS estudios,
+                    (SELECT COUNT(*) FROM experiencias_aspirantes exa WHERE exa.id_curriculum = ca.id_curriculum) AS experiencias,
+                    (SELECT COUNT(*) FROM idiomas_aspirantes ia WHERE ia.id_curriculum = ca.id_curriculum) AS idiomas
+                FROM 
+                    aspirantes a
+                JOIN 
+                    curriculum_aspirantes ca ON a.id_aspirante = ca.id_aspirante
+                ORDER BY 
+                    a.nombre_aspirante;";
 
         return Database::getRows($sql);
     }
@@ -309,6 +308,27 @@ ORDER BY
             JOIN curriculum_aspirantes ca ON a.id_aspirante = ca.id_aspirante
             WHERE a.id_aspirante = ?
             ORDER BY a.nombre_aspirante';
+        $params = array($this->id);
+        return Database::getRow($sql, $params);
+    }
+
+    public function readOneData()
+    {
+        $sql = 'SELECT 
+                    a.nombre_aspirante,
+                    a.apellido_aspirante,
+                    TIMESTAMPDIFF(YEAR, a.fecha_nacimiento, CURDATE()) AS Edad,
+                    a.genero_aspirante,
+                    c.telefono_fijo,
+                    c.telefono_movil,
+                    c.correo_curriculum,
+                    c.imagen_aspirante
+                FROM 
+                    curriculum_aspirantes c
+                    JOIN aspirantes a ON c.id_aspirante = a.id_aspirante
+                WHERE 
+                    c.id_curriculum = ?;
+                ';
         $params = array($this->id);
         return Database::getRow($sql, $params);
     }

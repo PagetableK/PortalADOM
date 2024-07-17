@@ -15,6 +15,19 @@ const SAVE_FORM = document.getElementById('saveForm'),
     ID_CURRICULUM = document.getElementById('idCurriculum'),
     NOMBRE_ASPIRANTE = document.getElementById('nombreAspirante');
 
+const CURRICULUM_MODAL = new bootstrap.Modal('#curriculumModalViewer'),
+    CM_IMAGEN = document.getElementById("curriculumModalImagen"),
+    CM_NOMBRE = document.getElementById("curriculumModalNombre"),
+    CM_EDAD = document.getElementById("curriculumModalEdad"),
+    CM_GENERO = document.getElementById("curriculumModalGenero"),
+    CM_TELEFONO_FIJO = document.getElementById("curriculumModalTelefonoFijo"),
+    CM_TELEFONO_MOVIL = document.getElementById("curriculumModalTelefono"),
+    CM_EMAIL = document.getElementById("curriculumModalEmail"),
+
+    CM_TB_EXPERIENCIA = document.getElementById("curriculumModalExperienciaLaboral"),
+    CM_TB_ESTUDIOS = document.getElementById("curriculumModalEstudios");
+    
+
 // Método del evento para cuando el documento ha cargado.
 document.addEventListener('DOMContentLoaded', () => {
     // Llamada a la función para mostrar el encabezado y pie del documento.
@@ -92,7 +105,7 @@ const fillTable = async (form = null) => {
                     <td>${row.experiencias}</td>
                     <td>${row.idiomas}</td>
                     <td>   
-                        <button type="button" class="btn btn-outline-primary" onclick="openUpdate(${row.id_curriculum})">
+                        <button type="button" class="btn btn-outline-primary" onclick="openVerCurriculum(${row.id_curriculum})">
                             <i class="bi bi-info-circle"></i>
                         </button>
                         <button type="button" class="btn btn-outline-danger" onclick="openDelete(${row.id_curriculum})">
@@ -119,6 +132,38 @@ const openCreate = () => {
     // Se prepara el formulario.
     SAVE_FORM.reset();
     fillSelect(RUBRO_API, 'readAll', 'idRubro');
+}
+
+const openVerCurriculum = async (id) => {
+
+    const FORM = new FormData();
+    FORM.append('idCurriculum', id);
+    // Petición para obtener los datos del registro solicitado.
+    const DATA = await fetchData(CURRICULUM_API, 'readOneData', FORM);
+    // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
+    if (DATA.status) {
+        
+        const ROW = DATA.dataset;
+        CM_IMAGEN.src= SERVER_URL+"images/aspirantes/"+ROW.imagen_aspirante;
+        if(ROW.imagen_aspirante == null){
+            CM_IMAGEN.src= SERVER_URL+"images/aspirantes/default.webp";
+        }
+        CM_NOMBRE.textContent = ROW.nombre_aspirante +" "+ ROW.apellido_aspirante;
+        CM_EDAD.textContent = ROW.Edad;
+        CM_GENERO.textContent = ROW.genero_aspirante;
+        CM_TELEFONO_MOVIL.textContent = ROW.telefono_movil;
+        CM_TELEFONO_FIJO.textContent = ROW.telefono_fijo;
+        document.getElementById("cmTelefonoFijoContainer").classList.remove("d-none")
+        CM_EMAIL.textContent = ROW.correo_curriculum;
+
+        CURRICULUM_MODAL.show(); 
+
+    } else {
+        sweetAlert(2, DATA.error, false);
+    }
+
+
+    
 }
 
 /*
