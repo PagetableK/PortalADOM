@@ -56,7 +56,7 @@
                         </div>
                     </div>
                     <div>
-                        <p class="d-flex gap-2 textoInfo"><i class="bi bi-info-circle-fill iconoCeleste"></i>La
+                        <p class="d-flex gap-2 textoInfo" id="textoInfo"><i class="bi bi-info-circle-fill iconoCeleste"></i>La
                             información agregada se almacenará hasta que agregue el currículum o cierre sesión</p>
                     </div>
                     <div class="bs-stepper-content mt-5 mx-md-5">
@@ -88,7 +88,7 @@
                                         <div class="col-md-6 d-flex flex-column gap-1">
                                             <label for="otraInstitucion" class="fs-6">Otra institución</label>
                                             <input type="text" class="form-control" id="otraInstitucion"
-                                                autocomplete="off" name="otraInstitucion" min="4" max="100" disabled>
+                                                autocomplete="off" name="otraInstitucion" min="4" max="100" disabled required>
                                         </div>
                                         <div class="col-md-6 d-flex flex-column gap-1">
                                             <label for="fechaFinal" class="fs-6">Año de finalización</label>
@@ -374,7 +374,7 @@
                                 <div class="col-12">
                                     <div class="row d-flex">
                                         <div class="col-md-6 d-flex gap-2 flex-column">
-                                            <label for="archivoImagen" class="form-label fw-semibold">Imagen de perfil</label>
+                                            <label for="archivoImagen" class="form-label fw-semibold">Imagen de perfil <span class="text-danger">*</span></label>
                                             <div class="d-flex align-items-center justify-content-center">
                                                 <img src="../../api/images/aspirantes/imageholder.png"
                                                     class="img-thumbnail" id="imgAspirante">
@@ -387,7 +387,7 @@
                                         <div class="col-md-6 d-flex flex-column gap-4 justify-content-center mt-4 mt-md-0">
                                             <p class="fw-bold fs-5 text-center">Provee los datos de contacto que se mostrarán en tu currículum</p>
                                             <div class="d-flex flex-column gap-1 w-100">
-                                                <label for="telefonoMovil" class="fs-6">Teléfono móvil</label>
+                                                <label for="telefonoMovil" class="fs-6">Teléfono móvil <span class="text-danger">*</span></label>
                                                 <div class="input-group">
                                                     <span class="input-group-text">
                                                         <i class="bi bi-telephone-fill"></i>
@@ -405,11 +405,11 @@
                                                     </span>
                                                     <input type="text" class="form-control telefono" id="telefonoFijo"
                                                         name="telefonoFijo" minlength="9" autocomplete="off"
-                                                        maxlength="9" placeholder="2509-2383" required>
+                                                        maxlength="9" placeholder="2509-2383">
                                                 </div>
                                             </div>
                                             <div class="d-flex flex-column gap-1 w-100">
-                                                <label for="correo" class="fs-6">Correo electrónico</label>
+                                                <label for="correo" class="fs-6">Correo electrónico <span class="text-danger">*</span></label>
                                                 <div class="input-group">
                                                     <span class="input-group-text fw-bold">
                                                         @
@@ -442,7 +442,7 @@
                     </button>
                 </div>
                 <div class="p-3">
-                    <button class="btn btn-success text-end">
+                    <button class="btn btn-success text-end" id="btnEditarCv">
                         Editar currículum
                         <i class="bi bi-pencil"></i>
                     </button>

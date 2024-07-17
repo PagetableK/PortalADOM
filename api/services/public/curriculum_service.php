@@ -9,7 +9,7 @@ if (isset($_GET['action'])) {
     // Se instancia la clase correspondiente.
     $curriculum = new CurriculumData;
     // Se declara e inicializa un arreglo para guardar el resultado que retorna la API.
-    $result = array('status' => 0, 'session' => 0, 'recaptcha' => 0, 'message' => null, 'error' => null, 'exception' => null);
+    $result = array('status' => 0, 'session' => 0, 'recaptcha' => 0, 'message' => null, 'dataset' => null, 'error' => null, 'exception' => null);
     // Se verifica si existe una sesión iniciada como aspirante para realizar las acciones correspondientes.
     if (isset($_SESSION['idAspirante'])) {
         $result['session'] = 1;
@@ -286,62 +286,80 @@ if (isset($_GET['action'])) {
                 break;
 
             case 'agregarEstudios':
-                if(!$curriculum->setId($_POST['idCurriculum'])){
+                if (!$curriculum->setId($_POST['idCurriculum'])) {
                     $result['error'] = $curriculum->getDataError();
-                } elseif($curriculum->agregarEstudios()){
+                } elseif ($curriculum->agregarEstudios()) {
                     $result['status'] = 1;
-                } else{
+                } else {
                     $result['error'] = 'Ocurrió un error al agregar los estudios';
                 }
                 break;
 
             case 'agregarCertificados':
-                if(!$curriculum->setId($_POST['idCurriculum'])){
+                if (!$curriculum->setId($_POST['idCurriculum'])) {
                     $result['error'] = $curriculum->getDataError();
-                } elseif($curriculum->agregarCertificados()){
+                } elseif ($curriculum->agregarCertificados()) {
                     $result['status'] = 1;
-                } else{
+                } else {
                     $result['error'] = 'Ocurrió un error al agregar los certificados';
                 }
                 break;
 
             case 'agregarExperiencias':
-                if(!$curriculum->setId($_POST['idCurriculum'])){
+                if (!$curriculum->setId($_POST['idCurriculum'])) {
                     $result['error'] = $curriculum->getDataError();
-                } elseif($curriculum->agregarExperiencias()){
+                } elseif ($curriculum->agregarExperiencias()) {
                     $result['status'] = 1;
-                } else{
+                } else {
                     $result['error'] = 'Ocurrió un error al agregar las experiencias';
                 }
                 break;
 
             case 'agregarIdiomas':
-                if(!$curriculum->setId($_POST['idCurriculum'])){
+                if (!$curriculum->setId($_POST['idCurriculum'])) {
                     $result['error'] = $curriculum->getDataError();
-                } elseif($curriculum->agregarIdiomas()){
+                } elseif ($curriculum->agregarIdiomas()) {
                     $result['status'] = 1;
-                } else{
+                } else {
                     $result['error'] = 'Ocurrió un error al agregar los idiomas';
                 }
                 break;
 
             case 'agregarHabilidades':
-                if(!$curriculum->setId($_POST['idCurriculum'])){
+                if (!$curriculum->setId($_POST['idCurriculum'])) {
                     $result['error'] = $curriculum->getDataError();
-                } elseif($curriculum->agregarHabilidades()){
+                } elseif ($curriculum->agregarHabilidades()) {
                     $result['status'] = 1;
-                } else{
+                } else {
                     $result['error'] = 'Ocurrió un error al agregar las habilidades';
                 }
                 break;
 
             case 'agregarReferencias':
+                if (!$curriculum->setId($_POST['idCurriculum'])) {
+                    $result['error'] = $curriculum->getDataError();
+                } elseif ($curriculum->agregarReferencias()) {
+                    $result['status'] = 1;
+                } else {
+                    $result['error'] = 'Ocurrió un error al agregar las referencias';
+                }
+                break;
+
+            case 'getCurriculum':
+                if ($result['dataset'] = $curriculum->getCurriculum()) {
+                    $result['status'] = 1;
+                } else {
+                    $result['error'] = 'El currículum aún no ha sido agregado';
+                }
+                break;
+
+            case 'cargarApartados':
                 if(!$curriculum->setId($_POST['idCurriculum'])){
                     $result['error'] = $curriculum->getDataError();
-                } elseif($curriculum->agregarReferencias()){
+                } elseif($curriculum->cargarApartados()){
                     $result['status'] = 1;
                 } else{
-                    $result['error'] = 'Ocurrió un error al agregar las referencias';
+                    $result['error'] = "Ocurrió un error al cargar uno de los apartados";
                 }
                 break;
 

@@ -255,12 +255,23 @@ class CurriculumHandler
     // Esta función permite agregar un currículum.
     public function agregarCurriculum()
     {
-        // Se establece la estructura de la sentencia.
-        $sql = 'INSERT INTO curriculum_aspirantes (imagen_aspirante, telefono_fijo, telefono_movil, correo_curriculum, id_aspirante)
-                VALUES(?, ?, ?, ?, ?)';
-        // Se almacenan los parámetros en el array.
-        $params = array($this->imagen, $this->telefono_fijo, $this->telefono_movil, $this->correo, $_SESSION['idAspirante']);
-        // Se obtiene la fila y se devuelve el dato.
+        // Si el atributo no tiene un valor asignado se ejecuta el código.
+        if (!empty($this->telefono_fijo)) {
+            // Se establece la estructura de la sentencia.
+            $sql = "INSERT INTO curriculum_aspirantes (imagen_aspirante, telefono_fijo, telefono_movil, correo_curriculum, id_aspirante)
+                VALUES(?, ?, ?, ?, ?)";
+            // Se almacenan los parámetros en el array.
+            $params = array($this->imagen, $this->telefono_fijo, $this->telefono_movil, $this->correo, $_SESSION['idAspirante']);
+        }
+        // De lo contrario se ejecuta el código.
+        else {
+            // Se establece la estructura de la sentencia.
+            $sql = "INSERT INTO curriculum_aspirantes (imagen_aspirante, telefono_movil, correo_curriculum, id_aspirante)
+                VALUES(?, ?, ?, ?)";
+            // Se almacenan los parámetros en el array.
+            $params = array($this->imagen, $this->telefono_movil, $this->correo, $_SESSION['idAspirante']);
+        }
+        // Se ejecuta la sentencia.
         return Database::executeRow($sql, $params);
     }
 
@@ -298,7 +309,7 @@ class CurriculumHandler
                         VALUES(?, ?, ?, ?)';
                 // Se almacenan los parámetros en el array.
                 $params = array($titulo_estudio, $id_grado, $nombre_institucion, $this->id);
-                // Se obtiene la fila y se devuelve el dato.
+                // Se ejecuta la sentencia.
                 Database::executeRow($sql, $params);
             }
             // Caso en que el aspirante finalizó el estudio y no se seleccionó una opción de las instituciones.
@@ -308,7 +319,7 @@ class CurriculumHandler
                         VALUES(?, ?, ?, ?, ?)';
                 // Se almacenan los parámetros en el array.
                 $params = array($titulo_estudio, $id_grado, $fecha_finalizacion, $nombre_institucion, $this->id);
-                // Se obtiene la fila y se devuelve el dato.
+                // Se ejecuta la sentencia.
                 Database::executeRow($sql, $params);
             }
             // Caso en que el aspirante cursa el estudio y se seleccionó una opción de las instituciones. 
@@ -318,7 +329,7 @@ class CurriculumHandler
                         VALUES(?, ?, ?, ?)';
                 // Se almacenan los parámetros en el array.
                 $params = array($titulo_estudio, $id_grado, $id_institucion, $this->id);
-                // Se obtiene la fila y se devuelve el dato.
+                // Se ejecuta la sentencia.
                 Database::executeRow($sql, $params);
             }
             // Caso en que el aspirante finalizó el estudio y se seleccionó una opción de las instituciones. 
@@ -328,10 +339,13 @@ class CurriculumHandler
                         VALUES(?, ?, ?, ?, ?)';
                 // Se almacenan los parámetros en el array.
                 $params = array($titulo_estudio, $id_grado, $fecha_finalizacion, $id_institucion, $this->id);
-                // Se obtiene la fila y se devuelve el dato.
+                // Se ejecuta la sentencia.
                 Database::executeRow($sql, $params);
             }
         }
+
+        // Se inicializa el array que almacena los estudios del currículum.
+        $_SESSION['estudios'] = array();
 
         return true;
     }
@@ -354,9 +368,12 @@ class CurriculumHandler
                     VALUES(?, ?, ?, ?)';
             // Se almacenan los parámetros en el array.
             $params = array($titulo_certificado, $institucion_certificado, $fecha_finalizacion, $this->id);
-            // Se obtiene la fila y se devuelve el dato.
+            // Se ejecuta la sentencia.
             Database::executeRow($sql, $params);
         }
+
+        // Se inicializa el array que almacena la formación complementaria del currículum.
+        $_SESSION['formacionComplementaria'] = array();
 
         return true;
     }
@@ -398,7 +415,7 @@ class CurriculumHandler
                         VALUES(?, ?, ?, ?, ?, ?, ?)';
                 // Se almacenan los parámetros en el array.
                 $params = array($empresa, $cargo, $fecha_inicio, $descripcion, $area, $rubro, $this->id);
-                // Se obtiene la fila y se devuelve el dato.
+                // Se ejecuta la sentencia.
                 Database::executeRow($sql, $params);
             }
             // Caso en que el aspirante no trabaja en la experiencia. 
@@ -408,10 +425,13 @@ class CurriculumHandler
                         VALUES(?, ?, ?, ?, ?, ?, ?, ?)';
                 // Se almacenan los parámetros en el array.
                 $params = array($empresa, $cargo, $fecha_inicio, $fecha_fin, $descripcion, $area, $rubro, $this->id);
-                // Se obtiene la fila y se devuelve el dato.
+                // Se ejecuta la sentencia.
                 Database::executeRow($sql, $params);
             }
         }
+
+        // Se inicializa el array que almacena las experiencias laborales del currículum.
+        $_SESSION['experiencias'] = array();
 
         return true;
     }
@@ -436,9 +456,12 @@ class CurriculumHandler
                     VALUES(?, ?, ?, ?, ?)';
             // Se almacenan los parámetros en el array.
             $params = array($nombre, $apellido, $puesto, $telefono, $this->id);
-            // Se obtiene la fila y se devuelve el dato.
+            // Se ejecuta la sentencia.
             Database::executeRow($sql, $params);
         }
+
+        // Se inicializa el array que almacena las referencias laborales del currículum.
+        $_SESSION['referencias'] = array();
 
         return true;
     }
@@ -459,9 +482,12 @@ class CurriculumHandler
                     VALUES(?, ?, ?)';
             // Se almacenan los parámetros en el array.
             $params = array($nivel, $idioma, $this->id);
-            // Se obtiene la fila y se devuelve el dato.
+            // Se ejecuta la sentencia.
             Database::executeRow($sql, $params);
         }
+
+        // Se inicializa el array que almacena los idiomas del currículum.
+        $_SESSION['idiomas'] = array();
 
         return true;
     }
@@ -482,11 +508,29 @@ class CurriculumHandler
                     VALUES(?, ?, ?)';
             // Se almacenan los parámetros en el array.
             $params = array($nivel, $habilidad, $this->id);
-            // Se obtiene la fila y se devuelve el dato.
+            // Se ejecuta la sentencia.
             Database::executeRow($sql, $params);
         }
 
+        // Se inicializa el array que almacena las habilidades del currículum.
+        $_SESSION['habilidades'] = array();
+
         return true;
+    }
+
+    public function getCurriculum()
+    {
+        // Se establece la estructura de la sentencia.
+        $sql = 'SELECT * FROM curriculum_aspirantes WHERE id_aspirante = ?';
+        // Se almacena el parámetro en el array.
+        $params = array($_SESSION['idAspirante']);
+        // Se obtiene la fila y se devuelve el dato.
+        return Database::getRow($sql, $params);
+    }
+
+    // Función que permite cargar los apartados del currículum dentro de la variable de sesión.
+    public function cargarApartados()
+    {
     }
 
     public function createRow()

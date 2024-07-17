@@ -609,8 +609,19 @@ class CurriculumData extends CurriculumHandler
     // Función que permite validar el campo telefono_fijo.
     public function setTelefonoFijo($valor, $boolean = null)
     {
+        // Se verifica si el parámetro está vacío.
+        if(empty($valor)){
+            // Se devuelve true.
+            return true;
+        }
+        // Se verifica que el teléfono fijo no sea el mismo que el teléfono móvil.
+        elseif($valor == $this->telefono_movil){
+            // En caso de que los teléfonos sean iguales se devuelve el error.
+            $this->info_error = 'Los teléfonos no pueden ser iguales';
+            return false;
+        }
         // Se valida que la cadena de caracteres tenga el formato de teléfono.
-        if (!Validator::validatePhone($valor)) {
+        elseif (!Validator::validatePhone($valor)) {
             // En caso de no serlo se devuelve el error.
             $this->info_error = 'El teléfono debe iniciar con el formato ####-####';
             return false;

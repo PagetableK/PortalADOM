@@ -82,8 +82,13 @@ class Validator
         if (is_uploaded_file($file['tmp_name'])) {
             // Se obtienen los datos de la imagen.
             $image = getimagesize($file['tmp_name']);
+            // Si la variable se encuentra vacía se devuelve el error.
+            if(empty($image)){
+                self::$file_error = 'El tipo de imagen debe ser jpg o png';
+                return false;
+            }
             // Se comprueba si el archivo tiene un tamaño mayor a 2MB.
-            if ($file['size'] > 2097152) {
+            elseif ($file['size'] > 2097152) {
                 self::$file_error = 'El tamaño de la imagen debe ser menor a 2MB';
                 return false;
             } elseif ($image['mime'] == 'image/jpeg' || $image['mime'] == 'image/png') {
@@ -316,8 +321,8 @@ class Validator
     public static function validateMonth($value)
     {
         // Se itera el array con los meses y se valida que el valor concuerde con uno de los meses.
-        for($i = 1; $i < 13 ; $i++){
-            if($value == $i){
+        for ($i = 1; $i < 13; $i++) {
+            if ($value == $i) {
                 return true;
             }
         }
@@ -334,7 +339,7 @@ class Validator
         if (trim($value) == '') {
             self::$search_error = 'Ingrese un valor para buscar';
             return false;
-        } elseif(str_word_count($value) > 3) {
+        } elseif (str_word_count($value) > 3) {
             self::$search_error = 'La búsqueda contiene más de 3 palabras';
             return false;
         } elseif (self::validateString($value)) {
