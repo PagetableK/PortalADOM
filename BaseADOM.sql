@@ -503,7 +503,7 @@ SELECT
     a.genero_aspirante, 
     a.estado_aspirante,
     c.id_curriculum,
-    c.imagen_aspirante, 
+    c.imagen_aspirante AS 'IMAGEN', 
     c.telefono_fijo, 
     c.telefono_movil, 
     c.correo_curriculum,
