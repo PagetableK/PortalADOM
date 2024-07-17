@@ -392,7 +392,7 @@ class CurriculumData extends CurriculumHandler
         // Se almacena en la variable la fecha de finalización en formato unix.
         $fecha_final = strtotime("$this->year_final-$this->mes_final");
         // Se verifica que se haya agrega el año de finalización (Si no se ha agregado el año de finalización la experiencia agregada es trabajo actual del aspirante).
-        if($this->year_final == null){
+        if ($this->year_final == null) {
             return true;
         }
         // Si la fecha de inicio es mayor a la fecha de finalización se ejecuta el código.
@@ -567,10 +567,11 @@ class CurriculumData extends CurriculumHandler
     }
 
     // Función que permite validar la imagen de perfil del currículum.
-    public function setImagen($file)
+    public function setImagen($file, $boolean)
     {
-
-        if (Validator::validateImageFile($file)) {
+        if ($boolean) {
+            return true;
+        } elseif (Validator::validateImageFile($file)) {
 
             $this->imagen = Validator::getFilename();
             return true;
@@ -610,12 +611,12 @@ class CurriculumData extends CurriculumHandler
     public function setTelefonoFijo($valor, $boolean = null)
     {
         // Se verifica si el parámetro está vacío.
-        if(empty($valor)){
+        if (empty($valor)) {
             // Se devuelve true.
             return true;
         }
         // Se verifica que el teléfono fijo no sea el mismo que el teléfono móvil.
-        elseif($valor == $this->telefono_movil){
+        elseif ($valor == $this->telefono_movil) {
             // En caso de que los teléfonos sean iguales se devuelve el error.
             $this->info_error = 'Los teléfonos no pueden ser iguales';
             return false;

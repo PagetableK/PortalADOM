@@ -19,7 +19,6 @@ if (isset($_GET['action'])) {
             case 'almacenarEstudio':
                 // Se eliminan los espacios en blancos de los valores dentro del array.
                 $_POST = Validator::validateForm($_POST);
-                // echo $_POST['gradoAcademico'] . $_POST['titulo'] . $_POST['institucion'] . $_POST['booleanoInstitucion'] . $_POST['otraInstitucion'] . $_POST['fechaFinal'] . $_POST['booleanFecha'] . $_POST['identificador'];
                 // Se valida que el conjunto de datos que retorna la función se almacena en el array.
                 if (
                     !$curriculum->setIdGrado($_POST['gradoAcademico']) or
@@ -266,7 +265,7 @@ if (isset($_GET['action'])) {
                 $_POST = Validator::validateForm($_POST);
                 if (
                     !$curriculum->verificarEstudio() or
-                    !$curriculum->setImagen($_FILES['archivoImagen']) or
+                    !$curriculum->setImagen($_FILES['archivoImagen'], 0) or
                     !$curriculum->setTelefonoMovil($_POST['telefonoMovil']) or
                     !$curriculum->setTelefonoFijo($_POST['telefonoFijo']) or
                     !$curriculum->setCorreo($_POST['correo'])
@@ -278,6 +277,27 @@ if (isset($_GET['action'])) {
                     $result['status'] = 1;
                 } else {
                     $result['error'] = 'Ocurrió un error al agregar el currículum';
+                }
+                break;
+
+            case 'actualizarCurriculum':
+                $_POST = Validator::validateForm($_POST);
+                if (
+                    !$curriculum->verificarEstudio() or
+                    !$curriculum->setImagen($_FILES['archivoImagen'], $_POST['booleanImagen']) or
+                    !$curriculum->setTelefonoMovil($_POST['telefonoMovil']) or
+                    !$curriculum->setTelefonoFijo($_POST['telefonoFijo']) or
+                    !$curriculum->setCorreo($_POST['correo'])
+                ) {
+                    $result['error'] = $curriculum->getDataError();
+                } elseif ($_POST['booleanImagen'] and $curriculum->actualizarCurriculum()) {
+                    // Se asigna el estado del archivo después de insertar.
+                    $result['fileStatus'] = Validator::saveFile($_FILES['archivoImagen'], $curriculum::RUTA_IMAGEN);
+                    $result['status'] = 1;
+                } elseif ($curriculum->actualizarCurriculum()) {
+                    $result['status'] = 1;
+                } else {
+                    $result['error'] = 'Ocurrió un error al actualizar el currículum';
                 }
                 break;
 
@@ -368,6 +388,23 @@ if (isset($_GET['action'])) {
 
                 break;
 
+            case 'eliminarApartados':
+                if (!$curriculum->setId($_POST['idCurriculum'])) {
+                    $result['error'] = $curriculum->getDataError();
+                } elseif (
+                    $curriculum->eliminarEstudios() and
+                    $curriculum->eliminarCertificados() and
+                    $curriculum->eliminarExperiencias() and
+                    $curriculum->eliminarReferencias() and
+                    $curriculum->eliminarIdiomas() and
+                    $curriculum->eliminarHabilidades()
+                ) {
+                    $result['status'] = 1;
+                } else {
+                    $result['error'] = 'Ocurrió un error en el proceso de actualizar los apartados';
+                }
+                break;
+
             case 'getEstudios':
                 if (!$curriculum->setId($_POST['idCurriculum'])) {
                     $result['error'] = $curriculum->getDataError();
@@ -425,16 +462,6 @@ if (isset($_GET['action'])) {
                     $result['status'] = 1;
                 } else {
                     $result['error'] = 'No se han agregado habilidades';
-                }
-                break;
-
-            case '  ':
-                if (!$curriculum->setId($_POST['idCurriculum'])) {
-                    $result['error'] = $curriculum->getDataError();
-                } elseif ($curriculum->cargarApartados()) {
-                    $result['status'] = 1;
-                } else {
-                    $result['error'] = "Ocurrió un error al cargar uno de los apartados";
                 }
                 break;
 

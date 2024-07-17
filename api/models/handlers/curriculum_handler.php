@@ -83,60 +83,6 @@ class CurriculumHandler
         return true;
     }
 
-    public function getEstudios()
-    {
-        $sql = 'SELECT * FROM estudios_aspirantes WHERE id_curriculum = ?';
-
-        $params = array($this->id);
-
-        return Database::getRows($sql, $params);
-    }
-
-    public function getCertificados()
-    {
-        $sql = 'SELECT * FROM certificados_aspirantes WHERE id_curriculum = ?';
-
-        $params = array($this->id);
-
-        return Database::getRows($sql, $params);
-    }
-
-    public function getExperiencias()
-    {
-        $sql = 'SELECT * FROM experiencias_aspirantes WHERE id_curriculum = ?';
-
-        $params = array($this->id);
-
-        return Database::getRows($sql, $params);
-    }
-
-    public function getReferencias()
-    {
-        $sql = 'SELECT * FROM referencias_aspirantes WHERE id_curriculum = ?';
-
-        $params = array($this->id);
-
-        return Database::getRows($sql, $params);
-    }
-
-    public function getIdiomas()
-    {
-        $sql = 'SELECT * FROM idiomas_aspirantes WHERE id_curriculum = ?';
-
-        $params = array($this->id);
-
-        return Database::getRows($sql, $params);
-    }
-
-    public function getHabilidades()
-    {
-        $sql = 'SELECT * FROM habilidades_aspirantes WHERE id_curriculum = ?';
-
-        $params = array($this->id);
-
-        return Database::getRows($sql, $params);
-    }
-
     public function eliminarFormacionComplementaria()
     {
         foreach ($_SESSION["formacionComplementaria"] as $key => $val) {
@@ -323,6 +269,47 @@ class CurriculumHandler
                 VALUES(?, ?, ?, ?)";
             // Se almacenan los parámetros en el array.
             $params = array($this->imagen, $this->telefono_movil, $this->correo, $_SESSION['idAspirante']);
+        }
+        // Se ejecuta la sentencia.
+        return Database::executeRow($sql, $params);
+    }
+
+    // Esta función permite agregar un currículum.
+    public function actualizarCurriculum()
+    {
+        // Si los atributos de imagen y teléfono fijo no tienen un valor asignado se ejecuta el código.
+        if(empty($this->telefono_fijo) && empty($this->imagen)){
+            // Se establece la estructura de la sentencia.
+            $sql = "UPDATE curriculum_aspirantes 
+                    SET telefono_movil = ?, correo_curriculum = ?
+                    WHERE id_aspirante = ?";
+            // Se almacenan los parámetros en el array.
+            $params = array($this->telefono_movil, $this->correo, $_SESSION['idAspirante']);
+        }
+        elseif (empty($this->telefono_fijo) && !empty($this->imagen)) {
+            // Se establece la estructura de la sentencia.
+            $sql = "UPDATE curriculum_aspirantes 
+                    SET telefono_movil = ?, correo_curriculum = ?, imagen_aspirante = ?
+                    WHERE id_aspirante = ?";
+            // Se almacenan los parámetros en el array.
+            $params = array($this->telefono_movil, $this->correo, $this->imagen, $_SESSION['idAspirante']);
+        }
+        elseif (!empty($this->telefono_fijo) && empty($this->imagen)) {
+            // Se establece la estructura de la sentencia.
+            $sql = "UPDATE curriculum_aspirantes 
+                    SET telefono_movil = ?, correo_curriculum = ?, telefono_fijo = ?
+                    WHERE id_aspirante = ?";
+            // Se almacenan los parámetros en el array.
+            $params = array($this->telefono_movil, $this->correo, $this->telefono_fijo, $_SESSION['idAspirante']);
+        }
+        // De lo contrario se ejecuta el código.
+        else {
+            // Se establece la estructura de la sentencia.
+            $sql = "UPDATE curriculum_aspirantes 
+                    SET telefono_movil = ?, correo_curriculum = ?, telefono_fijo = ?, imagen_aspirante = ?
+                    WHERE id_aspirante = ?";
+            // Se almacenan los parámetros en el array.
+            $params = array($this->telefono_movil, $this->correo, $this->telefono_fijo, $this->imagen, $_SESSION['idAspirante']);
         }
         // Se ejecuta la sentencia.
         return Database::executeRow($sql, $params);
@@ -571,6 +558,66 @@ class CurriculumHandler
         return true;
     }
 
+    public function eliminarEstudios()
+    {
+        // Se establece la estructura de la sentencia.
+        $sql = 'DELETE FROM estudios_aspirantes WHERE id_curriculum = ?';
+        // Se almacena el parámetro en el array.
+        $params = array($this->id);
+        // Se ejecuta la sentencia y se retorna el estado del query.
+        return Database::executeRow($sql, $params);
+    }
+
+    public function eliminarCertificados()
+    {
+        // Se establece la estructura de la sentencia.
+        $sql = 'DELETE FROM certificados_aspirantes WHERE id_curriculum = ?';
+        // Se almacena el parámetro en el array.
+        $params = array($this->id);
+        // Se ejecuta la sentencia y se retorna el estado del query.
+        return Database::executeRow($sql, $params);
+    }    
+
+    public function eliminarExperiencias()
+    {
+        // Se establece la estructura de la sentencia.
+        $sql = 'DELETE FROM experiencias_aspirantes WHERE id_curriculum = ?';
+        // Se almacena el parámetro en el array.
+        $params = array($this->id);
+        // Se ejecuta la sentencia y se retorna el estado del query.
+        return Database::executeRow($sql, $params);
+    }    
+    
+    public function eliminarReferencias()
+    {
+        // Se establece la estructura de la sentencia.
+        $sql = 'DELETE FROM referencias_aspirantes WHERE id_curriculum = ?';
+        // Se almacena el parámetro en el array.
+        $params = array($this->id);
+        // Se ejecuta la sentencia y se retorna el estado del query.
+        return Database::executeRow($sql, $params);
+    }    
+    
+    public function eliminarIdiomas()
+    {
+        // Se establece la estructura de la sentencia.
+        $sql = 'DELETE FROM idiomas_aspirantes WHERE id_curriculum = ?';
+        // Se almacena el parámetro en el array.
+        $params = array($this->id);
+        // Se ejecuta la sentencia y se retorna el estado del query.
+        return Database::executeRow($sql, $params);
+    }    
+    
+    public function eliminarHabilidades()
+    {
+        // Se establece la estructura de la sentencia.
+        $sql = 'DELETE FROM habilidades_aspirantes WHERE id_curriculum = ?';
+        // Se almacena el parámetro en el array.
+        $params = array($this->id);
+        // Se ejecuta la sentencia y se retorna el estado del query.
+        return Database::executeRow($sql, $params);
+    }
+
     public function getCurriculum()
     {
         // Se establece la estructura de la sentencia.
@@ -581,9 +628,58 @@ class CurriculumHandler
         return Database::getRow($sql, $params);
     }
 
-    // Función que permite cargar los apartados del currículum dentro de la variable de sesión.
-    public function cargarApartados()
+    public function getEstudios()
     {
+        $sql = 'SELECT * FROM estudios_aspirantes WHERE id_curriculum = ?';
+
+        $params = array($this->id);
+
+        return Database::getRows($sql, $params);
+    }
+
+    public function getCertificados()
+    {
+        $sql = 'SELECT * FROM certificados_aspirantes WHERE id_curriculum = ?';
+
+        $params = array($this->id);
+
+        return Database::getRows($sql, $params);
+    }
+
+    public function getExperiencias()
+    {
+        $sql = 'SELECT * FROM experiencias_aspirantes WHERE id_curriculum = ?';
+
+        $params = array($this->id);
+
+        return Database::getRows($sql, $params);
+    }
+
+    public function getReferencias()
+    {
+        $sql = 'SELECT * FROM referencias_aspirantes WHERE id_curriculum = ?';
+
+        $params = array($this->id);
+
+        return Database::getRows($sql, $params);
+    }
+
+    public function getIdiomas()
+    {
+        $sql = 'SELECT * FROM idiomas_aspirantes WHERE id_curriculum = ?';
+
+        $params = array($this->id);
+
+        return Database::getRows($sql, $params);
+    }
+
+    public function getHabilidades()
+    {
+        $sql = 'SELECT * FROM habilidades_aspirantes WHERE id_curriculum = ?';
+
+        $params = array($this->id);
+
+        return Database::getRows($sql, $params);
     }
 
     public function createRow()

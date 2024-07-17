@@ -42,9 +42,11 @@ const SIGUIENTE_PASO = document.querySelectorAll('.siguientePaso'), PASO_ANTERIO
 const STEP_EDUCACION = document.getElementById('educacion'), STEP_EXPERIENCIA = document.getElementById('experiencia'),
     STEP_CONTACTO = document.getElementById('contacto'), STEP_HABILIDAD = document.getElementById('habilidad');
 
-const BOTON_EDITAR = document.getElementById('btnEditarCv'), BOTON_REGRESAR = document.getElementById('botonRegresar');
+const BOTON_EDITAR = document.getElementById('btnEditarCv'), BOTON_REGRESAR = document.getElementById('botonRegresar'),
+    BOTON_CURRICULUM = document.getElementById('btnCurriculum'), TEXTO_BOTON = document.getElementById('textoBoton'),
+    ICONO_AGREGAR = document.getElementById('iconoAgregar'), ICONO_EDITAR = document.getElementById('iconoEditar');
 
-let errorCurriculum = false;
+let errorCurriculum = false, editarCv = false;
 
 // Evento que se ejecuta al terminar de cargar los componentes.
 document.addEventListener('DOMContentLoaded', async () => {
@@ -912,7 +914,7 @@ FORM_CURRICULUM.addEventListener('submit', async (e) => {
 
     e.preventDefault();
 
-    if (IMAGEN.value == "") {
+    if (IMAGEN.value == "" && !editarCv) {
 
         await sweetAlert(3, "Asegúrese de seleccionar la imagen que se mostrará en el currículum", false);
 
@@ -931,23 +933,61 @@ FORM_CURRICULUM.addEventListener('submit', async (e) => {
 
         const FORM = new FormData(FORM_CURRICULUM);
 
-        const DATA = await fetchData(API_CURRICULUM, 'agregarCurriculum', FORM);
+        let accion;
 
-        if (DATA.status) {
+        editarCv ? accion = 'actualizarCurriculum' : accion = 'agregarCurriculum';
+
+        // ENVIAR BOOLEANIMAGEN, VALIDAR TELEFONOS CON CHECKWITHID
+        FORM.append("booleanImagen", 1);
+
+        const DATA = await fetchData(API_CURRICULUM, accion, FORM);
+
+        if(DATA.status && editarCv){
 
             const DATA_APARTADOS = await fetchData(API_CURRICULUM, 'obtenerApartados');
 
-            await agregarEstudios(DATA_APARTADOS.dataset[5]);
+            const FORM = new FormData();
+        
+            FORM.append('idCurriculum', DATA_APARTADOS.dataset[5]);
 
-            DATA_APARTADOS.dataset[0] == false ? "" : await agregarCertificados(DATA_APARTADOS.dataset[5]);
+            await fetchData(API_CURRICULUM, 'eliminarApartados', FORM);
 
-            DATA_APARTADOS.dataset[1] == false ? "" : await agregarExperiencias(DATA_APARTADOS.dataset[5]);
+            await agregarEstudios(FORM);
 
-            DATA_APARTADOS.dataset[4] == false ? "" : await agregarReferencias(DATA_APARTADOS.dataset[5]);
+            DATA_APARTADOS.dataset[0] == false ? "" : await agregarCertificados(FORM);
 
-            DATA_APARTADOS.dataset[2] == false ? "" : await agregarIdiomas(DATA_APARTADOS.dataset[5]);
+            DATA_APARTADOS.dataset[1] == false ? "" : await agregarExperiencias(FORM);
 
-            DATA_APARTADOS.dataset[3] == false ? "" : await agregarHabilidades(DATA_APARTADOS.dataset[5]);
+            DATA_APARTADOS.dataset[4] == false ? "" : await agregarReferencias(FORM);
+
+            DATA_APARTADOS.dataset[2] == false ? "" : await agregarIdiomas(FORM);
+
+            DATA_APARTADOS.dataset[3] == false ? "" : await agregarHabilidades(FORM);
+
+            errorCurriculum ? async () => {
+                await sweetAlert(1, 'Currículum actualizado correctamente');
+                sweetAlert(3, 'Es posible que los apartados no se hayan actualizado correctamente, se recomienda verificar el currículum', false);
+            } : sweetAlert(1, 'Currículum actualizado correctamente', true, 'curriculum.html');
+        }
+        else if (DATA.status) {
+
+            const DATA_APARTADOS = await fetchData(API_CURRICULUM, 'obtenerApartados');
+
+            const FORM = new FormData();
+        
+            FORM.append('idCurriculum', DATA_APARTADOS.dataset[5]);
+
+            await agregarEstudios(FORM);
+
+            DATA_APARTADOS.dataset[0] == false ? "" : await agregarCertificados(FORM);
+
+            DATA_APARTADOS.dataset[1] == false ? "" : await agregarExperiencias(FORM);
+
+            DATA_APARTADOS.dataset[4] == false ? "" : await agregarReferencias(FORM);
+
+            DATA_APARTADOS.dataset[2] == false ? "" : await agregarIdiomas(FORM);
+
+            DATA_APARTADOS.dataset[3] == false ? "" : await agregarHabilidades(FORM);
 
             errorCurriculum ? async () => {
                 await sweetAlert(1, 'Currículum agregado correctamente');
@@ -996,11 +1036,7 @@ FORM_CURRICULUM.addEventListener('submit', async (e) => {
 });
 
 
-const agregarEstudios = async (idCv) => {
-
-    const FORM = new FormData();
-
-    FORM.append('idCurriculum', idCv);
+const agregarEstudios = async (FORM) => {
 
     const DATA = await fetchData(API_CURRICULUM, 'agregarEstudios', FORM);
 
@@ -1013,11 +1049,7 @@ const agregarEstudios = async (idCv) => {
     }
 }
 
-const agregarCertificados = async (idCv) => {
-
-    const FORM = new FormData();
-
-    FORM.append('idCurriculum', idCv);
+const agregarCertificados = async (FORM) => {
 
     const DATA = await fetchData(API_CURRICULUM, 'agregarCertificados', FORM);
 
@@ -1030,11 +1062,7 @@ const agregarCertificados = async (idCv) => {
 }
 
 
-const agregarExperiencias = async (idCv) => {
-
-    const FORM = new FormData();
-
-    FORM.append('idCurriculum', idCv);
+const agregarExperiencias = async (FORM) => {
 
     const DATA = await fetchData(API_CURRICULUM, 'agregarExperiencias', FORM);
 
@@ -1047,11 +1075,7 @@ const agregarExperiencias = async (idCv) => {
 }
 
 
-const agregarReferencias = async (idCv) => {
-
-    const FORM = new FormData();
-
-    FORM.append('idCurriculum', idCv);
+const agregarReferencias = async (FORM) => {
 
     const DATA = await fetchData(API_CURRICULUM, 'agregarReferencias', FORM);
 
@@ -1064,11 +1088,7 @@ const agregarReferencias = async (idCv) => {
 }
 
 
-const agregarIdiomas = async (idCv) => {
-
-    const FORM = new FormData();
-
-    FORM.append('idCurriculum', idCv);
+const agregarIdiomas = async (FORM) => {
 
     const DATA = await fetchData(API_CURRICULUM, 'agregarIdiomas', FORM);
 
@@ -1081,11 +1101,7 @@ const agregarIdiomas = async (idCv) => {
 }
 
 
-const agregarHabilidades = async (idCv) => {
-
-    const FORM = new FormData();
-
-    FORM.append('idCurriculum', idCv);
+const agregarHabilidades = async (FORM) => {
 
     const DATA = await fetchData(API_CURRICULUM, 'agregarHabilidades', FORM);
 
@@ -1192,11 +1208,13 @@ BOTON_EDITAR.addEventListener('click', async () => {
     const DATA = await fetchData(API_CURRICULUM, 'getCurriculum');
     // Si la respuesta es satisfactoria se ejecuta el código.
     if (DATA.status) {
+        // Se cambia el valor de la variable global (Se utiliza en el evento submit del FORM_CURRICULUM);
+        editarCv = true;
         // Se inicializa la constante dónde se almacenará el idCurriculum.
         const FORM = new FormData();
         // Se almacena el idCurriculum en la constante.
         FORM.append('idCurriculum', DATA.dataset.id_curriculum);
-
+        // Se realiza una petición a la API para obtener los estudios agregados en el currículum.
         const DATA_ESTUDIOS = await fetchData(API_CURRICULUM, 'getEstudios', FORM);
 
         const DATA_CERTIFICADOS = await fetchData(API_CURRICULUM, 'getCertificados', FORM);
@@ -1208,21 +1226,42 @@ BOTON_EDITAR.addEventListener('click', async () => {
         const DATA_IDIOMAS = await fetchData(API_CURRICULUM, 'getIdiomas', FORM);
 
         const DATA_HABILIDADES = await fetchData(API_CURRICULUM, 'getHabilidades', FORM);
-
+        // Se ejecuta la función que agrega los estudios dentro de la variable de sesión para luego mostrarlos al usuario.
         await almacenarEstudios(DATA_ESTUDIOS.dataset);
 
         await almacenarCertificados(DATA_CERTIFICADOS.dataset);
 
         await almacenarExperiencias(DATA_EXPERIENCIAS.dataset);
 
-        // Se realiza la petición a la API para cargar los apartados del currículum en la variable de sesión.
-        // const DATA_CURRICULUM = await fetchData(API_CURRICULUM, 'cargarApartados', FORM);
+        await almacenarReferencias(DATA_REFERENCIAS.dataset);
+
+        await almacenarIdiomas(DATA_IDIOMAS.dataset);
+
+        await almacenarHabilidades(DATA_HABILIDADES.dataset);
+
+        TELEFONO_MOVIL.value = DATA.dataset.telefono_movil;
+
+        TELEFONO_FIJO.value = DATA.dataset.telefono_fijo;
+
+        CORREO_ASPIRANTE.value = DATA.dataset.correo_curriculum;
+        // Se define la ruta de la imagen almacenada en la API.
+        IMAGEN_ASPIRANTE.src = "../../api/images/aspirantes/" + DATA.dataset.imagen_aspirante;
+        // Se desactiva el atributo required del input imgAspirante.
+        ARCHIVO_IMAGEN.required = false;
+        // Se quita el color naranja del botón.
+        BOTON_CURRICULUM.classList.remove('bg-orange');
+
+        TEXTO_BOTON.textContent = 'Editar currículum';
         // Se prepara el stepper para su funcionamiento general.
         prepararStepper();
         // Se oculta el contenedor con las opciones.
         CONTENEDOR_OPCIONES_CV.classList.add('d-none');
         // Se muestra el contenedor con el stepper.
         CONTENEDOR_STEPPER.classList.remove('d-none');
+        // Se oculta el ícono de agregar.
+        ICONO_AGREGAR.classList.add('d-none');
+        // Se muestra el ícono de edición.
+        ICONO_EDITAR.classList.remove('d-none');
         // Si la respuesta no es satisfactoria se ejecuta el código.
         if (!DATA.status) {
             // Se muestra la advertencia.
@@ -1252,6 +1291,7 @@ const almacenarEstudios = async (arrayEstudios) => {
 
         if (row.id_institucion == null) {
 
+            FORM.append('institucion', 0)
             FORM.append('booleanoInstitucion', 1)
             FORM.append('otraInstitucion', row.nombre_institucion);
         } else {
@@ -1268,8 +1308,6 @@ const almacenarEstudios = async (arrayEstudios) => {
         FORM.append('identificador', crearId(10));
 
         const DATA = await fetchData(API_CURRICULUM, 'almacenarEstudio', FORM);
-
-        console.log(DATA.status);
 
         if (!DATA.status) {
             sweetAlert(2, DATA.error, false);
@@ -1291,15 +1329,7 @@ const almacenarCertificados = async (arrayCertificados) => {
 
         const DATA = await fetchData(API_CURRICULUM, 'almacenarFormacionComplementaria', FORM);
 
-        if (DATA.status) {
-
-            FORM_FORMACION_COMPLEMENTARIA.reset();
-
-            cargarFormacionComplementaria();
-
-            sweetAlert(1, 'Certificado agregado', false);
-        } else {
-
+        if (!DATA.status) {
             sweetAlert(2, DATA.error, false);
         }
     }
@@ -1309,46 +1339,100 @@ const almacenarExperiencias = async (arrayExperiencias) => {
 
     for (const row of arrayExperiencias) {
 
-
         const FORM = new FormData();
 
-        if (ESTADO_EXPERIENCIA.checked) {
+        if (row.fecha_fin == null) {
 
             FORM.append('booleanFecha', 1);
             FORM.append('mesFinal', "0");
             FORM.append('yearFinal', "0000");
         } else {
 
+            let fecha_fin = row.fecha_fin.split("-");
+
+            FORM.append('mesFinal', parseInt(fecha_fin[1]));
+            FORM.append('yearFinal', parseInt(fecha_fin[0]));
             FORM.append('booleanFecha', 0);
         }
+
+        let fecha_inicio = row.fecha_inicio.split("-");
+
+        FORM.append("mesInicio", parseInt(fecha_inicio[1]));
+        FORM.append("yearInicio", parseInt(fecha_inicio[0]));
+        FORM.append('empresa', row.nombre_empresa);
+        FORM.append('cargo', row.nombre_cargo);
+        FORM.append('rubro', row.id_rubro);
+        FORM.append('area', row.id_area);
+        FORM.append('descripcion', row.descripcion_puesto);
 
         FORM.append('identificador', crearId(10));
 
         const DATA = await fetchData(API_CURRICULUM, 'almacenarExperiencia', FORM);
 
-        if (DATA.status) {
+        if (!DATA.status) {
 
-            FORM_EXPERIENCIA.reset();
+            sweetAlert(2, DATA.error, false);
+        }
+    }
+}
 
-            SELECT_MES_INICIO.removeAttribute("disabled");
 
-            SELECT_MES_FINAL.removeAttribute("disabled");
+const almacenarReferencias = async (arrayReferencias) => {
 
-            SELECT_YEAR_INICIO.removeAttribute("disabled");
+    for (const row of arrayReferencias) {
 
-            SELECT_YEAR_FINAL.removeAttribute("disabled");
+        const FORM = new FormData();
 
-            CARACTERES_RESTANTES.textContent = "Caracteres restantes: 300";
+        FORM.append('nombre', row.nombre_referencia);
+        FORM.append('apellido', row.apellido_referencia);
+        FORM.append('puesto', row.puesto_trabajo);
+        FORM.append('telefonoReferencia', row.telefono_referencia);
 
-            cargarExperiencias();
+        FORM.append('identificador', crearId(10));
 
-            sweetAlert(1, 'Experiencia agregada', false);
-        } else if (DATA.error == 'La fecha de la experiencia no es válida') {
+        const DATA = await fetchData(API_CURRICULUM, 'almacenarReferencia', FORM);
 
-            sweetAlert(3, 'Las fechas no coinciden', false);
+        if (!DATA.status) {
 
-            SELECT_MES_INICIO.focus();
-        } else {
+            sweetAlert(2, DATA.error, false);
+        }
+    }
+}
+
+const almacenarIdiomas = async (arrayIdiomas) => {
+
+    for (const row of arrayIdiomas) {
+
+        const FORM = new FormData();
+
+        FORM.append('idioma', row.id_idioma);
+        FORM.append('nivelIdioma', row.nivel_idioma);
+
+        FORM.append('identificador', crearId(10));
+
+        const DATA = await fetchData(API_CURRICULUM, 'almacenarIdioma', FORM);
+
+        if (!DATA.status) {
+
+            sweetAlert(2, DATA.error, false);
+        }
+    }
+}
+
+const almacenarHabilidades = async (arrayHabilidades) => {
+
+    for (const row of arrayHabilidades) {
+
+        const FORM = new FormData();
+
+        FORM.append('nombreHabilidad', row.id_habilidad);
+        FORM.append('nivelHabilidad', row.nivel_habilidad);
+
+        FORM.append('identificador', crearId(10));
+
+        const DATA = await fetchData(API_CURRICULUM, 'almacenarHabilidad', FORM);
+
+        if (!DATA.status) {
 
             sweetAlert(2, DATA.error, false);
         }
