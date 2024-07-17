@@ -67,7 +67,7 @@
 	CREATE TABLE curriculum_aspirantes(
 		id_curriculum INT PRIMARY KEY AUTO_INCREMENT,
 		imagen_aspirante VARCHAR(200) NULL,
-		telefono_fijo VARCHAR(9) UNIQUE NOT NULL,
+		telefono_fijo VARCHAR(9) UNIQUE NULL,
 		telefono_movil VARCHAR(9) UNIQUE NOT NULL,
 		correo_curriculum VARCHAR(100) UNIQUE NOT NULL,
 		id_aspirante INT NOT NULL,
