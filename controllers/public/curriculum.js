@@ -314,7 +314,7 @@ const openReport = async () => {
             
                 return {
                     title: `${item['nombre_cargo']}`,
-                    company: `${item['nombre_empresa']} | ${fechaInicioFormateada} - ${fechaFinFormateada}`,
+                    company: `${item['nombre_empresa']} | ${item['fecha_inicio']} - ${item['fecha_fin'] ? item['fecha_fin'] : 'Trabajo actual'}`,
                     details: `${item['descripcion_puesto']}`
                 };
             });
@@ -355,7 +355,7 @@ const openReport = async () => {
 
                         const detalles = exp.details.split('\n');
                         detalles.forEach(detail => {
-                            doc.text(`- ${detail}`, 70, expY);
+                            doc.text(`- ${detail}`, 70, expY, {maxWidth :140});
                             expY += 6;
                         });
 
@@ -450,6 +450,9 @@ const openReport = async () => {
                 // Actualizar yPositionV al final de la sección de certificados
                 yPositionV = Math.max(yPositionV, certY + 10);
             }
+
+            
+
             const pdfOutput = doc.output('dataurlnewwindow'); // Genera un Blob en lugar de una URL
 
             // Crear una URL del Blob
@@ -464,6 +467,11 @@ const openReport = async () => {
 
             // Limpiar la URL del Blob después de abrir la nueva pestaña
             URL.revokeObjectURL(blobURL);
+
+            if (yPositionC > 260) {
+                doc.addPage(); // Agregar una nueva página
+                yPositionC = 10; // Reiniciar la posición vertical para el contenido
+            }
 
         });
     } else {
