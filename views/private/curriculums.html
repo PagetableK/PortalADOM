@@ -11,6 +11,8 @@
         <link href="../../resources/css/utils/bootstrap-icons.min.css" rel="stylesheet">
         <!-- CSS de la barra lateral de navegación -->
         <link href="../../resources/css/utils/barra_lateral.css" rel="stylesheet">
+        <!-- Llamada al archivo que contiene los estilos generales del crud -->
+        <link href="../../resources/css/utils/estilos_cruds.css" rel="stylesheet">
 </head>
 <body class="d-flex">
     <!-- Contenido principal del documento -->
@@ -55,9 +57,6 @@
            <table class="table table-hover caption-top">
                 <thead>
                     <tr>
-                        <td colspan="6" id="filasEncontradas"></td>
-                    </tr>
-                    <tr>
                         <th >Imagen</th>
                         <th >Nombre Aspirante</th>
                         <th >Estudios</th>
@@ -73,6 +72,51 @@
             </table>
         </div>
         <!-- Componente Modal para guardar un registro -->
+        <div class="modal fade" id="curriculumModalViewer" tabindex="-1" aria-labelledby="curriculumModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="curriculumModalLabel">Curriculum Vitae</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <img id="curriculumModalImagen" src="../../api/images/aspirantes/default.webp" alt="Profile Picture" class="img-fluid rounded-circle mb-3">
+                                    <h5 id="curriculumModalNombre"></h5>
+                                    <ul class="list-unstyled">
+                                        <li><strong>Edad:</strong> <span id="curriculumModalEdad"></span></li>
+                                        <li><strong>Género:</strong> <span id="curriculumModalGenero"></span></li>
+                                        <li><strong>Teléfono Movil:</strong> <span id="curriculumModalTelefono"></span></li>
+                                        <li id="cmTelefonoFijoContainer" class="d-none"><strong>Teléfono Fijo:</strong> <span id="curriculumModalTelefonoFijo"></span></li>
+                                        <li><strong>Correo electrónico:</strong> <span id="curriculumModalEmail"></span></li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-8">
+                                    <h5>Experiencia laboral</h5>
+                                    <hr>
+                                    <div id="curriculumModalExperienciaLaboral">
+
+                                    </div>
+                                <h5>Estudios</h5>
+                                    <hr>
+
+                                    <div id="curriculumModalEstudios">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success">Editar curriculum</button>
+                        <button type="button" class="btn btn-danger d-none" id="cmEliminarBoton">Eliminar curriculum</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="modal fade" id="saveModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
             aria-labelledby="modalTitle" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-centered">

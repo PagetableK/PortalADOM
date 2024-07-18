@@ -21,7 +21,6 @@ class RubroHandler
     {
         $value = '%' . Validator::getSearchValue() . '%';
             $sql = 'SELECT i.id_rubro, i.nombre_rubro,
-                COUNT(e.id_rubro) AS veces_utilizadas FROM rubros_empresas i
                 LEFT JOIN areas_laborales e ON i.id_rubro = e.id_rubro
                 WHERE i.nombre_rubro LIKE ?
                 GROUP BY i.id_rubro, i.nombre_rubro';

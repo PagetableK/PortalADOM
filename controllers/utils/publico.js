@@ -70,7 +70,7 @@ const cargarPlantilla = async () => {
             </nav>`
             );
             // Se retorna el nombre completo del usuario.
-            return [DATA.nombre, DATA.idCV];
+            return [DATA.nombre, DATA.idCV, DATA.genero];
         } else {
             // De lo contrario se muestra el error y se redirige al inicio de sesión.
             sweetAlert(3, DATA.error, false, 'index.html');

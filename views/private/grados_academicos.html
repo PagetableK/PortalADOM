@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Título del documento -->
-    <title>Grado academico</title>
+    <title>Grados académicos</title>
     <!-- Llamada al framework de diseño -->
     <link href="../../resources/css/utils/bootstrap.min.css" rel="stylesheet">
     <!-- Llamada a los íconos de la barra de navegación -->
@@ -37,7 +37,7 @@
                                     </button>
                                 </div>
                                 <!-- Este input crea la barra de búsqueda -->
-                                <input type="search" class="form-control elemento-form" placeholder="Buscar..." name="search">
+                                <input type="search" class="form-control elemento-form" placeholder="Buscar grados académicos por nombre..." name="search">
                                 <div class="d-flex">
                                     <button type="reset" class="input-group-text elemento-form" onclick="fillTable()">
                                         <i class="bi bi-arrow-clockwise"></i>
@@ -61,11 +61,9 @@
                 <table class="table table-hover caption-top">
                     <!-- Cabeza de la tabla para mostrar la cantidad de registros y los títulos de las columnas -->
                     <thead>
-                        <tr>
-                            <td colspan="2" id="rowsFound"></td>
-                        </tr>
                         <tr class="text-center">
                             <th>Nombres</th>
+                            <th>Usos</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -92,7 +90,7 @@
                             <input type="number" class="d-none" id="idGrado" name="idGrado">
                             <div class="col-12">
                                 <label for="nombreGrado" class="form-label fw-semibold">Grado académico</label>
-                                <input id="nombreGrado" type="text" name="nombreGrado"
+                                <input id="nombreGrado" type="text" name="nombreGrado" 
                                     class="form-control" placeholder="Ingrese el nombre del grado académico"
                                     autocomplete="off" required>
                             </div>

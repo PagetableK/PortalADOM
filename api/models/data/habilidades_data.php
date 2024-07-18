@@ -29,10 +29,7 @@ class HabilidadesData extends HabilidadesHandler
 
     public function setNombre($valor, $min = 2, $max = 30)
     {
-        if (!Validator::validateAlphanumeric($valor)) {
-            $this->info_error = 'El nombre de la habilidad debe ser un valor alfanumérico';
-            return false;
-        } elseif (HabilidadesHandler::checkDuplicate($valor)) {
+        if (HabilidadesHandler::checkDuplicate($valor)) {
             $this->info_error = 'La habilidad ya ha sido agregada';
             return false;
         }elseif (Validator::validateLength($valor, $min, $max)) {

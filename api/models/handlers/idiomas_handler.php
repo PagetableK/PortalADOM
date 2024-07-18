@@ -59,9 +59,9 @@ class IdiomasHandler
     public function searchRows()
     {
         $value = '%' . Validator::getSearchValue() . '%';
-        $sql = 'SELECT * FROM vista_tabla_idiomas
-        WHERE NOMBRE LIKE ?
-        ORDER BY NOMBRE;';
+        $sql = 'SELECT id_idioma AS ID, nombre_idioma AS NOMBRE, (SELECT COUNT(idiomas_aspirantes.id_idioma) FROM idiomas_aspirantes WHERE idiomas_aspirantes.id_idioma = idiomas.id_idioma) AS usos 
+	            FROM idiomas
+                WHERE nombre_idioma LIKE ?';
         $params = array($value);
         return Database::getRows($sql, $params);
     }
@@ -69,8 +69,8 @@ class IdiomasHandler
     //Función para leer todos los admministradores.
     public function readAll()
     {
-        $sql = 'SELECT * FROM vista_tabla_idiomas
-        ORDER BY NOMBRE;';
+        $sql = 'SELECT id_idioma AS ID, nombre_idioma AS NOMBRE, (SELECT COUNT(idiomas_aspirantes.id_idioma) FROM idiomas_aspirantes WHERE idiomas_aspirantes.id_idioma = idiomas.id_idioma) AS usos 
+	            FROM idiomas;';
         return Database::getRows($sql);
     }
 

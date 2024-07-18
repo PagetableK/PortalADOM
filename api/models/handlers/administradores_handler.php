@@ -83,9 +83,8 @@ class AdministradoresHandler
     {
         $value = '%' . Validator::getSearchValue() . '%';
         $sql = 'SELECT * FROM vista_tabla_administradores
-        WHERE NOMBRE LIKE ?
-        ORDER BY NOMBRE;';
-        $params = array($value);
+        WHERE NOMBRE LIKE ? OR CORREO LIKE ? OR APELLIDO LIKE ?';
+        $params = array($value, $value, $value);
         return Database::getRows($sql, $params);
     }
 

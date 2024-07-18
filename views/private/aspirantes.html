@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Título del documento -->
-    <title>Aspirante</title>
+    <title>Aspirantes</title>
     <!-- Llamada al framework de diseño -->
     <link href="../../resources/css/utils/bootstrap.min.css" rel="stylesheet">
     <!-- Llamada a los íconos de la barra de navegación -->
@@ -38,7 +38,7 @@
                                     </button>
                                 </div>
                                 <!-- Este input crea la barra de búsqueda -->
-                                <input type="search" class="form-control elemento-form" placeholder="Buscar..."
+                                <input type="search" class="form-control elemento-form" placeholder="Buscar aspirantes por nombre, apellido o correo..."
                                     name="search">
                                 <div class="d-flex">
                                     <button type="reset" class="input-group-text elemento-form" onclick="fillTable()">
@@ -63,9 +63,6 @@
                 <table class="table table-hover caption-top">
                     <!-- Cabeza de la tabla para mostrar la cantidad de registros y los títulos de las columnas -->
                     <thead>
-                        <tr>
-                            <td colspan="7" id="rowsFound"></td>
-                        </tr>
                         <tr class="text-center">
                             <th>Nombres</th>
                             <th>Apellidos</th>
@@ -118,7 +115,7 @@
                                     placeholder="fechanacimiento" class="form-control" required autocomplete="off" />
                             </div>
                             <div class="col-sm-12 col-md-6">
-                                <label for="generoAspirante" class="form-label fw-semibold">Selecciona el genero</label>
+                                <label for="generoAspirante" class="form-label fw-semibold">Género</label>
                                 <select id="generoAspirante" type="text" name="generoAspirante" class="form-select"
                                     required></select>
                             </div>

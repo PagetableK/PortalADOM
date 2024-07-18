@@ -44,6 +44,7 @@ const fillTable = async (form = null) => {
             TABLE_BODY.innerHTML += `
                 <tr>
                     <td>${row.nombre_habilidad}</td>
+                    <td>${row.usos}</td>
                     <td>   
                         <button type="button" class="btn btn-outline-success" onclick="openUpdate(${row.id_habilidad})">
                             <i class="bi bi-pencil-fill"></i>
@@ -130,7 +131,7 @@ const openDelete = async (id) => {
             // Se carga nuevamente la tabla para visualizar los cambios.
             fillTable();
         } else if (DATA.exception != null && (DATA.exception.includes("Integrity constraint") || DATA.exception.includes("constraint fails"))) {
-            sweetAlert(3, 'No se puede eliminar la habilidad porque está asociado a un currículum.', false);
+            sweetAlert(3, 'No se puede eliminar la habilidad porque está asociado a un currículum', false);
         } else {
             sweetAlert(2, DATA.error, false);
         }
@@ -164,6 +165,8 @@ SAVE_FORM.addEventListener('submit', async (event) => {
             sweetAlert(2, DATA.error, false);
         }
     } else {
+
+        sweetAlert(1, 'Habilidad actualizada correctamente', false);
         // Se cierra la caja de diálogo.
         SAVE_MODAL.hide();
     }
