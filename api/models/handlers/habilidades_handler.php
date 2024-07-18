@@ -55,15 +55,17 @@ class HabilidadesHandler
     public function searchRows()
     {
         $value = '%' . Validator::getSearchValue() . '%';
-        $sql = 'SELECT * FROM habilidades
-        WHERE nombre_habilidad LIKE ?;';
+        $sql = 'SELECT id_habilidad, nombre_habilidad, (SELECT COUNT(habilidades_aspirantes.id_habilidad) FROM habilidades_aspirantes WHERE habilidades_aspirantes.id_habilidad = habilidades.id_habilidad) AS usos
+                FROM habilidades
+                WHERE nombre_habilidad LIKE ?';
         $params = array($value);
         return Database::getRows($sql, $params);
     }
 
     public function readAll()
     {
-        $sql = 'SELECT * FROM habilidades;';
+        $sql = 'SELECT id_habilidad, nombre_habilidad, (SELECT COUNT(habilidades_aspirantes.id_habilidad) FROM habilidades_aspirantes WHERE habilidades_aspirantes.id_habilidad = habilidades.id_habilidad) AS usos
+                FROM habilidades';
         return Database::getRows($sql);
     }
 

@@ -26,10 +26,9 @@
     color: #0CBA52;
 }
 
-.table {
-    --bs-table-bg: #ffffff;
+.table-responsive-lg {
     box-shadow: rgba(0, 0, 0, 0.2) 0px 7px 29px 0px;
-    border-radius: 0.25rem;
+    border-radius: 0.3rem;
     width: 100%;  /* Asegura que la tabla ocupe todo el ancho del contenedor */
     font-size: 1rem;  /* Ajusta el tamaño de la fuente si es necesario */
 }
