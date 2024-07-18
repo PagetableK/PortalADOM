@@ -149,7 +149,7 @@ const openReport = async () => {
             doc.setFont('Times', 'bold');
             doc.setFontSize(28);
             doc.setTextColor(...secondaryColor);
-            doc.text(rowCurriculum['NOMBRE'], 70, 20);
+            doc.text(rowCurriculum['NOMBRE'], 70, 20, {maxWidth: 140});
             doc.setFontSize(16);
             doc.setTextColor(0, 0, 0);
 
@@ -305,28 +305,18 @@ const openReport = async () => {
                 item['fecha_inicio'] &&
                 item['descripcion_puesto']
             ).map(item => {
-                const fechaInicio = new Date(item['fecha_inicio']);
-                const fechaInicioFormateada = `${getMonthName(fechaInicio.getMonth() + 1)} ${fechaInicio.getFullYear()}`;
-            
-                const fechaFinFormateada = item['fecha_fin'] ? 
-                    `${getMonthName(new Date(item['fecha_fin']).getMonth() + 1)} ${new Date(item['fecha_fin']).getFullYear()}` : 
-                    'Trabajo actual';
+                // Función para formatear la fecha en 'yyyy, mm, dd' usando split
+                const formatDate = (dateString) => {
+                    const [year, month] = dateString.split('-');
+                    return `${year}, ${month}`;
+                };
             
                 return {
                     title: `${item['nombre_cargo']}`,
-                    company: `${item['nombre_empresa']} | ${item['fecha_inicio']} - ${item['fecha_fin'] ? item['fecha_fin'] : 'Trabajo actual'}`,
+                    company: `${item['nombre_empresa']} | ${formatDate(item['fecha_inicio'])} - ${item['fecha_fin'] ? formatDate(item['fecha_fin']) : 'Trabajo actual'}`,
                     details: `${item['descripcion_puesto']}`
                 };
             });
-            
-            // Función para obtener el nombre del mes a partir de su número
-            function getMonthName(monthNumber) {
-                const months = [
-                    'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
-                    'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'
-                ];
-                return months[monthNumber]; // Restamos 1 porque el índice de los meses empieza en 0
-            }
             
             
 
