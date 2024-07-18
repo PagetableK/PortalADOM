@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     var fechaMaxima = new Date();
     // Se calcula la diferencia de la fecha actual - 18 años (La persona debe ser mayor de edad para registrarse).
     fechaMaxima.setFullYear(fechaMaxima.getFullYear() - 18);
+    fechaMaxima.setHours(fechaMaxima.getHours() - 24);
     // Se configura la fecha máxima del date picker.
     FECHA_NACIMIENTO.max = fechaMaxima.toISOString().substring(0, 10);
     // Se calcula la diferencia de la fecha actual - 18 años - 42 (60 años es la edad máxima para registrarse).

@@ -3,8 +3,7 @@ const IDIOMA_API = 'services/private/idiomas_service.php';
 // Constante para establecer el formulario de buscar.
 const SEARCH_FORM = document.getElementById('searchForm');
 // Constantes para establecer los elementos de la tabla.
-const TABLE_BODY = document.getElementById('tabla_idioma'),
-    ROWS_FOUND = document.getElementById('rowsFound');
+const TABLE_BODY = document.getElementById('tabla_idioma');
 // Constantes para establecer los elementos del componente Modal.
 const SAVE_MODAL = new bootstrap.Modal('#saveModal'),
     MODAL_TITLE = document.getElementById('modalTitle');
@@ -67,6 +66,8 @@ SAVE_FORM.addEventListener('submit', async (event) => {
             sweetAlert(2, DATA.error, false);
         }
     } else {
+
+        sweetAlert(1, 'Idioma actualizado correctamente', false);
         // Se cierra la caja de diálogo.
         SAVE_MODAL.hide();
     }
@@ -79,7 +80,6 @@ SAVE_FORM.addEventListener('submit', async (event) => {
 */
 const fillTable = async (form = null) => {
     // Se inicializa el contenido de la tabla.
-    ROWS_FOUND.textContent = '';
     TABLE_BODY.innerHTML = '';
     // Se verifica la acción a realizar.
     (form) ? action = 'searchRows' : action = 'readAll';
@@ -93,6 +93,7 @@ const fillTable = async (form = null) => {
             TABLE_BODY.innerHTML += `
                 <tr>
                     <td>${row.NOMBRE}</td>
+                    <td>${row.usos}</td>
                     <td>   
                         <button type="button" class="btn btn-outline-success" onclick="openUpdate(${row.ID})">
                             <i class="bi bi-pencil-fill"></i>
@@ -117,7 +118,7 @@ const fillTable = async (form = null) => {
 const openCreate = () => {
     // Se muestra la caja de diálogo con su título.
     SAVE_MODAL.show();
-    MODAL_TITLE.textContent = 'Crear idioma';
+    MODAL_TITLE.textContent = 'Agregar idioma';
     // Se prepara el formulario.
     SAVE_FORM.reset();
     // Se muestra el botón de agregar y se oculta el de actualizar.
@@ -179,7 +180,7 @@ const openDelete = async (id) => {
             // Se carga nuevamente la tabla para visualizar los cambios.
             fillTable();
         } else if (DATA.exception != null && (DATA.exception.includes("Integrity constraint") || DATA.exception.includes("constraint fails"))) {
-            sweetAlert(3, 'No se puede eliminar el  idioma porque está asociado a un currículum.', false);
+            sweetAlert(3, 'No se puede eliminar el  idioma porque está asociado a un currículum', false);
         } else {
             sweetAlert(2, DATA.error, false);
         }

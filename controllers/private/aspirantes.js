@@ -3,8 +3,7 @@ const ASPIRANTE_API = 'services/private/aspirante_service.php';
 // Constante para establecer el formulario de buscar.
 const SEARCH_FORM = document.getElementById('searchForm');
 // Constantes para establecer los elementos de la tabla.
-const TABLE_BODY = document.getElementById('tabla_aspirante'),
-    ROWS_FOUND = document.getElementById('rowsFound');
+const TABLE_BODY = document.getElementById('tabla_aspirante');
 // Constantes para establecer los elementos del componente Modal.
 const SAVE_MODAL = new bootstrap.Modal('#saveModal'),
     MODAL_TITLE = document.getElementById('modalTitle');
@@ -29,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     var fechaMaxima = new Date();
     // Se calcula la diferencia de la fecha actual - 18 años (La persona debe ser mayor de edad para registrarse).
     fechaMaxima.setFullYear(fechaMaxima.getFullYear() - 18);
+    fechaMaxima.setHours(fechaMaxima.getHours() - 24);
     // Se configura la fecha máxima del date picker.
     FECHA_ASPIRANTE.max = fechaMaxima.toISOString().substring(0, 10);
     // Se calcula la diferencia de la fecha actual - 18 años - 42 (60 años es la edad máxima para registrarse).
@@ -64,7 +64,6 @@ SAVE_FORM.addEventListener('submit', async (event) => {
     const FORM = new FormData(SAVE_FORM);
     // Petición para guardar los datos del formulario.
     const DATA = await fetchData(ASPIRANTE_API, action, FORM);
-    console.log(DATA);
     // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
     if (DATA.status) {
         // Se cierra la caja de diálogo.
@@ -75,6 +74,8 @@ SAVE_FORM.addEventListener('submit', async (event) => {
         fillTable();
     } else if (DATA.exception != null && (DATA.exception.includes ("Integrity constraint") || DATA.exception.includes ("Duplicate entry"))) {
         sweetAlert(3, 'El correo del aspirante ya está siendo utilizado', false);
+    } else if(DATA.error == "El correo ya está siendo utilizado por otro aspirante"){
+        sweetAlert(3, DATA.error, false);
     } else {
         sweetAlert(2, DATA.error, false);
     }
@@ -87,7 +88,6 @@ SAVE_FORM.addEventListener('submit', async (event) => {
 */
 const fillTable = async (form = null) => {
     // Se inicializa el contenido de la tabla.
-    ROWS_FOUND.textContent = '';
     TABLE_BODY.innerHTML = '';
     // Se verifica la acción a realizar.
     (form) ? action = 'searchRows' : action = 'readAll';
@@ -146,7 +146,7 @@ const Selected = (data, action, selectId, selectedValue = null) => {
     // Crear opción por defecto
     const defaultOption = document.createElement('option');
     defaultOption.value = '';
-    defaultOption.textContent = 'Selecciona el género';
+    defaultOption.textContent = 'Seleccione el género';
     selectElement.appendChild(defaultOption);
 
     // Llenar el combobox con los datos proporcionados
@@ -292,7 +292,7 @@ const openDelete = async (id) => {
             // Se carga nuevamente la tabla para visualizar los cambios.
             fillTable();
         } else if (DATA.exception != null && (DATA.exception.includes ("Integrity constraint") || DATA.exception.includes ("constraint fails"))) {
-            sweetAlert(3, 'No se puede eliminar el aspirante porque está asociado a un currículum.', false);
+            sweetAlert(3, 'No se puede eliminar el aspirante porque está asociado a un currículum', false);
         }else {
             sweetAlert(2, DATA.error, false);
         }

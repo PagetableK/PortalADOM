@@ -37,7 +37,7 @@
                                     </button>
                                 </div>
                                 <!-- Este input crea la barra de búsqueda -->
-                                <input type="search" class="form-control elemento-form" placeholder="Buscar..." name="search">
+                                <input type="search" class="form-control elemento-form" placeholder="Buscar instituciones por nombre..." name="search" id="buscador">
                                 <div class="d-flex">
                                     <button type="reset" class="input-group-text elemento-form" onclick="fillTable()">
                                         <i class="bi bi-arrow-clockwise"></i>
@@ -45,13 +45,12 @@
                                 </div>
                             </div>
                         </form>
-                        
                     </div>
                 </div>
                 <div class="col-12 col-lg-3 d-flex justify-content-center">
                     <div class="btn btn-dark h-100 w-100 d-flex align-items-center justify-content-center gap-2 contenedor-form"
                         type="submit" onclick="openCreate()">
-                        Agregar institucion <i class="bi bi-plus h3 agregar-icono"></i>
+                        Agregar institución <i class="bi bi-plus h3 agregar-icono"></i>
                     </div>
                 </div>
             </div>
@@ -61,9 +60,6 @@
                 <table class="table table-hover caption-top">
                     <!-- Cabeza de la tabla para mostrar la cantidad de registros y los títulos de las columnas -->
                     <thead>
-                        <tr>
-                            <td colspan="2" id="rowsFound"></td>
-                        </tr>
                         <tr class="text-center">
                             <th>Nombres</th>
                             <th>Usos</th>
@@ -77,14 +73,12 @@
         </div>
 
         <!-- Componente Modal para guardar un registro -->
-        <div class="modal fade" id="saveModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-            aria-labelledby="modalTitle" aria-hidden="true">
+        <div class="modal fade" id="saveModal" data-bs-backdrop="static">
             <div class="modal-dialog modal-lg modal-dialog-centered">
                 <div class="modal-content">
-                    <div class="modal-header ">
+                    <div class="modal-header">
                         <h1 class="modal-title fs-5 text-dark" id="modalTitle"></h1>
-                        <button type="button" class="btn-close btn-close-dark" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
+                        <button type="button" class="btn-close btn-close-dark" data-bs-dismiss="modal"></button>
                     </div>
                     <!-- Formulario para crear o actualizar un registro -->
                     <form id="saveForm">
@@ -92,15 +86,22 @@
                             <!-- Campo oculto para asignar el id del registro al momento de modificar -->
                             <input type="number" class="d-none" id="idInstitucion" name="idInstitucion">
                             
-                            <div class="col-sm-12 col-md-6">
-                                <label for="nombreInstitucion" class="form-label fw-semibold">Institucion</label>
+                            <div class="col-12">
+                                <label for="nombreInstitucion" class="form-label fw-semibold">Institución</label>
                                 <input id="nombreInstitucion" type="text" name="nombreInstitucion"
-                                    class="form-control" placeholder="Ingresa el nombre de la institucion"
+                                    class="form-control" placeholder="Ingrese el nombre de la institucion"
                                     autocomplete="off" required>
                             </div>
                         </div>
-                        <div class="modal-footer col-sm-12 col-md-12 col-lg-12">
-                            <button type="submit" class="btn bg-primary text-white ">Guardar</button>
+                        <div class="modal-footer col-12 justify-content-center">
+                            <button type="submit" class="btn bg-primary text-white d-none" id="btnAgregar">
+                                <i class="bi bi-plus"></i>
+                                Agregar institución
+                            </button>
+                            <button type="submit" class="btn bg-success text-white d-none" id="btnActualizar">
+                                <i class="bi bi-pencil-fill"></i>
+                                Actualizar institución
+                            </button>
                         </div>
                     </form>
                 </div>

@@ -5,8 +5,7 @@ const CURRICULUM_API = 'services/private/curriculum_service.php';
 // Constante para establecer el formulario de buscar.
 const SEARCH_FORM = document.getElementById('searchForm');
 // Constantes para establecer los elementos de la tabla.
-const TABLE_BODY = document.getElementById('tabla_aspirante'),
-    ROWS_FOUND = document.getElementById('filasEncontradas');
+const TABLE_BODY = document.getElementById('tabla_aspirante');
 // Constantes para establecer los elementos del componente Modal.
 //const SAVE_MODAL = new bootstrap.Modal('#saveModal'),
     MODAL_TITLE = document.getElementById('modalTitle');
@@ -14,6 +13,21 @@ const TABLE_BODY = document.getElementById('tabla_aspirante'),
 const SAVE_FORM = document.getElementById('saveForm'),
     ID_CURRICULUM = document.getElementById('idCurriculum'),
     NOMBRE_ASPIRANTE = document.getElementById('nombreAspirante');
+
+const CURRICULUM_MODAL = new bootstrap.Modal('#curriculumModalViewer'),
+    CM_IMAGEN = document.getElementById("curriculumModalImagen"),
+    CM_NOMBRE = document.getElementById("curriculumModalNombre"),
+    CM_EDAD = document.getElementById("curriculumModalEdad"),
+    CM_GENERO = document.getElementById("curriculumModalGenero"),
+    CM_TELEFONO_FIJO = document.getElementById("curriculumModalTelefonoFijo"),
+    CM_TELEFONO_MOVIL = document.getElementById("curriculumModalTelefono"),
+    CM_EMAIL = document.getElementById("curriculumModalEmail"),
+
+    CM_TB_EXPERIENCIA = document.getElementById("curriculumModalExperienciaLaboral"),
+    CM_TB_ESTUDIOS = document.getElementById("curriculumModalEstudios");
+
+    CM_ELIMINAR = document.getElementById("cmEliminarBoton");
+    
 
 // Método del evento para cuando el documento ha cargado.
 document.addEventListener('DOMContentLoaded', () => {
@@ -68,7 +82,6 @@ SAVE_FORM.addEventListener('submit', async (event) => {
 */
 const fillTable = async (form = null) => {
     // Se inicializa el contenido de la tabla.
-    ROWS_FOUND.textContent = '';
     TABLE_BODY.innerHTML = '';
     // Se verifica la acción a realizar.
     (form) ? action = 'searchRows' : action = 'readAll';
@@ -92,11 +105,11 @@ const fillTable = async (form = null) => {
                     <td>${row.experiencias}</td>
                     <td>${row.idiomas}</td>
                     <td>   
-                        <button type="button" class="btn btn-outline-success" onclick="openUpdate(${row.id_area})">
-                            <i class="bi bi-pencil-fill"></i>
+                        <button type="button" class="btn btn-outline-primary" onclick="openVerCurriculum(${row.id_curriculum})">
+                            <i class="bi bi-info-circle"></i>
                         </button>
-                        <button type="button" class="btn btn-outline-danger" onclick="openDelete(${row.id_area})">
-                            <i class="bi bi-trash-fill"></i>
+                        <button type="button" class="btn btn-outline-danger" onclick="openDelete(${row.id_curriculum})">
+                            <i class="bi bi-filetype-pdf"></i>
                         </button>
                     </td>
                 </tr>
@@ -119,6 +132,75 @@ const openCreate = () => {
     // Se prepara el formulario.
     SAVE_FORM.reset();
     fillSelect(RUBRO_API, 'readAll', 'idRubro');
+}
+
+const openVerCurriculum = async (id) => {
+
+    const FORM = new FormData();
+    FORM.append('idCurriculum', id);
+    const DATA = await fetchData(CURRICULUM_API, 'readOneData', FORM);
+
+    CM_ELIMINAR.classList.remove("d-none")
+    CM_ELIMINAR.addEventListener('click', function() {
+        openDelete(id);
+        CURRICULUM_MODAL.hide();
+    })
+
+    // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
+    if (DATA.status) {
+        
+        const ROW = DATA.dataset;
+        CM_IMAGEN.src= SERVER_URL+"images/aspirantes/"+ROW.imagen_aspirante;
+        if(ROW.imagen_aspirante == null){
+            CM_IMAGEN.src= SERVER_URL+"images/aspirantes/default.webp";
+        }
+        CM_NOMBRE.textContent = ROW.nombre_aspirante +" "+ ROW.apellido_aspirante;
+        CM_EDAD.textContent = ROW.Edad;
+        CM_GENERO.textContent = ROW.genero_aspirante;
+        CM_TELEFONO_MOVIL.textContent = ROW.telefono_movil;
+        CM_TELEFONO_FIJO.textContent = ROW.telefono_fijo;
+        document.getElementById("cmTelefonoFijoContainer").classList.remove("d-none")
+        CM_EMAIL.textContent = ROW.correo_curriculum;
+
+
+        const FORME = new FormData();
+        FORME.append('idCurriculum', id);
+        const DATAE = await fetchData(CURRICULUM_API, 'readOneDataExperiencias', FORME);
+
+        if(DATAE.status){
+            DATAE.dataset.forEach(row => {
+                CM_TB_EXPERIENCIA.innerHTML += `
+                <div> 
+                <p><strong>${row.nombre_empresa} - ${row.nombre_cargo}</strong></p>
+                <p>Rubro de la empresa: ${row.nombre_rubro}</p>
+                <p>${row.fecha_inicio} hasta ${row.fecha_fin}</p>
+                </div>`;
+            })
+        }
+
+        const FORMS = new FormData();
+        FORMS.append('idCurriculum', id);
+        const DATAS = await fetchData(CURRICULUM_API, 'readOneDataEstudios', FORMS);
+
+        if(DATAS.status){ 
+            DATAS.dataset.forEach(row => {
+                CM_TB_ESTUDIOS.innerHTML += `
+                <div>
+                <p><strong>${row.nombre_institucion}</strong></p>
+                <p>${row.estado_egreso} - ${row.titulo_estudio}</p>
+                <p>${row.fecha_finalizacion}</p>
+                </div>`;
+            })
+        }
+
+        CURRICULUM_MODAL.show(); 
+
+    } else {
+        sweetAlert(2, DATA.error, false);
+    }
+
+
+    
 }
 
 /*
@@ -158,14 +240,14 @@ const openUpdate = async (id) => {
 */
 const openDelete = async (id) => {
     // Llamada a la función para mostrar un mensaje de confirmación, capturando la respuesta en una constante.
-    const RESPONSE = await confirmAction('¿Desea eliminar la area de forma permanente?');
+    const RESPONSE = await confirmAction('¿Desea eliminar el curriculum de forma permanente?');
     // Se verifica la respuesta del mensaje.
     if (RESPONSE) {
         // Se define una constante tipo objeto con los datos del registro seleccionado.
         const FORM = new FormData();
-        FORM.append('idArea', id);
+        FORM.append('idCurriculum', id);
         // Petición para eliminar el registro seleccionado.
-        const DATA = await fetchData(AREA_API, 'deleteRow', FORM);
+        const DATA = await fetchData(CURRICULUM_API, 'deleteRow', FORM);
         // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
         if (DATA.status) {
             // Se muestra un mensaje de éxito.
