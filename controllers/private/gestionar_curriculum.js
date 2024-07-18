@@ -35,6 +35,8 @@ const SELECT_IDIOMAS = document.getElementById('idioma'), SELECT_HABILIDADES = d
 
 const ESTUDIOS = [], CERTIFICADOS = [], EXPERIENCIAS = [], REFERENCIAS = [], IDIOMAS = [], HABILIDADES = [];
 
+let editarCv = false;
+
 // Se inicializan y agregan los diseños de los elementos select2.
 $("#aspirante").select2({
     theme: "bootstrap",
@@ -281,7 +283,7 @@ const cargarInstituciones = async () => {
     // Se realiza la petición a la API para obtener las instituciones.
     const DATA = await fetchData(API_INSTITUCIONES, 'readAll');
     // Se inicializan los valores del combobox.
-    SELECT_INSTITUCIONES.innerHTML = '<option value="default" selected>Seleccione una opción</option>';
+    SELECT_INSTITUCIONES.innerHTML = '<option value="-1" selected>Seleccione una opción</option>';
     SELECT_INSTITUCIONES.innerHTML += '<option value="0">Otra institución</option>';
     // Si la respuesta es satisfactoria se ejecuta el código.
     if (DATA.status) {
@@ -366,8 +368,11 @@ const cargarHabilidades = async () => {
 
 // Evento que se ejecuta al cambiar la opción seleccionada.
 $('#institucion').on('change', function (e) {
+    // Se verifica si el array está vacío.
+    if ($("#institucion").select2('data').length == 0) {
+    }
     // Si el valor seleccionado es 0 se ejecuta el código.
-    if ($("#institucion").select2('data')[0].id == 0) {
+    else if ($("#institucion").select2('data')[0].id == 0) {
 
         OTRA_INSTITUCION.removeAttribute("disabled");
     } else {
@@ -436,8 +441,6 @@ const cargarEstudios = async () => {
 
     const DATA = ESTUDIOS;
 
-    console.log(DATA);
-
     const DATA_GRADOS = await fetchData(API_GRADOS, 'readAll');
 
     const DATA_INSTITUCIONES = await fetchData(API_INSTITUCIONES, 'readAll');
@@ -470,8 +473,6 @@ const cargarFormacionComplementaria = async () => {
     const DATA = CERTIFICADOS;
 
     if (DATA.length > 0) {
-
-        console.log(DATA);
 
         CONTENEDOR_FORMACION_COMPLEMENTARIA.innerHTML = '';
 
@@ -527,9 +528,7 @@ const cargarReferencias = async () => {
 
         CONTENEDOR_REFERENCIAS.innerHTML = '';
 
-        const ROW = DATA.dataset;
-
-        Object.values(ROW).forEach(row => {
+        DATA.forEach(row => {
 
             CONTENEDOR_REFERENCIAS.innerHTML += `
             <div class="d-flex gap-2 contenedorElementoCV rounded-5 p-2 align-items-center">
@@ -554,13 +553,11 @@ const cargarIdiomasCV = async () => {
 
         CONTENEDOR_IDIOMAS.innerHTML = '';
 
-        const ROW = DATA.dataset;
-
-        Object.values(ROW).forEach(row => {
+        DATA.forEach(row => {
 
             CONTENEDOR_IDIOMAS.innerHTML += `
             <div class="d-flex gap-2 contenedorElementoCV rounded-5 p-2 align-items-center">
-                <p class="psinmargen tex-center"><span class="fw-bold">${DATA_IDIOMAS.dataset.filter(function (entry) { return entry.ID === row.idioma; })[0].NOMBRE}</span> - <span class="fw-bold">${row.nivel}</span></p>
+                <p class="psinmargen tex-center"><span class="fw-bold">${DATA_IDIOMAS.dataset.filter(function (entry) { return entry.ID === parseInt(row.idioma); })[0].NOMBRE}</span> - <span class="fw-bold">${row.nivel}</span></p>
                 <i class="bi bi-x-square text-danger" onclick="eliminarIdioma('${row.identificador}')"></i>
             </div>`;
         });
@@ -580,12 +577,11 @@ const cargarHabilidadesCV = async () => {
 
         CONTENEDOR_HABILIDADES.innerHTML = '';
 
-        const ROW = DATA.dataset;
+        DATA.forEach(row => {
 
-        Object.values(ROW).forEach(row => {
             CONTENEDOR_HABILIDADES.innerHTML += `
             <div class="d-flex gap-2 contenedorElementoCV rounded-5 p-2 align-items-center">
-                <p class="psinmargen tex-center"><span class="fw-bold">${DATA_HABILIDADES.dataset.filter(function (entry) { return entry.id_habilidad === row.habilidad; })[0].nombre_habilidad}</span> - <span class="fw-bold">${row.nivel}</span></p>
+                <p class="psinmargen tex-center"><span class="fw-bold">${DATA_HABILIDADES.dataset.filter(function (entry) { return entry.id_habilidad === parseInt(row.habilidad); })[0].nombre_habilidad}</span> - <span class="fw-bold">${row.nivel}</span></p>
                 <i class="bi bi-x-square text-danger" onclick="eliminarHabilidad('${row.identificador}')"></i>
             </div>`;
         });
@@ -683,6 +679,12 @@ FORM_ESTUDIO.addEventListener('submit', async (e) => {
 
             FORM_ESTUDIO.reset();
 
+            SELECT_FECHA_ESTUDIO.removeAttribute("disabled");
+
+            OTRA_INSTITUCION.setAttribute('disabled', '');
+
+            $("#institucion").val('').trigger('change');
+
             cargarEstudios();
 
             sweetAlert(1, 'Estudio agregado', false);
@@ -693,6 +695,20 @@ FORM_ESTUDIO.addEventListener('submit', async (e) => {
     }
 });
 
+const eliminarEstudio = async (id) => {
+
+    ESTUDIOS.forEach(row => {
+
+        var indice = ESTUDIOS.indexOf(row);
+
+        if (row.identificador == id) {
+
+            ESTUDIOS.splice(indice, 1);
+        }
+    });
+
+    cargarEstudios();
+}
 
 FORM_FORMACION_COMPLEMENTARIA.addEventListener('submit', async (e) => {
 
@@ -726,6 +742,21 @@ FORM_FORMACION_COMPLEMENTARIA.addEventListener('submit', async (e) => {
 });
 
 
+const eliminarFormacionComplementaria = async (id) => {
+
+    CERTIFICADOS.forEach(row => {
+
+        var indice = CERTIFICADOS.indexOf(row);
+
+        if (row.identificador == id) {
+
+            CERTIFICADOS.splice(indice, 1);
+        }
+    });
+
+    cargarFormacionComplementaria();
+}
+
 FORM_EXPERIENCIA.addEventListener('submit', async (e) => {
 
     e.preventDefault();
@@ -743,13 +774,21 @@ FORM_EXPERIENCIA.addEventListener('submit', async (e) => {
     } else {
         const FORM = new FormData(FORM_EXPERIENCIA);
 
+        var mesFinal;
+
+        var yearFinal;
+
         if (ESTADO_EXPERIENCIA.checked) {
 
             FORM.append('booleanFecha', 1);
             FORM.append('mesFinal', "0");
             FORM.append('yearFinal', "0000");
+            mesFinal = "";
+            yearFinal = "";
         } else {
 
+            mesFinal = FORM_EXPERIENCIA['mesFinal'].value;
+            yearFinal = FORM_EXPERIENCIA['yearFinal'].value;
             FORM.append('booleanFecha', 0);
         }
 
@@ -761,10 +800,11 @@ FORM_EXPERIENCIA.addEventListener('submit', async (e) => {
 
         if (DATA.status) {
 
-            EXPERIENCIAS.push({ identificador : IDENTIFICADOR, empresa : FORM_EXPERIENCIA['empresa'].value, cargo: FORM_EXPERIENCIA['cargo'].value, rubro : FORM_EXPERIENCIA['rubro'].value, area : FORM_EXPERIENCIA['area'].value,
-                mes_inicio : FORM_EXPERIENCIA['mesInicio'].value, year_inicio : FORM_EXPERIENCIA['yearInicio'].value, mes_final : FORM_EXPERIENCIA['mesFinal'].value, year_final : FORM_EXPERIENCIA['yearFinal'].value, 
-                descripcion : FORM_EXPERIENCIA['descripcion']
-             });
+            EXPERIENCIAS.push({
+                identificador: IDENTIFICADOR, empresa: FORM_EXPERIENCIA['empresa'].value, cargo: FORM_EXPERIENCIA['cargo'].value, rubro: FORM_EXPERIENCIA['rubro'].value, area: FORM_EXPERIENCIA['area'].value,
+                mes_inicio: FORM_EXPERIENCIA['mesInicio'].value, year_inicio: FORM_EXPERIENCIA['yearInicio'].value, mes_final: mesFinal, year_final: yearFinal,
+                descripcion: FORM_EXPERIENCIA['descripcion']
+            });
 
             FORM_EXPERIENCIA.reset();
 
@@ -786,5 +826,345 @@ FORM_EXPERIENCIA.addEventListener('submit', async (e) => {
 
             sweetAlert(2, DATA.error, false);
         }
+    }
+});
+
+
+const eliminarExperiencia = async (id) => {
+
+    EXPERIENCIAS.forEach(row => {
+
+        var indice = EXPERIENCIAS.indexOf(row);
+
+        if (row.identificador == id) {
+
+            EXPERIENCIAS.splice(indice, 1);
+        }
+    });
+
+    cargarExperiencias();
+}
+
+FORM_REFERENCIA.addEventListener('submit', async (e) => {
+
+    e.preventDefault();
+
+    if (!(FORM_REFERENCIA['telefonoReferencia'].value.length == 9)) {
+
+        await sweetAlert(3, 'El teléfono de la referencia debe tener 8 digitos y seguir el formato ####-####', false);
+
+        FORM_REFERENCIA['telefonoReferencia'].focus();
+    } else {
+
+        var telefonoReferencia;
+
+        if (REFERENCIAS.length == 0) {
+
+            telefonoReferencia = [];
+        } else {
+
+            telefonoReferencia = REFERENCIAS.filter(function (entry) { return entry.telefono === FORM_REFERENCIA['telefonoReferencia'].value });
+        }
+
+        const FORM = new FormData(FORM_REFERENCIA);
+
+        const IDENTIFICADOR = crearId(10);
+
+        FORM.append('identificador', IDENTIFICADOR);
+
+        const DATA = await fetchData(API_CURRICULUM, 'validarReferencia', FORM);
+
+        if (DATA.status && telefonoReferencia.length == 0) {
+
+            REFERENCIAS.push({
+                identificador: IDENTIFICADOR, nombre: FORM_REFERENCIA['nombre'].value, apellido: FORM_REFERENCIA['apellido'].value, puesto: FORM_REFERENCIA['puesto'].value,
+                telefono: FORM_REFERENCIA['telefonoReferencia'].value
+            });
+
+            FORM_REFERENCIA.reset();
+
+            cargarReferencias();
+
+            sweetAlert(1, 'Referencia agregada', false);
+        } else if (telefonoReferencia.length > 0) {
+
+            sweetAlert(3, "El teléfono digitado ya ha sido agregado en otra referencia.\nDigite un número diferente.", false);
+        } else {
+
+            sweetAlert(2, DATA.error, false);
+        }
+    }
+});
+
+
+const eliminarReferencia = async (id) => {
+
+    REFERENCIAS.forEach(row => {
+
+        var indice = REFERENCIAS.indexOf(row);
+
+        if (row.identificador == id) {
+
+            REFERENCIAS.splice(indice, 1);
+        }
+    });
+
+    cargarReferencias();
+}
+
+FORM_IDIOMA.addEventListener('submit', async (e) => {
+
+    e.preventDefault();
+
+    if (SELECT_IDIOMAS.value == "default") {
+
+        sweetAlert(3, "Asegúrese de seleccionar un idioma", false);
+
+        SELECT_IDIOMAS.focus();
+    } else {
+
+        var idioma;
+
+        if (IDIOMAS.length == 0) {
+
+            idioma = [];
+        } else {
+
+            idioma = IDIOMAS.filter(function (entry) { return entry.idioma === FORM_IDIOMA['idioma'].value });
+        }
+
+        const FORM = new FormData(FORM_IDIOMA);
+
+        const IDENTIFICADOR = crearId(10);
+
+        FORM.append('identificador', IDENTIFICADOR);
+
+        const DATA = await fetchData(API_CURRICULUM, 'validarIdioma', FORM);
+
+        if (DATA.status && idioma.length == 0) {
+
+            IDIOMAS.push({ identificador: IDENTIFICADOR, idioma: FORM_IDIOMA['idioma'].value, nivel: FORM_IDIOMA['nivelIdioma'].value });
+
+            FORM_IDIOMA.reset();
+
+            cargarIdiomasCV();
+
+            sweetAlert(1, 'Idioma agregado', false);
+        } else if (idioma.length > 0) {
+
+            sweetAlert(3, "El idioma ya ha sido agregado", false);
+        } else {
+
+            sweetAlert(2, DATA.error, false);
+        }
+    }
+});
+
+
+const eliminarIdioma = async (id) => {
+
+    IDIOMAS.forEach(row => {
+
+        var indice = IDIOMAS.indexOf(row);
+
+        if (row.identificador == id) {
+
+            IDIOMAS.splice(indice, 1);
+        }
+    });
+
+    cargarIdiomasCV();
+}
+
+FORM_HABILIDAD.addEventListener('submit', async (e) => {
+
+    e.preventDefault();
+
+    if (SELECT_HABILIDADES.value == "default") {
+
+        await sweetAlert(3, 'Asegúrese de seleccionar una habilidad');
+
+        SELECT_HABILIDADES.focus();
+    } else {
+
+        var habilidad;
+
+        if (HABILIDADES.length == 0) {
+
+            habilidad = [];
+        } else {
+
+            habilidad = HABILIDADES.filter(function (entry) { return entry.habilidad === FORM_HABILIDAD['nombreHabilidad'].value });
+        }
+
+        const FORM = new FormData(FORM_HABILIDAD);
+
+        const IDENTIFICADOR = crearId(10);
+
+        FORM.append('identificador', IDENTIFICADOR);
+
+        const DATA = await fetchData(API_CURRICULUM, 'validarHabilidad', FORM);
+
+        if (DATA.status && habilidad.length == 0) {
+
+            HABILIDADES.push({ identificador: IDENTIFICADOR, habilidad: FORM_HABILIDAD['nombreHabilidad'].value, nivel: FORM_HABILIDAD['nivelHabilidad'].value });
+
+            FORM_HABILIDAD.reset();
+
+            cargarHabilidadesCV();
+
+            sweetAlert(1, 'Habilidad agregada', false);
+        } else if (habilidad.length > 0) {
+
+            sweetAlert(3, "La habilidad ya ha sido agregada", false);
+        } else {
+
+            sweetAlert(2, DATA.error, false);
+        }
+    }
+});
+
+
+const eliminarHabilidad = async (id) => {
+
+    HABILIDADES.forEach(row => {
+
+        var indice = HABILIDADES.indexOf(row);
+
+        if (row.identificador == id) {
+
+            HABILIDADES.splice(indice, 1);
+        }
+    });
+
+    cargarHabilidadesCV();
+}
+
+
+FORM_CURRICULUM.addEventListener('submit', async (e) => {
+
+    e.preventDefault();
+
+    let estudio = ESTUDIOS.length;
+
+    if (IMAGEN.value == "" && !editarCv) {
+
+        await sweetAlert(3, "Asegúrese de seleccionar la imagen que se mostrará en el currículum", false);
+
+        IMAGEN.focus();
+    } else if (TELEFONO_MOVIL.value == "") {
+
+        await sweetAlert(3, "Asegúrese de agregar el teléfono móvil", false);
+
+        TELEFONO_MOVIL.focus();
+    } else if (CORREO_ASPIRANTE.value.trim() == "") {
+
+        await sweetAlert(3, "Asegúrese de agregar el correo electrónico", false);
+
+        CORREO_ASPIRANTE.focus();
+    } else if(estudio > 0) {
+
+        const FORM = new FormData(FORM_CURRICULUM);
+
+        let accion;
+
+        editarCv ? accion = 'actualizarCurriculum' : accion = 'agregarCurriculum';
+
+        // ENVIAR BOOLEANIMAGEN, VALIDAR TELEFONOS CON CHECKWITHID
+        FORM.append("booleanImagen", 1);
+
+        const DATA = await fetchData(API_CURRICULUM, accion, FORM);
+
+        if (DATA.status && editarCv) {
+
+            const DATA_APARTADOS = await fetchData(API_CURRICULUM, 'obtenerApartados');
+
+            const FORM = new FormData();
+
+            FORM.append('idCurriculum', DATA_APARTADOS.dataset[5]);
+
+            await fetchData(API_CURRICULUM, 'eliminarApartados', FORM);
+
+            await agregarEstudios(FORM);
+
+            DATA_APARTADOS.dataset[0] == false ? "" : await agregarCertificados(FORM);
+
+            DATA_APARTADOS.dataset[1] == false ? "" : await agregarExperiencias(FORM);
+
+            DATA_APARTADOS.dataset[4] == false ? "" : await agregarReferencias(FORM);
+
+            DATA_APARTADOS.dataset[2] == false ? "" : await agregarIdiomas(FORM);
+
+            DATA_APARTADOS.dataset[3] == false ? "" : await agregarHabilidades(FORM);
+
+            errorCurriculum ? async () => {
+                await sweetAlert(1, 'Currículum actualizado correctamente');
+                sweetAlert(3, 'Es posible que los apartados no se hayan actualizado correctamente, se recomienda verificar el currículum', false);
+            } : sweetAlert(1, 'Currículum actualizado correctamente', true, 'curriculum.html');
+        }
+        else if (DATA.status) {
+
+            const FORM = new FormData();
+            // Se almacena la url en la variable.
+            var url = document.URL;
+            // Se almacena el parámetro en la variable.
+            var parametro = new URL(url).searchParams.get("id");
+
+            FORM.append('idCurriculum', parametro);
+
+            await agregarEstudios(FORM);
+
+            CERTIFICADOS.length > 0 ? "" : await agregarCertificados(FORM);
+
+            EXPERIENCIAS.length > 0 ? "" : await agregarExperiencias(FORM);
+
+            REFERENCIAS.length > 0 ? "" : await agregarReferencias(FORM);
+
+            IDIOMAS.length > 0 ? "" : await agregarIdiomas(FORM);
+
+            HABILIDADES.length > 0 ? "" : await agregarHabilidades(FORM);
+
+            sweetAlert(1, 'Currículum agregado correctamente', true, 'curriculums.html');
+        } else if (DATA.error == "El teléfono móvil ya está siendo utilizado en otro currículum") {
+
+            await sweetAlert(3, DATA.error + ". Digite un número de teléfono diferente", false);
+
+            TELEFONO_MOVIL.focus();
+        } else if (DATA.error == "El correo ya está siendo utilizado en otro currículum") {
+
+            await sweetAlert(3, DATA.error + ". Digite un correo diferente", false);
+
+            CORREO_ASPIRANTE.focus();
+        } else if (DATA.error == "El teléfono fijo ya está siendo utilizado en otro currículum") {
+
+            await sweetAlert(3, DATA.error + ". Digite un número de teléfono diferente", false);
+
+            TELEFONO_FIJO.focus();
+        } else if (DATA.error == "Los teléfonos no pueden ser iguales") {
+
+            await sweetAlert(3, "El teléfono fijo no puede ser el mismo número que el teléfono móvil", false);
+
+            TELEFONO_FIJO.focus();
+        } else if (DATA.error == "El tipo de imagen debe ser jpg o png") {
+
+            sweetAlert(3, "La imagen debe ser formato .jpg o .png", false)
+
+            IMAGEN.focus();
+        } else {
+
+            sweetAlert(2, DATA.error, false);
+        }
+    } else{
+        
+        sweetAlert(3, "Debe agregar por lo menos 1 estudio a su currículum", false);
+
+        var stepperCv = new Stepper(document.querySelector('#stepperCv'), {
+            linear: false,
+            animation: true
+        });
+
+        stepperCv.to(1);
+
+        MAIN.scrollTo(0, 0);
     }
 });

@@ -472,7 +472,7 @@ class CurriculumData extends CurriculumHandler
 
 
     // Función que permite validar el campo telefono_referencia.
-    public function setTelefonoReferencia($valor)
+    public function setTelefonoReferencia($valor, $boolean)
     {
         // Se valida que la cadena de caracteres tenga el formato de teléfono.
         if (!Validator::validatePhone($valor)) {
@@ -481,7 +481,7 @@ class CurriculumData extends CurriculumHandler
             return false;
         }
         // Se valida que el teléfono no haya sido agregado anteriormente.
-        elseif ($this->verificarTelefono($valor)) {
+        elseif ($boolean and $this->verificarTelefono($valor)) {
             // En caso de haberlo agregado se devuelve el error.
             $this->info_error = 'El teléfono digitado ya ha sido agregado en otra referencia';
             return false;
@@ -523,10 +523,14 @@ class CurriculumData extends CurriculumHandler
     }
 
     // Función que verifica que el idioma no haya sido agregado aún.
-    public function validarIdioma()
+    public function validarIdioma($boolean)
     {
+        // Si el valor del parámetro es 1 se devuelve true.
+        if($boolean){
+            return true;
+        }
         // Se verifica que el idioma no haya sido agregado.
-        if ($this->verificarIdioma()) {
+        elseif ($this->verificarIdioma()) {
             // Se devuelve true.
             return true;
         } else {
@@ -661,10 +665,14 @@ class CurriculumData extends CurriculumHandler
     }
 
     // Función que verifica que la habilidad no haya sido agregada aún.
-    public function validarHabilidad()
+    public function validarHabilidad($boolean)
     {
+        // Si el valor del parámetro es 1 se devuelve true.
+        if($boolean){
+            return true;
+        }
         // Se verifica que la habilidad no haya sido agregada.
-        if ($this->verificarHabilidad()) {
+        elseif ($this->verificarHabilidad()) {
             // Se devuelve true.
             return true;
         } else {

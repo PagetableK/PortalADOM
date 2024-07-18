@@ -168,7 +168,7 @@ if (isset($_GET['action'])) {
                     !$curriculum->setNombreReferencia($_POST['nombre']) or
                     !$curriculum->setApellidoReferencia($_POST['apellido']) or
                     !$curriculum->setPuesto($_POST['puesto']) or
-                    !$curriculum->setTelefonoReferencia($_POST['telefonoReferencia']) or
+                    !$curriculum->setTelefonoReferencia($_POST['telefonoReferencia'], 1) or
                     !$curriculum->setIdentificador($_POST['identificador'])
                 ) {
                     $result['error'] = $curriculum->getDataError();
@@ -205,7 +205,7 @@ if (isset($_GET['action'])) {
                     !$curriculum->setIdIdioma($_POST['idioma']) or
                     !$curriculum->setNivelIdioma($_POST['nivelIdioma']) or
                     !$curriculum->setIdentificador($_POST['identificador']) or
-                    !$curriculum->validarIdioma()
+                    !$curriculum->validarIdioma(0)
                 ) {
                     $result['error'] = $curriculum->getDataError();
                 } elseif ($curriculum->agregarIdioma()) {
@@ -241,7 +241,7 @@ if (isset($_GET['action'])) {
                     !$curriculum->setIdHabilidad($_POST['nombreHabilidad']) or
                     !$curriculum->setNivelHabilidad($_POST['nivelHabilidad']) or
                     !$curriculum->setIdentificador($_POST['identificador']) or
-                    !$curriculum->validarHabilidad()
+                    !$curriculum->validarHabilidad(0)
                 ) {
                     $result['error'] = $curriculum->getDataError();
                 } elseif ($curriculum->agregarHabilidad()) {

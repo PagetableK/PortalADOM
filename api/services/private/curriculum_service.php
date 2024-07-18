@@ -160,6 +160,49 @@ if (isset($_GET['action'])) {
                     $result['status'] = 1;
                 }
                 break;
+            case 'validarReferencia':
+                // Se eliminan los espacios en blancos de los valores dentro del array.
+                $_POST = Validator::validateForm($_POST);
+                if (
+                    !$curriculum->setNombreReferencia($_POST['nombre']) or
+                    !$curriculum->setApellidoReferencia($_POST['apellido']) or
+                    !$curriculum->setPuesto($_POST['puesto']) or
+                    !$curriculum->setTelefonoReferencia($_POST['telefonoReferencia'], 0) or
+                    !$curriculum->setIdentificador($_POST['identificador'])
+                ) {
+                    $result['error'] = $curriculum->getDataError();
+                } else {
+                    $result['status'] = 1;
+                }
+                break;
+            case 'validarIdioma':
+                // Se eliminan los espacios en blancos de los valores dentro del array.
+                $_POST = Validator::validateForm($_POST);
+                if (
+                    !$curriculum->setIdIdioma($_POST['idioma']) or
+                    !$curriculum->setNivelIdioma($_POST['nivelIdioma']) or
+                    !$curriculum->setIdentificador($_POST['identificador']) or
+                    !$curriculum->validarIdioma(1)
+                ) {
+                    $result['error'] = $curriculum->getDataError();
+                } else {
+                    $result['status'] = 1;
+                }
+                break;
+            case 'validarHabilidad':
+                // Se eliminan los espacios en blancos de los valores dentro del array.
+                $_POST = Validator::validateForm($_POST);
+                if (
+                    !$curriculum->setIdHabilidad($_POST['nombreHabilidad']) or
+                    !$curriculum->setNivelHabilidad($_POST['nivelHabilidad']) or
+                    !$curriculum->setIdentificador($_POST['identificador']) or
+                    !$curriculum->validarHabilidad(1)
+                ) {
+                    $result['error'] = $curriculum->getDataError();
+                } else {
+                    $result['status'] = 1;
+                }
+                break;
             default:
                 $result['error'] = 'Acción no disponible dentro de la sesión';
         }

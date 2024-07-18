@@ -1063,6 +1063,8 @@ FORM_ESTUDIO.addEventListener('submit', async (e) => {
 
             OTRA_INSTITUCION.setAttribute('disabled', '');
 
+            $("#institucion").val('').trigger('change');
+
             cargarEstudios();
 
             sweetAlert(1, 'Estudio agregado', false);
@@ -1104,12 +1106,12 @@ FORM_EXPERIENCIA.addEventListener('submit', async (e) => {
 
     if (SELECT_RUBROS.value == "default") {
 
-        sweetAlert(3, "Asegúrese de seleccionar un rubro", false);
+        await sweetAlert(3, "Asegúrese de seleccionar un rubro", false);
 
         SELECT_RUBROS.focus();
     } else if (SELECT_AREAS.value == "default") {
 
-        sweetAlert(3, "Asegúrese de seleccionar un área");
+        await sweetAlert(3, "Asegúrese de seleccionar un área");
 
         SELECT_AREAS.focus();
     } else {
@@ -1188,7 +1190,7 @@ FORM_IDIOMA.addEventListener('submit', async (e) => {
 
     if (SELECT_IDIOMAS.value == "default") {
 
-        sweetAlert(3, "Asegúrese de seleccionar un idioma", false);
+        await sweetAlert(3, "Asegúrese de seleccionar un idioma", false);
 
         SELECT_IDIOMAS.focus();
     } else {
@@ -1223,7 +1225,7 @@ FORM_HABILIDAD.addEventListener('submit', async (e) => {
 
     if (SELECT_HABILIDADES.value == "default") {
 
-        sweetAlert(3, 'Asegúrese de seleccionar una habilidad');
+        await sweetAlert(3, 'Asegúrese de seleccionar una habilidad');
 
         SELECT_HABILIDADES.focus();
     } else {
@@ -1345,6 +1347,9 @@ FORM_CURRICULUM.addEventListener('submit', async (e) => {
             });
 
             stepperCv.to(1);
+            
+            // Se restablece el scroll de la pantalla.
+            window.scrollTo(0, 0);
         } else if (DATA.error == "El teléfono móvil ya está siendo utilizado en otro currículum") {
 
             await sweetAlert(3, DATA.error + ". Digite un número de teléfono diferente", false);
@@ -1478,8 +1483,11 @@ function crearId(longitud) {
 
 // Evento que se ejecuta al cambiar la opción seleccionada.
 $('#institucion').on('change', function (e) {
+    // Se verifica si el array está vacío.
+    if($("#institucion").select2('data').length == 0){
+    }
     // Si el valor seleccionado es 0 se ejecuta el código.
-    if ($("#institucion").select2('data')[0].id == 0) {
+    else if ($("#institucion").select2('data')[0].id == 0) {
 
         OTRA_INSTITUCION.removeAttribute("disabled");
     } else {
