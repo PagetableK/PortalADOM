@@ -689,12 +689,11 @@ class CurriculumHandler
         $params = array($this->id_aspirante, $this->nombre_aspirante);
         return Database::executeRow($sql, $params);
     }
-
     public function readAll()
     {
         $sql = "SELECT 
                     a.id_aspirante, ca.imagen_aspirante, ca.id_curriculum,
-                    CONCAT(a.nombre_aspirante, ' ', a.apellido_aspirante) AS nombre,
+                    CONCAT(a.nombre_aspirante, ' ', a.apellido_aspirante) AS NOMBRE,
                     (SELECT COUNT(*) FROM estudios_aspirantes ea WHERE ea.id_curriculum = ca.id_curriculum) AS estudios,
                     (SELECT COUNT(*) FROM experiencias_aspirantes exa WHERE exa.id_curriculum = ca.id_curriculum) AS experiencias,
                     (SELECT COUNT(*) FROM idiomas_aspirantes ia WHERE ia.id_curriculum = ca.id_curriculum) AS idiomas
@@ -739,6 +738,18 @@ class CurriculumHandler
         $params = array($this->id);
         return Database::getRow($sql, $params);
     }
+
+
+    public function searchRows()
+    {
+        $value = '%' . Validator::getSearchValue() . '%';
+        $sql = 'SELECT * FROM vista_tabla_curriculum_privado
+        WHERE NOMBRE LIKE ? OR nombre_institucion_estudio LIKE ? OR titulo_certificado LIKE ? OR nombre_empresa LIKE ? OR nombre_cargo LIKE ? OR descripcion_puesto LIKE ? OR nombre_area LIKE ? OR nombre_idioma LIKE ? OR nombre_habilidad LIKE ?';
+        $params = array($value, $value, $value, $value, $value, $value, $value, $value, $value);
+        return Database::getRows($sql, $params);
+    }
+
+
 
     public function readCurriculum()
     {

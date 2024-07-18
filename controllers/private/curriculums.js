@@ -99,8 +99,8 @@ const fillTable = async (form = null) => {
             // Se crean y concatenan las filas de la tabla con los datos de cada registro.
             TABLE_BODY.innerHTML += `
                 <tr>
-                    <td><img class="rounded-circle" src="${SERVER_URL}images/aspirantes/${row.imagen_aspirante}" height="50"></td>
-                    <td>${row.nombre}</td>
+                    <td><img class="rounded-circle" src="${SERVER_URL}images/aspirantes/${row.IMAGEN}" height="50"></td>
+                    <td>${row.NOMBRE}</td>
                     <td>${row.estudios}</td>
                     <td>${row.experiencias}</td>
                     <td>${row.idiomas}</td>
