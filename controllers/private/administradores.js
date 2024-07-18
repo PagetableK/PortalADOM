@@ -60,6 +60,9 @@ SAVE_FORM.addEventListener('submit', async (event) => {
         sweetAlert(1, DATA.message, true);
         // Se carga nuevamente la tabla para visualizar los cambios.
         fillTable();
+    } else if(DATA.error == "El correo ya está siendo utilizado por otro administrador"){
+
+        sweetAlert(3, DATA.error, false);
     } else {
         sweetAlert(2, DATA.error, false);
     }
@@ -200,6 +203,9 @@ const openState = async (id) => {
                 await sweetAlert(1, DATA.message, true);
                 // Se carga nuevamente la tabla para visualizar los cambios.
                 fillTable();
+            } else if(DATA.error == "No se puede bloquear a sí mismo"){
+
+                sweetAlert(3, DATA.error, false);
             } else {
                 sweetAlert(2, DATA.error, false);
             }
@@ -208,7 +214,6 @@ const openState = async (id) => {
     catch (Error) {
         console.log(Error + ' Error al cargar el mensaje');
     }
-
 }
 
 /*
@@ -232,6 +237,9 @@ const openDelete = async (id) => {
             await sweetAlert(1, DATA.message, true);
             // Se carga nuevamente la tabla para visualizar los cambios.
             fillTable();
+        } else if(DATA.error == "No se puede eliminar a sí mismo"){
+
+            sweetAlert(3, DATA.error, false);
         } else {
             sweetAlert(2, DATA.error, false);
         }

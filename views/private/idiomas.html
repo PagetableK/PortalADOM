@@ -37,7 +37,7 @@
                                     </button>
                                 </div>
                                 <!-- Este input crea la barra de búsqueda -->
-                                <input type="search" class="form-control elemento-form" placeholder="Buscar..." name="search">
+                                <input type="search" class="form-control elemento-form" placeholder="Buscar idiomas por nombre..." name="search">
                                 <div class="d-flex">
                                     <button type="reset" class="input-group-text elemento-form" onclick="fillTable()">
                                         <i class="bi bi-arrow-clockwise"></i>
@@ -60,11 +60,9 @@
                 <table class="table table-hover caption-top">
                     <!-- Cabeza de la tabla para mostrar la cantidad de registros y los títulos de las columnas -->
                     <thead>
-                        <tr>
-                            <td colspan="2" id="rowsFound"></td>
-                        </tr>
                         <tr class="text-center">
                             <th>Nombres</th>
+                            <th>Usos</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -96,14 +94,14 @@
                                     autocomplete="off" required>
                             </div>
                         </div>
-                        <div class="modal-footer col-sm-12 col-md-12 col-lg-12 justify-content-center">
+                        <div class="modal-footer col-12 justify-content-center">
                             <button type="submit" class="btn bg-primary text-white d-none" id="btnAgregar">
                                 <i class="bi bi-plus"></i>
-                                Agregar grado académico
+                                Agregar idioma
                             </button>
                             <button type="submit" class="btn bg-success text-white d-none" id="btnActualizar">
                                 <i class="bi bi-pencil-fill"></i>
-                                Actualizar grado académico
+                                Actualizar idioma
                             </button>
                         </div>
                     </form>

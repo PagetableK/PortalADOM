@@ -594,8 +594,8 @@ class CurriculumData extends CurriculumHandler
             // En caso de no serlo se devuelve el error.
             $this->info_error = 'El teléfono debe iniciar con el formato ####-####';
             return false;
-        } elseif ($boolean and !$this->checkDuplicate($valor)) {
-            $this->correo = $valor;
+        } elseif ($boolean and !$this->checkDuplicateWithId($valor)) {
+            $this->telefono_movil = $valor;
             return true;
         } elseif ($this->checkDuplicate($valor)) {
             $this->info_error = 'El teléfono móvil ya está siendo utilizado en otro currículum';
@@ -627,7 +627,7 @@ class CurriculumData extends CurriculumHandler
             $this->info_error = 'El teléfono debe iniciar con el formato ####-####';
             return false;
         } elseif ($boolean and !$this->checkDuplicateWithId($valor)) {
-            $this->correo = $valor;
+            $this->telefono_fijo = $valor;
             return true;
         } elseif ($this->checkDuplicate($valor)) {
             $this->info_error = 'El teléfono fijo ya está siendo utilizado en otro currículum';

@@ -285,9 +285,9 @@ if (isset($_GET['action'])) {
                 if (
                     !$curriculum->verificarEstudio() or
                     !$curriculum->setImagen($_FILES['archivoImagen'], $_POST['booleanImagen']) or
-                    !$curriculum->setTelefonoMovil($_POST['telefonoMovil']) or
-                    !$curriculum->setTelefonoFijo($_POST['telefonoFijo']) or
-                    !$curriculum->setCorreo($_POST['correo'])
+                    !$curriculum->setTelefonoMovil($_POST['telefonoMovil'], 1) or
+                    !$curriculum->setTelefonoFijo($_POST['telefonoFijo'], 1) or
+                    !$curriculum->setCorreo($_POST['correo'], 1)
                 ) {
                     $result['error'] = $curriculum->getDataError();
                 } elseif ($_POST['booleanImagen'] and $curriculum->actualizarCurriculum()) {

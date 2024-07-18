@@ -57,7 +57,10 @@ SAVE_FORM.addEventListener('submit', async (event) => {
         // Se carga nuevamente la tabla para visualizar los cambios.
         fillTable();
     } else if (DATA.exception != null && (DATA.exception.includes ("Integrity constraint") || DATA.exception.includes ("Duplicate entry"))) {
-        sweetAlert(3, 'El grado académico ya ha sido agregado', false);
+
+        await sweetAlert(3, 'El grado académico ya ha sido agregado', false);
+
+        SAVE_MODAL.hide();
     } else {
         sweetAlert(2, DATA.error, false);
     }
@@ -70,7 +73,6 @@ SAVE_FORM.addEventListener('submit', async (event) => {
 */
 const fillTable = async (form = null) => {
     // Se inicializa el contenido de la tabla.
-    ROWS_FOUND.textContent = '';
     TABLE_BODY.innerHTML = '';
     // Se verifica la acción a realizar.
     (form) ? action = 'searchRows' : action = 'readAll';
@@ -84,6 +86,7 @@ const fillTable = async (form = null) => {
             TABLE_BODY.innerHTML += `
                 <tr>
                     <td>${row.NOMBRE}</td>
+                    <td>${row.usos}</td>
                     <td>   
                         <button type="button" class="btn btn-outline-success" onclick="openUpdate(${row.ID})">
                             <i class="bi bi-pencil-fill"></i>
@@ -168,7 +171,8 @@ const openDelete = async (id) => {
             // Se carga nuevamente la tabla para visualizar los cambios.
             fillTable();
         } else if (DATA.exception != null && (DATA.exception.includes ("Integrity constraint") || DATA.exception.includes ("constraint fails"))) {
-            sweetAlert(3, 'No se puede eliminar el grado academico porque está asociado a un currículum.', false);
+
+            sweetAlert(3, 'No se puede eliminar el grado académico porque está asociado a un currículum', false);
         } else {
             sweetAlert(2, DATA.error, false);
         }

@@ -44,7 +44,8 @@ const STEP_EDUCACION = document.getElementById('educacion'), STEP_EXPERIENCIA = 
 
 const BOTON_EDITAR = document.getElementById('btnEditarCv'), BOTON_REGRESAR = document.getElementById('botonRegresar'),
     BOTON_CURRICULUM = document.getElementById('btnCurriculum'), TEXTO_BOTON = document.getElementById('textoBoton'),
-    ICONO_AGREGAR = document.getElementById('iconoAgregar'), ICONO_EDITAR = document.getElementById('iconoEditar');
+    ICONO_AGREGAR = document.getElementById('iconoAgregar'), ICONO_EDITAR = document.getElementById('iconoEditar'),
+    CONTENEDOR_BOTON = document.getElementById('contenedorBtnRegresar'), CONTENEDOR_MENSAJE = document.getElementById('contenedorMensaje');
 
 let errorCurriculum = false, editarCv = false;
 
@@ -942,12 +943,12 @@ FORM_CURRICULUM.addEventListener('submit', async (e) => {
 
         const DATA = await fetchData(API_CURRICULUM, accion, FORM);
 
-        if(DATA.status && editarCv){
+        if (DATA.status && editarCv) {
 
             const DATA_APARTADOS = await fetchData(API_CURRICULUM, 'obtenerApartados');
 
             const FORM = new FormData();
-        
+
             FORM.append('idCurriculum', DATA_APARTADOS.dataset[5]);
 
             await fetchData(API_CURRICULUM, 'eliminarApartados', FORM);
@@ -974,7 +975,7 @@ FORM_CURRICULUM.addEventListener('submit', async (e) => {
             const DATA_APARTADOS = await fetchData(API_CURRICULUM, 'obtenerApartados');
 
             const FORM = new FormData();
-        
+
             FORM.append('idCurriculum', DATA_APARTADOS.dataset[5]);
 
             await agregarEstudios(FORM);
@@ -1208,6 +1209,10 @@ BOTON_EDITAR.addEventListener('click', async () => {
     const DATA = await fetchData(API_CURRICULUM, 'getCurriculum');
     // Si la respuesta es satisfactoria se ejecuta el código.
     if (DATA.status) {
+        // Se muestra el contenedor con el botón para regresar.
+        CONTENEDOR_BOTON.classList.remove('d-none');
+        // Se oculta el mensaje.
+        CONTENEDOR_MENSAJE.classList.add('d-none');
         // Se cambia el valor de la variable global (Se utiliza en el evento submit del FORM_CURRICULUM);
         editarCv = true;
         // Se inicializa la constante dónde se almacenará el idCurriculum.
@@ -1216,33 +1221,33 @@ BOTON_EDITAR.addEventListener('click', async () => {
         FORM.append('idCurriculum', DATA.dataset.id_curriculum);
         // Se realiza una petición a la API para obtener los estudios agregados en el currículum.
         const DATA_ESTUDIOS = await fetchData(API_CURRICULUM, 'getEstudios', FORM);
-
+        // Se realiza una petición a la API para obtener los certificados agregados en el currículum.
         const DATA_CERTIFICADOS = await fetchData(API_CURRICULUM, 'getCertificados', FORM);
-
+        // Se realiza una petición a la API para obtener las experiencias agregadas en el currículum.
         const DATA_EXPERIENCIAS = await fetchData(API_CURRICULUM, 'getExperiencias', FORM);
-
+        // Se realiza una petición a la API para obtener las referencias agregadas en el currículum.
         const DATA_REFERENCIAS = await fetchData(API_CURRICULUM, 'getReferencias', FORM);
-
+        // Se realiza una petición a la API para obtener los idiomas agregados en el currículum.
         const DATA_IDIOMAS = await fetchData(API_CURRICULUM, 'getIdiomas', FORM);
-
+        // Se realiza una petición a la API para obtener las habilidades agregadas en el currículum.
         const DATA_HABILIDADES = await fetchData(API_CURRICULUM, 'getHabilidades', FORM);
         // Se ejecuta la función que agrega los estudios dentro de la variable de sesión para luego mostrarlos al usuario.
         await almacenarEstudios(DATA_ESTUDIOS.dataset);
-
+        // Se ejecuta la función que agrega los certificados dentro de la variable de sesión para luego mostrarlos al usuario.
         await almacenarCertificados(DATA_CERTIFICADOS.dataset);
-
+        // Se ejecuta la función que agrega las experiencias dentro de la variable de sesión para luego mostrarlos al usuario.
         await almacenarExperiencias(DATA_EXPERIENCIAS.dataset);
-
+        // Se ejecuta la función que agrega las referencias dentro de la variable de sesión para luego mostrarlos al usuario.
         await almacenarReferencias(DATA_REFERENCIAS.dataset);
-
+        // Se ejecuta la función que agrega los idiomas dentro de la variable de sesión para luego mostrarlos al usuario.
         await almacenarIdiomas(DATA_IDIOMAS.dataset);
-
+        // Se ejecuta la función que agrega las habilidades dentro de la variable de sesión para luego mostrarlos al usuario.
         await almacenarHabilidades(DATA_HABILIDADES.dataset);
-
+        // Se carga el número de teléfono en el campo.
         TELEFONO_MOVIL.value = DATA.dataset.telefono_movil;
-
+        // Se carga el número de teléfono en el campo.
         TELEFONO_FIJO.value = DATA.dataset.telefono_fijo;
-
+        // Se carga el correo del currículum en el campo.
         CORREO_ASPIRANTE.value = DATA.dataset.correo_curriculum;
         // Se define la ruta de la imagen almacenada en la API.
         IMAGEN_ASPIRANTE.src = "../../api/images/aspirantes/" + DATA.dataset.imagen_aspirante;
@@ -1250,7 +1255,7 @@ BOTON_EDITAR.addEventListener('click', async () => {
         ARCHIVO_IMAGEN.required = false;
         // Se quita el color naranja del botón.
         BOTON_CURRICULUM.classList.remove('bg-orange');
-
+        // Se configura el texto del botón.
         TEXTO_BOTON.textContent = 'Editar currículum';
         // Se prepara el stepper para su funcionamiento general.
         prepararStepper();
@@ -1441,8 +1446,12 @@ const almacenarHabilidades = async (arrayHabilidades) => {
 
 BOTON_REGRESAR.addEventListener('click', async () => {
 
-    // Se oculta el contenedor con las opciones.
-    CONTENEDOR_OPCIONES_CV.classList.remove('d-none');
-    // Se muestra el contenedor con el stepper.
-    CONTENEDOR_STEPPER.classList.add('d-none');
+    const RESPONSE = await confirmAction('¿Está seguro que desea regresar?\nSe perderán los cambios realizados');
+    // Se verifica la opción seleccionada (true si selecciona sí).
+    if(RESPONSE){
+        // Se oculta el contenedor con las opciones.
+        CONTENEDOR_OPCIONES_CV.classList.remove('d-none');
+        // Se muestra el contenedor con el stepper.
+        CONTENEDOR_STEPPER.classList.add('d-none');
+    }
 });

@@ -32,9 +32,9 @@ if (isset($_GET['action'])) {
                     $result['error'] = $instituciones->getDataError();
                 } elseif ($instituciones->createRow()) {
                     $result['status'] = 1;
-                    $result['message'] = 'Institucion agregada correctamente';
+                    $result['message'] = 'Institución agregada correctamente';
                 } else {
-                    $result['error'] = 'Ocurrió un problema al crear la institucion';
+                    $result['error'] = 'Ocurrió un problema al crear la institución';
                 }
                 break;
             case 'readAll':
@@ -51,7 +51,7 @@ if (isset($_GET['action'])) {
                 } elseif ($result['dataset'] = $instituciones->readOne()) {
                     $result['status'] = 1;
                 } else {
-                    $result['error'] = 'Institucion inexistente';
+                    $result['error'] = 'Institución inexistente';
                 }
                 break;
             case 'updateRow':
@@ -63,9 +63,9 @@ if (isset($_GET['action'])) {
                     $result['error'] = $instituciones->getDataError();
                 } elseif ($instituciones->updateRow()) {
                     $result['status'] = 1;
-                    $result['message'] = 'institucion modificada correctamente';
+                    $result['message'] = 'Institución actualizada correctamente';
                 } else {
-                    $result['error'] = 'Ocurrió un problema al modificar la institucion';
+                    $result['error'] = 'Ocurrió un problema al modificar la institución';
                 }
                 break;
                 case 'cantidadInstituciones':
