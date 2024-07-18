@@ -1,3 +1,5 @@
+
+
 	DROP DATABASE IF EXISTS dbadom;
 	
 	CREATE DATABASE IF NOT EXISTS dbadom;
@@ -13,11 +15,7 @@
 		estado_administrador TINYINT(1) NOT NULL DEFAULT 1
 	);
 	
-	SELECT * FROM administradores;
-	
-	INSERT INTO administradores (correo_administrador, clave_administrador, nombre_administrador, apellido_administrador)
-	VALUES
-	('admin1@example.com', '$2y$10$dc8Me1dj90av0Di3Q64SbujesgAIzIZVu/vHpTn1GhEO7X6KS92t2', 'Juan', 'Perez');
+    insert into administradores (correo_administrador,clave_administrador,nombre_administrador,apellido_administrador,estado_administrador) values ('joel@gmail.com', '$2y$10$1RwTuaRZaRgGwPbYh5jUvupLahtu8Y7T2Ps8TO/eeoT1t0lQkn4Ca', 'joel', 'mena',1);
 	
 	CREATE TABLE aspirantes(
 		id_aspirante INT PRIMARY KEY AUTO_INCREMENT,
@@ -69,7 +67,7 @@
 	CREATE TABLE curriculum_aspirantes(
 		id_curriculum INT PRIMARY KEY AUTO_INCREMENT,
 		imagen_aspirante VARCHAR(200) NULL,
-		telefono_fijo VARCHAR(9) UNIQUE NOT NULL,
+		telefono_fijo VARCHAR(9) UNIQUE NULL,
 		telefono_movil VARCHAR(9) UNIQUE NOT NULL,
 		correo_curriculum VARCHAR(100) UNIQUE NOT NULL,
 		id_aspirante INT NOT NULL,
@@ -82,7 +80,7 @@
 		id_estudio INT PRIMARY KEY AUTO_INCREMENT,
 		titulo_estudio VARCHAR(70) NOT NULL,
 		id_grado INT NOT NULL,
-		fecha_finalizacion DATE NULL,
+		fecha_finalizacion YEAR NULL,
 		nombre_institucion VARCHAR(100) NULL,
 		id_institucion INT NULL,
 		id_curriculum INT NOT NULL,
@@ -101,7 +99,7 @@
 		id_certificado INT PRIMARY KEY AUTO_INCREMENT,
 		titulo_certificado VARCHAR(70) NOT NULL,
 		institucion_certificado VARCHAR(70) NOT NULL,
-		fecha_finalizacion DATE NOT NULL,
+		fecha_finalizacion YEAR NOT NULL,
 		id_curriculum INT NOT NULL,
 		CONSTRAINT fk_curriculum_certif
 		FOREIGN KEY (id_curriculum)
@@ -272,9 +270,9 @@
 	$$
 	DELIMITER ;
 	
-	DROP PROCEDURE IF EXISTS insertar_aspirante_validado;
+	DROP PROCEDURE IF EXISTS registrar_aspirante;
 	DELIMITER $$
-	CREATE PROCEDURE insertar_aspirante_validado(
+	CREATE PROCEDURE registrar_aspirante(
 	   IN p_nombre_aspirante VARCHAR(50),
 	   IN p_apellido_aspirante VARCHAR(50),
 	   IN p_clave_aspirante VARCHAR(100),
@@ -490,3 +488,76 @@
 			nombre_grado AS 'NOMBRE'
 	FROM grados_academicos;
 	$$ 
+    
+    SELECT * FROM vista_tabla_curriculum where ID = 1;
+    -- VISTA para tabla curriculum
+	DROP VIEW IF EXISTS vista_tabla_curriculum;
+	DELIMITER $$
+	CREATE VIEW vista_tabla_curriculum AS
+	
+SELECT 
+    a.id_aspirante AS 'ID', 
+    concat(a.nombre_aspirante, " ",a.apellido_aspirante) AS 'NOMBRE',
+    a.correo_aspirante, 
+    a.fecha_nacimiento, 
+    a.genero_aspirante, 
+    a.estado_aspirante,
+    c.id_curriculum,
+    c.imagen_aspirante AS 'IMAGEN', 
+    c.telefono_fijo, 
+    c.telefono_movil, 
+    c.correo_curriculum,
+    e.id_estudio,
+    e.titulo_estudio,
+    g.nombre_grado,
+    e.fecha_finalizacion AS fecha_finalizacion_estudio,
+    e.nombre_institucion AS nombre_institucion_estudio,
+    i.nombre_institucion,
+    cr.id_certificado,
+    cr.titulo_certificado,
+    cr.institucion_certificado,
+    cr.fecha_finalizacion AS fecha_finalizacion_certificado,
+    ex.id_experiencia,
+    ex.nombre_empresa,
+    ex.nombre_cargo,
+    ex.fecha_inicio,
+    ex.fecha_fin,
+    ex.descripcion_puesto,
+    al.nombre_area,
+    concat(re.nombre_referencia, " ",re.apellido_referencia) AS 'APELLIDO',
+    re.puesto_trabajo,
+    re.telefono_referencia,
+    ia.id_idioma_aspirante,
+    id.nombre_idioma,
+    ia.nivel_idioma,
+    ha.id_habilidad_aspirante,
+    h.nombre_habilidad,
+    ha.nivel_habilidad
+FROM 
+    aspirantes a
+INNER JOIN 
+    curriculum_aspirantes c ON a.id_aspirante = c.id_aspirante
+LEFT JOIN 
+    estudios_aspirantes e ON c.id_curriculum = e.id_curriculum
+LEFT JOIN 
+    grados_academicos g ON e.id_grado = g.id_grado
+LEFT JOIN 
+    instituciones i ON e.id_institucion = i.id_institucion
+LEFT JOIN 
+    certificados_aspirantes cr ON c.id_curriculum = cr.id_curriculum
+LEFT JOIN 
+    experiencias_aspirantes ex ON c.id_curriculum = ex.id_curriculum
+LEFT JOIN 
+    areas_laborales al ON ex.id_area = al.id_area
+LEFT JOIN 
+    referencias_aspirantes re ON c.id_curriculum = re.id_curriculum
+LEFT JOIN 
+    idiomas_aspirantes ia ON c.id_curriculum = ia.id_curriculum
+LEFT JOIN 
+    idiomas id ON ia.id_idioma = id.id_idioma
+LEFT JOIN 
+    habilidades_aspirantes ha ON c.id_curriculum = ha.id_curriculum
+LEFT JOIN 
+    habilidades h ON ha.id_habilidad = h.id_habilidad
+	$$ 
+

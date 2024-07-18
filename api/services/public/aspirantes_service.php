@@ -38,6 +38,13 @@ if (isset($_GET['action'])) {
                     $result['error'] = 'Ocurrió un problema al leer el perfil';
                 }
                 break;
+            case 'reallCurriculum':
+                    if ($result['dataset'] = $aspirantes->reallCurriculum()) {
+                        $result['status'] = 1;
+                    } else {
+                        $result['error'] = 'Ocurrió un problema al leer el curriculum';
+                    }
+                    break;
                 //actualizar
             case 'editProfile':
                 $_POST = Validator::validateForm($_POST);

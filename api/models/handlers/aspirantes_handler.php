@@ -205,4 +205,12 @@ class AspirantesHandler
         $params = array($_SESSION['idAspirante']);
         return Database::getRow($sql, $params);
     }
+
+    public function reallCurriculum()
+    {
+        $sql = 'SELECT * FROM vista_tabla_curriculum
+        WHERE ID LIKE ?';
+        $params = array($_SESSION['idAspirante']);
+        return Database::getRows($sql, $params);
+    }
 }

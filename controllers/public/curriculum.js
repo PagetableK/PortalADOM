@@ -3,6 +3,7 @@ const API_GRADOS = 'services/public/grados_academicos_service.php', API_INSTITUC
     API_CURRICULUM = 'services/public/curriculum_service.php', API_RUBROS = 'services/public/rubros_service.php',
     API_AREAS = 'services/public/areas_laborales_service.php', API_IDIOMAS = 'services/public/idiomas_service.php',
     API_HABILIDADES = 'services/public/habilidades_service.php';
+const API_ASPIRANTE = 'services/public/aspirantes_service.php';
 // Se almacenan los contenedores principales de la página.
 const CONTENEDOR_STEPPER = document.getElementById('contenedorStepper'),
     CONTENEDOR_OPCIONES_CV = document.getElementById('contenedorOpcionesCV');
@@ -117,12 +118,345 @@ const getCurriculums = async () => {
     cargarHabilidadesCV();
 }
 
-const openReport = () => {
-    // Se declara una constante tipo objeto con la ruta específica del reporte en el servidor.
-    const PATH = new URL(`${SERVER_URL}reports/public/curriculum_formato_one.php`);
-    // Se abre el reporte en una nueva pestaña.
-    window.open(PATH.href);
-}
+
+const openReport = async () => {
+    console.log("openReport llamado");
+    // Asegúrate de que la biblioteca jsPDF esté cargada
+    const { jsPDF } = window.jspdf;
+
+    // Crear un nuevo documento PDF
+    const doc = new jsPDF('p', 'mm', 'a4');
+
+
+    // Fetch data from your API or data source
+    const dataCurriculum = await fetchData(API_ASPIRANTE, 'reallCurriculum', {});
+
+    if (dataCurriculum.status) {
+        dataCurriculum.dataset.forEach(rowCurriculum => {
+            // Definir colores
+            const primaryColor = [225, 235, 247];  // Color primario (azul claro)
+            const secondaryColor = [0, 52, 99];  // Color secundario (negro)
+
+            // Dibujar fondo azul claro
+            doc.setFillColor(...primaryColor);
+            doc.rect(0, 0, 60, 297, 'F');
+
+            // Añadir foto del perfil
+            const imgData = `../../api/images/aspirantes/${rowCurriculum['IMAGEN']}`; // Reemplaza con los datos de la imagen en base64
+            doc.addImage(imgData, 'JPEG', 10, 10, 40, 40);
+
+            // Añadir nombre y título
+            doc.setFont('Times', 'bold');
+            doc.setFontSize(28);
+            doc.setTextColor(...secondaryColor);
+            doc.text(rowCurriculum['NOMBRE'], 70, 20);
+            doc.setFontSize(16);
+            doc.setTextColor(0, 0, 0);
+
+            // Añadir sección de contacto
+            doc.setFontSize(12);
+            doc.setTextColor(...secondaryColor);
+            doc.text('CONTACTO', 10, 60);
+            doc.setDrawColor(...secondaryColor);
+            doc.setLineWidth(0.5);
+            doc.line(10, 62, 50, 62);
+
+            doc.setFont('Times', 'normal');
+            doc.setFontSize(10);
+            doc.setTextColor(0, 0, 0);
+            const contactFields = [
+                rowCurriculum['correo_aspirante'],
+                rowCurriculum['fecha_nacimiento'],
+                rowCurriculum['genero_aspirante']
+            ];
+            let yPositionC = 70;
+            contactFields.forEach(field => {
+                doc.text(field, 10, yPositionC);
+                yPositionC += 6;
+            });
+
+            // Añadir sección de idiomas
+            // Filtrar idiomas únicos asociados al currículum actual
+            const idiomas = dataCurriculum.dataset.filter(item => item['id_curriculum'] === rowCurriculum['id_curriculum']);
+
+            // Verificar si hay datos válidos para mostrar la sección de idiomas
+            if (idiomas.length > 0 && idiomas.some(idioma => idioma['nombre_idioma'] && idioma['nivel_idioma'])) {
+                doc.setFontSize(12);
+                doc.setTextColor(...secondaryColor);
+                doc.text('IDIOMAS', 10, yPositionC + 10);
+                doc.line(10, yPositionC + 12, 50, yPositionC + 12);
+
+                doc.setFontSize(10);
+                doc.setTextColor(0, 0, 0);
+
+                let idiomasMostrados = new Set(); // Usar un Set para almacenar idiomas únicos
+                let yPositionIdiomas = yPositionC + 18;
+
+                idiomas.forEach(idioma => {
+                    const nombreIdioma = idioma['nombre_idioma'];
+                    const nivelIdioma = idioma['nivel_idioma'];
+
+                    if (nombreIdioma && nivelIdioma && !idiomasMostrados.has(nombreIdioma)) {
+                        const field = `. ${nombreIdioma}: ${nivelIdioma}`;
+                        const lines = doc.splitTextToSize(field, 50);
+                        lines.forEach(line => {
+                            if (yPositionIdiomas <= 297) {
+                                doc.text(line, 10, yPositionIdiomas);
+                                yPositionIdiomas += 6;
+                            }
+                        });
+                        idiomasMostrados.add(nombreIdioma); // Agregar idioma al Set para evitar duplicados
+                    }
+                });
+
+                // Actualizar yPositionC al final de la sección de idiomas
+                yPositionC = yPositionIdiomas + 10;
+            }
+
+            yPositionC = yPositionC + 10;
+
+            // Añadir sección de habilidades debajo de los idiomas
+            const primaryColorRectWidth = 50; // Ancho del rectángulo azul claro
+
+            // Filtrar habilidades únicas asociadas al currículum actual
+            const habilidades = dataCurriculum.dataset.filter(item => item['id_curriculum'] === rowCurriculum['id_curriculum'])
+                .map(item => ({
+                    nombre: item['nombre_habilidad'],
+                    nivel: item['nivel_habilidad']
+                }));
+
+            // Verificar si hay datos válidos para mostrar la sección de habilidades
+            if (habilidades.length > 0 && habilidades.some(habilidad => habilidad['nombre'] && habilidad['nivel'])) {
+                doc.setFont('Times', 'bold');
+                doc.setFontSize(12);
+                doc.setTextColor(...secondaryColor);
+                doc.text('HABILIDADES', 10, yPositionC);
+                doc.line(10, yPositionC + 2, 50, yPositionC + 2); // Usar el ancho del rectángulo azul claro
+
+                doc.setFont('Times', 'normal');
+                doc.setFontSize(10);
+                doc.setTextColor(0, 0, 0);
+
+                let habilidadesMostradas = new Set(); // Usar un Set para almacenar habilidades únicas
+                let yPositionHabilidades = yPositionC + 10;
+
+                habilidades.forEach(habilidad => {
+                    const habilidadString = `. ${habilidad['nombre']}: ${habilidad['nivel']}`;
+                    if (habilidad['nombre'] && habilidad['nivel'] && !habilidadesMostradas.has(habilidadString)) {
+                        const lines = doc.splitTextToSize(habilidadString, primaryColorRectWidth - 10); // Ajustar al ancho del rectángulo
+                        lines.forEach(line => {
+                            if (yPositionHabilidades <= 297) {
+                                doc.text(line, 10, yPositionHabilidades);
+                                yPositionHabilidades += 6;
+                            }
+                        });
+                        habilidadesMostradas.add(habilidadString); // Agregar habilidad al Set para evitar duplicados
+                    }
+                });
+
+                // Actualizar yPositionC al final de la sección de habilidades
+                yPositionC = Math.max(yPositionC, yPositionHabilidades + 10);
+            }
+
+            // Obtener referencias únicas del conjunto de datos
+            const referencias = new Set();
+            dataCurriculum.dataset.forEach(item => {
+                if (item['id_curriculum'] === rowCurriculum['id_curriculum'] &&
+                    item['APELLIDO'] && item['puesto_trabajo'] && item['telefono_referencia']) {
+                    const referencia = `. ${item['APELLIDO']},\n${item['puesto_trabajo']},\n(+503) ${item['telefono_referencia']}`;
+                    referencias.add(referencia);
+                }
+            });
+
+            // Verificar si hay datos válidos para mostrar la sección de referencias
+            if (referencias.size > 0) {
+                doc.setFont('Times', 'bold');
+                doc.setFontSize(12);
+                doc.setTextColor(...secondaryColor);
+                doc.text('REFERENCIA', 10, yPositionC);
+                doc.line(10, yPositionC + 2, primaryColorRectWidth, yPositionC + 2); // Usar el ancho del rectángulo azul claro
+
+                doc.setFont('Times', 'normal');
+                doc.setFontSize(10);
+                doc.setTextColor(0, 0, 0);
+                let yPositionReferencias = yPositionC + 10;
+
+                // Mostrar referencias únicas en el PDF
+                referencias.forEach(referencia => {
+                    const lines = doc.splitTextToSize(referencia, primaryColorRectWidth - 10); // Ajustar al ancho del rectángulo
+                    lines.forEach(line => {
+                        if (yPositionReferencias <= 297) {
+                            doc.text(line, 10, yPositionReferencias);
+                            yPositionReferencias += 6;
+                        }
+                    });
+                });
+
+                // Actualizar yPositionC al final de la sección de referencias
+                yPositionC = Math.max(yPositionC, yPositionReferencias + 10);
+            }
+
+
+
+            let yPositionV = 50;
+            // Filtrar y mapear las experiencias únicas
+            // Filtrar y mapear las experiencias únicas asociadas al currículum actual
+            const allExperiencias = dataCurriculum.dataset.filter(item =>
+                item['id_curriculum'] === rowCurriculum['id_curriculum'] &&
+                item['nombre_cargo'] &&
+                item['nombre_empresa'] &&
+                item['fecha_inicio'] &&
+                item['fecha_fin'] &&
+                item['descripcion_puesto']
+            ).map(item => ({
+                title: `. ${item['nombre_cargo']}`,
+                company: `${item['nombre_empresa']}  | ${item['fecha_inicio']} - ${item['fecha_fin']}`,
+                details: `${item['descripcion_puesto']}` // No es necesario agregar '\n' aquí
+            }));
+
+            // Verificar si hay experiencias para mostrar
+            if (allExperiencias.length > 0 && allExperiencias.some(exp => exp.title && exp.company && exp.details)) {
+                doc.setFont('Times', 'bold');
+                doc.setFontSize(12);
+                doc.setTextColor(...secondaryColor);
+                doc.text('EXPERIENCIA PROFESIONAL', 70, yPositionV); // Posición vertical ajustada según necesidad
+                doc.line(70, yPositionV + 2, 200, yPositionV + 2); // Línea separadora
+
+                doc.setFont('Times', 'normal');
+                doc.setFontSize(10);
+                doc.setTextColor(0, 0, 0);
+
+                const experienciasSet = new Set();
+                let expY = yPositionV + 8; // Posición inicial vertical para los detalles de experiencia
+
+                allExperiencias.forEach(exp => {
+                    const experienciaString = `${exp.title} ${exp.company} ${exp.details}`;
+                    if (!experienciasSet.has(experienciaString)) {
+                        doc.setFont('Times', 'normal');// Asegurarse de que la fuente sea normal
+                        doc.text(exp.title, 70, expY);
+                        doc.text(exp.company, 70, expY + 6);
+                        expY += 12;
+
+                        // Separar los detalles de la experiencia por líneas
+                        const detalles = exp.details.split('\n');
+                        detalles.forEach(detail => {
+                            doc.text(`- ${detail}`, 70, expY);
+                            expY += 6;
+                        });
+
+                        expY += 6;
+                        experienciasSet.add(experienciaString); // Agregar experiencia al Set para evitar duplicados
+                    }
+                });
+
+                // Actualizar yPositionV al final de la sección de experiencia
+                yPositionV = Math.max(yPositionV, expY + 10);
+            }
+
+
+            // Filtrar y mapear las formaciones únicas
+            const allFormaciones = dataCurriculum.dataset.filter(item =>
+                item['id_curriculum'] === rowCurriculum['id_curriculum'] &&
+                item['nombre_grado'] &&
+                item['titulo_estudio'] &&
+                item['nombre_institucion_estudio'] &&
+                item['fecha_finalizacion_estudio']
+            ).map(item => `. ${item['nombre_grado']} ${item['titulo_estudio']}, ${item['nombre_institucion_estudio']} ${item['fecha_finalizacion_estudio']}`);
+
+            // Verificar si hay formaciones para mostrar
+            if (allFormaciones.length > 0 && allFormaciones.some(formacion => formacion.trim() !== '.')) {
+                doc.setFont('Times', 'bold');
+                doc.setFontSize(12);
+                doc.setTextColor(...secondaryColor);
+                doc.text('FORMACIÓN', 70, yPositionV);
+                doc.line(70, yPositionV + 2, 200, yPositionV + 2);
+
+                doc.setFont('Times', 'normal');
+                doc.setFontSize(10);
+                doc.setTextColor(0, 0, 0);
+
+                const formacionesSet = new Set();
+                let formY = yPositionV + 8; // Posición inicial vertical para los detalles de formación
+
+                allFormaciones.forEach(formacion => {
+                    if (!formacionesSet.has(formacion)) {
+                        const lines = doc.splitTextToSize(formacion, 120); // Ajusta el ancho si es necesario
+                        lines.forEach(line => {
+                            if (formY <= 297) {
+                                doc.text(line, 70, formY);
+                                formY += 6;
+                            }
+                        });
+                        formacionesSet.add(formacion); // Agregar formación al Set para evitar duplicados
+                    }
+                });
+
+                // Actualizar yPositionV al final de la sección de formación
+                yPositionV = Math.max(yPositionV, formY + 10);
+            }
+
+
+
+            // Filtrar y mapear los certificados únicos asociados al currículum actual
+            const allCertificados = dataCurriculum.dataset.filter(item =>
+                item['id_curriculum'] === rowCurriculum['id_curriculum'] &&
+                item['titulo_certificado'] &&
+                item['institucion_certificado'] &&
+                item['fecha_finalizacion_certificado']
+            ).map(item => `${item['titulo_certificado']}, ${item['institucion_certificado']} ${item['fecha_finalizacion_certificado']}`);
+
+            // Verificar si hay certificados para mostrar
+            if (allCertificados.length > 0) {
+                doc.setFont('Times', 'bold');
+                doc.setFontSize(12);
+                doc.setTextColor(...secondaryColor);
+                doc.text('CERTIFICADOS', 70, yPositionV);
+                doc.line(70, yPositionV + 2, 200, yPositionV + 2);
+
+                doc.setFont('Times', 'normal');
+                doc.setFontSize(10);
+                doc.setTextColor(0, 0, 0);
+
+                const certificadosSet = new Set();
+                let certY = yPositionV + 8; // Posición inicial vertical para los detalles de certificados
+
+                allCertificados.forEach(certificado => {
+                    if (!certificadosSet.has(certificado)) {
+                        const lines = doc.splitTextToSize(certificado, 120); // Ajusta el ancho si es necesario
+                        lines.forEach(line => { 
+                            if (certY <= 297) {
+                                doc.text(line, 70, certY);
+                                certY += 6;
+                            }
+                        });
+                        certificadosSet.add(certificado); // Agregar certificado al Set para evitar duplicados
+                    }
+                });
+
+                // Actualizar yPositionV al final de la sección de certificados
+                yPositionV = Math.max(yPositionV, certY + 10);
+            }
+            // Generar el PDF
+            const pdfOutput = doc.output('dataurlnewwindow'); // Utilizando 'dataurlnewwindow'
+
+            // Crear una URL de Blob
+            const blob = new Blob([pdfOutput], { type: 'application/pdf' });
+
+            // Crear una URL del Blob
+            const blobURL = URL.createObjectURL(blob);
+
+            // Abrir el PDF en una nueva pestaña
+            window.open(blobURL, '_blank');
+
+            // Limpiar la URL del Blob después de abrir la nueva pestaña
+            URL.revokeObjectURL(blobURL);
+        });
+    } else {
+        doc.text('No hay información para mostrar', 10, 10);
+    }
+};
+
+
 
 
 const cargarEstudios = async () => {
