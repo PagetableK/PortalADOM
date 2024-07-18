@@ -23,12 +23,10 @@ class AreaslaboralesHandler
     public function searchRows()
     {
         $value = '%' . Validator::getSearchValue() . '%';
-        $sql = ' SELECT a.id_area, a.nombre_area, a.id_rubro, b.nombre_rubro
-                FROM areas_laborales a
-                JOIN rubros_empresas b ON a.id_rubro = b.id_rubro
-                WHERE a.nombre_area LIKE ? OR b.nombre_rubro LIKE ?
-                ORDER BY a.nombre_area';
-        $params = array($value, $value);
+        $sql = 'SELECT id_area, nombre_area, (SELECT COUNT(experiencias_aspirantes.id_area) FROM experiencias_aspirantes WHERE experiencias_aspirantes.id_area = areas_laborales.id_area) AS usos 
+	            FROM areas_laborales
+                WHERE nombre_area LIKE ?';
+        $params = array($value);
         return Database::getRows($sql, $params);
     }
 
@@ -43,8 +41,8 @@ class AreaslaboralesHandler
     //Función para leer todos los admministradores.
     public function readAll()
     {
-        $sql = 'SELECT * from areas_laborales
-                ';
+        $sql = 'SELECT id_area, nombre_area, (SELECT COUNT(experiencias_aspirantes.id_area) FROM experiencias_aspirantes WHERE experiencias_aspirantes.id_area = areas_laborales.id_area) AS usos 
+	            FROM areas_laborales';
         return Database::getRows($sql);
     }
 
@@ -75,17 +73,16 @@ class AreaslaboralesHandler
     {
         $sql = 'DELETE FROM areas_laborales 
                  WHERE id_area = ?';
-         $params = array($this->id);
-         return Database::executeRow($sql, $params);
-     }
+        $params = array($this->id);
+        return Database::executeRow($sql, $params);
+    }
 
-     public function checkDuplicateWithId($area)
-     {
-         $sql = 'SELECT id_area
+    public function checkDuplicateWithId($area)
+    {
+        $sql = 'SELECT id_area
                  FROM areas_laborales
                  WHERE nombre_area = ?';
-         $params = array($area);
-         return Database::getRow($sql, $params);
-     }
-     
+        $params = array($area);
+        return Database::getRow($sql, $params);
+    }
 }

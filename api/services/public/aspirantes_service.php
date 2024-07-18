@@ -9,7 +9,7 @@ if (isset($_GET['action'])) {
     // Se instancia la clase correspondiente.
     $aspirantes = new AspirantesData;
     // Se declara e inicializa un arreglo para guardar el resultado que retorna la API.
-    $result = array('status' => 0, 'session' => 0, 'recaptcha' => 0, 'message' => null, 'error' => null, 'exception' => null, 'username' => null, 'nombre' => null, 'idCV' => null);
+    $result = array('status' => 0, 'session' => 0, 'recaptcha' => 0, 'message' => null, 'error' => null, 'exception' => null, 'username' => null, 'nombre' => null, 'idCV' => null, 'genero' => null);
     // Se verifica si existe una sesión iniciada como aspirante para realizar las acciones correspondientes.
     if (isset($_SESSION['idAspirante'])) {
         $result['session'] = 1;
@@ -24,6 +24,7 @@ if (isset($_GET['action'])) {
                     $result['username'] = $_SESSION['correoAspirante'];
                     $result['nombre'] = $_SESSION['nombreAspirante'] . " " . $_SESSION['apellidoAspirante'];
                     $result['idCV'] = $aspirantes->getCvId();
+                    $result['genero'] = $_SESSION['generoAspirante'];
                 } else {
                     // Se retorna el error.
                     $result['error'] = 'Correo de usuario indefinido';
@@ -37,6 +38,13 @@ if (isset($_GET['action'])) {
                     $result['error'] = 'Ocurrió un problema al leer el perfil';
                 }
                 break;
+            case 'reallCurriculum':
+                    if ($result['dataset'] = $aspirantes->reallCurriculum()) {
+                        $result['status'] = 1;
+                    } else {
+                        $result['error'] = 'Ocurrió un problema al leer el curriculum';
+                    }
+                    break;
                 //actualizar
             case 'editProfile':
                 $_POST = Validator::validateForm($_POST);
@@ -144,22 +152,28 @@ if (isset($_GET['action'])) {
                 if ($aspirantes->checkUser($_POST['correo'], $_POST['clave']) == 'Estado inactivo') {
                     // Si el estado del aspirante es inactivo se muestra un mensaje con el error.
                     $result['error'] = 'Su cuenta ha sido desactivada';
-                } elseif ($aspirantes->checkUser($_POST['correo'], $_POST['clave'])) {
-                    // Si el estado del aspirante es activo se ejecuta el código.
+                } 
+                // Si el estado del aspirante es activo se ejecuta el código.
+                elseif ($aspirantes->checkUser($_POST['correo'], $_POST['clave'])) {
                     // Se asigna el valor de status.
                     $result['status'] = 1;
+                    // Se almacena el conjunto de datos proveniente de la función dentro de la variable $info.
+                    $info = $aspirantes->checkUser($_POST['correo'], $_POST['clave']);
                     // Se asigna el id del aspirante proveniente de la función checkUser()
                     // dentro del array de la sesión $_SESSION.
-                    $_SESSION['idAspirante'] = $aspirantes->checkUser($_POST['correo'], $_POST['clave'])[0];
+                    $_SESSION['idAspirante'] = $info[0];
                     // Se asigna el correo del aspirante proveniente de la función checkUser()
                     // dentro del array de la sesión $_SESSION.
-                    $_SESSION['correoAspirante'] = $aspirantes->checkUser($_POST['correo'], $_POST['clave'])[1];
+                    $_SESSION['correoAspirante'] = $info[1];
                     // Se asigna el nombre del aspirante proveniente de la función checkUser()
                     // dentro del array de la sesión $_SESSION.
-                    $_SESSION['nombreAspirante'] = $aspirantes->checkUser($_POST['correo'], $_POST['clave'])[2];
+                    $_SESSION['nombreAspirante'] = $info[2];
                     // Se asigna el apellido del aspirante proveniente de la función checkUser()
                     // dentro del array de la sesión $_SESSION.
-                    $_SESSION['apellidoAspirante'] = $aspirantes->checkUser($_POST['correo'], $_POST['clave'])[3];
+                    $_SESSION['apellidoAspirante'] = $info[3];
+                    // Se asigna el genero del aspirante proveniente de la función checkUser()
+                    // dentro del array de la sesión $_SESSION.
+                    $_SESSION['generoAspirante'] = $info[4];
                     // Se inicializa el array que almacena los estudios del currículum.
                     $_SESSION['estudios'] = array();
                     // Se inicializa el array que almacena las experiencias laborales del currículum.

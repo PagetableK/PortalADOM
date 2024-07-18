@@ -49,7 +49,7 @@ const cargarPlantilla = async () => {
                     <li class="sidebar-item">
                         <a href="../../views/private/administradores.html" class="sidebar-link">
                             <i class="bi bi-person"></i>
-                            <span>Administrador</span>
+                            <span>Administradores</span>
                         </a>
                     </li>
 

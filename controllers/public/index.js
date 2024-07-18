@@ -22,7 +22,7 @@ FORM_LOGIN.addEventListener('submit', async (event) => {
         sweetAlert(1, DATA.message, true, 'inicio.html');
     } 
     // Si se muestra el error se ejecuta el código.
-    else if(DATA.error == "Su cuenta ha sido desactivada por un administrador") {
+    else if(DATA.error == "Su cuenta ha sido desactivada") {
         sweetAlert(3, DATA.error, false);
     }
     // Si la respuesta no es satisfactoria se muestra el error.

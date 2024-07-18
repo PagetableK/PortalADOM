@@ -50,9 +50,9 @@ class GradoHandler
     public function searchRows()
     {
         $value = '%' . Validator::getSearchValue() . '%';
-        $sql = 'SELECT * FROM vista_tabla_grado
-        WHERE NOMBRE LIKE ?
-        ORDER BY NOMBRE;';
+        $sql = 'SELECT id_grado as ID, nombre_grado as NOMBRE, (SELECT COUNT(estudios_aspirantes.id_grado) FROM estudios_aspirantes WHERE estudios_aspirantes.id_grado = grados_academicos.id_grado) AS usos 
+	            FROM grados_academicos
+                WHERE nombre_grado LIKE ?';
         $params = array($value);
         return Database::getRows($sql, $params);
     }
@@ -60,8 +60,8 @@ class GradoHandler
     //Función para leer todos los admministradores.
     public function readAll()
     {
-        $sql = 'SELECT * FROM vista_tabla_grado
-        ORDER BY NOMBRE;';
+        $sql = 'SELECT id_grado as ID, nombre_grado as NOMBRE, (SELECT COUNT(estudios_aspirantes.id_grado) FROM estudios_aspirantes WHERE estudios_aspirantes.id_grado = grados_academicos.id_grado) AS usos 
+	            FROM grados_academicos';
         return Database::getRows($sql);
     }
 

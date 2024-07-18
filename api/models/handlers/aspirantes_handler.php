@@ -27,7 +27,7 @@ class AspirantesHandler
     public function checkUser($correo, $clave)
     {
         // Se establece la estructura del query.
-        $sql = 'SELECT id_aspirante, clave_aspirante, estado_aspirante, nombre_aspirante, apellido_aspirante
+        $sql = 'SELECT id_aspirante, clave_aspirante, estado_aspirante, nombre_aspirante, apellido_aspirante, genero_aspirante
                 FROM aspirantes
                 WHERE correo_aspirante = ?';
         // Se agrega el parámetro en el array.
@@ -46,7 +46,7 @@ class AspirantesHandler
                     return 'Estado inactivo';
                 } else {
                     // Si estado_aspirante = 1 el estado es activo: Se devuelve el array.
-                    return array($data['id_aspirante'], $correo, $data['nombre_aspirante'], $data['apellido_aspirante']);
+                    return array($data['id_aspirante'], $correo, $data['nombre_aspirante'], $data['apellido_aspirante'], $data['genero_aspirante']);
                 }
             } else {
                 // Si la contraseña no es correcta se devuelve false.
@@ -91,7 +91,7 @@ class AspirantesHandler
     public function createRow()
     {
         $sql = 'CALL insertar_aspirante_validado(?,?,?,?,?,?,?)';
-        $params = array($this->nombre, $this->apellido, $this->clave, $this->correo, $this->genero, $this->fecha_nacimiento, $_SESSION['idAdministrador']) ;
+        $params = array($this->nombre, $this->apellido, $this->clave, $this->correo, $this->genero, $this->fecha_nacimiento, $_SESSION['idAdministrador']);
         return Database::executeRow($sql, $params);
     }
 
@@ -105,16 +105,8 @@ class AspirantesHandler
      //Función para actualizar un admministrador.
     public function updateRow()
     {
-        $sql = 'CALL actualizar_aspirante_validado(?,?,?,?,?,?,?);';
-        $params = array(
-            $this->id,
-            $this->nombre,
-            $this->apellido,
-            $this->correo,
-            $this->genero,
-            $this->fecha_nacimiento,
-            $_SESSION['idAdministrador']
-        );
+        $sql = 'CALL actualizar_aspirante_validado(?, ?, ?, ?, ?, ?, ?)';
+        $params = array($this->id, $this->nombre, $this->apellido, $this->correo, $this->genero, $this->fecha_nacimiento, $_SESSION['idAdministrador']);
         return Database::executeRow($sql, $params);
     }
 
@@ -212,5 +204,13 @@ class AspirantesHandler
         WHERE id_aspirante LIKE ?';
         $params = array($_SESSION['idAspirante']);
         return Database::getRow($sql, $params);
+    }
+
+    public function reallCurriculum()
+    {
+        $sql = 'SELECT * FROM vista_tabla_curriculum
+        WHERE ID LIKE ?';
+        $params = array($_SESSION['idAspirante']);
+        return Database::getRows($sql, $params);
     }
 }
