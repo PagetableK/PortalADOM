@@ -19,9 +19,7 @@ const ESTADO_EXPERIENCIA = document.getElementById('estadoExperiencia'), SELECT_
     SELECT_YEAR_FINAL = document.getElementById('yearFinal'), DESCRIPCION_PUESTO = document.getElementById('descripcion'),
     CARACTERES_RESTANTES = document.getElementById('caracteresRestantes'), TELEFONOS = document.querySelectorAll('.telefono');
 
-const SELECT_IDIOMAS = document.getElementById('idioma');
-
-const SELECT_HABILIDADES = document.getElementById('nombreHabilidad');
+const SELECT_IDIOMAS = document.getElementById('idioma'), SELECT_HABILIDADES = document.getElementById('nombreHabilidad');
 
 const CORREO_ASPIRANTE = document.getElementById('correo'), TELEFONO_MOVIL = document.getElementById('telefonoMovil'),
     IMAGEN = document.getElementById('archivoImagen'), TELEFONO_FIJO = document.getElementById('telefonoFijo');
@@ -49,6 +47,19 @@ const BOTON_EDITAR = document.getElementById('btnEditarCv'), BOTON_REGRESAR = do
     CONTENEDOR_BOTON = document.getElementById('contenedorBtnRegresar'), CONTENEDOR_MENSAJE = document.getElementById('contenedorMensaje');
 
 let errorCurriculum = false, editarCv = false;
+
+// Se inicializa y agrega el diseño del elemento select2.
+$(".select2-single").select2({
+    theme: "bootstrap",
+    placeholder: "Seleccione una institución",
+    maximumSelectionSize: 6,
+    containerCssClass: ':all:',
+    "language": {
+        "noResults": function(){
+            return "No se encontraron resultados";
+        }
+    },
+});
 
 // Evento que se ejecuta al terminar de cargar los componentes.
 document.addEventListener('DOMContentLoaded', async () => {
@@ -423,7 +434,7 @@ const openReport = async () => {
                 allCertificados.forEach(certificado => {
                     if (!certificadosSet.has(certificado)) {
                         const lines = doc.splitTextToSize(certificado, 120); // Ajusta el ancho si es necesario
-                        lines.forEach(line => { 
+                        lines.forEach(line => {
                             if (certY <= 297) {
                                 doc.text(line, 70, certY);
                                 certY += 6;
@@ -1122,11 +1133,7 @@ FORM_EXPERIENCIA.addEventListener('submit', async (e) => {
 
             FORM_EXPERIENCIA.reset();
 
-            SELECT_MES_INICIO.removeAttribute("disabled");
-
             SELECT_MES_FINAL.removeAttribute("disabled");
-
-            SELECT_YEAR_INICIO.removeAttribute("disabled");
 
             SELECT_YEAR_FINAL.removeAttribute("disabled");
 
@@ -1449,32 +1456,34 @@ const agregarHabilidades = async (FORM) => {
 }
 
 
+// Función que permite crear un id para los apartados del currículum.
 function crearId(longitud) {
-
+    // Variable donde se almacenará el id.
     let resultado = '';
-
+    // Se definen los caracteres que se utilizarán en el id.
     const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-
+    // Se almacena la longitud de la cadena de caracteres en el string.
     const longitudCaracteres = caracteres.length;
-
+    // Se inicializa la variable.
     let contador = 0;
-
+    // Se realiza una iteración para obtener un nuevo caracter por cada iteración.
     while (contador < longitud) {
-
+        // Se almacena el caracter random en la variable.
         resultado += caracteres.charAt(Math.floor(Math.random() * longitudCaracteres));
-
         contador += 1;
     }
-
+    // Se retorna el id.
     return resultado;
 }
 
-SELECT_INSTITUCIONES.addEventListener('change', () => {
-
-    if (SELECT_INSTITUCIONES.value == 0) {
+// Evento que se ejecuta al cambiar la opción seleccionada.
+$('#institucion').on('change', function (e) {
+    // Si el valor seleccionado es 0 se ejecuta el código.
+    if ($("#institucion").select2('data')[0].id == 0) {
 
         OTRA_INSTITUCION.removeAttribute("disabled");
     } else {
+        // Se activa el campo de otra institución.
         OTRA_INSTITUCION.setAttribute("disabled", "");
         OTRA_INSTITUCION.value = '';
     }
@@ -1782,7 +1791,7 @@ BOTON_REGRESAR.addEventListener('click', async () => {
 
     const RESPONSE = await confirmAction('¿Está seguro que desea regresar?\nSe perderán los cambios realizados');
     // Se verifica la opción seleccionada (true si selecciona sí).
-    if(RESPONSE){
+    if (RESPONSE) {
         // Se oculta el contenedor con las opciones.
         CONTENEDOR_OPCIONES_CV.classList.remove('d-none');
         // Se muestra el contenedor con el stepper.

@@ -127,11 +127,7 @@ const fillTable = async (form = null) => {
 */
 const openCreate = () => {
     // Se muestra la caja de diálogo con su título.
-    SAVE_MODAL.show();
-    MODAL_TITLE.textContent = 'Crear area';
-    // Se prepara el formulario.
-    SAVE_FORM.reset();
-    fillSelect(RUBRO_API, 'readAll', 'idRubro');
+    location.href = "gestionar_curriculum.html";
 }
 
 const openVerCurriculum = async (id) => {

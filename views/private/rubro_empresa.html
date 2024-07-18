@@ -23,10 +23,7 @@
     <main>
         <div class="container-fluid px-5">
             <!-- Este div crea una fila dentro de Bootstrap -->
-            <div class="row mb-3 row-gap-3 pe-2 ps-2 d-flex align-items-center">
-                <div class="col-12">
-                    <h4 class="text-start fw-semibold"></h4>
-                </div>
+            <div class="row mb-3 row-gap-3 pe-2 ps-2 d-flex align-items-center mt-4">
                 <div class="col-12 col-lg-9">
                     <div class="row d-flex contenedor-form">
                         <form id="searchForm" class="d-flex">
@@ -38,7 +35,7 @@
                                     </button>
                                 </div>
                                 <!-- Este input crea la barra de búsqueda -->
-                                <input type="search" class="form-control elemento-form" placeholder="Buscar..."
+                                <input type="search" class="form-control elemento-form" placeholder="Buscar rubro por nombre..."
                                     name="search">
                                 <div class="d-flex">
                                     <button type="reset" class="input-group-text elemento-form" onclick="fillTable()">
@@ -47,7 +44,6 @@
                                 </div>
                             </div>
                         </form>
-
                     </div>
                 </div>
                 <div class="col-12 col-lg-3 d-flex justify-content-center">
@@ -90,16 +86,22 @@
                         <div class="modal-body row g-3">
                             <!-- Campo oculto para asignar el id del registro al momento de modificar -->
                             <input type="number" class="d-none" id="idRubro" name="idRubro">
-                        </div>
 
-                        <div class="col-sm-12 col-md-6">
-                            <label for="nombreRubro" class="form-label fw-semibold">Área</label>
-                            <input id="nombreRubro" type="text" name="nombreRubro" class="form-control"
-                                placeholder="Ingresa el nombre de la institucion" autocomplete="off" required>
+                            <div class="col-12">
+                                <label for="nombreRubro" class="form-label fw-semibold">Rubro</label>
+                                <input id="nombreRubro" type="text" name="nombreRubro" class="form-control"
+                                    placeholder="Ingrese el nombre del rubro" autocomplete="off" required>
+                            </div>
                         </div>
-                        
-                        <div class="modal-footer col-sm-12 col-md-12 col-lg-12">
-                            <button type="submit" class="btn bg-primary text-white ">Guardar</button>
+                        <div class="modal-footer col-12 justify-content-center">
+                            <button type="submit" class="btn bg-primary text-white d-none" id="btnAgregar">
+                                <i class="bi bi-plus"></i>
+                                Agregar rubro
+                            </button>
+                            <button type="submit" class="btn bg-success text-white d-none" id="btnActualizar">
+                                <i class="bi bi-pencil-fill"></i>
+                                Actualizar rubro
+                            </button>
                         </div>
                     </form>
                 </div>

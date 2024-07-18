@@ -14,21 +14,21 @@ if (isset($_GET['action'])) {
     if (isset($_SESSION['idAdministrador'])) {
         // Se compara la acción a realizar cuando un administrador ha iniciado sesión.
         switch ($_GET['action']) {
-            // case 'searchRows':
-            //     if (!Validator::validateSearch($_POST['search'])) {
-            //         $result['error'] = Validator::getSearchError();
-            //     } elseif ($result['dataset'] = $curriculum->searchRows()) {
-            //         $result['status'] = 1;
-            //         $result['message'] = 'Existen ' . count($result['dataset']) . ' coincidencias';
-            //     } else {
-            //         $result['error'] = 'No hay coincidencias';
-            //     }
-            //     break;
+                // case 'searchRows':
+                //     if (!Validator::validateSearch($_POST['search'])) {
+                //         $result['error'] = Validator::getSearchError();
+                //     } elseif ($result['dataset'] = $curriculum->searchRows()) {
+                //         $result['status'] = 1;
+                //         $result['message'] = 'Existen ' . count($result['dataset']) . ' coincidencias';
+                //     } else {
+                //         $result['error'] = 'No hay coincidencias';
+                //     }
+                //     break;
             case 'createRow':
                 $_POST = Validator::validateForm($_POST);
                 if (
                     !$curriculum->setNombre($_POST['nombreAspirante']) or
-                    !$curriculum->setIdAspirante($_POST['idAspirante']) 
+                    !$curriculum->setIdAspirante($_POST['idAspirante'])
                 ) {
                     $result['error'] = $area->getDataError();
                 } elseif ($area->createRow()) {
@@ -75,7 +75,7 @@ if (isset($_GET['action'])) {
                 break;
             case 'readOneDataEstudios':
                 if (!$curriculum->setId($_POST['idCurriculum'])) {
-                    $result['error'] = $curriculum->getDataError();                                                                                                                                 
+                    $result['error'] = $curriculum->getDataError();
                 } elseif ($result['dataset'] = $curriculum->readOneDataEstudios()) {
                     $result['status'] = 1;
                 } else {
@@ -86,7 +86,7 @@ if (isset($_GET['action'])) {
                 $_POST = Validator::validateForm($_POST);
                 if (
                     !$curriculum->setIdAspirante($_POST['idAspirante']) or
-                    !$curriculum->setNombre($_POST['nombreAspirante']) 
+                    !$curriculum->setNombre($_POST['nombreAspirante'])
                 ) {
                     $result['error'] = $curriculum->getDataError();
                 } elseif ($curriculum->updateRow()) {
@@ -98,7 +98,7 @@ if (isset($_GET['action'])) {
                 break;
             case 'deleteRow':
                 if (
-                    !$curriculum->setId($_POST['idCurriculum']) 
+                    !$curriculum->setId($_POST['idCurriculum'])
                 ) {
                     $result['error'] = $curriculum->getDataError();
                 } elseif ($curriculum->deleteRow()) {
@@ -106,6 +106,58 @@ if (isset($_GET['action'])) {
                     $result['message'] = 'curriculum eliminada correctamente';
                 } else {
                     $result['error'] = 'Ocurrió un problema al eliminar la area';
+                }
+                break;
+            case 'validarEstudio':
+                // Se eliminan los espacios en blancos de los valores dentro del array.
+                $_POST = Validator::validateForm($_POST);
+                if (
+                    !$curriculum->setIdGrado($_POST['gradoAcademico']) or
+                    !$curriculum->setTitulo($_POST['titulo']) or
+                    !$curriculum->setIdInstitucion($_POST['institucion'], $_POST['booleanoInstitucion']) or
+                    !$curriculum->setNombreInstitucion($_POST['otraInstitucion']) or
+                    !$curriculum->setFechaFinalizacionEstudio($_POST['fechaFinal'], $_POST['booleanFecha']) or
+                    !$curriculum->setIdentificador($_POST['identificador'])
+                ) {
+                    // Se retorna el error proveniente de la clase DATA.
+                    $result['error'] = $curriculum->getDataError();
+                } else {
+                    $result['status'] = 1;
+                }
+                break;
+            case 'validarCertificado':
+                // Se eliminan los espacios en blancos de los valores dentro del array.
+                $_POST = Validator::validateForm($_POST);
+                if (
+                    !$curriculum->setTituloCertificado($_POST['tituloCertificado']) or
+                    !$curriculum->setInstitucionCertificado($_POST['institucionCertificado']) or
+                    !$curriculum->setFechaFinalizacionCertificado($_POST['fechaFinalCertificado']) or
+                    !$curriculum->setIdentificador($_POST['identificador'])
+                ) {
+                    $result['error'] = $curriculum->getDataError();
+                } else {
+                    $result['status'] = 1;
+                }
+                break;
+            case 'validarExperiencia':
+                // Se eliminan los espacios en blancos de los valores dentro del array.
+                $_POST = Validator::validateForm($_POST);
+                if (
+                    !$curriculum->setEmpresa($_POST['empresa']) or
+                    !$curriculum->setCargo($_POST['cargo']) or
+                    !$curriculum->setIdRubro($_POST['rubro']) or
+                    !$curriculum->setIdArea($_POST['area']) or
+                    !$curriculum->setMesInicio($_POST['mesInicio']) or
+                    !$curriculum->setMesFinal($_POST['mesFinal'], $_POST['booleanFecha']) or
+                    !$curriculum->setYearInicio($_POST['yearInicio']) or
+                    !$curriculum->setYearFinal($_POST['yearFinal'], $_POST['booleanFecha']) or
+                    !$curriculum->validarLapso() or
+                    !$curriculum->setDescripcion($_POST['descripcion']) or
+                    !$curriculum->setIdentificador($_POST['identificador'])
+                ) {
+                    $result['error'] = $curriculum->getDataError();
+                } else {
+                    $result['status'] = 1;
                 }
                 break;
             default:
