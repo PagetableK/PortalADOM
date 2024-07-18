@@ -166,8 +166,7 @@ const openReport = async () => {
             doc.setTextColor(0, 0, 0);
             const contactFields = [
                 rowCurriculum['correo_aspirante'],
-                rowCurriculum['fecha_nacimiento'],
-                rowCurriculum['genero_aspirante']
+                `(+503) ${rowCurriculum['telefono_movil']}`
             ];
             let yPositionC = 70;
             contactFields.forEach(field => {
@@ -299,19 +298,37 @@ const openReport = async () => {
 
 
             let yPositionV = 50;
-            // Filtrar y mapear las experiencias únicas
-            // Añadir sección de experiencia laboral
             const allExperiencias = dataCurriculum.dataset.filter(item =>
                 item['id_curriculum'] === rowCurriculum['id_curriculum'] &&
                 item['nombre_cargo'] &&
                 item['nombre_empresa'] &&
                 item['fecha_inicio'] &&
                 item['descripcion_puesto']
-            ).map(item => ({
-                title: `. ${item['nombre_cargo']}`,
-                company: `${item['nombre_empresa']}  | ${item['fecha_inicio']} - ${item['fecha_fin'] ? item['fecha_fin'] : 'Trabajo actual'}`,
-                details: `${item['descripcion_puesto']}`
-            }));
+            ).map(item => {
+                const fechaInicio = new Date(item['fecha_inicio']);
+                const fechaInicioFormateada = `${getMonthName(fechaInicio.getMonth() + 1)} ${fechaInicio.getFullYear()}`;
+            
+                const fechaFinFormateada = item['fecha_fin'] ? 
+                    `${getMonthName(new Date(item['fecha_fin']).getMonth() + 1)} ${new Date(item['fecha_fin']).getFullYear()}` : 
+                    'Trabajo actual';
+            
+                return {
+                    title: `${item['nombre_cargo']}`,
+                    company: `${item['nombre_empresa']} | ${fechaInicioFormateada} - ${fechaFinFormateada}`,
+                    details: `${item['descripcion_puesto']}`
+                };
+            });
+            
+            // Función para obtener el nombre del mes a partir de su número
+            function getMonthName(monthNumber) {
+                const months = [
+                    'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
+                    'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'
+                ];
+                return months[monthNumber]; // Restamos 1 porque el índice de los meses empieza en 0
+            }
+            
+            
 
             if (allExperiencias.length > 0 && allExperiencias.some(exp => exp.title && exp.company && exp.details)) {
 
@@ -344,7 +361,7 @@ const openReport = async () => {
 
                         expY += 6; // Espacio adicional entre experiencias
                         experienciasSet.add(experienciaString);
-                        
+
                     }
                 });
                 yPositionV = Math.max(yPositionV, expY + 10);
@@ -356,7 +373,7 @@ const openReport = async () => {
                 item['id_curriculum'] === rowCurriculum['id_curriculum'] &&
                 item['nombre_grado'] &&
                 item['titulo_estudio']
-            ).map(item => `. ${item['nombre_grado']} ${item['titulo_estudio']}, ${item['nombre_institucion_estudio'] ? item['nombre_institucion_estudio'] : ''} ${item['fecha_finalizacion_estudio'] ? item['fecha_finalizacion_estudio'] : 'Cursando'}`);
+            ).map(item => `. ${item['nombre_grado']}, ${item['titulo_estudio']}, ${item['nombre_institucion'] ? item['nombre_institucion'] : ''} ${item['nombre_institucion_estudio'] ? item['nombre_institucion_estudio'] : ''} ${item['fecha_finalizacion_estudio'] ? item['fecha_finalizacion_estudio'] : 'Cursando'}`);
 
 
             // Verificar si hay formaciones para mostrar
@@ -433,20 +450,21 @@ const openReport = async () => {
                 // Actualizar yPositionV al final de la sección de certificados
                 yPositionV = Math.max(yPositionV, certY + 10);
             }
-            // Generar el PDF
-            const pdfOutput = doc.output('dataurlnewwindow'); // Utilizando 'dataurlnewwindow'
-
-            // Crear una URL de Blob
-            const blob = new Blob([pdfOutput], { type: 'application/pdf' });
+            const pdfOutput = doc.output('dataurlnewwindow'); // Genera un Blob en lugar de una URL
 
             // Crear una URL del Blob
-            const blobURL = URL.createObjectURL(blob);
+            const blobURL = URL.createObjectURL(pdfOutput);
 
-            // Abrir el PDF en una nueva pestaña
-            window.open(blobURL, '_blank');
+            // Abrir el PDF en una nueva pestaña o ventana
+            if (!window.pdfWindow || window.pdfWindow.closed) {
+                window.pdfWindow = window.open(blobURL, '_blank');
+            } else {
+                window.pdfWindow.location.href = blobURL; // Actualiza la URL existente
+            }
 
             // Limpiar la URL del Blob después de abrir la nueva pestaña
             URL.revokeObjectURL(blobURL);
+
         });
     } else {
         doc.text('No hay información para mostrar', 10, 10);
