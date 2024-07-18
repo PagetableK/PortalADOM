@@ -149,7 +149,7 @@ const openReport = async () => {
             doc.setFont('Times', 'bold');
             doc.setFontSize(28);
             doc.setTextColor(...secondaryColor);
-            doc.text(rowCurriculum['NOMBRE'], 70, 20);
+            doc.text(rowCurriculum['NOMBRE'], 70, 20, {maxWidth: 140});
             doc.setFontSize(16);
             doc.setTextColor(0, 0, 0);
 
@@ -166,8 +166,7 @@ const openReport = async () => {
             doc.setTextColor(0, 0, 0);
             const contactFields = [
                 rowCurriculum['correo_aspirante'],
-                rowCurriculum['fecha_nacimiento'],
-                rowCurriculum['genero_aspirante']
+                `(+503) ${rowCurriculum['telefono_movil']}`
             ];
             let yPositionC = 70;
             contactFields.forEach(field => {
@@ -299,57 +298,62 @@ const openReport = async () => {
 
 
             let yPositionV = 50;
-            // Filtrar y mapear las experiencias únicas
-            // Filtrar y mapear las experiencias únicas asociadas al currículum actual
             const allExperiencias = dataCurriculum.dataset.filter(item =>
                 item['id_curriculum'] === rowCurriculum['id_curriculum'] &&
                 item['nombre_cargo'] &&
                 item['nombre_empresa'] &&
                 item['fecha_inicio'] &&
-                item['fecha_fin'] &&
                 item['descripcion_puesto']
-            ).map(item => ({
-                title: `. ${item['nombre_cargo']}`,
-                company: `${item['nombre_empresa']}  | ${item['fecha_inicio']} - ${item['fecha_fin']}`,
-                details: `${item['descripcion_puesto']}` // No es necesario agregar '\n' aquí
-            }));
+            ).map(item => {
+                // Función para formatear la fecha en 'yyyy, mm, dd' usando split
+                const formatDate = (dateString) => {
+                    const [year, month] = dateString.split('-');
+                    return `${year}, ${month}`;
+                };
+            
+                return {
+                    title: `${item['nombre_cargo']}`,
+                    company: `${item['nombre_empresa']} | ${formatDate(item['fecha_inicio'])} - ${item['fecha_fin'] ? formatDate(item['fecha_fin']) : 'Trabajo actual'}`,
+                    details: `${item['descripcion_puesto']}`
+                };
+            });
+            
+            
 
-            // Verificar si hay experiencias para mostrar
             if (allExperiencias.length > 0 && allExperiencias.some(exp => exp.title && exp.company && exp.details)) {
+
                 doc.setFont('Times', 'bold');
                 doc.setFontSize(12);
                 doc.setTextColor(...secondaryColor);
-                doc.text('EXPERIENCIA PROFESIONAL', 70, yPositionV); // Posición vertical ajustada según necesidad
-                doc.line(70, yPositionV + 2, 200, yPositionV + 2); // Línea separadora
+                doc.text('EXPERIENCIA PROFESIONAL', 70, yPositionV);
+                doc.line(70, yPositionV + 2, 200, yPositionV + 2);
 
                 doc.setFont('Times', 'normal');
                 doc.setFontSize(10);
                 doc.setTextColor(0, 0, 0);
 
                 const experienciasSet = new Set();
-                let expY = yPositionV + 8; // Posición inicial vertical para los detalles de experiencia
+                let expY = yPositionV + 8;
 
                 allExperiencias.forEach(exp => {
                     const experienciaString = `${exp.title} ${exp.company} ${exp.details}`;
                     if (!experienciasSet.has(experienciaString)) {
-                        doc.setFont('Times', 'normal');// Asegurarse de que la fuente sea normal
+                        doc.setFont('Times', 'normal');
                         doc.text(exp.title, 70, expY);
                         doc.text(exp.company, 70, expY + 6);
                         expY += 12;
 
-                        // Separar los detalles de la experiencia por líneas
                         const detalles = exp.details.split('\n');
                         detalles.forEach(detail => {
-                            doc.text(`- ${detail}`, 70, expY);
+                            doc.text(`- ${detail}`, 70, expY, {maxWidth :140});
                             expY += 6;
                         });
 
-                        expY += 6;
-                        experienciasSet.add(experienciaString); // Agregar experiencia al Set para evitar duplicados
+                        expY += 6; // Espacio adicional entre experiencias
+                        experienciasSet.add(experienciaString);
+
                     }
                 });
-
-                // Actualizar yPositionV al final de la sección de experiencia
                 yPositionV = Math.max(yPositionV, expY + 10);
             }
 
@@ -358,10 +362,9 @@ const openReport = async () => {
             const allFormaciones = dataCurriculum.dataset.filter(item =>
                 item['id_curriculum'] === rowCurriculum['id_curriculum'] &&
                 item['nombre_grado'] &&
-                item['titulo_estudio'] &&
-                item['nombre_institucion_estudio'] &&
-                item['fecha_finalizacion_estudio']
-            ).map(item => `. ${item['nombre_grado']} ${item['titulo_estudio']}, ${item['nombre_institucion_estudio']} ${item['fecha_finalizacion_estudio']}`);
+                item['titulo_estudio']
+            ).map(item => `. ${item['nombre_grado']}, ${item['titulo_estudio']}, ${item['nombre_institucion'] ? item['nombre_institucion'] : ''} ${item['nombre_institucion_estudio'] ? item['nombre_institucion_estudio'] : ''} ${item['fecha_finalizacion_estudio'] ? item['fecha_finalizacion_estudio'] : 'Cursando'}`);
+
 
             // Verificar si hay formaciones para mostrar
             if (allFormaciones.length > 0 && allFormaciones.some(formacion => formacion.trim() !== '.')) {
@@ -397,6 +400,7 @@ const openReport = async () => {
 
 
 
+
             // Filtrar y mapear los certificados únicos asociados al currículum actual
             const allCertificados = dataCurriculum.dataset.filter(item =>
                 item['id_curriculum'] === rowCurriculum['id_curriculum'] &&
@@ -423,7 +427,7 @@ const openReport = async () => {
                 allCertificados.forEach(certificado => {
                     if (!certificadosSet.has(certificado)) {
                         const lines = doc.splitTextToSize(certificado, 120); // Ajusta el ancho si es necesario
-                        lines.forEach(line => { 
+                        lines.forEach(line => {
                             if (certY <= 297) {
                                 doc.text(line, 70, certY);
                                 certY += 6;
@@ -436,20 +440,29 @@ const openReport = async () => {
                 // Actualizar yPositionV al final de la sección de certificados
                 yPositionV = Math.max(yPositionV, certY + 10);
             }
-            // Generar el PDF
-            const pdfOutput = doc.output('dataurlnewwindow'); // Utilizando 'dataurlnewwindow'
 
-            // Crear una URL de Blob
-            const blob = new Blob([pdfOutput], { type: 'application/pdf' });
+            
+
+            const pdfOutput = doc.output('dataurlnewwindow'); // Genera un Blob en lugar de una URL
 
             // Crear una URL del Blob
-            const blobURL = URL.createObjectURL(blob);
+            const blobURL = URL.createObjectURL(pdfOutput);
 
-            // Abrir el PDF en una nueva pestaña
-            window.open(blobURL, '_blank');
+            // Abrir el PDF en una nueva pestaña o ventana
+            if (!window.pdfWindow || window.pdfWindow.closed) {
+                window.pdfWindow = window.open(blobURL, '_blank');
+            } else {
+                window.pdfWindow.location.href = blobURL; // Actualiza la URL existente
+            }
 
             // Limpiar la URL del Blob después de abrir la nueva pestaña
             URL.revokeObjectURL(blobURL);
+
+            if (yPositionC > 260) {
+                doc.addPage(); // Agregar una nueva página
+                yPositionC = 10; // Reiniciar la posición vertical para el contenido
+            }
+
         });
     } else {
         doc.text('No hay información para mostrar', 10, 10);
@@ -1782,7 +1795,7 @@ BOTON_REGRESAR.addEventListener('click', async () => {
 
     const RESPONSE = await confirmAction('¿Está seguro que desea regresar?\nSe perderán los cambios realizados');
     // Se verifica la opción seleccionada (true si selecciona sí).
-    if(RESPONSE){
+    if (RESPONSE) {
         // Se oculta el contenedor con las opciones.
         CONTENEDOR_OPCIONES_CV.classList.remove('d-none');
         // Se muestra el contenedor con el stepper.
