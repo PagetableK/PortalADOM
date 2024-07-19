@@ -32,7 +32,7 @@ if (isset($_GET['action'])) {
                     $result['error'] = $area->getDataError();
                 } elseif ($area->createRow()) {
                     $result['status'] = 1;
-                    $result['message'] = 'area agregada correctamente';
+                    $result['message'] = 'Área agregada correctamente';
                 } else {
                     $result['error'] = 'Ocurrió un problema al crear la area';
                 }
@@ -64,7 +64,7 @@ if (isset($_GET['action'])) {
                     $result['status'] = 1;
                     $result['message'] = 'area modificada correctamente';
                 } else {
-                    $result['error'] = 'Ocurrió un problema al modificar la area';
+                    $result['error'] = 'Ocurrió un problema al modificar el área';
                 }
                 break;
             case 'deleteRow':
@@ -76,7 +76,7 @@ if (isset($_GET['action'])) {
                     $result['status'] = 1;
                     $result['message'] = 'area eliminada correctamente';
                 } else {
-                    $result['error'] = 'Ocurrió un problema al eliminar la area';
+                    $result['error'] = 'Ocurrió un problema al eliminar el area';
                 }
                 break;
             default:

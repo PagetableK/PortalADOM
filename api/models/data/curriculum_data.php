@@ -21,7 +21,7 @@ class CurriculumData extends CurriculumHandler
         // Se valida que el valor sea de tipo numérico entero.
         if (Validator::validateNaturalNumber($valor)) {
             // Se asigna el valor del atributo.
-            $this->id_grado = $valor;
+            $this->id_aspirante = $valor;
             return true;
         } else {
             // En caso de no serlo se devuelve el error.
@@ -523,14 +523,10 @@ class CurriculumData extends CurriculumHandler
     }
 
     // Función que verifica que el idioma no haya sido agregado aún.
-    public function validarIdioma($boolean)
+    public function validarIdioma()
     {
-        // Si el valor del parámetro es 1 se devuelve true.
-        if($boolean){
-            return true;
-        }
         // Se verifica que el idioma no haya sido agregado.
-        elseif ($this->verificarIdioma()) {
+        if ($this->verificarIdioma()) {
             // Se devuelve true.
             return true;
         } else {
@@ -665,14 +661,10 @@ class CurriculumData extends CurriculumHandler
     }
 
     // Función que verifica que la habilidad no haya sido agregada aún.
-    public function validarHabilidad($boolean)
+    public function validarHabilidad()
     {
-        // Si el valor del parámetro es 1 se devuelve true.
-        if($boolean){
-            return true;
-        }
         // Se verifica que la habilidad no haya sido agregada.
-        elseif ($this->verificarHabilidad()) {
+        if ($this->verificarHabilidad()) {
             // Se devuelve true.
             return true;
         } else {

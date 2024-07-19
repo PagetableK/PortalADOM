@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Título del documento -->
     <title></title>
+    <!-- Se configura el ícono de la pestaña -->
+    <link type="image/png" rel="icon" href="/PortalADOM/resources/img/logo.png">
     <!-- Llamada al framework de diseño -->
     <link href="../../resources/css/utils/bootstrap.min.css" rel="stylesheet">
     <!-- Llamada al archivo css para utilizar stepper -->
@@ -32,7 +34,7 @@
     <main>
         <div class="container-fluid px-5">
             <!-- Este div crea una fila dentro de Bootstrap -->
-            <div class="row mb-3 row-gap-3 pe-2 ps-2 d-flex align-items-center mt-4">
+            <div class="row mb-3 row-gap-3 pe-2 ps-2 d-flex align-items-center mt-4 d-none" id="contenedorAspirantes">
                 <div class="col-12 d-flex flex-column gap-1">
                     <p class="fw-bold fs-5">Seleccione un aspirante que no tenga un currículum asignado</p>
                     <label for="aspirante" class="fs-6">Aspirante</label>
@@ -43,7 +45,7 @@
                 </div>
             </div>
             <hr>
-            <div class="row mx-lg-5 pb-3" id="contenedorStepper">
+            <div class="row mx-lg-3 pb-3" id="contenedorStepper">
                 <div class="col-md-12">
                     <div id="stepperCv" class="bs-stepper">
                         <div class="bs-stepper-header">

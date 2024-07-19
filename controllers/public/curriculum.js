@@ -1281,8 +1281,7 @@ FORM_CURRICULUM.addEventListener('submit', async (e) => {
 
         editarCv ? accion = 'actualizarCurriculum' : accion = 'agregarCurriculum';
 
-        // ENVIAR BOOLEANIMAGEN, VALIDAR TELEFONOS CON CHECKWITHID
-        FORM.append("booleanImagen", 1);
+        IMAGEN.value != "" ? FORM.append("booleanImagen", 0) : FORM.append("booleanImagen", 1);
 
         const DATA = await fetchData(API_CURRICULUM, accion, FORM);
 
@@ -1310,8 +1309,8 @@ FORM_CURRICULUM.addEventListener('submit', async (e) => {
 
             errorCurriculum ? async () => {
                 await sweetAlert(1, 'Currículum actualizado correctamente');
-                sweetAlert(3, 'Es posible que los apartados no se hayan actualizado correctamente, se recomienda verificar el currículum', false);
-            } : sweetAlert(1, 'Currículum actualizado correctamente', true, 'curriculum.html');
+                await sweetAlert(3, 'Es posible que los apartados no se hayan actualizado correctamente, se recomienda verificar el currículum', false, 'curriculum.html');
+            } : sweetAlert(1, 'Currículum actualizado correctamente', false, 'curriculum.html');
         }
         else if (DATA.status) {
 
@@ -1335,7 +1334,7 @@ FORM_CURRICULUM.addEventListener('submit', async (e) => {
 
             errorCurriculum ? async () => {
                 await sweetAlert(1, 'Currículum agregado correctamente');
-                sweetAlert(3, 'Es posible que los apartados no se hayan agregado correctamente, se recomienda verificar el currículum', false);
+                await sweetAlert(3, 'Es posible que los apartados no se hayan agregado correctamente, se recomienda verificar el currículum', false, 'curriculum.html');
             } : sweetAlert(1, 'Currículum agregado correctamente', true, 'curriculum.html');
         } else if (DATA.error == "Debe agregar por lo menos 1 estudio a su currículum") {
 
@@ -1389,7 +1388,6 @@ const agregarEstudios = async (FORM) => {
 
     if (DATA.status) {
 
-        console.log(DATA.status);
     } else {
 
         errorCurriculum = true;
@@ -1647,13 +1645,13 @@ const almacenarEstudios = async (arrayEstudios) => {
 
         if (row.id_institucion == null) {
 
-            FORM.append('institucion', 0)
-            FORM.append('booleanoInstitucion', 1)
+            FORM.append('institucion', 0);
+            FORM.append('booleanoInstitucion', 1);
             FORM.append('otraInstitucion', row.nombre_institucion);
         } else {
 
             FORM.append('institucion', row.id_institucion);
-            FORM.append('booleanoInstitucion', 0)
+            FORM.append('booleanoInstitucion', 0);
             FORM.append('otraInstitucion', '');
         }
 

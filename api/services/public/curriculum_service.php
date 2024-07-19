@@ -205,7 +205,7 @@ if (isset($_GET['action'])) {
                     !$curriculum->setIdIdioma($_POST['idioma']) or
                     !$curriculum->setNivelIdioma($_POST['nivelIdioma']) or
                     !$curriculum->setIdentificador($_POST['identificador']) or
-                    !$curriculum->validarIdioma(0)
+                    !$curriculum->validarIdioma()
                 ) {
                     $result['error'] = $curriculum->getDataError();
                 } elseif ($curriculum->agregarIdioma()) {
@@ -241,7 +241,7 @@ if (isset($_GET['action'])) {
                     !$curriculum->setIdHabilidad($_POST['nombreHabilidad']) or
                     !$curriculum->setNivelHabilidad($_POST['nivelHabilidad']) or
                     !$curriculum->setIdentificador($_POST['identificador']) or
-                    !$curriculum->validarHabilidad(0)
+                    !$curriculum->validarHabilidad()
                 ) {
                     $result['error'] = $curriculum->getDataError();
                 } elseif ($curriculum->agregarHabilidad()) {
@@ -290,7 +290,7 @@ if (isset($_GET['action'])) {
                     !$curriculum->setCorreo($_POST['correo'], 1)
                 ) {
                     $result['error'] = $curriculum->getDataError();
-                } elseif ($_POST['booleanImagen'] and $curriculum->actualizarCurriculum()) {
+                } elseif (!$_POST['booleanImagen'] and $curriculum->actualizarCurriculum()) {
                     // Se asigna el estado del archivo después de insertar.
                     $result['fileStatus'] = Validator::saveFile($_FILES['archivoImagen'], $curriculum::RUTA_IMAGEN);
                     $result['status'] = 1;

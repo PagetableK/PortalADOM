@@ -32,7 +32,7 @@ if (isset($_GET['action'])) {
                     $result['error'] = $rubro->getDataError();
                 } elseif ($rubro->createRow()) {
                     $result['status'] = 1;
-                    $result['message'] = 'rubro agregada correctamente';
+                    $result['message'] = 'Rubro agregado correctamente';
                 } else {
                     $result['error'] = 'Ocurrió un problema al crear el rubro';
                 }
@@ -52,7 +52,7 @@ if (isset($_GET['action'])) {
                 } elseif ($result['dataset'] = $rubro->readOne()) {
                     $result['status'] = 1;
                 } else {
-                    $result['error'] = 'Institucion inexistente';
+                    $result['error'] = 'Rubro inexistente';
                 }
                 break;
 
