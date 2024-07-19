@@ -1,6 +1,6 @@
 <?php
 // Se incluye la clase del modelo.
-require_once ('../../models/data/curriculum_data.php');
+require_once('../../models/data/curriculum_data.php');
 
 // Se comprueba si existe una acción a realizar, de lo contrario se finaliza el script con un mensaje de error.
 if (isset($_GET['action'])) {
@@ -24,7 +24,7 @@ if (isset($_GET['action'])) {
                     $result['error'] = 'No hay coincidencias';
                 }
                 break;
-                
+
             case 'readAll':
                 if ($result['dataset'] = $curriculum->readAll()) {
                     $result['status'] = 1;
@@ -241,6 +241,26 @@ if (isset($_GET['action'])) {
                 }
                 break;
 
+            case 'actualizarYAsignarCurriculum':
+                $_POST = Validator::validateForm($_POST);
+                if (
+                    !$curriculum->setImagen($_FILES['archivoImagen'], $_POST['booleanImagen']) or
+                    !$curriculum->setTelefonoMovil($_POST['telefonoMovil'], 1) or
+                    !$curriculum->setTelefonoFijo($_POST['telefonoFijo'], 1) or
+                    !$curriculum->setCorreo($_POST['correo'], 1)
+                ) {
+                    $result['error'] = $curriculum->getDataError();
+                } elseif (!$_POST['booleanImagen'] and $curriculum->actualizarYAsignarCurriculum()) {
+                    // Se asigna el estado del archivo después de insertar.
+                    $result['fileStatus'] = Validator::saveFile($_FILES['archivoImagen'], $curriculum::RUTA_IMAGEN);
+                    $result['status'] = 1;
+                } elseif ($curriculum->actualizarYAsignarCurriculum()) {
+                    $result['status'] = 1;
+                } else {
+                    $result['error'] = 'Ocurrió un error al actualizar el currículum';
+                }
+                break;
+
             case 'getIdCv':
                 if (!$curriculum->setIdAspirante($_POST['idAspirante'])) {
                     $result['error'] = $curriculum->getDataError();
@@ -250,7 +270,7 @@ if (isset($_GET['action'])) {
                     $result['error'] = 'Ocurrió un error al obtener el id del currículum';
                 }
                 break;
-                
+
             case 'agregarEstudio':
                 // Se eliminan los espacios en blancos de los valores dentro del array.
                 $_POST = Validator::validateForm($_POST);
@@ -464,10 +484,10 @@ if (isset($_GET['action'])) {
         // Se indica el tipo de contenido a mostrar y su respectivo conjunto de caracteres.
         header('Content-type: application/json; charset=utf-8');
         // Se imprime el resultado en formato JSON y se retorna al controlador.
-        print (json_encode($result));
+        print(json_encode($result));
     } else {
-        print (json_encode('Acceso denegado'));
+        print(json_encode('Acceso denegado'));
     }
 } else {
-    print (json_encode('Recurso no disponible'));
+    print(json_encode('Recurso no disponible'));
 }

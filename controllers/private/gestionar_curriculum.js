@@ -176,6 +176,7 @@ const cargarApartados = async (id) => {
         // Se carga el correo del currículum en el campo.
         CORREO_ASPIRANTE.value = DATA.dataset.correo_curriculum;
         // Se define la ruta de la imagen almacenada en la API.
+        console.log(DATA.dataset.imagen_aspirante);
         IMAGEN_ASPIRANTE.src = "../../api/images/aspirantes/" + DATA.dataset.imagen_aspirante;
         // Se desactiva el atributo required del input imgAspirante.
         ARCHIVO_IMAGEN.required = false;
@@ -1193,9 +1194,11 @@ FORM_CURRICULUM.addEventListener('submit', async (e) => {
 
         let accion;
 
+        console.log(editarCv);
+
         if (editarCv) {
 
-            accion = 'actualizarCurriculum';
+            accion = 'actualizarYAsignarCurriculum';
 
             let form = new FormData();
 
@@ -1242,7 +1245,7 @@ FORM_CURRICULUM.addEventListener('submit', async (e) => {
                 await sweetAlert(3, 'Es posible que los apartados no se hayan actualizado correctamente, se recomienda verificar el currículum', false, 'curriculums.html');
             } else {
 
-                sweetAlert(1, 'Currículum actualizado correctamente', true, 'curriculums.html');
+                await sweetAlert(1, 'Currículum actualizado correctamente', true, 'curriculums.html');
             }
         }
         else if (DATA.status) {
@@ -1272,7 +1275,7 @@ FORM_CURRICULUM.addEventListener('submit', async (e) => {
 
                 await sweetAlert(3, 'Es posible que los apartados no se hayan agregado correctamente, se recomienda verificar el currículum', false, 'curriculums.html');
             } else {
-                sweetAlert(1, 'Currículum agregado correctamente', false, 'curriculums.html');
+                await sweetAlert(1, 'Currículum agregado correctamente', false, 'curriculums.html');
             }
         } else if (DATA.error == "El teléfono móvil ya está siendo utilizado en otro currículum") {
 

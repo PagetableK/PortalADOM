@@ -336,6 +336,45 @@ class CurriculumHandler
         return Database::executeRow($sql, $params);
     }
 
+    // Esta función permite agregar un currículum.
+    public function actualizarYAsignarCurriculum()
+    {
+        // Si los atributos de imagen y teléfono fijo no tienen un valor asignado se ejecuta el código.
+        if (empty($this->telefono_fijo) && empty($this->imagen)) {
+            // Se establece la estructura de la sentencia.
+            $sql = "UPDATE curriculum_aspirantes 
+                        SET telefono_movil = ?, correo_curriculum = ?
+                        WHERE id_aspirante = ?";
+            // Se almacenan los parámetros en el array.
+            $params = array($this->telefono_movil, $this->correo, $this->id_aspirante);
+        } elseif (empty($this->telefono_fijo) && !empty($this->imagen)) {
+            // Se establece la estructura de la sentencia.
+            $sql = "UPDATE curriculum_aspirantes 
+                        SET telefono_movil = ?, correo_curriculum = ?, imagen_aspirante = ?
+                        WHERE id_aspirante = ?";
+            // Se almacenan los parámetros en el array.
+            $params = array($this->telefono_movil, $this->correo, $this->imagen, $this->id_aspirante);
+        } elseif (!empty($this->telefono_fijo) && empty($this->imagen)) {
+            // Se establece la estructura de la sentencia.
+            $sql = "UPDATE curriculum_aspirantes 
+                        SET telefono_movil = ?, correo_curriculum = ?, telefono_fijo = ?
+                        WHERE id_aspirante = ?";
+            // Se almacenan los parámetros en el array.
+            $params = array($this->telefono_movil, $this->correo, $this->telefono_fijo, $this->id_aspirante);
+        }
+        // De lo contrario se ejecuta el código.
+        else {
+            // Se establece la estructura de la sentencia.
+            $sql = "UPDATE curriculum_aspirantes 
+                        SET telefono_movil = ?, correo_curriculum = ?, telefono_fijo = ?, imagen_aspirante = ?
+                        WHERE id_aspirante = ?";
+            // Se almacenan los parámetros en el array.
+            $params = array($this->telefono_movil, $this->correo, $this->telefono_fijo, $this->imagen, $this->id_aspirante);
+        }
+        // Se ejecuta la sentencia.
+        return Database::executeRow($sql, $params);
+    }
+
     // Devuelve el id_curriculum de un un currículum asignado al aspirante con la sesión activa.
     public function obtenerIdCv()
     {
@@ -919,10 +958,10 @@ class CurriculumHandler
         $value = '%' . Validator::getSearchValue() . '%';
         $sql = 'SELECT * FROM vista_tabla_curriculum_privado
         WHERE NOMBRE LIKE ? OR nombre_institucion_estudio LIKE ? OR titulo_certificado LIKE ? OR nombre_empresa LIKE ? OR nombre_cargo LIKE ? OR descripcion_puesto LIKE ? OR nombre_area LIKE ? OR nombre_idioma LIKE ? OR nombre_habilidad LIKE ? OR correo_aspirante LIKE ? OR APELLIDO LIKE ? OR NOMBRE LIKE ? OR titulo_certificado LIKE ? OR titulo_estudio LIKE ? OR nombre_grado LIKE ? OR puesto_trabajo LIKE ?';
-        $params = array($value, $value, $value, $value, $value, $value, $value, $value, $value, $value , $value, $value, $value, $value, $value);
+        $params = array($value, $value, $value, $value, $value, $value, $value, $value, $value, $value, $value, $value, $value, $value, $value, $value);
         return Database::getRows($sql, $params);
     }
-    
+
 
 
 
