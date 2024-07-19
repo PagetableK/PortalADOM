@@ -24,21 +24,7 @@ if (isset($_GET['action'])) {
                     $result['error'] = 'No hay coincidencias';
                 }
                 break;
-            case 'createRow':
-                $_POST = Validator::validateForm($_POST);
-                if (
-                    !$curriculum->setNombre($_POST['nombreAspirante']) or
-                    !$curriculum->setIdAspirante($_POST['idAspirante'])
-                ) {
-                    $result['error'] = $area->getDataError();
-                } elseif ($area->createRow()) {
-                    $result['status'] = 1;
-                    $result['message'] = 'aspirante agregada correctamente';
-                } else {
-                    $result['error'] = 'Ocurrió un problema al crear la area';
-                }
-                break;
-
+                
             case 'readAll':
                 if ($result['dataset'] = $curriculum->readAll()) {
                     $result['status'] = 1;
@@ -67,7 +53,7 @@ if (isset($_GET['action'])) {
                     $result['error'] = 'aspirante inexistente';
                 }
                 break;
-            case 'readCurriculum':
+            case 'readCurriculums':
                 if (!$curriculum->setId($_POST['idCurriculum'])) {
                     $result['error'] = $curriculum->getDataError();
                 } elseif ($result['dataset'] = $curriculum->readCurriculums()) {
@@ -93,21 +79,6 @@ if (isset($_GET['action'])) {
                     $result['status'] = 1;
                 } else {
                     $result['error'] = 'aspirante inexistente';
-                }
-                break;
-
-            case 'updateRow':
-                $_POST = Validator::validateForm($_POST);
-                if (
-                    !$curriculum->setIdAspirante($_POST['idAspirante']) or
-                    !$curriculum->setNombre($_POST['nombreAspirante'])
-                ) {
-                    $result['error'] = $curriculum->getDataError();
-                } elseif ($curriculum->updateRow()) {
-                    $result['status'] = 1;
-                    $result['message'] = 'curriculum modificada correctamente';
-                } else {
-                    $result['error'] = 'Ocurrió un problema al modificar la area';
                 }
                 break;
 
