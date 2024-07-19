@@ -1,7 +1,13 @@
 .colo-thi{
-    background-color: #d5f5d5;
+    background-color: #003463;
     width: 250px;
     height: 300px;
+}
+
+.contenedor_formato:hover{
+    cursor: pointer;
+    background-color: #003463;
+    padding: 1px;
 }
 
 .bs-stepper-header{

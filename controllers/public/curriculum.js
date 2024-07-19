@@ -156,11 +156,22 @@ const openReport = async () => {
             const imgData = `../../api/images/aspirantes/${rowCurriculum['IMAGEN']}`; // Reemplaza con los datos de la imagen en base64
             doc.addImage(imgData, 'JPEG', 10, 10, 40, 40);
 
+            let nombreCompleto = rowCurriculum['NOMBRE'];
+
+            let nombreArray = nombreCompleto.split(" ");
+        
+            let nombreCapitalizado = "";
+        
+            for(var i = 0; i < nombreArray.length; i++){
+        
+                nombreCapitalizado += nombreArray[i].charAt(0).toUpperCase() + nombreArray[i].substring(1) + " ";
+            }
+
             // Añadir nombre y título
             doc.setFont('Times', 'bold');
             doc.setFontSize(28);
             doc.setTextColor(...secondaryColor);
-            doc.text(rowCurriculum['NOMBRE'], 70, 20, {maxWidth: 140});
+            doc.text(nombreCapitalizado, 70, 20, {maxWidth: 140});
             doc.setFontSize(16);
             doc.setTextColor(0, 0, 0);
 
@@ -191,6 +202,7 @@ const openReport = async () => {
 
             // Verificar si hay datos válidos para mostrar la sección de idiomas
             if (idiomas.length > 0 && idiomas.some(idioma => idioma['nombre_idioma'] && idioma['nivel_idioma'])) {
+                doc.setFont('Times', 'bold');
                 doc.setFontSize(12);
                 doc.setTextColor(...secondaryColor);
                 doc.text('IDIOMAS', 10, yPositionC + 10);
@@ -374,7 +386,7 @@ const openReport = async () => {
                 item['id_curriculum'] === rowCurriculum['id_curriculum'] &&
                 item['nombre_grado'] &&
                 item['titulo_estudio']
-            ).map(item => `. ${item['nombre_grado']}, ${item['titulo_estudio']}, ${item['nombre_institucion'] ? item['nombre_institucion'] : ''} ${item['nombre_institucion_estudio'] ? item['nombre_institucion_estudio'] : ''} ${item['fecha_finalizacion_estudio'] ? item['fecha_finalizacion_estudio'] : 'Cursando'}`);
+            ).map(item => `. ${item['nombre_grado']} en ${item['titulo_estudio']}, ${item['nombre_institucion'] ? item['nombre_institucion'] : ''} ${item['nombre_institucion_estudio'] ? item['nombre_institucion_estudio'] : ''} ${item['fecha_finalizacion_estudio'] ? item['fecha_finalizacion_estudio'] : 'Cursando'}`);
 
 
             // Verificar si hay formaciones para mostrar
@@ -382,7 +394,7 @@ const openReport = async () => {
                 doc.setFont('Times', 'bold');
                 doc.setFontSize(12);
                 doc.setTextColor(...secondaryColor);
-                doc.text('FORMACIÓN', 70, yPositionV);
+                doc.text('FORMACIÓN ACADÉMICA', 70, yPositionV);
                 doc.line(70, yPositionV + 2, 200, yPositionV + 2);
 
                 doc.setFont('Times', 'normal');
