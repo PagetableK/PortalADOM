@@ -803,6 +803,7 @@ class CurriculumHandler
     public function readOneDataExperiencias()
     {
         $sql = 'SELECT ea.*, al.nombre_area, re.nombre_rubro
+        
                 FROM experiencias_aspirantes ea
                 JOIN areas_laborales al ON ea.id_area = al.id_area
                 JOIN rubros_empresas re ON ea.id_rubro = re.id_rubro
@@ -846,7 +847,6 @@ class CurriculumHandler
                 DELETE FROM idiomas_aspirantes WHERE id_curriculum = @id_curriculum;
                 DELETE FROM habilidades_aspirantes WHERE id_curriculum = @id_curriculum;
                 DELETE FROM referencias_aspirantes WHERE id_curriculum = @id_curriculum;
-                
                 DELETE FROM curriculum_aspirantes WHERE id_curriculum = @id_curriculum;";
         $params = array($this->id);
         return Database::executeRow($sql, $params);

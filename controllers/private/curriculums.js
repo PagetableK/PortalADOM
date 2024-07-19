@@ -166,14 +166,22 @@ const openVerCurriculum = async (id) => {
         const FORME = new FormData();
         FORME.append('idCurriculum', id);
         const DATAE = await fetchData(CURRICULUM_API, 'readOneDataExperiencias', FORME);
-
+        
         if(DATAE.status){
             DATAE.dataset.forEach(row => {
+                var final = row.fecha_fin
+            if(final == null)
+                { 
+                    final = "inicio en " + row.fecha_inicio + " En progreso"
+                }
+                else{
+                    final = `${row.fecha_inicio} hasta ${row.fecha_fin}`
+                }
                 CM_TB_EXPERIENCIA.innerHTML += `
                 <div> 
                 <p><strong>${row.nombre_empresa} - ${row.nombre_cargo}</strong></p>
                 <p>Rubro de la empresa: ${row.nombre_rubro}</p>
-                <p>${row.fecha_inicio} hasta ${row.fecha_fin}</p>
+                <p>${final}</p>
                 </div>`;
             })
         }
@@ -181,14 +189,21 @@ const openVerCurriculum = async (id) => {
         const FORMS = new FormData();
         FORMS.append('idCurriculum', id);
         const DATAS = await fetchData(CURRICULUM_API, 'readOneDataEstudios', FORMS);
-
         if(DATAS.status){ 
             DATAS.dataset.forEach(row => {
+                var final = row.fecha_finalizacion
+                if(final == null)
+                    { 
+                        final =  " En progreso"
+                    }
+                    else{
+                        final = `${row.fecha_finalizacion}`
+                    }
                 CM_TB_ESTUDIOS.innerHTML += `
                 <div>
                 <p><strong>${row.nombre_institucion}</strong></p>
                 <p>${row.estado_egreso} - ${row.titulo_estudio}</p>
-                <p>${row.fecha_finalizacion}</p>
+                <p>${final}</p>
                 </div>`;
             })
         }
@@ -198,9 +213,6 @@ const openVerCurriculum = async (id) => {
     } else {
         sweetAlert(2, DATA.error, false);
     }
-
-
-    
 }
 
 /*
