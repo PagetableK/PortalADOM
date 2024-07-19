@@ -14,6 +14,8 @@ const SAVE_FORM = document.getElementById('saveForm'),
     BOTON_AGREGAR = document.getElementById('btnAgregar'),
     BOTON_ACTUALIZAR = document.getElementById('btnActualizar');
 
+let rubro;
+
 // Método del evento para cuando el documento ha cargado.
 document.addEventListener('DOMContentLoaded', () => {
     // Llamada a la función para mostrar el encabezado y pie del documento.
@@ -43,23 +45,33 @@ SAVE_FORM.addEventListener('submit', async (event) => {
     event.preventDefault();
     // Se verifica la acción a realizar.
     (ID_RUBRO.value) ? action = 'updateRow' : action = 'createRow';
-    // Constante tipo objeto con los datos del formulario.
-    const FORM = new FormData(SAVE_FORM);
-    // Petición para guardar los datos del formulario.
-    const DATA = await fetchData(RUBRO_API, action, FORM);
-    // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
-    if (DATA.status) {
+    // Se verifica que la acción sea crear habilidad o que el usuario haya ingresado un nombre de habilidad diferente al actual.
+    if (action == 'createRow' || (rubro != SAVE_FORM['nombreRubro'].value.trim())) {
+        // Constante tipo objeto con los datos del formulario.
+        const FORM = new FormData(SAVE_FORM);
+        // Petición para guardar los datos del formulario.
+        const DATA = await fetchData(RUBRO_API, action, FORM);
+        // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
+        if (DATA.status) {
+            // Se cierra la caja de diálogo.
+            SAVE_MODAL.hide();
+            // Se muestra un mensaje de éxito.
+            sweetAlert(1, DATA.message, true);
+            // Se carga nuevamente la tabla para visualizar los cambios.
+            fillTable();
+        } else if(DATA.error == "El nombre del rubro ya ha sido registrado"){
+    
+            await sweetAlert(3, "El rubro ya ha sido agregado", false);
+    
+            SAVE_MODAL.hide();
+        } else {
+            sweetAlert(2, DATA.error, false);
+        }
+    } else{
+
+        sweetAlert(1, 'Rubro actualizado correctamente', false);
         // Se cierra la caja de diálogo.
         SAVE_MODAL.hide();
-        // Se muestra un mensaje de éxito.
-        sweetAlert(1, DATA.message, true);
-        // Se carga nuevamente la tabla para visualizar los cambios.
-        fillTable();
-    } else if(DATA.error == "El nombre del rubro ya ha sido registrado"){
-
-        sweetAlert(3, "El rubro ya ha sido agregado", false);
-    } else {
-        sweetAlert(2, DATA.error, false);
     }
 });
 
@@ -136,7 +148,8 @@ const openUpdate = async (id) => {
         SAVE_FORM.reset();
         // Se inicializan los campos con los datos.
         const ROW = DATA.dataset;
-        console.log(DATA)
+        
+        rubro = ROW.nombre_rubro;
         ID_RUBRO.value = ROW.id_rubro;
         NOMBRE_RUBRO.value = ROW.nombre_rubro;
         // Se muestra el botón de actualizar y se oculta el de agregar.

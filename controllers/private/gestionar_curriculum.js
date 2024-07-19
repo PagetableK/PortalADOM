@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Se muestra el select con la lista de aspirantes sin currículum asignado.
         CONTENEDOR_ASPIRANTES.classList.remove('d-none');
         // Se muestra la línea divisora entre el stepper y el select.
-        document.querySelector(hr).classList.remove('d-none');
+        document.querySelector('hr').classList.remove('d-none');
         // Se cargan los aspirantes dentro del select.
         cargarAspirantes();
     }
@@ -1245,7 +1245,7 @@ FORM_CURRICULUM.addEventListener('submit', async (e) => {
                 sweetAlert(1, 'Currículum actualizado correctamente', true, 'curriculums.html');
             }
         }
-        else if (DATA.status && DATA_ASPIRANTE.status) {
+        else if (DATA.status) {
 
             FORM_ASPIRANTE.append('idAspirante', parseInt($("#aspirante").select2('data')[0].id));
 

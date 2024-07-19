@@ -34,7 +34,7 @@ if (isset($_GET['action'])) {
                     $result['status'] = 1;
                     $result['message'] = 'Área agregada correctamente';
                 } else {
-                    $result['error'] = 'Ocurrió un problema al crear la area';
+                    $result['error'] = 'Ocurrió un problema al crear el área';
                 }
                 break;
             case 'readAll':
@@ -51,18 +51,19 @@ if (isset($_GET['action'])) {
                 } elseif ($result['dataset'] = $area->readOne()) {
                     $result['status'] = 1;
                 } else {
-                    $result['error'] = 'Area inexistente';
+                    $result['error'] = 'Área inexistente';
                 }
                 break;
             case 'updateRow':
                 $_POST = Validator::validateForm($_POST);
                 if (
+                    !$area->setId($_POST['idArea']) or
                     !$area->setArea($_POST['nombreArea']) 
                 ) {
                     $result['error'] = $area->getDataError();
                 } elseif ($area->updateRow()) {
                     $result['status'] = 1;
-                    $result['message'] = 'area modificada correctamente';
+                    $result['message'] = 'Área modificada correctamente';
                 } else {
                     $result['error'] = 'Ocurrió un problema al modificar el área';
                 }
@@ -74,9 +75,9 @@ if (isset($_GET['action'])) {
                     $result['error'] = $area->getDataError();
                 } elseif ($area->deleteRow()) {
                     $result['status'] = 1;
-                    $result['message'] = 'area eliminada correctamente';
+                    $result['message'] = 'Área eliminada correctamente';
                 } else {
-                    $result['error'] = 'Ocurrió un problema al eliminar el area';
+                    $result['error'] = 'Ocurrió un problema al eliminar el área';
                 }
                 break;
             default:
