@@ -1619,7 +1619,7 @@ BOTON_EDITAR.addEventListener('click', async () => {
         // Si la respuesta no es satisfactoria se ejecuta el código.
         if (!DATA.status) {
             // Se muestra la advertencia.
-            sweetAlert(3, 'Es posible que algunos apartados no contengan la información real del currículum', false);
+            sweetAlert(3, 'Es posible que algunos apartados no contengan la información exacta del currículum', true);
         }
     } else {
         // Se muestra el error.

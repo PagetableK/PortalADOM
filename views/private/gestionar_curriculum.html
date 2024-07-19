@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!-- Se configura el idioma del documento -->
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
@@ -32,9 +32,13 @@
 
 <body class="d-flex">
     <main>
-        <div class="container-fluid px-5">
+        <div class="d-flex align-items-center mt-3 ms-4" id="contenedorBtnRegresar">
+            <p class="fw-semibold fs-6 psinmargen gap-2 mb-3 d-flex align-items-center" id="botonRegresar"><i
+                    class="bi bi-arrow-left h3 psinmargen"></i>Regresar</p>
+        </div>
+        <div class="container-fluid px-md-5">
             <!-- Este div crea una fila dentro de Bootstrap -->
-            <div class="row mb-3 row-gap-3 pe-2 ps-2 d-flex align-items-center mt-4 d-none" id="contenedorAspirantes">
+            <div class="row mb-3 row-gap-3 pe-2 ps-2 d-flex align-items-center d-none" id="contenedorAspirantes">
                 <div class="col-12 d-flex flex-column gap-1">
                     <p class="fw-bold fs-5">Seleccione un aspirante que no tenga un currículum asignado</p>
                     <label for="aspirante" class="fs-6">Aspirante</label>
@@ -44,7 +48,7 @@
                     </div>
                 </div>
             </div>
-            <hr>
+            <hr class="d-none">
             <div class="row mx-lg-3 pb-3" id="contenedorStepper">
                 <div class="col-md-12">
                     <div id="stepperCv" class="bs-stepper">

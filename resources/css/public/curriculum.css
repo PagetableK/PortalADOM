@@ -1,22 +1,7 @@
-.color-tama{
-    width: 250px;
-    height: 300px;
-}
-
-.colo-one{
-    background-color: #ffe5e5;
-}
-
-.colo-seco{
-    background-color: #e5e5e5;
-}
-
 .colo-thi{
     background-color: #d5f5d5;
-}
-
-.colo-fo{
-    background-color: #d5f5f5;
+    width: 250px;
+    height: 300px;
 }
 
 .bs-stepper-header{
@@ -75,14 +60,6 @@ button.bg-orange{
     font-size: 16px;
 }
 
-i.bi{
-    cursor: pointer;
-}
-
 .psinmargen{
     margin: 0;
-}
-
-.gap-10{
-    gap: 100px;
 }

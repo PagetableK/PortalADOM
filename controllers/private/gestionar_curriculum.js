@@ -34,6 +34,10 @@ const ARCHIVO_IMAGEN = document.getElementById('archivoImagen'), IMAGEN_ASPIRANT
     CORREO_ASPIRANTE = document.getElementById('correo'), TELEFONO_MOVIL = document.getElementById('telefonoMovil'),
     TELEFONO_FIJO = document.getElementById('telefonoFijo');
 
+const BOTON_CURRICULUM = document.getElementById('btnCurriculum'), TEXTO_BOTON = document.getElementById('textoBoton'),
+    ICONO_AGREGAR = document.getElementById('iconoAgregar'), ICONO_EDITAR = document.getElementById('iconoEditar'),
+    CONTENEDOR_BOTON = document.getElementById('contenedorBtnRegresar'), BOTON_REGRESAR = document.getElementById('botonRegresar');
+
 const SELECT_IDIOMAS = document.getElementById('idioma'), SELECT_HABILIDADES = document.getElementById('nombreHabilidad');
 
 const CONTENEDOR_ASPIRANTES = document.getElementById('contenedorAspirantes');
@@ -82,12 +86,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Se configura el título del elemento y del documento.
         TITULO.textContent = "Editar currículum";
         document.title = "Editar currículum";
+        // Se configura el valor de la variable global.
+        editarCv = true;
+        // Se manda a llamar a la función para cargar los apartados del currículum dentro de los contenedores.
+        await cargarApartados(parametro);
     } else {
         // Se configura el título del elemento y del documento.
         TITULO.textContent = "Agregar currículum";
         document.title = "Agregar currículum";
         // Se muestra el select con la lista de aspirantes sin currículum asignado.
         CONTENEDOR_ASPIRANTES.classList.remove('d-none');
+        // Se muestra la línea divisora entre el stepper y el select.
+        document.querySelector(hr).classList.remove('d-none');
         // Se cargan los aspirantes dentro del select.
         cargarAspirantes();
     }
@@ -122,6 +132,72 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Se manda a llamar a la función para rellenar los contenedores de los apartados del currículum.
     configurarContenedores();
 });
+
+
+const cargarApartados = async (id) => {
+
+    const FORM = new FormData();
+
+    FORM.append('idCurriculum', id);
+
+    const DATA = await fetchData(API_CURRICULUM, 'readCurriculum', FORM);
+
+    if (DATA.status) {
+
+        const DATA_ESTUDIOS = await fetchData(API_CURRICULUM, 'getEstudios', FORM);
+
+        const DATA_CERTIFICADOS = await fetchData(API_CURRICULUM, 'getCertificados', FORM);
+
+        const DATA_EXPERIENCIAS = await fetchData(API_CURRICULUM, 'getExperiencias', FORM);
+
+        const DATA_REFERENCIAS = await fetchData(API_CURRICULUM, 'getReferencias', FORM);
+
+        const DATA_IDIOMAS = await fetchData(API_CURRICULUM, 'getIdiomas', FORM);
+
+        const DATA_HABILIDADES = await fetchData(API_CURRICULUM, 'getHabilidades', FORM);
+
+        await almacenarEstudios(DATA_ESTUDIOS.dataset);
+
+        await almacenarCertificados(DATA_CERTIFICADOS.dataset);
+
+        await almacenarExperiencias(DATA_EXPERIENCIAS.dataset);
+
+        await almacenarReferencias(DATA_REFERENCIAS.dataset);
+
+        await almacenarIdiomas(DATA_IDIOMAS.dataset);
+
+        await almacenarHabilidades(DATA_HABILIDADES.dataset);
+        // Se llama a la función para mostrar los apartados del currículum al usuario.
+        configurarContenedores();
+        // Se carga el número de teléfono en el campo.
+        TELEFONO_MOVIL.value = DATA.dataset.telefono_movil;
+        // Se carga el número de teléfono en el campo.
+        TELEFONO_FIJO.value = DATA.dataset.telefono_fijo;
+        // Se carga el correo del currículum en el campo.
+        CORREO_ASPIRANTE.value = DATA.dataset.correo_curriculum;
+        // Se define la ruta de la imagen almacenada en la API.
+        IMAGEN_ASPIRANTE.src = "../../api/images/aspirantes/" + DATA.dataset.imagen_aspirante;
+        // Se desactiva el atributo required del input imgAspirante.
+        ARCHIVO_IMAGEN.required = false;
+        // Se quita el color naranja del botón.
+        BOTON_CURRICULUM.classList.remove('bg-orange');
+        // Se configura el texto del botón.
+        TEXTO_BOTON.textContent = 'Editar currículum';
+        // Se oculta el ícono de agregar.
+        ICONO_AGREGAR.classList.add('d-none');
+        // Se muestra el ícono de edición.
+        ICONO_EDITAR.classList.remove('d-none');
+        // Si la respuesta no es satisfactoria se ejecuta el código.
+        if (!DATA.status) {
+            // Se muestra la advertencia.
+            sweetAlert(3, 'Es posible que algunos apartados no contengan la información exacta del currículum', true);
+        }
+
+    } else {
+
+        sweetAlert(2, DATA.error, true, 'curriculums.html');
+    }
+}
 
 
 const configurarContenedores = async () => {
@@ -542,7 +618,7 @@ const cargarExperiencias = async () => {
 
             let fecha_duracion;
 
-            row.mes_final != "" ? fecha_duracion = "<span class='fw-bold'>" + meses[row.mes_inicio - 1] + " " + row.year_inicio + "</span> - <span class='fw-bold'>" + meses[row.mes_final - 1] + " " + row.year_final + "</span>" : fecha_duracion = "<span class='fw-bold'>" + meses[row.mes_inicio] + " " + row.year_inicio + "</span> - <span class='fw-bold'>Trabajo actual</span>";
+            row.mes_final != "" ? fecha_duracion = "<span class='fw-bold'>" + meses[row.mes_inicio - 1] + " " + row.year_inicio + "</span> - <span class='fw-bold'>" + meses[row.mes_final - 1] + " " + row.year_final + "</span>" : fecha_duracion = "<span class='fw-bold'>" + meses[row.mes_inicio - 1] + " " + row.year_inicio + "</span> - <span class='fw-bold'>Trabajo actual</span>";
 
             CONTENEDOR_EXPERIENCIAS.innerHTML += `
             <div class="d-flex gap-2 contenedorElementoCV rounded-5 p-2 align-items-center">
@@ -840,7 +916,7 @@ FORM_EXPERIENCIA.addEventListener('submit', async (e) => {
             EXPERIENCIAS.push({
                 identificador: IDENTIFICADOR, empresa: FORM_EXPERIENCIA['empresa'].value, cargo: FORM_EXPERIENCIA['cargo'].value, rubro: FORM_EXPERIENCIA['rubro'].value, area: FORM_EXPERIENCIA['area'].value,
                 mes_inicio: FORM_EXPERIENCIA['mesInicio'].value, year_inicio: FORM_EXPERIENCIA['yearInicio'].value, mes_final: mesFinal, year_final: yearFinal,
-                descripcion: FORM_EXPERIENCIA['descripcion']
+                descripcion: FORM_EXPERIENCIA['descripcion'].value
             });
 
             FORM_EXPERIENCIA.reset();
@@ -856,7 +932,7 @@ FORM_EXPERIENCIA.addEventListener('submit', async (e) => {
             sweetAlert(1, 'Experiencia agregada', false);
         } else if (DATA.error == 'La fecha de la experiencia no es válida') {
 
-            sweetAlert(3, 'Las fechas no coinciden', false);
+            sweetAlert(3, 'Las fechas no coinciden: La fecha de inicio debe ser menor a la fecha de finalización', false);
 
             SELECT_MES_INICIO.focus();
         } else {
@@ -1099,12 +1175,17 @@ FORM_CURRICULUM.addEventListener('submit', async (e) => {
         await sweetAlert(3, "Asegúrese de agregar el correo electrónico", false);
 
         CORREO_ASPIRANTE.focus();
-    } else if (!($("#aspirante").select2('data')[0].id > 0)) {
+    } else if (!editarCv && !($("#aspirante").select2('data')[0].id > 0)) {
 
         await sweetAlert(3, 'Asegúrese de seleccionar un aspirante de la lista de opciones', false);
 
         SELECT_ASPIRANTES.focus();
     } else if (estudio > 0) {
+
+        // Se almacena la url en la variable.
+        var url = document.URL;
+        // Se almacena el parámetro en la variable.
+        var parametro = new URL(url).searchParams.get("id");
 
         const FORM = new FormData(FORM_CURRICULUM);
 
@@ -1112,27 +1193,31 @@ FORM_CURRICULUM.addEventListener('submit', async (e) => {
 
         let accion;
 
-        editarCv ? accion = 'actualizarCurriculum' : accion = 'agregarCurriculum';
+        if (editarCv) {
+
+            accion = 'actualizarCurriculum';
+
+            let form = new FormData();
+
+            let idAspirante;
+
+            form.append('idCurriculum', parametro);
+
+            idAspirante = await fetchData(API_CURRICULUM, 'seleccionarIdAspirante', form).dataset;
+        } else {
+
+            accion = 'agregarCurriculum';
+
+            FORM.append('idAspirante', parseInt($("#aspirante").select2('data')[0].id));
+        }
 
         ARCHIVO_IMAGEN.value != "" ? FORM.append("booleanImagen", 0) : FORM.append("booleanImagen", 1);
 
-        FORM.append('idAspirante', parseInt($("#aspirante").select2('data')[0].id));
-
-        FORM_ASPIRANTE.append('idAspirante', parseInt($("#aspirante").select2('data')[0].id));
-
         const DATA = await fetchData(API_CURRICULUM, accion, FORM);
 
-        const DATA_ASPIRANTE = await fetchData(API_CURRICULUM, 'getIdCv', FORM_ASPIRANTE);
-
-        if (DATA.status && DATA_ASPIRANTE.status && editarCv) {
-
-            const DATA_APARTADOS = await fetchData(API_CURRICULUM, 'obtenerApartados');
-
+        if (DATA.status && editarCv) {
+            // Se declara la constante donde se almacenará el idCurriculum proveniente de la url.
             const FORM = new FormData();
-            // Se almacena la url en la variable.
-            var url = document.URL;
-            // Se almacena el parámetro en la variable.
-            var parametro = new URL(url).searchParams.get("id");
             // Se almacena el id del currículum en el parámetro.
             FORM.append('idCurriculum', parametro);
 
@@ -1140,43 +1225,55 @@ FORM_CURRICULUM.addEventListener('submit', async (e) => {
 
             await agregarEstudios(FORM);
 
-            DATA_APARTADOS.dataset[0] == false ? "" : await agregarCertificados(FORM);
+            CERTIFICADOS.length > 0 ? await agregarCertificados(FORM) : "";
 
-            DATA_APARTADOS.dataset[1] == false ? "" : await agregarExperiencias(FORM);
+            EXPERIENCIAS.length > 0 ? await agregarExperiencias(FORM) : "";
 
-            DATA_APARTADOS.dataset[4] == false ? "" : await agregarReferencias(FORM);
+            REFERENCIAS.length > 0 ? await agregarReferencias(FORM) : "";
 
-            DATA_APARTADOS.dataset[2] == false ? "" : await agregarIdiomas(FORM);
+            IDIOMAS.length > 0 ? await agregarIdiomas(FORM) : "";
 
-            DATA_APARTADOS.dataset[3] == false ? "" : await agregarHabilidades(FORM);
+            HABILIDADES.length > 0 ? await agregarHabilidades(FORM) : "";
 
-            errorCurriculum ? async () => {
+            if (errorCurriculum) {
+
                 await sweetAlert(1, 'Currículum actualizado correctamente');
-                sweetAlert(3, 'Es posible que los apartados no se hayan actualizado correctamente, se recomienda verificar el currículum', false);
-            } : sweetAlert(1, 'Currículum actualizado correctamente', true, 'curriculums.html');
+
+                await sweetAlert(3, 'Es posible que los apartados no se hayan actualizado correctamente, se recomienda verificar el currículum', false, 'curriculums.html');
+            } else {
+
+                sweetAlert(1, 'Currículum actualizado correctamente', true, 'curriculums.html');
+            }
         }
         else if (DATA.status && DATA_ASPIRANTE.status) {
+
+            FORM_ASPIRANTE.append('idAspirante', parseInt($("#aspirante").select2('data')[0].id));
+
+            const DATA_ASPIRANTE = await fetchData(API_CURRICULUM, 'getIdCv', FORM_ASPIRANTE);
 
             const FORM = new FormData();
 
             FORM.append('idCurriculum', DATA_ASPIRANTE.dataset);
 
-            agregarEstudios(FORM);
+            await agregarEstudios(FORM);
 
-            // CERTIFICADOS.length > 0 ? "" : await agregarCertificados(FORM);
+            CERTIFICADOS.length > 0 ? await agregarCertificados(FORM) : "";
 
-            // EXPERIENCIAS.length > 0 ? "" : await agregarExperiencias(FORM);
+            EXPERIENCIAS.length > 0 ? await agregarExperiencias(FORM) : "";
 
-            // REFERENCIAS.length > 0 ? "" : await agregarReferencias(FORM);
+            REFERENCIAS.length > 0 ? await agregarReferencias(FORM) : "";
 
-            // IDIOMAS.length > 0 ? "" : await agregarIdiomas(FORM);
+            IDIOMAS.length > 0 ? await agregarIdiomas(FORM) : "";
 
-            // HABILIDADES.length > 0 ? "" : await agregarHabilidades(FORM);
+            HABILIDADES.length > 0 ? await agregarHabilidades(FORM) : "";
 
-            errorCurriculum ? async () => {
+            if (errorCurriculum) {
                 await sweetAlert(1, 'Currículum agregado correctamente');
+
                 await sweetAlert(3, 'Es posible que los apartados no se hayan agregado correctamente, se recomienda verificar el currículum', false, 'curriculums.html');
-            } : sweetAlert(1, 'Currículum agregado correctamente', false, 'curriculums.html');
+            } else {
+                sweetAlert(1, 'Currículum agregado correctamente', false, 'curriculums.html');
+            }
         } else if (DATA.error == "El teléfono móvil ya está siendo utilizado en otro currículum") {
 
             await sweetAlert(3, DATA.error + ". Digite un número de teléfono diferente", false);
@@ -1228,12 +1325,10 @@ const agregarEstudios = async (form) => {
 
     for (let i = 0; i < ESTUDIOS.length; i++) {
 
-        console.log(ESTUDIOS[i]);
-        
         form.append('gradoAcademico', ESTUDIOS[i].id_grado);
 
         form.append('titulo', ESTUDIOS[i].titulo_estudio);
-        
+
         if (ESTUDIOS[i].fecha_finalizacion_estudio == "") {
 
             form.append('booleanFecha', 1);
@@ -1258,11 +1353,231 @@ const agregarEstudios = async (form) => {
 
         const DATA = await fetchData(API_CURRICULUM, 'agregarEstudio', form);
 
-        if(DATA.status){
-        } else{
+        if (!DATA.status) {
+            errorCurriculum = true;
+        }
+    }
+}
+
+
+const agregarCertificados = async (form) => {
+
+    for (let i = 0; i < CERTIFICADOS.length; i++) {
+
+        form.append('tituloCertificado', CERTIFICADOS[i].titulo_certificado);
+
+        form.append('institucionCertificado', CERTIFICADOS[i].institucion_certificado);
+
+        form.append('fechaFinalCertificado', CERTIFICADOS[i].fecha_finalizacion);
+
+        const DATA = await fetchData(API_CURRICULUM, 'agregarCertificado', form);
+
+        if (!DATA.status) {
+            errorCurriculum = true;
+        }
+    }
+}
+
+const agregarExperiencias = async (form) => {
+
+    for (let i = 0; i < EXPERIENCIAS.length; i++) {
+
+        form.append('empresa', EXPERIENCIAS[i].empresa);
+
+        form.append('cargo', EXPERIENCIAS[i].cargo);
+
+        form.append('rubro', EXPERIENCIAS[i].rubro);
+
+        form.append('area', EXPERIENCIAS[i].area);
+
+        form.append('mesInicio', EXPERIENCIAS[i].mes_inicio);
+
+        form.append('yearInicio', EXPERIENCIAS[i].year_inicio);
+
+        form.append('descripcion', EXPERIENCIAS[i].descripcion);
+
+        if (EXPERIENCIAS[i].mes_final == "") {
+
+            form.append('mesFinal', "");
+
+            form.append('yearFinal', "");
+
+            form.append('booleanFecha', 1);
+        } else {
+
+            form.append('mesFinal', EXPERIENCIAS[i].mes_final);
+
+            form.append('yearFinal', EXPERIENCIAS[i].year_final);
+
+            form.append('booleanFecha', 0);
+        }
+
+        const DATA = await fetchData(API_CURRICULUM, 'agregarExperiencia', form);
+
+        if (!DATA.status) {
 
             errorCurriculum = true;
         }
-
     }
 }
+
+
+const agregarReferencias = async (form) => {
+
+    for (let i = 0; i < REFERENCIAS.length; i++) {
+
+        form.append('nombre', REFERENCIAS[i].nombre);
+
+        form.append('apellido', REFERENCIAS[i].apellido);
+
+        form.append('puesto', REFERENCIAS[i].puesto);
+
+        form.append('telefonoReferencia', REFERENCIAS[i].telefono);
+
+        const DATA = await fetchData(API_CURRICULUM, 'agregarReferencia', form);
+
+        if (!DATA.status) {
+            errorCurriculum = true;
+        }
+    }
+}
+
+
+const agregarIdiomas = async (form) => {
+
+    for (let i = 0; i < IDIOMAS.length; i++) {
+
+        form.append('idioma', IDIOMAS[i].idioma);
+
+        form.append('nivelIdioma', IDIOMAS[i].nivel);
+
+        const DATA = await fetchData(API_CURRICULUM, 'agregarIdioma', form);
+
+        if (!DATA.status) {
+            errorCurriculum = true;
+        }
+    }
+}
+
+const agregarHabilidades = async (form) => {
+
+    for (let i = 0; i < HABILIDADES.length; i++) {
+
+        form.append('nombreHabilidad', HABILIDADES[i].habilidad);
+
+        form.append('nivelHabilidad', HABILIDADES[i].nivel);
+
+        const DATA = await fetchData(API_CURRICULUM, 'agregarHabilidad', form);
+
+        if (!DATA.status) {
+            errorCurriculum = true;
+        }
+    }
+}
+
+
+const almacenarEstudios = async (arrayEstudios) => {
+
+    for (const row of arrayEstudios) {
+
+        const IDENTIFICADOR = crearId(10);
+
+        ESTUDIOS.push({
+            identificador: IDENTIFICADOR, id_grado: row.id_grado, titulo_estudio: row.titulo_estudio, id_institucion: row.id_institucion != null ? row.id_institucion : "0",
+            nombre_institucion: row.nombre_institucion != null ? row.nombre_institucion : "", fecha_finalizacion_estudio: row.fecha_finalizacion != null ? row.fecha_finalizacion : ""
+        });
+    }
+}
+
+const almacenarCertificados = async (arrayCertificados) => {
+
+    for (const row of arrayCertificados) {
+
+        const IDENTIFICADOR = crearId(10);
+
+        CERTIFICADOS.push({
+            identificador: IDENTIFICADOR, titulo_certificado: row.titulo_certificado, institucion_certificado: row.institucion_certificado,
+            fecha_finalizacion: row.fecha_finalizacion
+        });
+    }
+}
+
+const almacenarExperiencias = async (arrayExperiencias) => {
+
+    for (const row of arrayExperiencias) {
+
+        let mesInicio, yearInicio, mesFinal, yearFinal, fechaInicio, fechaFinal;
+
+        fechaInicio = row.fecha_inicio.split('-');
+
+        mesInicio = fechaInicio[1];
+
+        yearInicio = fechaInicio[0];
+
+        if (row.fecha_fin == null) {
+
+            mesFinal = "";
+    
+            yearFinal = "";
+        } else {
+
+            fechaFinal = row.fecha_fin.split('-');
+
+            mesFinal = fechaFinal[1];
+    
+            yearFinal = fechaFinal[0];
+        }
+
+        const IDENTIFICADOR = crearId(10);
+
+        EXPERIENCIAS.push({
+            identificador: IDENTIFICADOR, empresa: row.nombre_empresa, cargo: row.nombre_cargo, rubro: row.id_rubro, area: row.id_area,
+            mes_inicio: mesInicio, year_inicio: yearInicio, mes_final: mesFinal, year_final: yearFinal,
+            descripcion: row.descripcion_puesto
+        });
+    }
+}
+
+const almacenarReferencias = async (arrayReferencias) => {
+
+    for (const row of arrayReferencias) {
+
+        const IDENTIFICADOR = crearId(10);
+
+        REFERENCIAS.push({
+            identificador: IDENTIFICADOR, nombre: row.nombre_referencia, apellido: row.apellido_referencia, puesto: row.puesto_trabajo,
+            telefono: row.telefono_referencia
+        });
+    }
+}
+
+const almacenarIdiomas = async (arrayIdiomas) => {
+
+    for (const row of arrayIdiomas) {
+
+        const IDENTIFICADOR = crearId(10);
+
+        IDIOMAS.push({ identificador: IDENTIFICADOR, idioma: row.id_idioma, nivel: row.nivel_idioma });
+    }
+}
+
+const almacenarHabilidades = async (arrayHabilidades) => {
+
+    for (const row of arrayHabilidades) {
+
+        const IDENTIFICADOR = crearId(10);
+
+        HABILIDADES.push({ identificador: IDENTIFICADOR, habilidad: row.id_habilidad, nivel: row.nivel_habilidad });
+    }
+}
+
+
+BOTON_REGRESAR.addEventListener('click', async () => {
+
+    const RESPONSE = await confirmAction('¿Está seguro que desea regresar?\nSe perderán los cambios realizados');
+    // Se verifica la opción seleccionada (true si selecciona sí).
+    if (RESPONSE) {
+        // Se redirige hacia la interfaz.
+        location.href = 'curriculums.html';
+    }
+});

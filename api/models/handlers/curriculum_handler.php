@@ -495,6 +495,18 @@ class CurriculumHandler
         return true;
     }
 
+    public function registrarCertificado()
+    {
+
+        // Se establece la estructura de la sentencia.
+        $sql = 'INSERT INTO certificados_aspirantes (titulo_certificado, institucion_certificado, fecha_finalizacion, id_curriculum)
+                    VALUES(?, ?, ?, ?)';
+        // Se almacenan los parámetros en el array.
+        $params = array($this->titulo_certificado, $this->institucion_certificado, $this->fecha_finalizacion_certificado, $this->id);
+        // Se ejecuta la sentencia.
+        return Database::executeRow($sql, $params);
+    }
+
     public function agregarExperiencias()
     {
         foreach ($_SESSION['experiencias'] as $key => $value) {
@@ -553,6 +565,35 @@ class CurriculumHandler
         return true;
     }
 
+    public function registrarExperiencia()
+    {
+        // Se concatena el año de inicio con el mes en la variable.
+        $fecha_inicio = "$this->year_inicio-$this->mes_inicio-01";
+        // Se concatena el año de finalización con el mes en la variable.
+        $fecha_fin = "$this->year_final-$this->mes_final-01";
+
+        // Caso en que el aspirante trabaja actualmente en la experiencia.
+        if ($this->mes_final == "") {
+            // Se establece la estructura de la sentencia.
+            $sql = 'INSERT INTO experiencias_aspirantes (nombre_empresa, nombre_cargo, fecha_inicio, descripcion_puesto, id_area, id_rubro, id_curriculum)
+                        VALUES(?, ?, ?, ?, ?, ?, ?)';
+            // Se almacenan los parámetros en el array.
+            $params = array($this->empresa, $this->cargo, $fecha_inicio, $this->descripcion, $this->id_area, $this->id_rubro, $this->id);
+            // Se ejecuta la sentencia.
+            return Database::executeRow($sql, $params);
+        }
+        // Caso en que el aspirante no trabaja en la experiencia. 
+        else {
+            // Se establece la estructura de la sentencia.
+            $sql = 'INSERT INTO experiencias_aspirantes (nombre_empresa, nombre_cargo, fecha_inicio, fecha_fin, descripcion_puesto, id_area, id_rubro, id_curriculum)
+                        VALUES(?, ?, ?, ?, ?, ?, ?, ?)';
+            // Se almacenan los parámetros en el array.
+            $params = array($this->empresa, $this->cargo, $fecha_inicio, $fecha_fin, $this->descripcion, $this->id_area, $this->id_rubro, $this->id);
+            // Se ejecuta la sentencia.
+            return Database::executeRow($sql, $params);
+        }
+    }
+
     public function agregarReferencias()
     {
         foreach ($_SESSION['referencias'] as $key => $value) {
@@ -583,6 +624,17 @@ class CurriculumHandler
         return true;
     }
 
+    public function registrarReferencia()
+    {
+        // Se establece la estructura de la sentencia.
+        $sql = 'INSERT INTO referencias_aspirantes (nombre_referencia, apellido_referencia, puesto_trabajo, telefono_referencia, id_curriculum)
+                    VALUES(?, ?, ?, ?, ?)';
+        // Se almacenan los parámetros en el array.
+        $params = array($this->nombre_referencia, $this->apellido_referencia, $this->puesto_referencia, $this->telefono_referencia, $this->id);
+        // Se ejecuta la sentencia.
+        return Database::executeRow($sql, $params);
+    }
+
     public function agregarIdiomas()
     {
         foreach ($_SESSION['idiomas'] as $key => $value) {
@@ -609,6 +661,17 @@ class CurriculumHandler
         return true;
     }
 
+    public function registrarIdioma()
+    {
+        // Se establece la estructura de la sentencia.
+        $sql = 'INSERT INTO idiomas_aspirantes (nivel_idioma, id_idioma, id_curriculum)
+                    VALUES(?, ?, ?)';
+        // Se almacenan los parámetros en el array.
+        $params = array($this->nivel_idioma, $this->id_idioma, $this->id);
+        // Se ejecuta la sentencia.
+        return Database::executeRow($sql, $params);
+    }
+
     public function agregarHabilidades()
     {
         foreach ($_SESSION['habilidades'] as $key => $value) {
@@ -633,6 +696,17 @@ class CurriculumHandler
         $_SESSION['habilidades'] = array();
 
         return true;
+    }
+
+    public function registrarHabilidad()
+    {
+        // Se establece la estructura de la sentencia.
+        $sql = 'INSERT INTO habilidades_aspirantes (nivel_habilidad, id_habilidad, id_curriculum)
+                    VALUES(?, ?, ?)';
+        // Se almacenan los parámetros en el array.
+        $params = array($this->nivel_habilidad, $this->id_habilidad, $this->id);
+        // Se ejecuta la sentencia.
+        return Database::executeRow($sql, $params);
     }
 
     public function eliminarEstudios()
@@ -701,6 +775,26 @@ class CurriculumHandler
         $sql = 'SELECT * FROM curriculum_aspirantes WHERE id_aspirante = ?';
         // Se almacena el parámetro en el array.
         $params = array($_SESSION['idAspirante']);
+        // Se obtiene la fila y se devuelve el dato.
+        return Database::getRow($sql, $params);
+    }
+
+    public function readCurriculum()
+    {
+        // Se establece la estructura de la sentencia.
+        $sql = 'SELECT * FROM curriculum_aspirantes WHERE id_curriculum = ?';
+        // Se almacena el parámetro en el array.
+        $params = array($this->id);
+        // Se obtiene la fila y se devuelve el dato.
+        return Database::getRow($sql, $params);
+    }
+
+    public function seleccionarIdAspirante()
+    {
+        // Se establece la estructura de la sentencia.
+        $sql = 'SELECT id_aspirante FROM curriculum_aspirantes WHERE id_curriculum = ?';
+        // Se almacena el parámetro en el array.
+        $params = array($this->id);
         // Se obtiene la fila y se devuelve el dato.
         return Database::getRow($sql, $params);
     }
