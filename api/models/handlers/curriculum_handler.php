@@ -926,7 +926,7 @@ class CurriculumHandler
 
 
 
-    public function readCurriculum()
+    public function readCurriculums()
     {
         $sql = 'SELECT 
 						 concat(a.nombre_aspirante, " ",a.apellido_aspirante) AS "NOMBRE",

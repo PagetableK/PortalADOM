@@ -286,7 +286,7 @@ const openReport = async (id) => {
     console.log(id);
 
     // Fetch data from your API or data source
-    const dataCurriculum = await fetchData(CURRICULUM_API, 'readCurriculum', FORM);
+    const dataCurriculum = await fetchData(CURRICULUM_API, 'readCurriculums', FORM);
 
     if (dataCurriculum.status) {
 

@@ -70,7 +70,7 @@ if (isset($_GET['action'])) {
             case 'readCurriculum':
                 if (!$curriculum->setId($_POST['idCurriculum'])) {
                     $result['error'] = $curriculum->getDataError();
-                } elseif ($result['dataset'] = $curriculum->readCurriculum()) {
+                } elseif ($result['dataset'] = $curriculum->readCurriculums()) {
                     $result['status'] = 1;
                 } else {
                     $result['error'] = 'curriculum inexistente';
