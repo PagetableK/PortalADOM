@@ -748,6 +748,7 @@ class CurriculumHandler
         $params = array($value, $value, $value, $value, $value, $value, $value, $value, $value);
         return Database::getRows($sql, $params);
     }
+    
 
 
 
@@ -814,16 +815,20 @@ class CurriculumHandler
 
     public function readOneDataEstudios()
     {
-        $sql = "SELECT es.*, ga.nombre_grado, ins.nombre_institucion,
-               CASE 
-                   WHEN es.fecha_finalizacion IS NULL THEN 'En curso'
-                   WHEN es.fecha_finalizacion <= CURDATE() THEN 'Egresado'
-                   ELSE 'No egresado'
-               END AS estado_egreso
-                FROM estudios_aspirantes es
-                JOIN grados_academicos ga ON es.id_grado = ga.id_grado
-                LEFT JOIN instituciones ins ON es.id_institucion = ins.id_institucion
-                WHERE es.id_curriculum = ?;";
+        $sql = "SELECT es.*, ga.nombre_grado, ins.nombre_institucion AS institucion_estudio,
+    CASE 
+        WHEN es.fecha_finalizacion IS NULL THEN 'En curso'
+        WHEN es.fecha_finalizacion <= CURDATE() THEN 'Egresado'
+        ELSE 'No egresado'
+    END AS estado_egreso
+    FROM 
+        estudios_aspirantes es
+    JOIN 
+        grados_academicos ga ON es.id_grado = ga.id_grado
+    LEFT JOIN 
+        instituciones ins ON es.id_institucion = ins.id_institucion
+    WHERE 
+        es.id_curriculum = ?";
         $params = array($this->id);
         return Database::getRows($sql, $params);
     }

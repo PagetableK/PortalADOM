@@ -52,6 +52,7 @@ SEARCH_FORM.addEventListener('submit', (event) => {
     }
 });
 
+
 // Método del evento para cuando se envía el formulario de guardar.
 SAVE_FORM.addEventListener('submit', async (event) => {
     // Se evita recargar la página web después de enviar el formulario.
@@ -89,6 +90,7 @@ const fillTable = async (form = null) => {
     const DATA = await fetchData(CURRICULUM_API, action, form);
     // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
     if (DATA.status) {
+        const addedIds = new Set(); 
         // Se recorre el conjunto de registros fila por fila.
         DATA.dataset.forEach(row => {
 
@@ -97,6 +99,8 @@ const fillTable = async (form = null) => {
             }
 
             // Se crean y concatenan las filas de la tabla con los datos de cada registro.
+            if (!addedIds.has(row.id_curriculum)) {
+                addedIds.add(row.id_curriculum);
             TABLE_BODY.innerHTML += `
                 <tr>
                     <td><img class="rounded-circle" src="${SERVER_URL}images/aspirantes/${row.IMAGEN}" height="50"></td>
@@ -114,6 +118,7 @@ const fillTable = async (form = null) => {
                     </td>
                 </tr>
             `;
+            }
         });
     } else {
         sweetAlert(3, DATA.error, true);
@@ -132,6 +137,14 @@ const openCreate = () => {
     // Se prepara el formulario.
     SAVE_FORM.reset();
     fillSelect(RUBRO_API, 'readAll', 'idRubro');
+}
+
+function formatoFecha(dateString){
+    const [year, month] = dateString.split('-');
+                    
+    const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'  ];
+
+    return `${meses[month - 1]}, ${year}`;
 }
 
 const openVerCurriculum = async (id) => {
@@ -168,6 +181,7 @@ const openVerCurriculum = async (id) => {
         const DATAE = await fetchData(CURRICULUM_API, 'readOneDataExperiencias', FORME);
         
         if(DATAE.status){
+            CM_TB_EXPERIENCIA.innerHTML= '';
             DATAE.dataset.forEach(row => {
                 var final = row.fecha_fin
             if(final == null)
@@ -175,7 +189,8 @@ const openVerCurriculum = async (id) => {
                     final = "inicio en " + row.fecha_inicio + " En progreso"
                 }
                 else{
-                    final = `${row.fecha_inicio} hasta ${row.fecha_fin}`
+                    
+                    final = `${formatoFecha(row.fecha_inicio)} hasta ${formatoFecha(row.fecha_fin)}`
                 }
                 CM_TB_EXPERIENCIA.innerHTML += `
                 <div> 
@@ -189,7 +204,9 @@ const openVerCurriculum = async (id) => {
         const FORMS = new FormData();
         FORMS.append('idCurriculum', id);
         const DATAS = await fetchData(CURRICULUM_API, 'readOneDataEstudios', FORMS);
+        // const DATAS
         if(DATAS.status){ 
+            CM_TB_ESTUDIOS.innerHTML = '';
             DATAS.dataset.forEach(row => {
                 var final = row.fecha_finalizacion
                 if(final == null)
@@ -465,9 +482,12 @@ const openReport = async (id) => {
                 // Función para formatear la fecha en 'yyyy, mm, dd' usando split
                 const formatDate = (dateString) => {
                     const [year, month] = dateString.split('-');
-                    return `${year}, ${month}`;
+                    
+                    const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'  ];
+                
+                    return `${meses[month - 1]}, ${year}`;
                 };
-            
+
                 return {
                     title: `${item['nombre_cargo']}`,
                     company: `${item['nombre_empresa']} | ${formatDate(item['fecha_inicio'])} - ${item['fecha_fin'] ? formatDate(item['fecha_fin']) : 'Trabajo actual'}`,
