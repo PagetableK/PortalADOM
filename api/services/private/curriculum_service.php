@@ -244,6 +244,7 @@ if (isset($_GET['action'])) {
             case 'actualizarYAsignarCurriculum':
                 $_POST = Validator::validateForm($_POST);
                 if (
+                    !$curriculum->setId($_POST['idCurriculum']) or
                     !$curriculum->setImagen($_FILES['archivoImagen'], $_POST['booleanImagen']) or
                     !$curriculum->setTelefonoMovil($_POST['telefonoMovil'], 1) or
                     !$curriculum->setTelefonoFijo($_POST['telefonoFijo'], 1) or

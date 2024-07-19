@@ -1194,19 +1194,11 @@ FORM_CURRICULUM.addEventListener('submit', async (e) => {
 
         let accion;
 
-        console.log(editarCv);
-
         if (editarCv) {
 
             accion = 'actualizarYAsignarCurriculum';
 
-            let form = new FormData();
-
-            let idAspirante;
-
-            form.append('idCurriculum', parametro);
-
-            idAspirante = await fetchData(API_CURRICULUM, 'seleccionarIdAspirante', form).dataset;
+            FORM.append('idCurriculum', parametro);
         } else {
 
             accion = 'agregarCurriculum';
@@ -1219,10 +1211,6 @@ FORM_CURRICULUM.addEventListener('submit', async (e) => {
         const DATA = await fetchData(API_CURRICULUM, accion, FORM);
 
         if (DATA.status && editarCv) {
-            // Se declara la constante donde se almacenará el idCurriculum proveniente de la url.
-            const FORM = new FormData();
-            // Se almacena el id del currículum en el parámetro.
-            FORM.append('idCurriculum', parametro);
 
             await fetchData(API_CURRICULUM, 'eliminarApartados', FORM);
 
@@ -1245,7 +1233,7 @@ FORM_CURRICULUM.addEventListener('submit', async (e) => {
                 await sweetAlert(3, 'Es posible que los apartados no se hayan actualizado correctamente, se recomienda verificar el currículum', false, 'curriculums.html');
             } else {
 
-                await sweetAlert(1, 'Currículum actualizado correctamente', true, 'curriculums.html');
+                await sweetAlert(1, 'Currículum actualizado correctamente', false, 'curriculums.html');
             }
         }
         else if (DATA.status) {

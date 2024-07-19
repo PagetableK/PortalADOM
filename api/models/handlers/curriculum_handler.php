@@ -244,7 +244,7 @@ class CurriculumHandler
         // Se establece la estructura de la sentencia.
         $sql = 'SELECT id_curriculum
                 FROM curriculum_aspirantes
-                WHERE (correo_curriculum = ? OR telefono_movil = ? OR telefono_fijo = ?) AND id_curriculum = ?';
+                WHERE (correo_curriculum = ? OR telefono_movil = ? OR telefono_fijo = ?) AND id_curriculum != ?';
         // Se almacenan los parámetros en el array.
         $params = array($value, $value, $value, $this->id);
         // Se obtiene la fila y se devuelve el dato.
@@ -343,33 +343,33 @@ class CurriculumHandler
         if (empty($this->telefono_fijo) && empty($this->imagen)) {
             // Se establece la estructura de la sentencia.
             $sql = "UPDATE curriculum_aspirantes 
-                        SET telefono_movil = ?, correo_curriculum = ?
-                        WHERE id_aspirante = ?";
+                        SET telefono_movil = ?, correo_curriculum = ?, telefono_fijo = null
+                        WHERE id_curriculum = ?";
             // Se almacenan los parámetros en el array.
-            $params = array($this->telefono_movil, $this->correo, $this->id_aspirante);
+            $params = array($this->telefono_movil, $this->correo, $this->id);
         } elseif (empty($this->telefono_fijo) && !empty($this->imagen)) {
             // Se establece la estructura de la sentencia.
             $sql = "UPDATE curriculum_aspirantes 
-                        SET telefono_movil = ?, correo_curriculum = ?, imagen_aspirante = ?
-                        WHERE id_aspirante = ?";
+                        SET telefono_movil = ?, correo_curriculum = ?, imagen_aspirante = ?, telefono_fijo = null
+                        WHERE id_curriculum = ?";
             // Se almacenan los parámetros en el array.
-            $params = array($this->telefono_movil, $this->correo, $this->imagen, $this->id_aspirante);
+            $params = array($this->telefono_movil, $this->correo, $this->imagen, $this->id);
         } elseif (!empty($this->telefono_fijo) && empty($this->imagen)) {
             // Se establece la estructura de la sentencia.
             $sql = "UPDATE curriculum_aspirantes 
                         SET telefono_movil = ?, correo_curriculum = ?, telefono_fijo = ?
-                        WHERE id_aspirante = ?";
+                        WHERE id_curriculum = ?";
             // Se almacenan los parámetros en el array.
-            $params = array($this->telefono_movil, $this->correo, $this->telefono_fijo, $this->id_aspirante);
+            $params = array($this->telefono_movil, $this->correo, $this->telefono_fijo, $this->id);
         }
         // De lo contrario se ejecuta el código.
         else {
             // Se establece la estructura de la sentencia.
             $sql = "UPDATE curriculum_aspirantes 
                         SET telefono_movil = ?, correo_curriculum = ?, telefono_fijo = ?, imagen_aspirante = ?
-                        WHERE id_aspirante = ?";
+                        WHERE id_curriculum = ?";
             // Se almacenan los parámetros en el array.
-            $params = array($this->telefono_movil, $this->correo, $this->telefono_fijo, $this->imagen, $this->id_aspirante);
+            $params = array($this->telefono_movil, $this->correo, $this->telefono_fijo, $this->imagen, $this->id);
         }
         // Se ejecuta la sentencia.
         return Database::executeRow($sql, $params);
@@ -1028,12 +1028,7 @@ class CurriculumHandler
 
     public function readOneDataEstudios()
     {
-        $sql = "SELECT es.titulo_estudio, es.fecha_finalizacion, es.id_estudio, es.id_grado, es.id_institucion, es.id_curriculum,  ga.nombre_grado, es.nombre_institucion AS otra_institucion ,ins.nombre_institucion AS institucion_estudio,
-        CASE 
-            WHEN es.fecha_finalizacion IS NULL THEN 'En curso'
-            WHEN es.fecha_finalizacion <= CURDATE() THEN 'Egresado'
-            ELSE 'No egresado'
-        END AS estado_egreso
+        $sql = "SELECT es.titulo_estudio, es.fecha_finalizacion, es.id_estudio, es.id_grado, es.id_institucion, es.id_curriculum,  ga.nombre_grado, es.nombre_institucion AS otra_institucion ,ins.nombre_institucion AS institucion_estudio
         FROM 
             estudios_aspirantes es
         JOIN 
