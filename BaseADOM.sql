@@ -561,3 +561,77 @@ LEFT JOIN
     habilidades h ON ha.id_habilidad = h.id_habilidad
 	$$ 
 
+DROP VIEW IF EXISTS vista_tabla_curriculum_privado;
+DELIMITER $$
+CREATE VIEW vista_tabla_curriculum_privado AS
+
+SELECT 
+    a.id_aspirante AS 'ID', 
+    concat(a.nombre_aspirante, " ",a.apellido_aspirante) AS 'NOMBRE',
+    a.correo_aspirante, 
+    a.fecha_nacimiento, 
+    a.genero_aspirante, 
+    a.estado_aspirante,
+    c.id_curriculum,
+    c.imagen_aspirante AS 'IMAGEN', 
+    c.telefono_fijo, 
+    c.telefono_movil, 
+    c.correo_curriculum,
+    e.id_estudio,
+    e.titulo_estudio,
+    g.nombre_grado,
+    e.fecha_finalizacion AS fecha_finalizacion_estudio,
+    e.nombre_institucion AS nombre_institucion_estudio,
+    i.nombre_institucion,
+    cr.id_certificado,
+    cr.titulo_certificado,
+    cr.institucion_certificado,
+    cr.fecha_finalizacion AS fecha_finalizacion_certificado,
+    ex.id_experiencia,
+    ex.nombre_empresa,
+    ex.nombre_cargo,
+    ex.fecha_inicio,
+    ex.fecha_fin,
+    ex.descripcion_puesto,
+    al.nombre_area,
+    concat(re.nombre_referencia, " ",re.apellido_referencia) AS 'APELLIDO',
+    re.puesto_trabajo,
+    re.telefono_referencia,
+    ia.id_idioma_aspirante,
+    id.nombre_idioma,
+    ia.nivel_idioma,
+    ha.id_habilidad_aspirante,
+    h.nombre_habilidad,
+    ha.nivel_habilidad,
+    (SELECT COUNT(*) FROM estudios_aspirantes ea WHERE ea.id_curriculum = c.id_curriculum) AS estudios,
+    (SELECT COUNT(*) FROM experiencias_aspirantes exa WHERE exa.id_curriculum = c.id_curriculum) AS experiencias,
+    (SELECT COUNT(*) FROM idiomas_aspirantes ia WHERE ia.id_curriculum = c.id_curriculum) AS idiomas
+    
+FROM 
+    aspirantes a
+INNER JOIN 
+    curriculum_aspirantes c ON a.id_aspirante = c.id_aspirante
+LEFT JOIN 
+    estudios_aspirantes e ON c.id_curriculum = e.id_curriculum
+LEFT JOIN 
+    grados_academicos g ON e.id_grado = g.id_grado
+LEFT JOIN 
+    instituciones i ON e.id_institucion = i.id_institucion
+LEFT JOIN 
+    certificados_aspirantes cr ON c.id_curriculum = cr.id_curriculum
+LEFT JOIN 
+    experiencias_aspirantes ex ON c.id_curriculum = ex.id_curriculum
+LEFT JOIN 
+    areas_laborales al ON ex.id_area = al.id_area
+LEFT JOIN 
+    referencias_aspirantes re ON c.id_curriculum = re.id_curriculum
+LEFT JOIN 
+    idiomas_aspirantes ia ON c.id_curriculum = ia.id_curriculum
+LEFT JOIN 
+    idiomas id ON ia.id_idioma = id.id_idioma
+LEFT JOIN 
+    habilidades_aspirantes ha ON c.id_curriculum = ha.id_curriculum
+LEFT JOIN 
+    habilidades h ON ha.id_habilidad = h.id_habilidad
+$$ 
+DELIMITER ;
