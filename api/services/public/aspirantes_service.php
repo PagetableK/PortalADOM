@@ -39,12 +39,12 @@ if (isset($_GET['action'])) {
                 }
                 break;
             case 'reallCurriculum':
-                    if ($result['dataset'] = $aspirantes->reallCurriculum()) {
-                        $result['status'] = 1;
-                    } else {
-                        $result['error'] = 'Ocurrió un problema al leer el curriculum';
-                    }
-                    break;
+                if ($result['dataset'] = $aspirantes->reallCurriculum()) {
+                    $result['status'] = 1;
+                } else {
+                    $result['error'] = 'Ocurrió un problema al leer el curriculum';
+                }
+                break;
                 //actualizar
             case 'editProfile':
                 $_POST = Validator::validateForm($_POST);
@@ -87,7 +87,7 @@ if (isset($_GET['action'])) {
                 // Si no se encuentra la acción se retorna el error.
             default:
                 $result['error'] = 'Acción no disponible dentro de la sesión';
-            break;
+                break;
         }
     } else {
         // Se compara la acción a realizar cuando el aspirante no ha iniciado sesión.
@@ -152,7 +152,7 @@ if (isset($_GET['action'])) {
                 if ($aspirantes->checkUser($_POST['correo'], $_POST['clave']) == 'Estado inactivo') {
                     // Si el estado del aspirante es inactivo se muestra un mensaje con el error.
                     $result['error'] = 'Su cuenta ha sido desactivada';
-                } 
+                }
                 // Si el estado del aspirante es activo se ejecuta el código.
                 elseif ($aspirantes->checkUser($_POST['correo'], $_POST['clave'])) {
                     // Se asigna el valor de status.
@@ -192,10 +192,34 @@ if (isset($_GET['action'])) {
                     $result['error'] = 'Credenciales incorrectas';
                 }
                 break;
+            case 'verificarCorreo':
+                $_POST = Validator::validateForm($_POST);
+                if (!$aspirantes->setVerificarCorreo($_POST['correo'])) {
+                    $result['error'] = $aspirantes->getDataError();
+                } elseif ($result['dataset'] = $aspirantes->verificarCorreo()) {
+                    $result['status'] = 1;
+                } else {
+                    $result['error'] = 'Ocurrió un error al verificar el correo';
+                }
+                break;
+            case 'restablecerContra':
+                $_POST = Validator::validateForm($_POST);
+                if (!$aspirantes->setId($_POST['idAspirante'])) {
+                    $result['error'] = $aspirantes->getDataError();
+                } elseif($_POST['contra'] != $_POST['contraRepetir']){
+                    $result['error'] = 'Las contraseñas no coinciden';
+                } elseif(strlen($_POST['contra']) < 8){
+                    $result['error'] = 'La contraseña debe tener mínimo 8 caracteres';
+                } elseif ($result['dataset'] = $aspirantes->restablecerContra($_POST['contra'])) {
+                    $result['status'] = 1;
+                } else {
+                    $result['error'] = 'Ocurrió un error al restablecer la contraseña';
+                }
+                break;
                 // Si no se encuentra la acción se retorna el error.
             default:
                 $result['error'] = 'Acción no disponible fuera de la sesión';
-            break;
+                break;
         }
     }
     // Se obtiene la excepción del servidor de base de datos por si ocurrió un problema.

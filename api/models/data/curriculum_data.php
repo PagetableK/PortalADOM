@@ -21,7 +21,7 @@ class CurriculumData extends CurriculumHandler
         // Se valida que el valor sea de tipo numérico entero.
         if (Validator::validateNaturalNumber($valor)) {
             // Se asigna el valor del atributo.
-            $this->id_grado = $valor;
+            $this->id_aspirante = $valor;
             return true;
         } else {
             // En caso de no serlo se devuelve el error.
@@ -472,7 +472,7 @@ class CurriculumData extends CurriculumHandler
 
 
     // Función que permite validar el campo telefono_referencia.
-    public function setTelefonoReferencia($valor)
+    public function setTelefonoReferencia($valor, $boolean)
     {
         // Se valida que la cadena de caracteres tenga el formato de teléfono.
         if (!Validator::validatePhone($valor)) {
@@ -481,7 +481,7 @@ class CurriculumData extends CurriculumHandler
             return false;
         }
         // Se valida que el teléfono no haya sido agregado anteriormente.
-        elseif ($this->verificarTelefono($valor)) {
+        elseif ($boolean and $this->verificarTelefono($valor)) {
             // En caso de haberlo agregado se devuelve el error.
             $this->info_error = 'El teléfono digitado ya ha sido agregado en otra referencia';
             return false;

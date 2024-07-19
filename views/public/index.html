@@ -8,6 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Título del documento -->
     <title>Inicie sesión</title>
+    <!-- Se configura el ícono de la pestaña -->
+    <link type="image/png" rel="icon" href="/PortalADOM/resources/img/logo.png">
     <!-- Llamada al framework de diseño -->
     <link href="../../resources/css/utils/bootstrap.min.css" rel="stylesheet">
     <!-- Llamada a los íconos del framework -->
@@ -32,7 +34,7 @@
                     <label for="correo" class="text-start fw-semibold">Correo electrónico</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
-                        <input type="text" id="correo" name="correo" class="form-control" autocomplete="off" required>
+                        <input type="email" id="correo" name="correo" class="form-control" autocomplete="off" required>
                     </div>
                     <label for="clave" class="text-start fw-semibold">Contraseña</label>
                     <div class="input-group">
@@ -41,7 +43,7 @@
                     </div>
                     <button type="submit" class="fw-bold btn btn-dark">Iniciar sesión</button>
                 </form>
-                <a class="fw-semibold fs-6">¿Olvidó su contraseña?</a>
+                <a class="fw-semibold fs-6" href="restablecer_contra.html">¿Olvidó su contraseña?</a>
                 <div class="d-flex flex-row align-items-center justify-content-center gap-2 w-100">
                     <hr class="linea-gruesa">
                     <p class="m-0">O</p>

@@ -27,7 +27,7 @@ const CURRICULUM_MODAL = new bootstrap.Modal('#curriculumModalViewer'),
     CM_TB_ESTUDIOS = document.getElementById("curriculumModalEstudios");
 
     CM_ELIMINAR = document.getElementById("cmEliminarBoton");
-    
+let idCurriculum = 0;
 
 // Método del evento para cuando el documento ha cargado.
 document.addEventListener('DOMContentLoaded', () => {
@@ -126,17 +126,13 @@ const fillTable = async (form = null) => {
 }
 
 /*
-*   Función para preparar el formulario al momento de insertar un registro.
+*   Función para redirigir al usuario hacia la pantalla para agregar un currículum.
 *   Parámetros: ninguno.
 *   Retorno: ninguno.
 */
 const openCreate = () => {
-    // Se muestra la caja de diálogo con su título.
-    SAVE_MODAL.show();
-    MODAL_TITLE.textContent = 'Crear area';
-    // Se prepara el formulario.
-    SAVE_FORM.reset();
-    fillSelect(RUBRO_API, 'readAll', 'idRubro');
+    // Se redirige hacia la interfaz.
+    location.href = "gestionar_curriculum.html";
 }
 
 function formatoFecha(dateString){
@@ -149,6 +145,7 @@ function formatoFecha(dateString){
 
 const openVerCurriculum = async (id) => {
 
+    idCurriculum = id;
     const FORM = new FormData();
     FORM.append('idCurriculum', id);
     const DATA = await fetchData(CURRICULUM_API, 'readOneData', FORM);
@@ -238,33 +235,13 @@ if (DATAS.status) {
 }
 
 /*
-*   Función asíncrona para preparar el formulario al momento de actualizar un registro.
+*   Función para redirigir al usuario hacia la interfaz para editar un currículum.
 *   Parámetros: id (identificador del registro seleccionado).
 *   Retorno: ninguno.
 */
-const openUpdate = async (id) => {
-    // Se define una constante tipo objeto con los datos del registro seleccionado.
-    const FORM = new FormData();
-    FORM.append('idArea', id);
-    // Petición para obtener los datos del registro solicitado.
-    const DATA = await fetchData(AREA_API, 'readOne', FORM);
-    // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
-    if (DATA.status) {
-        
-        // Se muestra la caja de diálogo con su título.
-        SAVE_MODAL.show();
-        MODAL_TITLE.textContent = 'Actualizar área';
-        // Se prepara el formulario.
-        SAVE_FORM.reset();
-        // Se inicializan los campos con los datos.
-        const ROW = DATA.dataset;
-        ID_AREA.value = ROW.id_area;
-        NOMBRE_AREA.value = ROW.nombre_area;
-        fillSelect(RUBRO_API, 'readAll', 'idRubro', ROW.id_rubro);
-
-    } else {
-        sweetAlert(2, DATA.error, false);
-    }
+const openUpdate = () => {
+    // Se redirige hacia la interfaz.
+    location.href = "gestionar_curriculum.html?id=" + idCurriculum;
 }
 
 /*

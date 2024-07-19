@@ -23,7 +23,7 @@ class AdministradoresHandler
     public function checkUser($correo, $clave)
     {
         // Se establece la estructura del query.
-        $sql = 'SELECT id_administrador, clave_administrador, estado_administrador
+        $sql = 'SELECT id_administrador, clave_administrador, estado_administrador, nombre_administrador, apellido_administrador
                 FROM administradores
                 WHERE correo_administrador = ?';
         // Se agrega el parámetro en el array.
@@ -42,7 +42,7 @@ class AdministradoresHandler
                     return 'Estado inactivo';
                 } else {
                     // Si estado_administrador = 1 el estado es activo: Se devuelve el array.
-                    return array($data['id_administrador'], $correo);
+                    return array($data['id_administrador'], $correo, $data['nombre_administrador'], $data['apellido_administrador']);
                 }
             } else {
                 // Si la contraseña no es correcta se devuelve false.
