@@ -202,28 +202,33 @@ const openVerCurriculum = async (id) => {
         }
 
         const FORMS = new FormData();
-        FORMS.append('idCurriculum', id);
-        const DATAS = await fetchData(CURRICULUM_API, 'readOneDataEstudios', FORMS);
-        // const DATAS
-        if(DATAS.status){ 
-            CM_TB_ESTUDIOS.innerHTML = '';
-            DATAS.dataset.forEach(row => {
-                var final = row.fecha_finalizacion
-                if(final == null)
-                    { 
-                        final =  " En progreso"
-                    }
-                    else{
-                        final = `${row.fecha_finalizacion}`
-                    }
-                CM_TB_ESTUDIOS.innerHTML += `
-                <div>
-                <p><strong>${row.nombre_institucion}</strong></p>
-                <p>${row.estado_egreso} - ${row.titulo_estudio}</p>
-                <p>${final}</p>
-                </div>`;
-            })
+FORMS.append('idCurriculum', id);
+const DATAS = await fetchData(CURRICULUM_API, 'readOneDataEstudios', FORMS);
+
+if (DATAS.status) { 
+    CM_TB_ESTUDIOS.innerHTML = '';
+    
+    for (const row of DATAS.dataset) {
+        let final = row.fecha_finalizacion;
+        if (final == null) {
+            final = "En progreso";
+        } else {
+            final = `${row.fecha_finalizacion}`;
         }
+
+        let nombreInstitucion = "";
+        
+        row.id_institucion != null ? nombreInstitucion = row.institucion_estudio : nombreInstitucion = row.otra_institucion;
+
+        CM_TB_ESTUDIOS.innerHTML += `
+        <div>
+            <p><strong>${nombreInstitucion}</strong></p>
+            <p>${row.estado_egreso} - ${row.titulo_estudio}</p>
+            <p>${final}</p>
+        </div>`;
+    }
+}
+
 
         CURRICULUM_MODAL.show(); 
 
@@ -301,12 +306,15 @@ const openReport = async (id) => {
 
     FORM.append('idCurriculum', id);
 
+    console.log(id);
+
     // Fetch data from your API or data source
     const dataCurriculum = await fetchData(CURRICULUM_API, 'readCurriculum', FORM);
 
     if (dataCurriculum.status) {
-        console.log(dataCurriculum.dataset + "asd");
-        dataCurriculum.dataset.forEach(rowCurriculum => {
+
+
+        Object.values(dataCurriculum.dataset).forEach(rowCurriculum => {
             // Definir colores
             const primaryColor = [225, 235, 247];  // Color primario (azul claro)
             const secondaryColor = [0, 52, 99];  // Color secundario (negro)
@@ -348,9 +356,10 @@ const openReport = async (id) => {
                 yPositionC += 6;
             });
 
+            console.log();
             // Añadir sección de idiomas
             // Filtrar idiomas únicos asociados al currículum actual
-            const idiomas = dataCurriculum.dataset.filter(item => item['id_curriculum'] === rowCurriculum['id_curriculum']);
+            const idiomas = Object.values(dataCurriculum.dataset).filter(item => item['id_curriculum'] === rowCurriculum['id_curriculum']);
 
             // Verificar si hay datos válidos para mostrar la sección de idiomas
             if (idiomas.length > 0 && idiomas.some(idioma => idioma['NOMBRE'] && idioma['nivel_idioma'])) {
@@ -392,7 +401,7 @@ const openReport = async (id) => {
             const primaryColorRectWidth = 50; // Ancho del rectángulo azul claro
 
             // Filtrar habilidades únicas asociadas al currículum actual
-            const habilidades = dataCurriculum.dataset.filter(item => item['id_curriculum'] === rowCurriculum['id_curriculum'])
+            const habilidades = Object.values(dataCurriculum.dataset).filter(item => item['id_curriculum'] === rowCurriculum['id_curriculum'])
                 .map(item => ({
                     nombre: item['nombre_habilidad'],
                     nivel: item['nivel_habilidad']
@@ -433,7 +442,7 @@ const openReport = async (id) => {
 
             // Obtener referencias únicas del conjunto de datos
             const referencias = new Set();
-            dataCurriculum.dataset.forEach(item => {
+            Object.values(dataCurriculum.dataset).forEach(item => {
                 if (item['id_curriculum'] === rowCurriculum['id_curriculum'] &&
                     item['APELLIDO'] && item['puesto_trabajo'] && item['telefono_referencia']) {
                     const referencia = `. ${item['APELLIDO']},\n${item['puesto_trabajo']},\n(+503) ${item['telefono_referencia']}`;
@@ -472,7 +481,7 @@ const openReport = async (id) => {
 
 
             let yPositionV = 50;
-            const allExperiencias = dataCurriculum.dataset.filter(item =>
+            const allExperiencias = Object.values(dataCurriculum.dataset).filter(item =>
                 item['id_curriculum'] === rowCurriculum['id_curriculum'] &&
                 item['nombre_cargo'] &&
                 item['nombre_empresa'] &&
@@ -536,7 +545,7 @@ const openReport = async (id) => {
 
 
             // Filtrar y mapear las formaciones únicas
-            const allFormaciones = dataCurriculum.dataset.filter(item =>
+            const allFormaciones = Object.values(dataCurriculum.dataset).filter(item =>
                 item['id_curriculum'] === rowCurriculum['id_curriculum'] &&
                 item['nombre_grado'] &&
                 item['titulo_estudio']
@@ -579,7 +588,7 @@ const openReport = async (id) => {
 
 
             // Filtrar y mapear los certificados únicos asociados al currículum actual
-            const allCertificados = dataCurriculum.dataset.filter(item =>
+            const allCertificados = Object.values(dataCurriculum.dataset).filter(item =>
                 item['id_curriculum'] === rowCurriculum['id_curriculum'] &&
                 item['titulo_certificado'] &&
                 item['institucion_certificado'] &&

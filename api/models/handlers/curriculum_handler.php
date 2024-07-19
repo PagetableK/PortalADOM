@@ -692,17 +692,20 @@ class CurriculumHandler
     public function readAll()
     {
         $sql = "SELECT 
-                    a.id_aspirante, ca.imagen_aspirante, ca.id_curriculum,
-                    CONCAT(a.nombre_aspirante, ' ', a.apellido_aspirante) AS NOMBRE,
-                    (SELECT COUNT(*) FROM estudios_aspirantes ea WHERE ea.id_curriculum = ca.id_curriculum) AS estudios,
-                    (SELECT COUNT(*) FROM experiencias_aspirantes exa WHERE exa.id_curriculum = ca.id_curriculum) AS experiencias,
-                    (SELECT COUNT(*) FROM idiomas_aspirantes ia WHERE ia.id_curriculum = ca.id_curriculum) AS idiomas
-                FROM 
-                    aspirantes a
-                JOIN 
-                    curriculum_aspirantes ca ON a.id_aspirante = ca.id_aspirante
-                ORDER BY 
-                    a.nombre_aspirante;";
+        a.id_aspirante, 
+        ca.imagen_aspirante AS IMAGEN, 
+        ca.id_curriculum,
+        CONCAT(a.nombre_aspirante, ' ', a.apellido_aspirante) AS NOMBRE,
+        (SELECT COUNT(*) FROM estudios_aspirantes ea WHERE ea.id_curriculum = ca.id_curriculum) AS estudios,
+        (SELECT COUNT(*) FROM experiencias_aspirantes exa WHERE exa.id_curriculum = ca.id_curriculum) AS experiencias,
+        (SELECT COUNT(*) FROM idiomas_aspirantes ia WHERE ia.id_curriculum = ca.id_curriculum) AS idiomas
+    FROM 
+        aspirantes a
+    JOIN 
+        curriculum_aspirantes ca ON a.id_aspirante = ca.id_aspirante
+    ORDER BY 
+        a.nombre_aspirante;
+    ";
 
         return Database::getRows($sql);
     }
@@ -744,8 +747,8 @@ class CurriculumHandler
     {
         $value = '%' . Validator::getSearchValue() . '%';
         $sql = 'SELECT * FROM vista_tabla_curriculum_privado
-        WHERE NOMBRE LIKE ? OR nombre_institucion_estudio LIKE ? OR titulo_certificado LIKE ? OR nombre_empresa LIKE ? OR nombre_cargo LIKE ? OR descripcion_puesto LIKE ? OR nombre_area LIKE ? OR nombre_idioma LIKE ? OR nombre_habilidad LIKE ?';
-        $params = array($value, $value, $value, $value, $value, $value, $value, $value, $value);
+        WHERE NOMBRE LIKE ? OR nombre_institucion_estudio LIKE ? OR titulo_certificado LIKE ? OR nombre_empresa LIKE ? OR nombre_cargo LIKE ? OR descripcion_puesto LIKE ? OR nombre_area LIKE ? OR nombre_idioma LIKE ? OR nombre_habilidad LIKE ? OR correo_aspirante LIKE ? OR APELLIDO LIKE ? OR NOMBRE LIKE ? OR titulo_certificado LIKE ? OR titulo_estudio LIKE ? OR nombre_grado LIKE ? OR puesto_trabajo LIKE ?';
+        $params = array($value, $value, $value, $value, $value, $value, $value, $value, $value, $value , $value, $value, $value, $value, $value);
         return Database::getRows($sql, $params);
     }
     
@@ -785,14 +788,14 @@ class CurriculumHandler
                     curriculum_aspirantes c
                     JOIN aspirantes a ON c.id_aspirante = a.id_aspirante
                     JOIN idiomas_aspirantes b ON c.id_curriculum = b.id_curriculum
-                    JOIN idiomas d ON b.id_idioma_aspirante = d.id_idioma
+                    JOIN idiomas d ON b.id_idioma = d.id_idioma
 						  JOIN habilidades_aspirantes e ON  c.id_curriculum = e.id_curriculum
                     JOIN habilidades f ON e.id_habilidad  = f.id_habilidad
                     JOIN referencias_aspirantes g ON c.id_curriculum = g.id_curriculum
                     JOIN experiencias_aspirantes h ON c.id_curriculum = h.id_curriculum
                     JOIN estudios_aspirantes i ON c.id_curriculum = i.id_curriculum
                     JOIN certificados_aspirantes j ON c.id_curriculum = j.id_curriculum 
-                    JOIN grados_academicos k ON i.id_estudio = k.id_grado
+                    JOIN grados_academicos k ON i.id_grado = k.id_grado
                     JOIN certificados_aspirantes l ON c.id_curriculum = l.id_curriculum
                 WHERE 
                     c.id_curriculum = ?
@@ -815,20 +818,20 @@ class CurriculumHandler
 
     public function readOneDataEstudios()
     {
-        $sql = "SELECT es.*, ga.nombre_grado, ins.nombre_institucion AS institucion_estudio,
-    CASE 
-        WHEN es.fecha_finalizacion IS NULL THEN 'En curso'
-        WHEN es.fecha_finalizacion <= CURDATE() THEN 'Egresado'
-        ELSE 'No egresado'
-    END AS estado_egreso
-    FROM 
-        estudios_aspirantes es
-    JOIN 
-        grados_academicos ga ON es.id_grado = ga.id_grado
-    LEFT JOIN 
-        instituciones ins ON es.id_institucion = ins.id_institucion
-    WHERE 
-        es.id_curriculum = ?";
+        $sql = "SELECT es.titulo_estudio, es.fecha_finalizacion, es.id_estudio, es.id_grado, es.id_institucion, es.id_curriculum,  ga.nombre_grado, es.nombre_institucion AS otra_institucion ,ins.nombre_institucion AS institucion_estudio,
+        CASE 
+            WHEN es.fecha_finalizacion IS NULL THEN 'En curso'
+            WHEN es.fecha_finalizacion <= CURDATE() THEN 'Egresado'
+            ELSE 'No egresado'
+        END AS estado_egreso
+        FROM 
+            estudios_aspirantes es
+        JOIN 
+            grados_academicos ga ON es.id_grado = ga.id_grado
+        LEFT JOIN 
+            instituciones ins ON es.id_institucion = ins.id_institucion
+        WHERE 
+            es.id_curriculum =?";
         $params = array($this->id);
         return Database::getRows($sql, $params);
     }
