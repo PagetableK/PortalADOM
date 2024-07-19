@@ -144,7 +144,7 @@ const cargarPlantilla = async () => {
                 TITULO.textContent = "Instituciones";
             }
             else if (location.pathname.endsWith('rubro_empresa.html')) {
-                TITULO.textContent = "Rubros empresa";
+                TITULO.textContent = "Rubros";
             }
             else if (location.pathname.endsWith('aspirantes.html')) {
                 TITULO.textContent = "Aspirantes";

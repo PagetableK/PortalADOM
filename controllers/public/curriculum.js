@@ -19,9 +19,7 @@ const ESTADO_EXPERIENCIA = document.getElementById('estadoExperiencia'), SELECT_
     SELECT_YEAR_FINAL = document.getElementById('yearFinal'), DESCRIPCION_PUESTO = document.getElementById('descripcion'),
     CARACTERES_RESTANTES = document.getElementById('caracteresRestantes'), TELEFONOS = document.querySelectorAll('.telefono');
 
-const SELECT_IDIOMAS = document.getElementById('idioma');
-
-const SELECT_HABILIDADES = document.getElementById('nombreHabilidad');
+const SELECT_IDIOMAS = document.getElementById('idioma'), SELECT_HABILIDADES = document.getElementById('nombreHabilidad');
 
 const CORREO_ASPIRANTE = document.getElementById('correo'), TELEFONO_MOVIL = document.getElementById('telefonoMovil'),
     IMAGEN = document.getElementById('archivoImagen'), TELEFONO_FIJO = document.getElementById('telefonoFijo');
@@ -49,6 +47,19 @@ const BOTON_EDITAR = document.getElementById('btnEditarCv'), BOTON_REGRESAR = do
     CONTENEDOR_BOTON = document.getElementById('contenedorBtnRegresar'), CONTENEDOR_MENSAJE = document.getElementById('contenedorMensaje');
 
 let errorCurriculum = false, editarCv = false;
+
+// Se inicializa y agrega el diseño del elemento select2.
+$(".select2-single").select2({
+    theme: "bootstrap",
+    placeholder: "Seleccione una institución",
+    maximumSelectionSize: 6,
+    containerCssClass: ':all:',
+    "language": {
+        "noResults": function(){
+            return "No se encontraron resultados";
+        }
+    },
+});
 
 // Evento que se ejecuta al terminar de cargar los componentes.
 document.addEventListener('DOMContentLoaded', async () => {
@@ -1065,6 +1076,8 @@ FORM_ESTUDIO.addEventListener('submit', async (e) => {
 
             OTRA_INSTITUCION.setAttribute('disabled', '');
 
+            $("#institucion").val('').trigger('change');
+
             cargarEstudios();
 
             sweetAlert(1, 'Estudio agregado', false);
@@ -1106,12 +1119,12 @@ FORM_EXPERIENCIA.addEventListener('submit', async (e) => {
 
     if (SELECT_RUBROS.value == "default") {
 
-        sweetAlert(3, "Asegúrese de seleccionar un rubro", false);
+        await sweetAlert(3, "Asegúrese de seleccionar un rubro", false);
 
         SELECT_RUBROS.focus();
     } else if (SELECT_AREAS.value == "default") {
 
-        sweetAlert(3, "Asegúrese de seleccionar un área");
+        await sweetAlert(3, "Asegúrese de seleccionar un área");
 
         SELECT_AREAS.focus();
     } else {
@@ -1135,11 +1148,7 @@ FORM_EXPERIENCIA.addEventListener('submit', async (e) => {
 
             FORM_EXPERIENCIA.reset();
 
-            SELECT_MES_INICIO.removeAttribute("disabled");
-
             SELECT_MES_FINAL.removeAttribute("disabled");
-
-            SELECT_YEAR_INICIO.removeAttribute("disabled");
 
             SELECT_YEAR_FINAL.removeAttribute("disabled");
 
@@ -1194,7 +1203,7 @@ FORM_IDIOMA.addEventListener('submit', async (e) => {
 
     if (SELECT_IDIOMAS.value == "default") {
 
-        sweetAlert(3, "Asegúrese de seleccionar un idioma", false);
+        await sweetAlert(3, "Asegúrese de seleccionar un idioma", false);
 
         SELECT_IDIOMAS.focus();
     } else {
@@ -1229,7 +1238,7 @@ FORM_HABILIDAD.addEventListener('submit', async (e) => {
 
     if (SELECT_HABILIDADES.value == "default") {
 
-        sweetAlert(3, 'Asegúrese de seleccionar una habilidad');
+        await sweetAlert(3, 'Asegúrese de seleccionar una habilidad');
 
         SELECT_HABILIDADES.focus();
     } else {
@@ -1285,8 +1294,7 @@ FORM_CURRICULUM.addEventListener('submit', async (e) => {
 
         editarCv ? accion = 'actualizarCurriculum' : accion = 'agregarCurriculum';
 
-        // ENVIAR BOOLEANIMAGEN, VALIDAR TELEFONOS CON CHECKWITHID
-        FORM.append("booleanImagen", 1);
+        IMAGEN.value != "" ? FORM.append("booleanImagen", 0) : FORM.append("booleanImagen", 1);
 
         const DATA = await fetchData(API_CURRICULUM, accion, FORM);
 
@@ -1314,8 +1322,8 @@ FORM_CURRICULUM.addEventListener('submit', async (e) => {
 
             errorCurriculum ? async () => {
                 await sweetAlert(1, 'Currículum actualizado correctamente');
-                sweetAlert(3, 'Es posible que los apartados no se hayan actualizado correctamente, se recomienda verificar el currículum', false);
-            } : sweetAlert(1, 'Currículum actualizado correctamente', true, 'curriculum.html');
+                await sweetAlert(3, 'Es posible que los apartados no se hayan actualizado correctamente, se recomienda verificar el currículum', false, 'curriculum.html');
+            } : sweetAlert(1, 'Currículum actualizado correctamente', false, 'curriculum.html');
         }
         else if (DATA.status) {
 
@@ -1339,7 +1347,7 @@ FORM_CURRICULUM.addEventListener('submit', async (e) => {
 
             errorCurriculum ? async () => {
                 await sweetAlert(1, 'Currículum agregado correctamente');
-                sweetAlert(3, 'Es posible que los apartados no se hayan agregado correctamente, se recomienda verificar el currículum', false);
+                await sweetAlert(3, 'Es posible que los apartados no se hayan agregado correctamente, se recomienda verificar el currículum', false, 'curriculum.html');
             } : sweetAlert(1, 'Currículum agregado correctamente', true, 'curriculum.html');
         } else if (DATA.error == "Debe agregar por lo menos 1 estudio a su currículum") {
 
@@ -1351,6 +1359,9 @@ FORM_CURRICULUM.addEventListener('submit', async (e) => {
             });
 
             stepperCv.to(1);
+            
+            // Se restablece el scroll de la pantalla.
+            window.scrollTo(0, 0);
         } else if (DATA.error == "El teléfono móvil ya está siendo utilizado en otro currículum") {
 
             await sweetAlert(3, DATA.error + ". Digite un número de teléfono diferente", false);
@@ -1390,7 +1401,6 @@ const agregarEstudios = async (FORM) => {
 
     if (DATA.status) {
 
-        console.log(DATA.status);
     } else {
 
         errorCurriculum = true;
@@ -1462,32 +1472,37 @@ const agregarHabilidades = async (FORM) => {
 }
 
 
+// Función que permite crear un id para los apartados del currículum.
 function crearId(longitud) {
-
+    // Variable donde se almacenará el id.
     let resultado = '';
-
+    // Se definen los caracteres que se utilizarán en el id.
     const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-
+    // Se almacena la longitud de la cadena de caracteres en el string.
     const longitudCaracteres = caracteres.length;
-
+    // Se inicializa la variable.
     let contador = 0;
-
+    // Se realiza una iteración para obtener un nuevo caracter por cada iteración.
     while (contador < longitud) {
-
+        // Se almacena el caracter random en la variable.
         resultado += caracteres.charAt(Math.floor(Math.random() * longitudCaracteres));
-
         contador += 1;
     }
-
+    // Se retorna el id.
     return resultado;
 }
 
-SELECT_INSTITUCIONES.addEventListener('change', () => {
-
-    if (SELECT_INSTITUCIONES.value == 0) {
+// Evento que se ejecuta al cambiar la opción seleccionada.
+$('#institucion').on('change', function (e) {
+    // Se verifica si el array está vacío.
+    if($("#institucion").select2('data').length == 0){
+    }
+    // Si el valor seleccionado es 0 se ejecuta el código.
+    else if ($("#institucion").select2('data')[0].id == 0) {
 
         OTRA_INSTITUCION.removeAttribute("disabled");
     } else {
+        // Se activa el campo de otra institución.
         OTRA_INSTITUCION.setAttribute("disabled", "");
         OTRA_INSTITUCION.value = '';
     }
@@ -1617,7 +1632,7 @@ BOTON_EDITAR.addEventListener('click', async () => {
         // Si la respuesta no es satisfactoria se ejecuta el código.
         if (!DATA.status) {
             // Se muestra la advertencia.
-            sweetAlert(3, 'Es posible que algunos apartados no contengan la información real del currículum', false);
+            sweetAlert(3, 'Es posible que algunos apartados no contengan la información exacta del currículum', true);
         }
     } else {
         // Se muestra el error.
@@ -1643,13 +1658,13 @@ const almacenarEstudios = async (arrayEstudios) => {
 
         if (row.id_institucion == null) {
 
-            FORM.append('institucion', 0)
-            FORM.append('booleanoInstitucion', 1)
+            FORM.append('institucion', 0);
+            FORM.append('booleanoInstitucion', 1);
             FORM.append('otraInstitucion', row.nombre_institucion);
         } else {
 
             FORM.append('institucion', row.id_institucion);
-            FORM.append('booleanoInstitucion', 0)
+            FORM.append('booleanoInstitucion', 0);
             FORM.append('otraInstitucion', '');
         }
 

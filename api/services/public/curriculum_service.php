@@ -116,7 +116,6 @@ if (isset($_GET['action'])) {
             case 'almacenarExperiencia':
                 // Se eliminan los espacios en blancos de los valores dentro del array.
                 $_POST = Validator::validateForm($_POST);
-                // Se valida que el conjunto de datos que retorna la función se almacena en el array.
                 if (
                     !$curriculum->setEmpresa($_POST['empresa']) or
                     !$curriculum->setCargo($_POST['cargo']) or
@@ -164,11 +163,13 @@ if (isset($_GET['action'])) {
                 break;
 
             case 'almacenarReferencia':
+                // Se eliminan los espacios en blancos de los valores dentro del array.
+                $_POST = Validator::validateForm($_POST);
                 if (
                     !$curriculum->setNombreReferencia($_POST['nombre']) or
                     !$curriculum->setApellidoReferencia($_POST['apellido']) or
                     !$curriculum->setPuesto($_POST['puesto']) or
-                    !$curriculum->setTelefonoReferencia($_POST['telefonoReferencia']) or
+                    !$curriculum->setTelefonoReferencia($_POST['telefonoReferencia'], 1) or
                     !$curriculum->setIdentificador($_POST['identificador'])
                 ) {
                     $result['error'] = $curriculum->getDataError();
@@ -201,6 +202,8 @@ if (isset($_GET['action'])) {
                 break;
 
             case 'almacenarIdioma':
+                // Se eliminan los espacios en blancos de los valores dentro del array.
+                $_POST = Validator::validateForm($_POST);
                 if (
                     !$curriculum->setIdIdioma($_POST['idioma']) or
                     !$curriculum->setNivelIdioma($_POST['nivelIdioma']) or
@@ -237,6 +240,8 @@ if (isset($_GET['action'])) {
                 break;
 
             case 'almacenarHabilidad':
+                // Se eliminan los espacios en blancos de los valores dentro del array.
+                $_POST = Validator::validateForm($_POST);
                 if (
                     !$curriculum->setIdHabilidad($_POST['nombreHabilidad']) or
                     !$curriculum->setNivelHabilidad($_POST['nivelHabilidad']) or
@@ -290,7 +295,7 @@ if (isset($_GET['action'])) {
                     !$curriculum->setCorreo($_POST['correo'], 1)
                 ) {
                     $result['error'] = $curriculum->getDataError();
-                } elseif ($_POST['booleanImagen'] and $curriculum->actualizarCurriculum()) {
+                } elseif (!$_POST['booleanImagen'] and $curriculum->actualizarCurriculum()) {
                     // Se asigna el estado del archivo después de insertar.
                     $result['fileStatus'] = Validator::saveFile($_FILES['archivoImagen'], $curriculum::RUTA_IMAGEN);
                     $result['status'] = 1;

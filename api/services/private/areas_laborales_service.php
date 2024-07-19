@@ -1,13 +1,13 @@
 <?php
 // Se incluye la clase del modelo.
-require_once('../../models/data/rubro_data.php');
+require_once('../../models/data/areas_laborales_data.php');
 
 // Se comprueba si existe una acción a realizar, de lo contrario se finaliza el script con un mensaje de error.
 if (isset($_GET['action'])) {
     // Se crea una sesión o se reanuda la actual para poder utilizar variables de sesión en el script.
     session_start();
     // Se instancia la clase correspondiente.
-    $rubro = new RubroData;
+    $area = new AreaslaboralesData;
     // Se declara e inicializa un arreglo para guardar el resultado que retorna la API.
     $result = array('status' => 0, 'message' => null, 'dataset' => null, 'error' => null, 'exception' => null, 'fileStatus' => null);
     // Se verifica si existe una sesión iniciada como administrador, de lo contrario se finaliza el script con un mensaje de error.
@@ -17,7 +17,7 @@ if (isset($_GET['action'])) {
             case 'searchRows':
                 if (!Validator::validateSearch($_POST['search'])) {
                     $result['error'] = Validator::getSearchError();
-                } elseif ($result['dataset'] = $rubro->searchRows()) {
+                } elseif ($result['dataset'] = $area->searchRows()) {
                     $result['status'] = 1;
                     $result['message'] = 'Existen ' . count($result['dataset']) . ' coincidencias';
                 } else {
@@ -27,67 +27,56 @@ if (isset($_GET['action'])) {
             case 'createRow':
                 $_POST = Validator::validateForm($_POST);
                 if (
-                    !$rubro->setRubro($_POST['nombreRubro'])
+                    !$area->setArea($_POST['nombreArea']) 
                 ) {
-                    $result['error'] = $rubro->getDataError();
-                } elseif ($rubro->createRow()) {
+                    $result['error'] = $area->getDataError();
+                } elseif ($area->createRow()) {
                     $result['status'] = 1;
-                    $result['message'] = 'rubro agregada correctamente';
+                    $result['message'] = 'Área agregada correctamente';
                 } else {
-                    $result['error'] = 'Ocurrió un problema al crear el rubro';
+                    $result['error'] = 'Ocurrió un problema al crear la area';
                 }
                 break;
             case 'readAll':
-                if ($result['dataset'] = $rubro->readAll()) {
+                if ($result['dataset'] = $area->readAll()) {
                     $result['status'] = 1;
                     $result['message'] = 'Existen ' . count($result['dataset']) . ' registros';
                 } else {
-                    $result['error'] = 'No existen rubros registrados';
+                    $result['error'] = 'No existen áreas laborales registradas';
                 }
                 break;
-
             case 'readOne':
-                if (!$rubro->setId($_POST['idRubro'])) {
-                    $result['error'] = $rubro->getDataError();
-                } elseif ($result['dataset'] = $rubro->readOne()) {
+                if (!$area->setId($_POST['idArea'])) {
+                    $result['error'] = $area->getDataError();
+                } elseif ($result['dataset'] = $area->readOne()) {
                     $result['status'] = 1;
                 } else {
-                    $result['error'] = 'Institucion inexistente';
+                    $result['error'] = 'Area inexistente';
                 }
                 break;
-
             case 'updateRow':
                 $_POST = Validator::validateForm($_POST);
                 if (
-                    !$rubro->setId($_POST['idRubro']) or
-                    !$rubro->setRubro($_POST['nombreRubro'])
+                    !$area->setArea($_POST['nombreArea']) 
                 ) {
-                    $result['error'] = $rubro->getDataError();
-                } elseif ($rubro->updateRow()) {
+                    $result['error'] = $area->getDataError();
+                } elseif ($area->updateRow()) {
                     $result['status'] = 1;
-                    $result['message'] = 'Rubro modificado correctamente';
+                    $result['message'] = 'area modificada correctamente';
                 } else {
-                    $result['error'] = 'Ocurrió un problema al modificar el rubro';
-                }
-                break;
-
-            case 'cantidadRubros':
-                if ($result['dataset'] = $rubro->cantidadRubros()) {
-                    $result['status'] = 1;
-                } else {
-                    $result['error'] = 'No hay rubros registrados';
+                    $result['error'] = 'Ocurrió un problema al modificar el área';
                 }
                 break;
             case 'deleteRow':
                 if (
-                    !$rubro->setId($_POST['idRubro'])
+                    !$area->setId($_POST['idArea']) 
                 ) {
-                    $result['error'] = $rubro->getDataError();
-                } elseif ($rubro->deleteRow()) {
+                    $result['error'] = $area->getDataError();
+                } elseif ($area->deleteRow()) {
                     $result['status'] = 1;
-                    $result['message'] = 'Rubro eliminado correctamente';
+                    $result['message'] = 'area eliminada correctamente';
                 } else {
-                    $result['error'] = 'Ocurrió un problema al eliminar el rubro';
+                    $result['error'] = 'Ocurrió un problema al eliminar el area';
                 }
                 break;
             default:

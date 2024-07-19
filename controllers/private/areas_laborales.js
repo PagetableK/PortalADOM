@@ -1,6 +1,6 @@
 
 // Constante para completar la ruta de la API.
-const AREA_API = 'services/private/areas_laborales_services.php';
+const AREA_API = 'services/private/areas_laborales_service.php';
 
 // Constante para establecer el formulario de buscar.
 const SEARCH_FORM = document.getElementById('searchForm');

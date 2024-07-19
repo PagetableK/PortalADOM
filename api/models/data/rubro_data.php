@@ -29,8 +29,8 @@ class RubroData extends RubroHandler
 
     public function setRubro($value, $min = 2, $max = 150)
     {
-        if (!Validator::validateAlphabetic($value)) {
-            $this->info_error = 'El nombre debe ser un valor alfanumérico';
+        if (!Validator::validateAlphanumeric($value)) {
+            $this->info_error = 'El nombre debe ser un valor alfabético';
             return false;
         }elseif (RubroHandler::checkDuplicateWithId($value)) {
             $this->info_error = 'El nombre del rubro ya ha sido registrado';

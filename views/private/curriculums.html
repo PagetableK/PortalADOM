@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- Título del documento -->
         <title>Inicio</title>
+        <!-- Se configura el ícono de la pestaña -->
+        <link type="image/png" rel="icon" href="/PortalADOM/resources/img/logo.png">
         <!-- Llamada al framework de diseño -->
         <link href="../../resources/css/utils/bootstrap.min.css" rel="stylesheet">
         <!-- Llamada a los íconos de la barra de navegación -->
@@ -17,13 +19,9 @@
 <body class="d-flex">
     <!-- Contenido principal del documento -->
     <main>
-        <div class="pito" id="rowsFound"></div>
         <div class="container-fluid px-5">
             <!-- Este div crea una fila dentro de Bootstrap -->
-            <div class="row mb-3 row-gap-3 pe-2 ps-2 d-flex align-items-center">
-                <div class="col-12">
-                    <h4 class="text-start fw-semibold"></h4>
-                </div>
+            <div class="row mb-3 row-gap-3 pe-2 ps-2 d-flex align-items-center mt-4">
                 <div class="col-12 col-lg-9">
                     <div class="row d-flex contenedor-form">
                         <form id="searchForm" class="d-flex">
@@ -45,9 +43,8 @@
                     </div>
                 </div>
                 <div class="col-12 col-lg-3 d-flex justify-content-center">
-                    <div class="btn btn-dark h-100 w-100 d-flex align-items-center justify-content-center gap-2 contenedor-form"
-                        type="submit" onclick="openCreate()">
-                        Agregar curriculum <i class="bi bi-plus h3 agregar-icono"></i>
+                    <div class="btn btn-dark h-100 w-100 d-flex align-items-center justify-content-center gap-2 contenedor-form" onclick="openCreate()">
+                        Agregar currículum <i class="bi bi-plus h3 agregar-icono"></i>
                     </div>
                 </div>
             </div>
@@ -111,7 +108,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-success">Editar curriculum</button>
+                        <button type="button" class="btn btn-success" onclick="openUpdate()">Editar curriculum</button>
                         <button type="button" class="btn btn-danger d-none" id="cmEliminarBoton">Eliminar curriculum</button>
                     </div>
                 </div>
@@ -182,11 +179,12 @@
             </div>
         </div>
     </main>
-
     <!-- Mandar a llamar el framework de diseño -->
     <script src="../../resources/js/bootstrap.bundle.min.js" type="text/javascript"></script>
     <!-- Mandar a llamar la librería de alertas -->
     <script src="../../resources/js/sweetalert.min.js" type="text/javascript"></script>
+    <!-- Llamada al archivo js para utilizar stepper -->
+    <script src="../../resources/js/bs-stepper.min.js" type="text/javascript"></script>
     <!-- Llamada al controlador general de la aplicación -->
     <script src="../../controllers/utils/componentes.js" type="text/javascript"></script>
     <!-- Llamada al controlador general del sitio privado -->

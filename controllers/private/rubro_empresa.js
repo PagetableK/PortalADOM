@@ -1,5 +1,5 @@
 // Constante para completar la ruta de la API.
-const RUBRO_API = 'services/private/rubro_services.php';
+const RUBRO_API = 'services/private/rubros_service.php';
 // Constante para establecer el formulario de buscar.
 const SEARCH_FORM = document.getElementById('searchForm');
 // Constantes para establecer los elementos de la tabla.
@@ -10,7 +10,9 @@ const SAVE_MODAL = new bootstrap.Modal('#saveModal'),
 // Constantes para establecer los elementos del formulario de guardar.
 const SAVE_FORM = document.getElementById('saveForm'),
     ID_RUBRO = document.getElementById('idRubro'),
-    NOMBRE_RUBRO = document.getElementById('nombreRubro');
+    NOMBRE_RUBRO = document.getElementById('nombreRubro'),
+    BOTON_AGREGAR = document.getElementById('btnAgregar'),
+    BOTON_ACTUALIZAR = document.getElementById('btnActualizar');
 
 // Método del evento para cuando el documento ha cargado.
 document.addEventListener('DOMContentLoaded', () => {
@@ -53,6 +55,9 @@ SAVE_FORM.addEventListener('submit', async (event) => {
         sweetAlert(1, DATA.message, true);
         // Se carga nuevamente la tabla para visualizar los cambios.
         fillTable();
+    } else if(DATA.error == "El nombre del rubro ya ha sido registrado"){
+
+        sweetAlert(3, "El rubro ya ha sido agregado", false);
     } else {
         sweetAlert(2, DATA.error, false);
     }
@@ -78,7 +83,7 @@ const fillTable = async (form = null) => {
             TABLE_BODY.innerHTML += `
                 <tr>
                     <td>${row.nombre_rubro}</td>
-                    <td>${row.veces_utilizadas}</td>
+                    <td>${row.usos}</td>
                     <td>
                         <button type="button" class="btn btn-outline-success" onclick="openUpdate(${row.id_rubro})">
                             <i class="bi bi-pencil-fill"></i>
@@ -106,6 +111,9 @@ const openCreate = () => {
     MODAL_TITLE.textContent = 'Crear rubro';
     // Se prepara el formulario.
     SAVE_FORM.reset();
+    // Se muestra el botón de agregar y se oculta el de actualizar.
+    BOTON_ACTUALIZAR.classList.add('d-none');
+    BOTON_AGREGAR.classList.remove('d-none');
 }
 
 /*
@@ -131,6 +139,9 @@ const openUpdate = async (id) => {
         console.log(DATA)
         ID_RUBRO.value = ROW.id_rubro;
         NOMBRE_RUBRO.value = ROW.nombre_rubro;
+        // Se muestra el botón de actualizar y se oculta el de agregar.
+        BOTON_AGREGAR.classList.add('d-none');
+        BOTON_ACTUALIZAR.classList.remove('d-none');
     } else {
         sweetAlert(2, DATA.error, false);
     }
@@ -157,6 +168,9 @@ const openDelete = async (id) => {
             await sweetAlert(1, DATA.message, true);
             // Se carga nuevamente la tabla para visualizar los cambios.
             fillTable();
+        } else if(DATA.exception.includes("Integrity constraint") || DATA.exception.includes("constraint fails")){
+
+            sweetAlert(3, 'No se puede eliminar el rubro porque está siendo utilizado en un currículum', false);
         } else {
             sweetAlert(2, DATA.error, false);
         }
