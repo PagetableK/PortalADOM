@@ -1,0 +1,55 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body, html, main {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.left-side {
+    background-color: #FFA000;
+}
+
+.right-side {
+    background-color: #fff;
+}
+
+.textoGrande{
+    font-size: 150px;
+}
+
+button {
+    cursor: pointer;
+}
+
+.fw-semibold.fs-6{
+    text-decoration: none;
+    cursor: pointer;
+    color: #000000;
+}
+
+.rounded-start-2{
+    border-bottom-left-radius: 2rem !important;
+    border-top-left-radius: 2rem !important;
+}
+
+.w-65{
+    width: 65%;
+}
+
+.linea-gruesa{
+    height: 0.1rem;
+    border: none;
+    background-color: #000000;
+    opacity: 100 !important;
+    width: 100%;
+    margin: 0px;
+}

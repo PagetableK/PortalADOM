@@ -46,7 +46,7 @@ SAVE_FORM.addEventListener('submit', async (event) => {
     // Se verifica la acción a realizar.
     (ID_IDIOMA.value) ? action = 'updateRow' : action = 'createRow';
     // Se verifica que la acción sea crear idioma o que el usuario haya ingresado un nombre de idioma diferente al actual.
-    if (action == 'createRow' || (idioma != SAVE_FORM['nombreIdioma'].value)) {
+    if (action == 'createRow' || (idioma != SAVE_FORM['nombreIdioma'].value.trim())) {
         // Constante tipo objeto con los datos del formulario.
         const FORM = new FormData(SAVE_FORM);
         // Petición para guardar los datos del formulario.
@@ -60,7 +60,10 @@ SAVE_FORM.addEventListener('submit', async (event) => {
             // Se carga nuevamente la tabla para visualizar los cambios.
             fillTable();
         } else if (DATA.error == "El nombre del idioma ya ha sido registrado") {
+
             sweetAlert(3, 'El idioma ya ha sido agregado', false);
+            
+            SAVE_MODAL.hide();
         } 
         else {
             sweetAlert(2, DATA.error, false);

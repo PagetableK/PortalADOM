@@ -244,7 +244,7 @@ class CurriculumHandler
         // Se establece la estructura de la sentencia.
         $sql = 'SELECT id_curriculum
                 FROM curriculum_aspirantes
-                WHERE (correo_curriculum = ? OR telefono_movil = ? OR telefono_fijo = ?) AND id_curriculum = ?';
+                WHERE (correo_curriculum = ? OR telefono_movil = ? OR telefono_fijo = ?) AND id_curriculum != ?';
         // Se almacenan los parámetros en el array.
         $params = array($value, $value, $value, $this->id);
         // Se obtiene la fila y se devuelve el dato.
@@ -274,27 +274,48 @@ class CurriculumHandler
         return Database::executeRow($sql, $params);
     }
 
+    // Esta función permite agregar un currículum asignándoselo a un aspirante.
+    public function agregarYAsignarCurriculum()
+    {
+        // Si el atributo no tiene un valor asignado se ejecuta el código.
+        if (!empty($this->telefono_fijo)) {
+            // Se establece la estructura de la sentencia.
+            $sql = "INSERT INTO curriculum_aspirantes (imagen_aspirante, telefono_fijo, telefono_movil, correo_curriculum, id_aspirante)
+                    VALUES(?, ?, ?, ?, ?)";
+            // Se almacenan los parámetros en el array.
+            $params = array($this->imagen, $this->telefono_fijo, $this->telefono_movil, $this->correo, $this->id_aspirante);
+        }
+        // De lo contrario se ejecuta el código.
+        else {
+            // Se establece la estructura de la sentencia.
+            $sql = "INSERT INTO curriculum_aspirantes (imagen_aspirante, telefono_movil, correo_curriculum, id_aspirante)
+                    VALUES(?, ?, ?, ?)";
+            // Se almacenan los parámetros en el array.
+            $params = array($this->imagen, $this->telefono_movil, $this->correo, $this->id_aspirante);
+        }
+        // Se ejecuta la sentencia.
+        return Database::executeRow($sql, $params);
+    }
+
     // Esta función permite agregar un currículum.
     public function actualizarCurriculum()
     {
         // Si los atributos de imagen y teléfono fijo no tienen un valor asignado se ejecuta el código.
-        if(empty($this->telefono_fijo) && empty($this->imagen)){
+        if (empty($this->telefono_fijo) && empty($this->imagen)) {
             // Se establece la estructura de la sentencia.
             $sql = "UPDATE curriculum_aspirantes 
                     SET telefono_movil = ?, correo_curriculum = ?
                     WHERE id_aspirante = ?";
             // Se almacenan los parámetros en el array.
             $params = array($this->telefono_movil, $this->correo, $_SESSION['idAspirante']);
-        }
-        elseif (empty($this->telefono_fijo) && !empty($this->imagen)) {
+        } elseif (empty($this->telefono_fijo) && !empty($this->imagen)) {
             // Se establece la estructura de la sentencia.
             $sql = "UPDATE curriculum_aspirantes 
                     SET telefono_movil = ?, correo_curriculum = ?, imagen_aspirante = ?
                     WHERE id_aspirante = ?";
             // Se almacenan los parámetros en el array.
             $params = array($this->telefono_movil, $this->correo, $this->imagen, $_SESSION['idAspirante']);
-        }
-        elseif (!empty($this->telefono_fijo) && empty($this->imagen)) {
+        } elseif (!empty($this->telefono_fijo) && empty($this->imagen)) {
             // Se establece la estructura de la sentencia.
             $sql = "UPDATE curriculum_aspirantes 
                     SET telefono_movil = ?, correo_curriculum = ?, telefono_fijo = ?
@@ -315,12 +336,63 @@ class CurriculumHandler
         return Database::executeRow($sql, $params);
     }
 
+    // Esta función permite agregar un currículum.
+    public function actualizarYAsignarCurriculum()
+    {
+        // Si los atributos de imagen y teléfono fijo no tienen un valor asignado se ejecuta el código.
+        if (empty($this->telefono_fijo) && empty($this->imagen)) {
+            // Se establece la estructura de la sentencia.
+            $sql = "UPDATE curriculum_aspirantes 
+                        SET telefono_movil = ?, correo_curriculum = ?, telefono_fijo = null
+                        WHERE id_curriculum = ?";
+            // Se almacenan los parámetros en el array.
+            $params = array($this->telefono_movil, $this->correo, $this->id);
+        } elseif (empty($this->telefono_fijo) && !empty($this->imagen)) {
+            // Se establece la estructura de la sentencia.
+            $sql = "UPDATE curriculum_aspirantes 
+                        SET telefono_movil = ?, correo_curriculum = ?, imagen_aspirante = ?, telefono_fijo = null
+                        WHERE id_curriculum = ?";
+            // Se almacenan los parámetros en el array.
+            $params = array($this->telefono_movil, $this->correo, $this->imagen, $this->id);
+        } elseif (!empty($this->telefono_fijo) && empty($this->imagen)) {
+            // Se establece la estructura de la sentencia.
+            $sql = "UPDATE curriculum_aspirantes 
+                        SET telefono_movil = ?, correo_curriculum = ?, telefono_fijo = ?
+                        WHERE id_curriculum = ?";
+            // Se almacenan los parámetros en el array.
+            $params = array($this->telefono_movil, $this->correo, $this->telefono_fijo, $this->id);
+        }
+        // De lo contrario se ejecuta el código.
+        else {
+            // Se establece la estructura de la sentencia.
+            $sql = "UPDATE curriculum_aspirantes 
+                        SET telefono_movil = ?, correo_curriculum = ?, telefono_fijo = ?, imagen_aspirante = ?
+                        WHERE id_curriculum = ?";
+            // Se almacenan los parámetros en el array.
+            $params = array($this->telefono_movil, $this->correo, $this->telefono_fijo, $this->imagen, $this->id);
+        }
+        // Se ejecuta la sentencia.
+        return Database::executeRow($sql, $params);
+    }
+
+    // Devuelve el id_curriculum de un un currículum asignado al aspirante con la sesión activa.
     public function obtenerIdCv()
     {
         // Se establece la estructura de la sentencia.
         $sql = 'SELECT id_curriculum FROM curriculum_aspirantes WHERE id_aspirante = ?';
         // Se almacena el parámetro en el array.
         $params = array($_SESSION['idAspirante']);
+        // Se obtiene la fila y se devuelve el dato.
+        return Database::getRow($sql, $params)['id_curriculum'];
+    }
+
+    // Devuelve el id_curriculum de un un currículum asignado a un aspirante específico.
+    public function getIdCv()
+    {
+        // Se establece la estructura de la sentencia.
+        $sql = 'SELECT id_curriculum FROM curriculum_aspirantes WHERE id_aspirante = ?';
+        // Se almacena el parámetro en el array.
+        $params = array($this->id_aspirante);
         // Se obtiene la fila y se devuelve el dato.
         return Database::getRow($sql, $params)['id_curriculum'];
     }
@@ -390,6 +462,50 @@ class CurriculumHandler
         return true;
     }
 
+    public function registrarEstudio()
+    {
+        // Caso en que el aspirante cursa el estudio y no se seleccionó una opción de las instituciones.
+        if ($this->fecha_finalizacion_estudio == "" and $this->id_institucion == 0) {
+            // Se establece la estructura de la sentencia.
+            $sql = 'INSERT INTO estudios_aspirantes (titulo_estudio, id_grado, nombre_institucion, id_curriculum)
+                                VALUES(?, ?, ?, ?)';
+            // Se almacenan los parámetros en el array.
+            $params = array($this->titulo_estudio, $this->id_grado, $this->nombre_institucion, $this->id);
+            // Se ejecuta la sentencia.
+            return Database::executeRow($sql, $params);
+        }
+        // Caso en que el aspirante finalizó el estudio y no se seleccionó una opción de las instituciones.
+        elseif ($this->fecha_finalizacion_estudio != "" and $this->id_institucion == 0) {
+            // Se establece la estructura de la sentencia.
+            $sql = 'INSERT INTO estudios_aspirantes (titulo_estudio, id_grado, fecha_finalizacion, nombre_institucion, id_curriculum)
+                                VALUES(?, ?, ?, ?, ?)';
+            // Se almacenan los parámetros en el array.
+            $params = array($this->titulo_estudio, $this->id_grado, $this->fecha_finalizacion_estudio, $this->nombre_institucion, $this->id);
+            // Se ejecuta la sentencia.
+            return Database::executeRow($sql, $params);
+        }
+        // Caso en que el aspirante cursa el estudio y se seleccionó una opción de las instituciones. 
+        elseif ($this->fecha_finalizacion_estudio == "" and $this->id_institucion != 0) {
+            // Se establece la estructura de la sentencia.
+            $sql = 'INSERT INTO estudios_aspirantes (titulo_estudio, id_grado, id_institucion, id_curriculum)
+                                VALUES(?, ?, ?, ?)';
+            // Se almacenan los parámetros en el array.
+            $params = array($this->titulo_estudio, $this->id_grado, $this->id_institucion, $this->id);
+            // Se ejecuta la sentencia.
+            return Database::executeRow($sql, $params);
+        }
+        // Caso en que el aspirante finalizó el estudio y se seleccionó una opción de las instituciones. 
+        else {
+            // Se establece la estructura de la sentencia.
+            $sql = 'INSERT INTO estudios_aspirantes (titulo_estudio, id_grado, fecha_finalizacion, id_institucion, id_curriculum)
+                                VALUES(?, ?, ?, ?, ?)';
+            // Se almacenan los parámetros en el array.
+            $params = array($this->titulo_estudio, $this->id_grado, $this->fecha_finalizacion_estudio, $this->id_institucion, $this->id);
+            // Se ejecuta la sentencia.
+            return Database::executeRow($sql, $params);
+        }
+    }
+
     public function agregarCertificados()
     {
         foreach ($_SESSION['formacionComplementaria'] as $key => $value) {
@@ -416,6 +532,18 @@ class CurriculumHandler
         $_SESSION['formacionComplementaria'] = array();
 
         return true;
+    }
+
+    public function registrarCertificado()
+    {
+
+        // Se establece la estructura de la sentencia.
+        $sql = 'INSERT INTO certificados_aspirantes (titulo_certificado, institucion_certificado, fecha_finalizacion, id_curriculum)
+                    VALUES(?, ?, ?, ?)';
+        // Se almacenan los parámetros en el array.
+        $params = array($this->titulo_certificado, $this->institucion_certificado, $this->fecha_finalizacion_certificado, $this->id);
+        // Se ejecuta la sentencia.
+        return Database::executeRow($sql, $params);
     }
 
     public function agregarExperiencias()
@@ -476,6 +604,35 @@ class CurriculumHandler
         return true;
     }
 
+    public function registrarExperiencia()
+    {
+        // Se concatena el año de inicio con el mes en la variable.
+        $fecha_inicio = "$this->year_inicio-$this->mes_inicio-01";
+        // Se concatena el año de finalización con el mes en la variable.
+        $fecha_fin = "$this->year_final-$this->mes_final-01";
+
+        // Caso en que el aspirante trabaja actualmente en la experiencia.
+        if ($this->mes_final == "") {
+            // Se establece la estructura de la sentencia.
+            $sql = 'INSERT INTO experiencias_aspirantes (nombre_empresa, nombre_cargo, fecha_inicio, descripcion_puesto, id_area, id_rubro, id_curriculum)
+                        VALUES(?, ?, ?, ?, ?, ?, ?)';
+            // Se almacenan los parámetros en el array.
+            $params = array($this->empresa, $this->cargo, $fecha_inicio, $this->descripcion, $this->id_area, $this->id_rubro, $this->id);
+            // Se ejecuta la sentencia.
+            return Database::executeRow($sql, $params);
+        }
+        // Caso en que el aspirante no trabaja en la experiencia. 
+        else {
+            // Se establece la estructura de la sentencia.
+            $sql = 'INSERT INTO experiencias_aspirantes (nombre_empresa, nombre_cargo, fecha_inicio, fecha_fin, descripcion_puesto, id_area, id_rubro, id_curriculum)
+                        VALUES(?, ?, ?, ?, ?, ?, ?, ?)';
+            // Se almacenan los parámetros en el array.
+            $params = array($this->empresa, $this->cargo, $fecha_inicio, $fecha_fin, $this->descripcion, $this->id_area, $this->id_rubro, $this->id);
+            // Se ejecuta la sentencia.
+            return Database::executeRow($sql, $params);
+        }
+    }
+
     public function agregarReferencias()
     {
         foreach ($_SESSION['referencias'] as $key => $value) {
@@ -506,6 +663,17 @@ class CurriculumHandler
         return true;
     }
 
+    public function registrarReferencia()
+    {
+        // Se establece la estructura de la sentencia.
+        $sql = 'INSERT INTO referencias_aspirantes (nombre_referencia, apellido_referencia, puesto_trabajo, telefono_referencia, id_curriculum)
+                    VALUES(?, ?, ?, ?, ?)';
+        // Se almacenan los parámetros en el array.
+        $params = array($this->nombre_referencia, $this->apellido_referencia, $this->puesto_referencia, $this->telefono_referencia, $this->id);
+        // Se ejecuta la sentencia.
+        return Database::executeRow($sql, $params);
+    }
+
     public function agregarIdiomas()
     {
         foreach ($_SESSION['idiomas'] as $key => $value) {
@@ -530,6 +698,17 @@ class CurriculumHandler
         $_SESSION['idiomas'] = array();
 
         return true;
+    }
+
+    public function registrarIdioma()
+    {
+        // Se establece la estructura de la sentencia.
+        $sql = 'INSERT INTO idiomas_aspirantes (nivel_idioma, id_idioma, id_curriculum)
+                    VALUES(?, ?, ?)';
+        // Se almacenan los parámetros en el array.
+        $params = array($this->nivel_idioma, $this->id_idioma, $this->id);
+        // Se ejecuta la sentencia.
+        return Database::executeRow($sql, $params);
     }
 
     public function agregarHabilidades()
@@ -558,6 +737,17 @@ class CurriculumHandler
         return true;
     }
 
+    public function registrarHabilidad()
+    {
+        // Se establece la estructura de la sentencia.
+        $sql = 'INSERT INTO habilidades_aspirantes (nivel_habilidad, id_habilidad, id_curriculum)
+                    VALUES(?, ?, ?)';
+        // Se almacenan los parámetros en el array.
+        $params = array($this->nivel_habilidad, $this->id_habilidad, $this->id);
+        // Se ejecuta la sentencia.
+        return Database::executeRow($sql, $params);
+    }
+
     public function eliminarEstudios()
     {
         // Se establece la estructura de la sentencia.
@@ -576,7 +766,7 @@ class CurriculumHandler
         $params = array($this->id);
         // Se ejecuta la sentencia y se retorna el estado del query.
         return Database::executeRow($sql, $params);
-    }    
+    }
 
     public function eliminarExperiencias()
     {
@@ -586,8 +776,8 @@ class CurriculumHandler
         $params = array($this->id);
         // Se ejecuta la sentencia y se retorna el estado del query.
         return Database::executeRow($sql, $params);
-    }    
-    
+    }
+
     public function eliminarReferencias()
     {
         // Se establece la estructura de la sentencia.
@@ -596,8 +786,8 @@ class CurriculumHandler
         $params = array($this->id);
         // Se ejecuta la sentencia y se retorna el estado del query.
         return Database::executeRow($sql, $params);
-    }    
-    
+    }
+
     public function eliminarIdiomas()
     {
         // Se establece la estructura de la sentencia.
@@ -606,8 +796,8 @@ class CurriculumHandler
         $params = array($this->id);
         // Se ejecuta la sentencia y se retorna el estado del query.
         return Database::executeRow($sql, $params);
-    }    
-    
+    }
+
     public function eliminarHabilidades()
     {
         // Se establece la estructura de la sentencia.
@@ -624,6 +814,26 @@ class CurriculumHandler
         $sql = 'SELECT * FROM curriculum_aspirantes WHERE id_aspirante = ?';
         // Se almacena el parámetro en el array.
         $params = array($_SESSION['idAspirante']);
+        // Se obtiene la fila y se devuelve el dato.
+        return Database::getRow($sql, $params);
+    }
+
+    public function readCurriculum()
+    {
+        // Se establece la estructura de la sentencia.
+        $sql = 'SELECT * FROM curriculum_aspirantes WHERE id_curriculum = ?';
+        // Se almacena el parámetro en el array.
+        $params = array($this->id);
+        // Se obtiene la fila y se devuelve el dato.
+        return Database::getRow($sql, $params);
+    }
+
+    public function seleccionarIdAspirante()
+    {
+        // Se establece la estructura de la sentencia.
+        $sql = 'SELECT id_aspirante FROM curriculum_aspirantes WHERE id_curriculum = ?';
+        // Se almacena el parámetro en el array.
+        $params = array($this->id);
         // Se obtiene la fila y se devuelve el dato.
         return Database::getRow($sql, $params);
     }
@@ -689,21 +899,23 @@ class CurriculumHandler
         $params = array($this->id_aspirante, $this->nombre_aspirante);
         return Database::executeRow($sql, $params);
     }
-
     public function readAll()
     {
         $sql = "SELECT 
-                    a.id_aspirante, ca.imagen_aspirante, ca.id_curriculum,
-                    CONCAT(a.nombre_aspirante, ' ', a.apellido_aspirante) AS nombre,
-                    (SELECT COUNT(*) FROM estudios_aspirantes ea WHERE ea.id_curriculum = ca.id_curriculum) AS estudios,
-                    (SELECT COUNT(*) FROM experiencias_aspirantes exa WHERE exa.id_curriculum = ca.id_curriculum) AS experiencias,
-                    (SELECT COUNT(*) FROM idiomas_aspirantes ia WHERE ia.id_curriculum = ca.id_curriculum) AS idiomas
-                FROM 
-                    aspirantes a
-                JOIN 
-                    curriculum_aspirantes ca ON a.id_aspirante = ca.id_aspirante
-                ORDER BY 
-                    a.nombre_aspirante;";
+        a.id_aspirante, 
+        ca.imagen_aspirante AS IMAGEN, 
+        ca.id_curriculum,
+        CONCAT(a.nombre_aspirante, ' ', a.apellido_aspirante) AS NOMBRE,
+        (SELECT COUNT(*) FROM estudios_aspirantes ea WHERE ea.id_curriculum = ca.id_curriculum) AS estudios,
+        (SELECT COUNT(*) FROM experiencias_aspirantes exa WHERE exa.id_curriculum = ca.id_curriculum) AS experiencias,
+        (SELECT COUNT(*) FROM idiomas_aspirantes ia WHERE ia.id_curriculum = ca.id_curriculum) AS idiomas
+    FROM 
+        aspirantes a
+    JOIN 
+        curriculum_aspirantes ca ON a.id_aspirante = ca.id_aspirante
+    ORDER BY 
+        a.nombre_aspirante;
+    ";
 
         return Database::getRows($sql);
     }
@@ -740,9 +952,72 @@ class CurriculumHandler
         return Database::getRow($sql, $params);
     }
 
+
+    public function searchRows()
+    {
+        $value = '%' . Validator::getSearchValue() . '%';
+        $sql = 'SELECT * FROM vista_tabla_curriculum_privado
+        WHERE NOMBRE LIKE ? OR nombre_institucion_estudio LIKE ? OR titulo_certificado LIKE ? OR nombre_empresa LIKE ? OR nombre_cargo LIKE ? OR descripcion_puesto LIKE ? OR nombre_area LIKE ? OR nombre_idioma LIKE ? OR nombre_habilidad LIKE ? OR correo_aspirante LIKE ? OR APELLIDO LIKE ? OR NOMBRE LIKE ? OR titulo_certificado LIKE ? OR titulo_estudio LIKE ? OR nombre_grado LIKE ? OR puesto_trabajo LIKE ?';
+        $params = array($value, $value, $value, $value, $value, $value, $value, $value, $value, $value, $value, $value, $value, $value, $value, $value);
+        return Database::getRows($sql, $params);
+    }
+
+
+
+
+    public function readCurriculums()
+    {
+        $sql = 'SELECT 
+						 concat(a.nombre_aspirante, " ",a.apellido_aspirante) AS "NOMBRE",
+                    TIMESTAMPDIFF(YEAR, a.fecha_nacimiento, CURDATE()) AS Edad,
+                    a.genero_aspirante,
+                    b.nivel_idioma,
+                    d.nombre_idioma,
+                    c.correo_curriculum,
+						  e.nivel_habilidad,
+						  f.nombre_habilidad,    
+						  g.puesto_trabajo,
+						  g.telefono_referencia,
+						  h.nombre_cargo,
+						  h.nombre_empresa,
+						  h.fecha_inicio,
+						  h.fecha_fin,
+						  i.titulo_estudio,
+						  i.nombre_institucion,
+						  j.fecha_finalizacion,
+						  l.titulo_certificado,
+						  l.institucion_certificado,
+						  l.fecha_finalizacion,
+						  k.nombre_grado,
+						  h.descripcion_puesto,
+                    c.telefono_fijo,
+                    c.telefono_movil,
+                    c.correo_curriculum,
+                    c.imagen_aspirante
+                FROM 
+                    curriculum_aspirantes c
+                    JOIN aspirantes a ON c.id_aspirante = a.id_aspirante
+                    JOIN idiomas_aspirantes b ON c.id_curriculum = b.id_curriculum
+                    JOIN idiomas d ON b.id_idioma = d.id_idioma
+						  JOIN habilidades_aspirantes e ON  c.id_curriculum = e.id_curriculum
+                    JOIN habilidades f ON e.id_habilidad  = f.id_habilidad
+                    JOIN referencias_aspirantes g ON c.id_curriculum = g.id_curriculum
+                    JOIN experiencias_aspirantes h ON c.id_curriculum = h.id_curriculum
+                    JOIN estudios_aspirantes i ON c.id_curriculum = i.id_curriculum
+                    JOIN certificados_aspirantes j ON c.id_curriculum = j.id_curriculum 
+                    JOIN grados_academicos k ON i.id_grado = k.id_grado
+                    JOIN certificados_aspirantes l ON c.id_curriculum = l.id_curriculum
+                WHERE 
+                    c.id_curriculum = ?
+                    ';
+        $params = array($this->id);
+        return Database::getRows($sql, $params);
+    }
+
     public function readOneDataExperiencias()
     {
         $sql = 'SELECT ea.*, al.nombre_area, re.nombre_rubro
+        
                 FROM experiencias_aspirantes ea
                 JOIN areas_laborales al ON ea.id_area = al.id_area
                 JOIN rubros_empresas re ON ea.id_rubro = re.id_rubro
@@ -753,20 +1028,19 @@ class CurriculumHandler
 
     public function readOneDataEstudios()
     {
-        $sql = "SELECT es.*, ga.nombre_grado, ins.nombre_institucion,
-               CASE 
-                   WHEN es.fecha_finalizacion IS NULL THEN 'En curso'
-                   WHEN es.fecha_finalizacion <= CURDATE() THEN 'Egresado'
-                   ELSE 'No egresado'
-               END AS estado_egreso
-                FROM estudios_aspirantes es
-                JOIN grados_academicos ga ON es.id_grado = ga.id_grado
-                LEFT JOIN instituciones ins ON es.id_institucion = ins.id_institucion
-                WHERE es.id_curriculum = ?;";
+        $sql = "SELECT es.titulo_estudio, es.fecha_finalizacion, es.id_estudio, es.id_grado, es.id_institucion, es.id_curriculum,  ga.nombre_grado, es.nombre_institucion AS otra_institucion ,ins.nombre_institucion AS institucion_estudio
+        FROM 
+            estudios_aspirantes es
+        JOIN 
+            grados_academicos ga ON es.id_grado = ga.id_grado
+        LEFT JOIN 
+            instituciones ins ON es.id_institucion = ins.id_institucion
+        WHERE 
+            es.id_curriculum =?";
         $params = array($this->id);
         return Database::getRows($sql, $params);
     }
-  
+
     public function updateRow()
     {
         $sql = 'UPDATE aspirantes a
@@ -786,9 +1060,18 @@ class CurriculumHandler
                 DELETE FROM idiomas_aspirantes WHERE id_curriculum = @id_curriculum;
                 DELETE FROM habilidades_aspirantes WHERE id_curriculum = @id_curriculum;
                 DELETE FROM referencias_aspirantes WHERE id_curriculum = @id_curriculum;
-                
                 DELETE FROM curriculum_aspirantes WHERE id_curriculum = @id_curriculum;";
         $params = array($this->id);
         return Database::executeRow($sql, $params);
+    }
+
+    public function readAspirantes()
+    {
+        // Se establece la estructura de la sentencia.
+        $sql = 'SELECT aspirantes.id_aspirante, nombre_aspirante, apellido_aspirante, correo_aspirante
+	            FROM aspirantes
+	            WHERE NOT EXISTS (SELECT 1 FROM curriculum_aspirantes WHERE curriculum_aspirantes.id_aspirante = aspirantes.id_aspirante);';
+        // Se ejecuta el query y se retorna el conjunto de datos.
+        return Database::getRows($sql);
     }
 }

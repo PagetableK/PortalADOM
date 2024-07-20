@@ -4,6 +4,10 @@ const API_USUARIO = 'services/private/administradores_service.php';
 const FORM_LOGIN = document.getElementById('formLogin');
 
 document.addEventListener('DOMContentLoaded', async () => {
+    // Se verifica que la ruta actual sea el archivo index.html.
+    if (location.href != 'http://localhost/portaladom/views/private/index.html') {
+        location.href = 'index.html';
+    }
     // Llamada a la función para validar sesiones activas.
     cargarPlantilla();
 });
@@ -20,9 +24,9 @@ FORM_LOGIN.addEventListener('submit', async (event) => {
     // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
     if (DATA.status) {
         sweetAlert(1, DATA.message, true, 'inicio.html');
-    } 
+    }
     // Si se muestra el error se ejecuta el código.
-    else if(DATA.error == "Su cuenta ha sido desactivada por un administrador") {
+    else if (DATA.error == "Su cuenta ha sido desactivada por un administrador") {
         sweetAlert(3, DATA.error, false);
     }
     // Si la respuesta no es satisfactoria se muestra el error.

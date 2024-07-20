@@ -97,13 +97,23 @@ const fillTable = async (form = null) => {
     if (DATA.status) {
         // Se recorre el conjunto de registros fila por fila.
         DATA.dataset.forEach(row => {
+
+            let nombreCompleto = row.NOMBRE + ' ' + row.APELLIDO;
+
+            let nombreArray = nombreCompleto.split(" ");
+        
+            let nombreCapitalizado = "";
+        
+            for(var i = 0; i < nombreArray.length; i++){
+        
+                nombreCapitalizado += " "+nombreArray[i].charAt(0).toUpperCase() + nombreArray[i].substring(1);
+            }
             // Se crean y concatenan las filas de la tabla con los datos de cada registro.
             TABLE_BODY.innerHTML += `
                 <tr class="${getRowBackgroundColor(row.ESTADO)}">
-                    <td>${row.NOMBRE}</td>
-                    <td>${row.APELLIDO}</td>
+                    <td>${nombreCapitalizado}</td>
                     <td>${row.CORREO}</td>
-                    <td>${row.FECHA}</td>
+                    <td>${formatDate(row.FECHA)}</td>
                     <td>${row.GENERO}</td>
                     <td class="${getRowColor(row.ESTADO)}">${row.ESTADO}</td>
                     <td>
@@ -123,6 +133,22 @@ const fillTable = async (form = null) => {
     } else {
         sweetAlert(3, DATA.error, true);
     }
+}
+
+function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + (d.getDate() + 1),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if(day == 32)
+        day -= 1;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [month, day, year].join('/');
 }
 
 const lista_datos = [
