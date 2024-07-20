@@ -171,7 +171,8 @@ const openReport = async () => {
             doc.setFont('Times', 'bold');
             doc.setFontSize(28);
             doc.setTextColor(...secondaryColor);
-            doc.text(nombreCapitalizado, 70, 20, {maxWidth: 140});
+            doc.text(rowCurriculum['NOMBRE'], 70, 15, {maxWidth: 140});
+            doc.text(nombreCapitalizado, 70, 15, {maxWidth: 140});
             doc.setFontSize(16);
             doc.setTextColor(0, 0, 0);
 
@@ -187,13 +188,13 @@ const openReport = async () => {
             doc.setFontSize(10);
             doc.setTextColor(0, 0, 0);
             const contactFields = [
-                rowCurriculum['correo_aspirante'],
+                rowCurriculum['correo_curriculum'],
                 `(+503) ${rowCurriculum['telefono_movil']}`
             ];
             let yPositionC = 70;
             contactFields.forEach(field => {
                 doc.text(field, 10, yPositionC);
-                yPositionC += 6;
+                yPositionC += 8;
             });
 
             // Añadir sección de idiomas
@@ -207,7 +208,7 @@ const openReport = async () => {
                 doc.setTextColor(...secondaryColor);
                 doc.text('IDIOMAS', 10, yPositionC + 10);
                 doc.line(10, yPositionC + 12, 50, yPositionC + 12);
-
+                doc.setFont('Times', 'normal');
                 doc.setFontSize(10);
                 doc.setTextColor(0, 0, 0);
 
@@ -219,7 +220,7 @@ const openReport = async () => {
                     const nivelIdioma = idioma['nivel_idioma'];
 
                     if (nombreIdioma && nivelIdioma && !idiomasMostrados.has(nombreIdioma)) {
-                        const field = `. ${nombreIdioma}: ${nivelIdioma}`;
+                        const field = `- ${nombreIdioma}: ${nivelIdioma}`;
                         const lines = doc.splitTextToSize(field, 50);
                         lines.forEach(line => {
                             if (yPositionIdiomas <= 297) {
@@ -232,10 +233,8 @@ const openReport = async () => {
                 });
 
                 // Actualizar yPositionC al final de la sección de idiomas
-                yPositionC = yPositionIdiomas + 10;
+                yPositionC = yPositionIdiomas + 5;
             }
-
-            yPositionC = yPositionC + 10;
 
             // Añadir sección de habilidades debajo de los idiomas
             const primaryColorRectWidth = 50; // Ancho del rectángulo azul claro
@@ -263,7 +262,7 @@ const openReport = async () => {
                 let yPositionHabilidades = yPositionC + 10;
 
                 habilidades.forEach(habilidad => {
-                    const habilidadString = `. ${habilidad['nombre']}: ${habilidad['nivel']}`;
+                    const habilidadString = `- ${habilidad['nombre']}: ${habilidad['nivel']}`;
                     if (habilidad['nombre'] && habilidad['nivel'] && !habilidadesMostradas.has(habilidadString)) {
                         const lines = doc.splitTextToSize(habilidadString, primaryColorRectWidth - 10); // Ajustar al ancho del rectángulo
                         lines.forEach(line => {
@@ -285,7 +284,7 @@ const openReport = async () => {
             dataCurriculum.dataset.forEach(item => {
                 if (item['id_curriculum'] === rowCurriculum['id_curriculum'] &&
                     item['APELLIDO'] && item['puesto_trabajo'] && item['telefono_referencia']) {
-                    const referencia = `. ${item['APELLIDO']},\n${item['puesto_trabajo']},\n(+503) ${item['telefono_referencia']}`;
+                    const referencia = `- ${item['APELLIDO']},\n${item['puesto_trabajo']},\n(+503) ${item['telefono_referencia']}`;
                     referencias.add(referencia);
                 }
             });
@@ -320,7 +319,7 @@ const openReport = async () => {
 
 
 
-            let yPositionV = 50;
+            let yPositionV = 40;
             const allExperiencias = dataCurriculum.dataset.filter(item =>
                 item['id_curriculum'] === rowCurriculum['id_curriculum'] &&
                 item['nombre_cargo'] &&
@@ -335,15 +334,14 @@ const openReport = async () => {
                 };
             
                 return {
-                    title: `${item['nombre_cargo']}`,
-                    company: `${item['nombre_empresa']} | ${formatDate(item['fecha_inicio'])} - ${item['fecha_fin'] ? formatDate(item['fecha_fin']) : 'Trabajo actual'}`,
+                    title: `- ${item['nombre_cargo']}, ${item['nombre_empresa']} | ${formatDate(item['fecha_inicio'])} - ${item['fecha_fin'] ? formatDate(item['fecha_fin']) : 'Trabajo actual'}` ,
                     details: `${item['descripcion_puesto']}`
                 };
             });
             
             
 
-            if (allExperiencias.length > 0 && allExperiencias.some(exp => exp.title && exp.company && exp.details)) {
+            if (allExperiencias.length > 0 && allExperiencias.some(exp => exp.title && exp.details)) {
 
                 doc.setFont('Times', 'bold');
                 doc.setFontSize(12);
@@ -359,25 +357,25 @@ const openReport = async () => {
                 let expY = yPositionV + 8;
 
                 allExperiencias.forEach(exp => {
-                    const experienciaString = `${exp.title} ${exp.company} ${exp.details}`;
+                    const experienciaString = `${exp.title} ${exp.details}`;
                     if (!experienciasSet.has(experienciaString)) {
                         doc.setFont('Times', 'normal');
-                        doc.text(exp.title, 70, expY);
-                        doc.text(exp.company, 70, expY + 6);
-                        expY += 12;
+                        doc.text(exp.title, 70, expY, {maxWidth :140});
+                        doc.setFont('Times', 'normal');
+                        expY += 9;
 
                         const detalles = exp.details.split('\n');
                         detalles.forEach(detail => {
-                            doc.text(`- ${detail}`, 70, expY, {maxWidth :140});
-                            expY += 6;
+                            doc.text(`${detail}`, 70, expY, {maxWidth :140});
+                            expY += 5;
                         });
 
-                        expY += 6; // Espacio adicional entre experiencias
+                        expY += 5; // Espacio adicional entre experiencias
                         experienciasSet.add(experienciaString);
 
                     }
                 });
-                yPositionV = Math.max(yPositionV, expY + 10);
+                yPositionV = Math.max(yPositionV, expY );
             }
 
 
@@ -418,7 +416,7 @@ const openReport = async () => {
                 });
 
                 // Actualizar yPositionV al final de la sección de formación
-                yPositionV = Math.max(yPositionV, formY + 10);
+                yPositionV = Math.max(yPositionV, formY + 3);
             }
 
 
