@@ -216,7 +216,7 @@ class AspirantesHandler
 
     public function verificarCorreo()
     {
-        $sql = 'SELECT id_aspirante, correo_aspirante 
+        $sql = 'SELECT id_aspirante, correo_aspirante, nombre_aspirante, apellido_aspirante
                 FROM aspirantes 
                 WHERE correo_aspirante = ?';
         $params = array($this->correo);

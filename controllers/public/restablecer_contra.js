@@ -9,6 +9,12 @@ const CONTENEDOR_CORREO = document.getElementById('contenedorCorreo'), CONTENEDO
 
 let codigo = '', id = 0;
 
+(function () {
+    emailjs.init({
+        publicKey: "3qr6YQfs6w83ANZna",
+    });
+})();
+
 FORM_CORREO.addEventListener('submit', async (e) => {
 
     e.preventDefault();
@@ -37,10 +43,32 @@ FORM_CORREO.addEventListener('submit', async (e) => {
         // Se asigna el código a la variable.
         codigo = resultado;
 
+        let nombres = DATA.dataset.nombre_aspirante;
+
+        let apellidos = DATA.dataset.apellido_aspirante;
+
+        let nombreArray = nombres.split(" ");
+
+        let apellidoArray = apellidos.split(" ");
+
+        let nombreCapitalizado = "";
+
+        let apellidoCapitalizado = "";
+
+        for (var i = 0; i < nombreArray.length; i++) {
+
+            nombreCapitalizado += " " + nombreArray[i].charAt(0).toUpperCase() + nombreArray[i].substring(1);
+        }
+
+        for (var i = 0; i < apellidoArray.length; i++) {
+
+            apellidoCapitalizado += " " + apellidoArray[i].charAt(0).toUpperCase() + apellidoArray[i].substring(1);
+        }
+
         let params = {
             correo: FORM_CORREO['correo'].value.trim(),
             code: codigo,
-            to_name: DATA.dataset.correo_aspirante
+            to_name: nombreCapitalizado + " " + apellidoCapitalizado
         }
 
         emailjs.send('service_vzkz32o', 'template_9ew81bd', params).then(sweetAlert(1, "Código de recuperación enviado, revise su bandeja de entrada", false));
