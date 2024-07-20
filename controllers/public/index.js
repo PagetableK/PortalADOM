@@ -5,7 +5,7 @@ const FORM_LOGIN = document.getElementById('formLogin');
 
 document.addEventListener('DOMContentLoaded', async () => {
     // Se verifica que la ruta actual sea el archivo index.html.
-    if(location.href != 'http://localhost/portaladom/views/public/index.html'){
+    if(location.href.substring(41) != 'index.html'){
         location.href = 'index.html';
     }
     // Llamada a la función para validar sesiones activas.
