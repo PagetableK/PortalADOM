@@ -1,5 +1,3 @@
-
-
 	DROP DATABASE IF EXISTS dbadom;
 	
 	CREATE DATABASE IF NOT EXISTS dbadom;
@@ -633,5 +631,5 @@ LEFT JOIN
     habilidades_aspirantes ha ON c.id_curriculum = ha.id_curriculum
 LEFT JOIN 
     habilidades h ON ha.id_habilidad = h.id_habilidad
-$$ 
-DELIMITER ;
+	$$
+	DELIMITER ;

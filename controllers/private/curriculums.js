@@ -15,6 +15,7 @@ const SAVE_FORM = document.getElementById('saveForm'),
     NOMBRE_ASPIRANTE = document.getElementById('nombreAspirante');
 
 const CURRICULUM_MODAL = new bootstrap.Modal('#curriculumModalViewer'),
+    CONTENEDOR_INFO_ASPIRANTE = document.getElementById('contenedorInfoAspirante'),
     CM_IMAGEN = document.getElementById("curriculumModalImagen"),
     CM_NOMBRE = document.getElementById("curriculumModalNombre"),
     CM_EDAD = document.getElementById("curriculumModalEdad"),
@@ -22,10 +23,8 @@ const CURRICULUM_MODAL = new bootstrap.Modal('#curriculumModalViewer'),
     CM_TELEFONO_FIJO = document.getElementById("curriculumModalTelefonoFijo"),
     CM_TELEFONO_MOVIL = document.getElementById("curriculumModalTelefono"),
     CM_EMAIL = document.getElementById("curriculumModalEmail"),
-
     CM_TB_EXPERIENCIA = document.getElementById("curriculumModalExperienciaLaboral"),
     CM_TB_ESTUDIOS = document.getElementById("curriculumModalEstudios");
-
     CM_ELIMINAR = document.getElementById("cmEliminarBoton");
 let idCurriculum = 0;
 
@@ -144,7 +143,6 @@ function formatoFecha(dateString){
 }
 
 const openVerCurriculum = async (id) => {
-
     idCurriculum = id;
     const FORM = new FormData();
     FORM.append('idCurriculum', id);
@@ -168,7 +166,16 @@ const openVerCurriculum = async (id) => {
         CM_EDAD.textContent = ROW.Edad;
         CM_GENERO.textContent = ROW.genero_aspirante;
         CM_TELEFONO_MOVIL.textContent = ROW.telefono_movil;
-        CM_TELEFONO_FIJO.textContent = ROW.telefono_fijo;
+
+        if(ROW.telefono_fijo != null){
+
+            CM_TELEFONO_FIJO.classList.remove('d-none');
+            CM_TELEFONO_FIJO.textContent = ROW.telefono_fijo;
+        } else{
+
+            CM_TELEFONO_FIJO.classList.add('d-none');
+        }
+
         document.getElementById("cmTelefonoFijoContainer").classList.remove("d-none")
         CM_EMAIL.textContent = ROW.correo_curriculum;
 
@@ -187,7 +194,7 @@ const openVerCurriculum = async (id) => {
                 }
                 else{
                     
-                    final = `${formatoFecha(row.fecha_inicio)} hasta ${formatoFecha(row.fecha_fin)}`
+                    final = `${formatoFecha(row.fecha_inicio)} - ${formatoFecha(row.fecha_fin)}`
                 }
                 CM_TB_EXPERIENCIA.innerHTML += `
                 <div> 
@@ -208,7 +215,7 @@ if (DATAS.status) {
     for (const row of DATAS.dataset) {
         let final = row.fecha_finalizacion;
         if (final == null) {
-            final = "En progreso";
+            final = "Cursando";
         } else {
             final = `${row.fecha_finalizacion}`;
         }
@@ -220,8 +227,7 @@ if (DATAS.status) {
         CM_TB_ESTUDIOS.innerHTML += `
         <div>
             <p><strong>${nombreInstitucion}</strong></p>
-            <p>${row.estado_egreso} - ${row.titulo_estudio}</p>
-            <p>${final}</p>
+            <p>${row.titulo_estudio} - ${final}</p>
         </div>`;
     }
 }
@@ -286,7 +292,7 @@ const openReport = async (id) => {
     console.log(id);
 
     // Fetch data from your API or data source
-    const dataCurriculum = await fetchData(CURRICULUM_API, 'readCurriculum', FORM);
+    const dataCurriculum = await fetchData(CURRICULUM_API, 'readCurriculums', FORM);
 
     if (dataCurriculum.status) {
 

@@ -225,9 +225,8 @@ class AspirantesHandler
 
     public function restablecerContra($contra)
     {
-        echo $contra . $this->id;
         $clave = password_hash($contra, PASSWORD_DEFAULT);
-        echo $clave;
+        
         $sql = 'UPDATE aspirantes
                 SET clave_aspirante = ? 
                 WHERE id_aspirante = ?';
