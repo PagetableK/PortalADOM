@@ -92,6 +92,16 @@ class AspirantesData extends AspirantesHandler
         }
     }
 
+    public function setVerificarCorreo($value)
+    {
+        if (!Validator::validateEmail($value)) {
+            $this->info_error = 'El correo no es válido';
+            return false;
+        } else {
+            $this->correo = $value;
+            return true;
+        }
+    }
   
     // Esta función permite validar el campo CLAVE_ASPIRANTE.
     public function setClave($valor)

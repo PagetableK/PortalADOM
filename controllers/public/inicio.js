@@ -18,6 +18,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Se muestra el mensaje.
         BIENVENIDA.textContent = "¡Bienvenido";
     }
+
+    let nombreCompleto = INFO[0];
+
+    let nombreArray = nombreCompleto.split(" ");
+
+    let nombreCapitalizado = "";
+
+    for(var i = 0; i < nombreArray.length; i++){
+
+        nombreCapitalizado += " "+nombreArray[i].charAt(0).toUpperCase() + nombreArray[i].substring(1);
+    }
     // Se carga el nombre del usuario en el elemento de texto.
-    NOMBRE_USUARIO.textContent = INFO[0];
+    NOMBRE_USUARIO.textContent = nombreCapitalizado;
 });

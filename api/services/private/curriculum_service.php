@@ -14,28 +14,14 @@ if (isset($_GET['action'])) {
     if (isset($_SESSION['idAdministrador'])) {
         // Se compara la acción a realizar cuando un administrador ha iniciado sesión.
         switch ($_GET['action']) {
-                // case 'searchRows':
-                //     if (!Validator::validateSearch($_POST['search'])) {
-                //         $result['error'] = Validator::getSearchError();
-                //     } elseif ($result['dataset'] = $curriculum->searchRows()) {
-                //         $result['status'] = 1;
-                //         $result['message'] = 'Existen ' . count($result['dataset']) . ' coincidencias';
-                //     } else {
-                //         $result['error'] = 'No hay coincidencias';
-                //     }
-                //     break;
-            case 'createRow':
-                $_POST = Validator::validateForm($_POST);
-                if (
-                    !$curriculum->setNombre($_POST['nombreAspirante']) or
-                    !$curriculum->setIdAspirante($_POST['idAspirante'])
-                ) {
-                    $result['error'] = $area->getDataError();
-                } elseif ($area->createRow()) {
+            case 'searchRows':
+                if (!Validator::validateSearch($_POST['search'])) {
+                    $result['error'] = Validator::getSearchError();
+                } elseif ($result['dataset'] = $curriculum->searchRows()) {
                     $result['status'] = 1;
-                    $result['message'] = 'aspirante agregada correctamente';
+                    $result['message'] = 'Existen ' . count($result['dataset']) . ' coincidencias';
                 } else {
-                    $result['error'] = 'Ocurrió un problema al crear la area';
+                    $result['error'] = 'No hay coincidencias';
                 }
                 break;
 
@@ -67,7 +53,15 @@ if (isset($_GET['action'])) {
                     $result['error'] = 'aspirante inexistente';
                 }
                 break;
-
+            case 'readCurriculums':
+                if (!$curriculum->setId($_POST['idCurriculum'])) {
+                    $result['error'] = $curriculum->getDataError();
+                } elseif ($result['dataset'] = $curriculum->readCurriculums()) {
+                    $result['status'] = 1;
+                } else {
+                    $result['error'] = 'curriculum inexistente';
+                }
+                break;
             case 'readOneDataExperiencias':
                 if (!$curriculum->setId($_POST['idCurriculum'])) {
                     $result['error'] = $curriculum->getDataError();
@@ -85,21 +79,6 @@ if (isset($_GET['action'])) {
                     $result['status'] = 1;
                 } else {
                     $result['error'] = 'aspirante inexistente';
-                }
-                break;
-
-            case 'updateRow':
-                $_POST = Validator::validateForm($_POST);
-                if (
-                    !$curriculum->setIdAspirante($_POST['idAspirante']) or
-                    !$curriculum->setNombre($_POST['nombreAspirante'])
-                ) {
-                    $result['error'] = $curriculum->getDataError();
-                } elseif ($curriculum->updateRow()) {
-                    $result['status'] = 1;
-                    $result['message'] = 'curriculum modificada correctamente';
-                } else {
-                    $result['error'] = 'Ocurrió un problema al modificar la area';
                 }
                 break;
 
@@ -262,6 +241,27 @@ if (isset($_GET['action'])) {
                 }
                 break;
 
+            case 'actualizarYAsignarCurriculum':
+                $_POST = Validator::validateForm($_POST);
+                if (
+                    !$curriculum->setId($_POST['idCurriculum']) or
+                    !$curriculum->setImagen($_FILES['archivoImagen'], $_POST['booleanImagen']) or
+                    !$curriculum->setTelefonoMovil($_POST['telefonoMovil'], 1) or
+                    !$curriculum->setTelefonoFijo($_POST['telefonoFijo'], 1) or
+                    !$curriculum->setCorreo($_POST['correo'], 1)
+                ) {
+                    $result['error'] = $curriculum->getDataError();
+                } elseif (!$_POST['booleanImagen'] and $curriculum->actualizarYAsignarCurriculum()) {
+                    // Se asigna el estado del archivo después de insertar.
+                    $result['fileStatus'] = Validator::saveFile($_FILES['archivoImagen'], $curriculum::RUTA_IMAGEN);
+                    $result['status'] = 1;
+                } elseif ($curriculum->actualizarYAsignarCurriculum()) {
+                    $result['status'] = 1;
+                } else {
+                    $result['error'] = 'Ocurrió un error al actualizar el currículum';
+                }
+                break;
+
             case 'getIdCv':
                 if (!$curriculum->setIdAspirante($_POST['idAspirante'])) {
                     $result['error'] = $curriculum->getDataError();
@@ -271,7 +271,7 @@ if (isset($_GET['action'])) {
                     $result['error'] = 'Ocurrió un error al obtener el id del currículum';
                 }
                 break;
-                
+
             case 'agregarEstudio':
                 // Se eliminan los espacios en blancos de los valores dentro del array.
                 $_POST = Validator::validateForm($_POST);

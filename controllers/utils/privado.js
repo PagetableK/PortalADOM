@@ -161,7 +161,8 @@ const cargarPlantilla = async () => {
             else if (location.pathname.endsWith('administradores.html')) {
                 TITULO.textContent = "Administradores";
             }
-
+            // Se devuelven el nombre y apellido del administrador.
+            return [DATA.nombre, DATA.apellido];    
         } else {
             // De lo contrario se muestra el error y se redirige al inicio de sesión.
             sweetAlert(3, DATA.error, false, 'index.html');

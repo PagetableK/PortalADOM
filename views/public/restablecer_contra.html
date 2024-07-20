@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Metadatos de la página web -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Título del documento -->
+    <title>Recuperar contraseña</title>
+    <!-- Metadatos de la página web -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Título del documento -->
+    <title>Inicie sesión</title>
+    <!-- Se configura el ícono de la pestaña -->
+    <link type="image/png" rel="icon" href="/PortalADOM/resources/img/logo.png">
+    <!-- Llamada al framework de diseño -->
+    <link href="../../resources/css/utils/bootstrap.min.css" rel="stylesheet">
+    <!-- Llamada a los íconos del framework -->
+    <link href="../../resources/css/utils/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Llamada al css de la página -->
+    <link href="../../resources/css/public/restablecer_contra.css" rel="stylesheet">
+</head>
+
+<body>
+    <main class="container-fluid d-flex align-items-stretch">
+        <div class="row d-flex align-items-stretch flex-fill" style="overflow-y: auto;" id="contenedorCorreo">
+            <div
+                class="left-side col-lg-6 d-flex align-items-center justify-content-center rounded-end-3 flex-column py-5">
+                <p class="fw-bold fs-1 text-light text-center">Ingrese su correo electrónico</p>
+                <p class="textoGrande text-light">@</p>
+            </div>
+            <div
+                class="right-side col-12 col-lg-6 d-flex flex-column justify-content-center align-items-center text-center">
+                <div id="contenedorFormCorreo" class="d-flex flex-column row-gap-3 px-md-5 w-75">
+                    <h4 class="fw-semibold">Ingrese el correo electrónico afiliado a su cuenta</h4>
+                    <form class="d-flex flex-column gap-2" id="formCorreo">
+                        <label for="correo" class="text-start fw-semibold">Correo electrónico</label>
+                        <input type="email" id="correo" name="correo" class="form-control" autocomplete="off" required>
+                        <button type="submit" class="fw-bold btn btn-dark">Verificar correo</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="row d-flex align-items-stretch flex-fill d-none" style="overflow-y: auto;" id="contenedorCodigo">
+            <div
+                class="left-side col-lg-6 d-flex align-items-center justify-content-center rounded-end-3 flex-column py-5">
+                <p class="fw-bold fs-1 text-light text-center">Ingrese el código enviado a su correo</p>
+                <img src="../../resources/img/paso_2.png">
+            </div>
+            <div
+                class="right-side col-12 col-lg-6 d-flex flex-column justify-content-center align-items-center text-center">
+                <div id="contenedorFormCodigo" class="d-flex flex-column row-gap-3 px-md-5 w-75">
+                    <h4 class="fw-semibold">Ingrese el código de verificación</h4>
+                    <form class="d-flex flex-column gap-2" id="formCodigo">
+                        <label for="codigo" class="text-start fw-semibold">Código</label>
+                        <input type="text" id="codigo" name="codigo" class="form-control" autocomplete="off" required>
+                        <button type="submit" class="fw-bold btn btn-dark">Verificar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="row d-flex align-items-stretch flex-fill d-none" style="overflow-y: auto;" id="contenedorContra">
+            <div
+                class="left-side col-lg-6 d-flex align-items-center justify-content-center rounded-end-3 flex-column py-5">
+                <p class="fw-bold fs-1 text-light text-center">Ingrese la nueva contraseña</p>
+                <img src="../../resources/img/paso_2.png">
+            </div>
+            <div
+                class="right-side col-12 col-lg-6 d-flex flex-column justify-content-center align-items-center text-center">
+                <div id="contenedorFormContra" class="d-flex flex-column row-gap-3 px-md-5 w-75">
+                    <h4 class="fw-semibold">Ingrese la nueva contraseña</h4>
+                    <form class="d-flex flex-column gap-2" id="formContra">
+                        <label for="contra" class="text-start fw-semibold">Nueva contraseña</label>
+                        <input type="text" id="contra" name="contra" class="form-control" autocomplete="off" required>
+                        <label for="contraRepetir" class="text-start fw-semibold">Repetir contraseña</label>
+                        <input type="text" id="contraRepetir" name="contraRepetir" class="form-control" autocomplete="off" required>
+                        <button type="submit" class="fw-bold btn btn-dark">Restablecer contraseña</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Mandar a llamar el framework de diseño -->
+    <script src="../../resources/js/bootstrap.bundle.min.js" type="text/javascript"></script>
+    <!-- Librería para enviar correo con código de verificación -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" type="text/javascript"></script>
+    <!-- Mandar a llamar la librería de alertas -->
+    <script src="../../resources/js/sweetalert.min.js" type="text/javascript"></script>
+    <!-- Llamada al controlador general de la aplicación -->
+    <script src="../../controllers/utils/componentes.js" type="text/javascript"></script>
+    <!-- Llamada al controlador general del sitio público -->
+    <script src="../../controllers/utils/publico.js" type="text/javascript"></script>
+    <!-- Llamada al controlador del inicio de sesión -->
+    <script src="../../controllers/public/restablecer_contra.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        (function () {
+            emailjs.init({
+                publicKey: "3qr6YQfs6w83ANZna",
+            });
+        })();
+    </script>
+</body>
+
+</html>
