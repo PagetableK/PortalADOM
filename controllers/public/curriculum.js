@@ -171,7 +171,6 @@ const openReport = async () => {
             doc.setFont('Times', 'bold');
             doc.setFontSize(28);
             doc.setTextColor(...secondaryColor);
-            doc.text(rowCurriculum['NOMBRE'], 70, 15, {maxWidth: 140});
             doc.text(nombreCapitalizado, 70, 15, {maxWidth: 140});
             doc.setFontSize(16);
             doc.setTextColor(0, 0, 0);
