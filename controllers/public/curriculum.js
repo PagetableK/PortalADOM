@@ -189,7 +189,8 @@ const openReport = async () => {
             doc.setTextColor(0, 0, 0);
             const contactFields = [
                 rowCurriculum['correo_curriculum'],
-                `(+503) ${rowCurriculum['telefono_movil']}`
+                `(+503) ${rowCurriculum['telefono_movil']}`,
+                rowCurriculum['telefono_fijo'] != null ? `(+503) ${rowCurriculum['telefono_fijo']}` : ""
             ];
             let yPositionC = 70;
             contactFields.forEach(field => {

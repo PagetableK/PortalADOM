@@ -16,6 +16,7 @@ const SAVE_FORM = document.getElementById('saveForm'),
 
 const CURRICULUM_MODAL = new bootstrap.Modal('#curriculumModalViewer'),
     CONTENEDOR_INFO_ASPIRANTE = document.getElementById('contenedorInfoAspirante'),
+    CONTENEDOR_EXPERIENCIAS = document.getElementById('contenedorExperiencias'),
     CM_IMAGEN = document.getElementById("curriculumModalImagen"),
     CM_NOMBRE = document.getElementById("curriculumModalNombre"),
     CM_EDAD = document.getElementById("curriculumModalEdad"),
@@ -97,13 +98,24 @@ const fillTable = async (form = null) => {
                 row.imagen_aspirante = "default.webp"
             }
 
+            let nombreCompleto = row.NOMBRE;
+
+            let nombreArray = nombreCompleto.split(" ");
+            
+            let nombreCapitalizado = "";
+            
+            for(var i = 0; i < nombreArray.length; i++){
+            
+                nombreCapitalizado += " "+nombreArray[i].charAt(0).toUpperCase() + nombreArray[i].substring(1);
+            }
+
             // Se crean y concatenan las filas de la tabla con los datos de cada registro.
             if (!addedIds.has(row.id_curriculum)) {
                 addedIds.add(row.id_curriculum);
             TABLE_BODY.innerHTML += `
                 <tr>
                     <td><img class="rounded-circle" src="${SERVER_URL}images/aspirantes/${row.IMAGEN}" height="50"></td>
-                    <td>${row.NOMBRE}</td>
+                    <td>${nombreCapitalizado}</td>
                     <td>${row.estudios}</td>
                     <td>${row.experiencias}</td>
                     <td>${row.idiomas}</td>
@@ -153,22 +165,33 @@ const openVerCurriculum = async (id) => {
         if(ROW.imagen_aspirante == null){
             CM_IMAGEN.src= SERVER_URL+"images/aspirantes/default.webp";
         }
-        CM_NOMBRE.textContent = ROW.nombre_aspirante +" "+ ROW.apellido_aspirante;
-        CM_EDAD.textContent = ROW.Edad;
-        CM_GENERO.textContent = ROW.genero_aspirante;
-        CM_TELEFONO_MOVIL.textContent = ROW.telefono_movil;
+
+        let nombreCompleto = ROW.nombre_aspirante + ' ' + ROW.apellido_aspirante;
+
+        let nombreArray = nombreCompleto.split(" ");
+        
+        let nombreCapitalizado = "";
+        
+        for(var i = 0; i < nombreArray.length; i++){
+        
+            nombreCapitalizado += " "+nombreArray[i].charAt(0).toUpperCase() + nombreArray[i].substring(1);
+        }
+
+        CM_NOMBRE.textContent = nombreCapitalizado;
+        CM_EDAD.textContent = "Edad: " +ROW.Edad + " años";
+        CM_GENERO.textContent = "Género: " + ROW.genero_aspirante;
+        CM_TELEFONO_MOVIL.textContent = "Teléfono móvil: " + ROW.telefono_movil;
 
         if(ROW.telefono_fijo != null){
 
             CM_TELEFONO_FIJO.classList.remove('d-none');
-            CM_TELEFONO_FIJO.textContent = ROW.telefono_fijo;
+            CM_TELEFONO_FIJO.textContent = "Teléfono fijo: " + ROW.telefono_fijo;
         } else{
 
             CM_TELEFONO_FIJO.classList.add('d-none');
         }
 
-        document.getElementById("cmTelefonoFijoContainer").classList.remove("d-none")
-        CM_EMAIL.textContent = ROW.correo_curriculum;
+        CM_EMAIL.textContent = "Correo: " + ROW.correo_curriculum;
 
         function formatoFecha(dateString) {
             const [year, month] = dateString.split('-');
@@ -181,11 +204,14 @@ const openVerCurriculum = async (id) => {
         const DATAE = await fetchData(CURRICULUM_API, 'readOneDataExperiencias', FORME);
         
         if (DATAE.status) {
+
+            CONTENEDOR_EXPERIENCIAS.classList.remove('d-none');
+            
             CM_TB_EXPERIENCIA.innerHTML = '';
             DATAE.dataset.forEach(row => {
                 var final;
                 if (row.fecha_fin == null) { 
-                    final = `Inicio en ${formatoFecha(row.fecha_inicio)} - En progreso`;
+                    final = `Inicio en ${formatoFecha(row.fecha_inicio)} - Trabajo actual`;
                 } else {
                     final = `${formatoFecha(row.fecha_inicio)} - ${formatoFecha(row.fecha_fin)}`;
                 }
@@ -196,7 +222,10 @@ const openVerCurriculum = async (id) => {
                     <p>${final}</p>
                 </div>`;
             });
-        }        
+        } else {
+
+            CONTENEDOR_EXPERIENCIAS.classList.add('d-none');
+        }
 
         const FORMS = new FormData();
 FORMS.append('idCurriculum', id);

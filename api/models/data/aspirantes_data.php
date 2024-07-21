@@ -52,7 +52,7 @@ class AspirantesData extends AspirantesHandler
     }
 
     // Esta función permite validar el campo APELLIDO_ASPIRANTE.
-    public function setApellido($valor, $min = 3, $max = 20)
+    public function setApellido($valor, $min = 3, $max = 50)
     {
         // Si la variable contiene caracteres que no son de tipo alfabético se devuelve el error.
         if (!Validator::validateAlphabetic($valor)) {

@@ -40,7 +40,7 @@ if (isset($_GET['action'])) {
                 } elseif ($result['dataset'] = $curriculum->readOne()) {
                     $result['status'] = 1;
                 } else {
-                    $result['error'] = 'aspirante inexistente';
+                    $result['error'] = 'Aspirante inexistente';
                 }
                 break;
 
@@ -50,7 +50,7 @@ if (isset($_GET['action'])) {
                 } elseif ($result['dataset'] = $curriculum->readOneData()) {
                     $result['status'] = 1;
                 } else {
-                    $result['error'] = 'aspirante inexistente';
+                    $result['error'] = 'Aspirante inexistente';
                 }
                 break;
             case 'readCurriculums':
@@ -59,7 +59,7 @@ if (isset($_GET['action'])) {
                 } elseif ($result['dataset'] = $curriculum->readCurriculums()) {
                     $result['status'] = 1;
                 } else {
-                    $result['error'] = 'curriculum inexistente';
+                    $result['error'] = 'Currículum inexistente';
                 }
                 break;
             case 'readOneDataExperiencias':
@@ -68,7 +68,7 @@ if (isset($_GET['action'])) {
                 } elseif ($result['dataset'] = $curriculum->readOneDataExperiencias()) {
                     $result['status'] = 1;
                 } else {
-                    $result['error'] = 'aspirante inexistente';
+                    $result['error'] = 'No se han agregado experiencias';
                 }
                 break;
 
@@ -78,7 +78,7 @@ if (isset($_GET['action'])) {
                 } elseif ($result['dataset'] = $curriculum->readOneDataEstudios()) {
                     $result['status'] = 1;
                 } else {
-                    $result['error'] = 'aspirante inexistente';
+                    $result['error'] = 'No se han agregado estudios';
                 }
                 break;
 
@@ -91,7 +91,7 @@ if (isset($_GET['action'])) {
                     $result['status'] = 1;
                     $result['message'] = 'curriculum eliminada correctamente';
                 } else {
-                    $result['error'] = 'Ocurrió un problema al eliminar la area';
+                    $result['error'] = 'Ocurrió un problema al eliminar el currículum';
                 }
                 break;
 
