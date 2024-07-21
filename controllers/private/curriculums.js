@@ -133,15 +133,6 @@ const openCreate = () => {
     // Se redirige hacia la interfaz.
     location.href = "gestionar_curriculum.html";
 }
-
-function formatoFecha(dateString){
-    const [year, month] = dateString.split('-');
-                    
-    const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'  ];
-
-    return `${meses[month - 1]}, ${year}`;
-}
-
 const openVerCurriculum = async (id) => {
     idCurriculum = id;
     const FORM = new FormData();
@@ -179,31 +170,33 @@ const openVerCurriculum = async (id) => {
         document.getElementById("cmTelefonoFijoContainer").classList.remove("d-none")
         CM_EMAIL.textContent = ROW.correo_curriculum;
 
-
+        function formatoFecha(dateString) {
+            const [year, month] = dateString.split('-');
+            const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+            return `${meses[month - 1]}, ${year}`;
+        }
+        
         const FORME = new FormData();
         FORME.append('idCurriculum', id);
         const DATAE = await fetchData(CURRICULUM_API, 'readOneDataExperiencias', FORME);
         
-        if(DATAE.status){
-            CM_TB_EXPERIENCIA.innerHTML= '';
+        if (DATAE.status) {
+            CM_TB_EXPERIENCIA.innerHTML = '';
             DATAE.dataset.forEach(row => {
-                var final = row.fecha_fin
-            if(final == null)
-                { 
-                    final = "inicio en " + row.fecha_inicio + " En progreso"
-                }
-                else{
-                    
-                    final = `${formatoFecha(row.fecha_inicio)} - ${formatoFecha(row.fecha_fin)}`
+                var final;
+                if (row.fecha_fin == null) { 
+                    final = `Inicio en ${formatoFecha(row.fecha_inicio)} - En progreso`;
+                } else {
+                    final = `${formatoFecha(row.fecha_inicio)} - ${formatoFecha(row.fecha_fin)}`;
                 }
                 CM_TB_EXPERIENCIA.innerHTML += `
                 <div> 
-                <p><strong>${row.nombre_empresa} - ${row.nombre_cargo}</strong></p>
-                <p>Rubro de la empresa: ${row.nombre_rubro}</p>
-                <p>${final}</p>
+                    <p><strong>${row.nombre_empresa} - ${row.nombre_cargo}</strong></p>
+                    <p>Rubro de la empresa: ${row.nombre_rubro}</p>
+                    <p>${final}</p>
                 </div>`;
-            })
-        }
+            });
+        }        
 
         const FORMS = new FormData();
 FORMS.append('idCurriculum', id);

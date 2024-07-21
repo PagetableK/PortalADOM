@@ -967,40 +967,39 @@ class CurriculumHandler
 
     public function readCurriculums()
     {
-        $sql = 'SELECT 
-						 concat(a.nombre_aspirante, " ",a.apellido_aspirante) AS "NOMBRE",
+         $sql = 'SELECT 
+                    concat(a.nombre_aspirante, " ", a.apellido_aspirante) AS "NOMBRE",
                     TIMESTAMPDIFF(YEAR, a.fecha_nacimiento, CURDATE()) AS Edad,
                     a.genero_aspirante,
                     b.nivel_idioma,
                     d.nombre_idioma,
                     c.correo_curriculum,
-						  e.nivel_habilidad,
-						  f.nombre_habilidad,    
-						  g.puesto_trabajo,
-						  g.telefono_referencia,
-						  h.nombre_cargo,
-						  h.nombre_empresa,
-						  h.fecha_inicio,
-						  h.fecha_fin,
-						  i.titulo_estudio,
-						  i.nombre_institucion,
-						  j.fecha_finalizacion,
-						  l.titulo_certificado,
-						  l.institucion_certificado,
-						  l.fecha_finalizacion,
-						  k.nombre_grado,
-						  h.descripcion_puesto,
+                    e.nivel_habilidad,
+                    f.nombre_habilidad,    
+                    g.puesto_trabajo,
+                    g.telefono_referencia,
+                    h.nombre_cargo,
+                    h.nombre_empresa,
+                    h.fecha_inicio,
+                    h.fecha_fin,
+                    i.titulo_estudio,
+                    i.nombre_institucion,
+                    j.fecha_finalizacion,
+                    l.titulo_certificado,
+                    l.institucion_certificado,
+                    l.fecha_finalizacion,
+                    k.nombre_grado,
+                    h.descripcion_puesto,
                     c.telefono_fijo,
                     c.telefono_movil,
-                    c.correo_curriculum,
                     c.imagen_aspirante
                 FROM 
                     curriculum_aspirantes c
                     JOIN aspirantes a ON c.id_aspirante = a.id_aspirante
                     JOIN idiomas_aspirantes b ON c.id_curriculum = b.id_curriculum
                     JOIN idiomas d ON b.id_idioma = d.id_idioma
-						  JOIN habilidades_aspirantes e ON  c.id_curriculum = e.id_curriculum
-                    JOIN habilidades f ON e.id_habilidad  = f.id_habilidad
+                    JOIN habilidades_aspirantes e ON c.id_curriculum = e.id_curriculum
+                    JOIN habilidades f ON e.id_habilidad = f.id_habilidad
                     JOIN referencias_aspirantes g ON c.id_curriculum = g.id_curriculum
                     JOIN experiencias_aspirantes h ON c.id_curriculum = h.id_curriculum
                     JOIN estudios_aspirantes i ON c.id_curriculum = i.id_curriculum
@@ -1008,8 +1007,7 @@ class CurriculumHandler
                     JOIN grados_academicos k ON i.id_grado = k.id_grado
                     JOIN certificados_aspirantes l ON c.id_curriculum = l.id_curriculum
                 WHERE 
-                    c.id_curriculum = ?
-                    ';
+                    c.id_curriculum = ?';
         $params = array($this->id);
         return Database::getRows($sql, $params);
     }
