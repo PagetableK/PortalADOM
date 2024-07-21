@@ -209,8 +209,29 @@ class AspirantesHandler
     public function reallCurriculum()
     {
         $sql = 'SELECT * FROM vista_tabla_curriculum
-        WHERE ID LIKE ?';
+        WHERE ID = ?';
         $params = array($_SESSION['idAspirante']);
         return Database::getRows($sql, $params);
+    }
+
+    public function verificarCorreo()
+    {
+        $sql = 'SELECT id_aspirante, correo_aspirante, nombre_aspirante, apellido_aspirante
+                FROM aspirantes 
+                WHERE correo_aspirante = ?';
+        $params = array($this->correo);
+        return Database::getRow($sql, $params);
+    }
+
+    public function restablecerContra($contra)
+    {
+        $clave = password_hash($contra, PASSWORD_DEFAULT);
+        
+        $sql = 'UPDATE aspirantes
+                SET clave_aspirante = ? 
+                WHERE id_aspirante = ?';
+
+        $params = array($clave, $this->id);
+        return Database::executeRow($sql, $params);
     }
 }

@@ -4,6 +4,10 @@ const API_USUARIO = 'services/public/aspirantes_service.php';
 const FORM_LOGIN = document.getElementById('formLogin');
 
 document.addEventListener('DOMContentLoaded', async () => {
+    // Se verifica que la ruta actual sea el archivo index.html.
+    if(location.href.substring(41) != 'index.html'){
+        location.href = 'index.html';
+    }
     // Llamada a la función para validar sesiones activas.
     cargarPlantilla();
 });
@@ -23,6 +27,10 @@ FORM_LOGIN.addEventListener('submit', async (event) => {
     } 
     // Si se muestra el error se ejecuta el código.
     else if(DATA.error == "Su cuenta ha sido desactivada") {
+        sweetAlert(3, DATA.error, false);
+    }
+    // Si se muestra el error se ejecuta el código.
+    else if(DATA.error == "Credenciales incorrectas") {
         sweetAlert(3, DATA.error, false);
     }
     // Si la respuesta no es satisfactoria se muestra el error.

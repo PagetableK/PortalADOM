@@ -1,6 +1,6 @@
 
 // Constante para completar la ruta de la API.
-const AREA_API = 'services/private/areas_laborales_services.php';
+const AREA_API = 'services/private/areas_laborales_service.php';
 
 // Constante para establecer el formulario de buscar.
 const SEARCH_FORM = document.getElementById('searchForm');
@@ -14,7 +14,9 @@ const SAVE_FORM = document.getElementById('saveForm'),
     ID_AREA = document.getElementById('idArea'),
     NOMBRE_AREA = document.getElementById('nombreArea'),
     BOTON_AGREGAR = document.getElementById('btnAgregar'),
-    BOTON_ACTUALIZAR = document.getElementById('btnActualizar');;
+    BOTON_ACTUALIZAR = document.getElementById('btnActualizar');
+
+let areaLaboral;
 
 // Método del evento para cuando el documento ha cargado.
 document.addEventListener('DOMContentLoaded', () => {
@@ -45,21 +47,34 @@ SAVE_FORM.addEventListener('submit', async (event) => {
     // Se evita recargar la página web después de enviar el formulario.
     event.preventDefault();
     // Se verifica la acción a realizar.
-    (AREA_API.value) ? action = 'updateRow' : action = 'createRow';
-    // Constante tipo objeto con los datos del formulario.
-    const FORM = new FormData(SAVE_FORM);
-    // Petición para guardar los datos del formulario.
-    const DATA = await fetchData(AREA_API, action, FORM);
-    // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
-    if (DATA.status) {
+    (SAVE_FORM['idArea'].value) ? action = 'updateRow' : action = 'createRow';
+    // Se verifica que la acción sea crear habilidad o que el usuario haya ingresado un nombre de habilidad diferente al actual.
+    if (action == 'createRow' || (areaLaboral != SAVE_FORM['nombreArea'].value.trim())) {
+        // Constante tipo objeto con los datos del formulario.
+        const FORM = new FormData(SAVE_FORM);
+        // Petición para guardar los datos del formulario.
+        const DATA = await fetchData(AREA_API, action, FORM);
+        // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
+        if (DATA.status) {
+            // Se cierra la caja de diálogo.
+            SAVE_MODAL.hide();
+            // Se muestra un mensaje de éxito.
+            sweetAlert(1, DATA.message, true);
+            // Se carga nuevamente la tabla para visualizar los cambios.
+            fillTable();
+        } else if(DATA.error == "El área laboral ya ha sido agregado"){
+    
+            sweetAlert(3, DATA.error, false);
+            
+            SAVE_MODAL.hide();
+        } else {
+            sweetAlert(2, DATA.error, false);
+        }
+    } else {
+
+        sweetAlert(1, 'Área actualizada correctamente', false);
         // Se cierra la caja de diálogo.
         SAVE_MODAL.hide();
-        // Se muestra un mensaje de éxito.
-        sweetAlert(1, DATA.message, true);
-        // Se carga nuevamente la tabla para visualizar los cambios.
-        fillTable();
-    } else {
-        sweetAlert(2, DATA.error, false);
     }
 });
 
@@ -139,6 +154,8 @@ const openUpdate = async (id) => {
         const ROW = DATA.dataset;
         ID_AREA.value = ROW.id_area;
         NOMBRE_AREA.value = ROW.nombre_area;
+
+        areaLaboral = ROW.nombre_area;
         // Se muestra el botón de actualizar y se oculta el de agregar.
         BOTON_AGREGAR.classList.add('d-none');
         BOTON_ACTUALIZAR.classList.remove('d-none');

@@ -52,7 +52,7 @@ class AspirantesData extends AspirantesHandler
     }
 
     // Esta función permite validar el campo APELLIDO_ASPIRANTE.
-    public function setApellido($valor, $min = 3, $max = 20)
+    public function setApellido($valor, $min = 3, $max = 50)
     {
         // Si la variable contiene caracteres que no son de tipo alfabético se devuelve el error.
         if (!Validator::validateAlphabetic($valor)) {
@@ -92,6 +92,16 @@ class AspirantesData extends AspirantesHandler
         }
     }
 
+    public function setVerificarCorreo($value)
+    {
+        if (!Validator::validateEmail($value)) {
+            $this->info_error = 'El correo no es válido';
+            return false;
+        } else {
+            $this->correo = $value;
+            return true;
+        }
+    }
   
     // Esta función permite validar el campo CLAVE_ASPIRANTE.
     public function setClave($valor)

@@ -23,7 +23,7 @@ class AreaslaboralesData extends AreaslaboralesHandler
             $this->id = $value;
             return true;
         } else {
-            $this->data_error = 'El identificador de la area es incorrecto';
+            $this->data_error = 'El identificador del área es incorrecto';
             return false;
         }
     }
@@ -31,28 +31,17 @@ class AreaslaboralesData extends AreaslaboralesHandler
     public function setArea($value, $min = 2, $max = 150)
     {
         if (!Validator::validateAlphanumeric($value)) {
-            $this->data_error = 'El area debe ser un valor alfanumérico';
+            $this->data_error = 'El nombre del área debe ser un valor alfanumérico';
             return false;
         }
         elseif (AreaslaboralesHandler::checkDuplicateWithId($value)) {
-            $this->data_error = 'El nombre del area ya ha sido registrado';
+            $this->data_error = 'El área laboral ya ha sido agregado';
             return false;
         } elseif (Validator::validateLength($value, $min, $max)) {
             $this->area = $value;
             return true;
         } else {
-            $this->data_error = 'El area debe tener una longitud entre ' . $min . ' y ' . $max;
-            return false;
-        }
-    }
-
-    public function setIdArea($value)
-    {
-        if (Validator::validateNaturalNumber($value)) {
-            $this->id_area = $value;
-            return true;
-        } else {
-            $this->data_error = 'error ID';
+            $this->data_error = 'El nombre del área debe tener una longitud entre ' . $min . ' y ' . $max;
             return false;
         }
     }

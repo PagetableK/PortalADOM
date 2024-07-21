@@ -31,7 +31,7 @@ if (isset($_GET['action'])) {
             case 'createRow':
                 $_POST = Validator::validateForm($_POST);
                 if (
-                    !$idioma->setNombre($_POST['nombreIdioma'])  
+                    !$idioma->setNombre($_POST['nombreIdioma'])
                 ) {
                     $result['error'] = $idioma->getDataError();
                 } elseif ($idioma->createRow()) {
@@ -60,12 +60,12 @@ if (isset($_GET['action'])) {
                     $result['error'] = 'Idioma inexistente';
                 }
                 break;
-                 // Actualizar
+                // Actualizar
             case 'updateRow':
                 $_POST = Validator::validateForm($_POST);
                 if (
                     !$idioma->setId($_POST['idIdioma']) or
-                    !$idioma->setNombre($_POST['nombreIdioma']) 
+                    !$idioma->setNombre($_POST['nombreIdioma'])
                 ) {
                     $result['error'] = $idioma->getDataError();
                 } elseif ($idioma->updateRow()) {
@@ -90,6 +90,7 @@ if (isset($_GET['action'])) {
                 break;
             default:
                 $result['error'] = 'Acción no disponible dentro de la sesión';
+                break;
         }
     } else {
         print(json_encode('Acceso denegado'));

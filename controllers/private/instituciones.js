@@ -1,5 +1,5 @@
 // Constante para completar la ruta de la API.
-const INSTITUCION_API = 'services/private/instituciones_services.php';
+const INSTITUCION_API = 'services/private/instituciones_service.php';
 // Constante para establecer el formulario de buscar.
 const SEARCH_FORM = document.getElementById('searchForm'), BUSCADOR = document.getElementById('buscador');
 // Constantes para establecer los elementos de la tabla.
@@ -101,7 +101,6 @@ const fillTable = async (form = null) => {
     } else {
         // Se muestra el mensaje.
         sweetAlert(3, DATA.error, true);
-        BUSCADOR.focus();
     }
 }
 

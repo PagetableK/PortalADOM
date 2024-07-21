@@ -145,7 +145,7 @@ SAVE_FORM.addEventListener('submit', async (event) => {
     // Se verifica la acción a realizar.
     (ID_HABILIDAD.value) ? action = 'updateRow' : action = 'createRow';
     // Se verifica que la acción sea crear habilidad o que el usuario haya ingresado un nombre de habilidad diferente al actual.
-    if (action == 'createRow' || (habilidad != SAVE_FORM['nombreHabilidad'].value)) {
+    if (action == 'createRow' || (habilidad != SAVE_FORM['nombreHabilidad'].value.trim())) {
         // Constante tipo objeto con los datos del formulario.
         const FORM = new FormData(SAVE_FORM);
         // Petición para guardar los datos del formulario.
@@ -159,7 +159,10 @@ SAVE_FORM.addEventListener('submit', async (event) => {
             // Se carga nuevamente la tabla para visualizar los cambios.
             fillTable();
         } else if (DATA.error == "La habilidad ya ha sido agregada") {
+
             sweetAlert(3, DATA.error, false);
+            
+            SAVE_MODAL.hide();
         }
         else {
             sweetAlert(2, DATA.error, false);

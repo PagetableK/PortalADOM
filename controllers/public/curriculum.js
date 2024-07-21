@@ -19,9 +19,7 @@ const ESTADO_EXPERIENCIA = document.getElementById('estadoExperiencia'), SELECT_
     SELECT_YEAR_FINAL = document.getElementById('yearFinal'), DESCRIPCION_PUESTO = document.getElementById('descripcion'),
     CARACTERES_RESTANTES = document.getElementById('caracteresRestantes'), TELEFONOS = document.querySelectorAll('.telefono');
 
-const SELECT_IDIOMAS = document.getElementById('idioma');
-
-const SELECT_HABILIDADES = document.getElementById('nombreHabilidad');
+const SELECT_IDIOMAS = document.getElementById('idioma'), SELECT_HABILIDADES = document.getElementById('nombreHabilidad');
 
 const CORREO_ASPIRANTE = document.getElementById('correo'), TELEFONO_MOVIL = document.getElementById('telefonoMovil'),
     IMAGEN = document.getElementById('archivoImagen'), TELEFONO_FIJO = document.getElementById('telefonoFijo');
@@ -49,6 +47,19 @@ const BOTON_EDITAR = document.getElementById('btnEditarCv'), BOTON_REGRESAR = do
     CONTENEDOR_BOTON = document.getElementById('contenedorBtnRegresar'), CONTENEDOR_MENSAJE = document.getElementById('contenedorMensaje');
 
 let errorCurriculum = false, editarCv = false;
+
+// Se inicializa y agrega el diseño del elemento select2.
+$(".select2-single").select2({
+    theme: "bootstrap",
+    placeholder: "Seleccione una institución",
+    maximumSelectionSize: 6,
+    containerCssClass: ':all:',
+    "language": {
+        "noResults": function () {
+            return "No se encontraron resultados";
+        }
+    },
+});
 
 // Evento que se ejecuta al terminar de cargar los componentes.
 document.addEventListener('DOMContentLoaded', async () => {
@@ -145,11 +156,22 @@ const openReport = async () => {
             const imgData = `../../api/images/aspirantes/${rowCurriculum['IMAGEN']}`; // Reemplaza con los datos de la imagen en base64
             doc.addImage(imgData, 'JPEG', 10, 10, 40, 40);
 
+            let nombreCompleto = rowCurriculum['NOMBRE'];
+
+            let nombreArray = nombreCompleto.split(" ");
+
+            let nombreCapitalizado = "";
+
+            for (var i = 0; i < nombreArray.length; i++) {
+
+                nombreCapitalizado += nombreArray[i].charAt(0).toUpperCase() + nombreArray[i].substring(1) + " ";
+            }
+
             // Añadir nombre y título
             doc.setFont('Times', 'bold');
             doc.setFontSize(28);
             doc.setTextColor(...secondaryColor);
-            doc.text(rowCurriculum['NOMBRE'], 70, 20);
+            doc.text(nombreCapitalizado, 70, 15, { maxWidth: 140 });
             doc.setFontSize(16);
             doc.setTextColor(0, 0, 0);
 
@@ -165,14 +187,14 @@ const openReport = async () => {
             doc.setFontSize(10);
             doc.setTextColor(0, 0, 0);
             const contactFields = [
-                rowCurriculum['correo_aspirante'],
-                rowCurriculum['fecha_nacimiento'],
-                rowCurriculum['genero_aspirante']
+                rowCurriculum['correo_curriculum'],
+                `(+503) ${rowCurriculum['telefono_movil']}`,
+                rowCurriculum['telefono_fijo'] != null ? `(+503) ${rowCurriculum['telefono_fijo']}` : ""
             ];
             let yPositionC = 70;
             contactFields.forEach(field => {
                 doc.text(field, 10, yPositionC);
-                yPositionC += 6;
+                yPositionC += 8;
             });
 
             // Añadir sección de idiomas
@@ -181,11 +203,12 @@ const openReport = async () => {
 
             // Verificar si hay datos válidos para mostrar la sección de idiomas
             if (idiomas.length > 0 && idiomas.some(idioma => idioma['nombre_idioma'] && idioma['nivel_idioma'])) {
+                doc.setFont('Times', 'bold');
                 doc.setFontSize(12);
                 doc.setTextColor(...secondaryColor);
                 doc.text('IDIOMAS', 10, yPositionC + 10);
                 doc.line(10, yPositionC + 12, 50, yPositionC + 12);
-
+                doc.setFont('Times', 'normal');
                 doc.setFontSize(10);
                 doc.setTextColor(0, 0, 0);
 
@@ -197,7 +220,7 @@ const openReport = async () => {
                     const nivelIdioma = idioma['nivel_idioma'];
 
                     if (nombreIdioma && nivelIdioma && !idiomasMostrados.has(nombreIdioma)) {
-                        const field = `. ${nombreIdioma}: ${nivelIdioma}`;
+                        const field = `- ${nombreIdioma}: ${nivelIdioma}`;
                         const lines = doc.splitTextToSize(field, 50);
                         lines.forEach(line => {
                             if (yPositionIdiomas <= 297) {
@@ -210,10 +233,8 @@ const openReport = async () => {
                 });
 
                 // Actualizar yPositionC al final de la sección de idiomas
-                yPositionC = yPositionIdiomas + 10;
+                yPositionC = yPositionIdiomas + 5;
             }
-
-            yPositionC = yPositionC + 10;
 
             // Añadir sección de habilidades debajo de los idiomas
             const primaryColorRectWidth = 50; // Ancho del rectángulo azul claro
@@ -241,7 +262,7 @@ const openReport = async () => {
                 let yPositionHabilidades = yPositionC + 10;
 
                 habilidades.forEach(habilidad => {
-                    const habilidadString = `. ${habilidad['nombre']}: ${habilidad['nivel']}`;
+                    const habilidadString = `- ${habilidad['nombre']}: ${habilidad['nivel']}`;
                     if (habilidad['nombre'] && habilidad['nivel'] && !habilidadesMostradas.has(habilidadString)) {
                         const lines = doc.splitTextToSize(habilidadString, primaryColorRectWidth - 10); // Ajustar al ancho del rectángulo
                         lines.forEach(line => {
@@ -263,7 +284,19 @@ const openReport = async () => {
             dataCurriculum.dataset.forEach(item => {
                 if (item['id_curriculum'] === rowCurriculum['id_curriculum'] &&
                     item['APELLIDO'] && item['puesto_trabajo'] && item['telefono_referencia']) {
-                    const referencia = `. ${item['APELLIDO']},\n${item['puesto_trabajo']},\n(+503) ${item['telefono_referencia']}`;
+
+                    let nombreCompleto = item['APELLIDO'];
+
+                    let nombreArray = nombreCompleto.split(" ");
+
+                    let nombreCapitalizado = "";
+
+                    for (var i = 0; i < nombreArray.length; i++) {
+
+                        nombreCapitalizado += " " + nombreArray[i].charAt(0).toUpperCase() + nombreArray[i].substring(1);
+                    }
+
+                    const referencia = `- ${nombreCapitalizado},\n${item['puesto_trabajo']},\n(+503) ${item['telefono_referencia']}`;
                     referencias.add(referencia);
                 }
             });
@@ -296,61 +329,65 @@ const openReport = async () => {
                 yPositionC = Math.max(yPositionC, yPositionReferencias + 10);
             }
 
+            var meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
-
-            let yPositionV = 50;
-            // Filtrar y mapear las experiencias únicas
-            // Filtrar y mapear las experiencias únicas asociadas al currículum actual
+            let yPositionV = 40;
             const allExperiencias = dataCurriculum.dataset.filter(item =>
                 item['id_curriculum'] === rowCurriculum['id_curriculum'] &&
                 item['nombre_cargo'] &&
                 item['nombre_empresa'] &&
                 item['fecha_inicio'] &&
-                item['fecha_fin'] &&
                 item['descripcion_puesto']
-            ).map(item => ({
-                title: `. ${item['nombre_cargo']}`,
-                company: `${item['nombre_empresa']}  | ${item['fecha_inicio']} - ${item['fecha_fin']}`,
-                details: `${item['descripcion_puesto']}` // No es necesario agregar '\n' aquí
-            }));
+            ).map(item => {
+                // Función para formatear la fecha en 'yyyy, mm, dd' usando split
+                const formatDate = (dateString) => {
+                    const [year, month] = dateString.split('-');
+                    return `${meses[month - 1]} ${year}`;
+                };
 
-            // Verificar si hay experiencias para mostrar
-            if (allExperiencias.length > 0 && allExperiencias.some(exp => exp.title && exp.company && exp.details)) {
+                return {
+                    title: `- ${item['nombre_cargo']}, ${item['nombre_empresa']} | ${formatDate(item['fecha_inicio'])} - ${item['fecha_fin'] ? formatDate(item['fecha_fin']) : 'Trabajo actual'}`,
+                    details: `${item['descripcion_puesto']}`
+                };
+            });
+
+
+
+            if (allExperiencias.length > 0 && allExperiencias.some(exp => exp.title && exp.details)) {
+
                 doc.setFont('Times', 'bold');
                 doc.setFontSize(12);
                 doc.setTextColor(...secondaryColor);
-                doc.text('EXPERIENCIA PROFESIONAL', 70, yPositionV); // Posición vertical ajustada según necesidad
-                doc.line(70, yPositionV + 2, 200, yPositionV + 2); // Línea separadora
+                doc.text('EXPERIENCIA PROFESIONAL', 70, yPositionV);
+                doc.line(70, yPositionV + 2, 200, yPositionV + 2);
 
                 doc.setFont('Times', 'normal');
                 doc.setFontSize(10);
                 doc.setTextColor(0, 0, 0);
 
                 const experienciasSet = new Set();
-                let expY = yPositionV + 8; // Posición inicial vertical para los detalles de experiencia
+                let expY = yPositionV + 8;
 
                 allExperiencias.forEach(exp => {
-                    const experienciaString = `${exp.title} ${exp.company} ${exp.details}`;
+                    const experienciaString = `${exp.title} ${exp.details}`;
                     if (!experienciasSet.has(experienciaString)) {
-                        doc.setFont('Times', 'normal');// Asegurarse de que la fuente sea normal
-                        doc.text(exp.title, 70, expY);
-                        doc.text(exp.company, 70, expY + 6);
-                        expY += 12;
+                        doc.setFont('Times', 'normal');
+                        doc.text(exp.title, 70, expY, { maxWidth: 140 });
+                        doc.setFont('Times', 'normal');
+                        expY += 9;
 
-                        // Separar los detalles de la experiencia por líneas
                         const detalles = exp.details.split('\n');
                         detalles.forEach(detail => {
-                            doc.text(`- ${detail}`, 70, expY);
-                            expY += 6;
+                            doc.text(`${detail}`, 70, expY, { maxWidth: 140 });
+                            expY += 5;
                         });
 
-                        expY += 6;
-                        experienciasSet.add(experienciaString); // Agregar experiencia al Set para evitar duplicados
+                        expY += 5; // Espacio adicional entre experiencias
+                        experienciasSet.add(experienciaString);
+
                     }
                 });
-
-                // Actualizar yPositionV al final de la sección de experiencia
-                yPositionV = Math.max(yPositionV, expY + 10);
+                yPositionV = Math.max(yPositionV, expY);
             }
 
 
@@ -358,17 +395,16 @@ const openReport = async () => {
             const allFormaciones = dataCurriculum.dataset.filter(item =>
                 item['id_curriculum'] === rowCurriculum['id_curriculum'] &&
                 item['nombre_grado'] &&
-                item['titulo_estudio'] &&
-                item['nombre_institucion_estudio'] &&
-                item['fecha_finalizacion_estudio']
-            ).map(item => `. ${item['nombre_grado']} ${item['titulo_estudio']}, ${item['nombre_institucion_estudio']} ${item['fecha_finalizacion_estudio']}`);
+                item['titulo_estudio']
+            ).map(item => `. ${item['nombre_grado']} en ${item['titulo_estudio']}, ${item['nombre_institucion'] ? item['nombre_institucion'] : ''} ${item['nombre_institucion_estudio'] ? item['nombre_institucion_estudio'] : ''} ${item['fecha_finalizacion_estudio'] ? item['fecha_finalizacion_estudio'] : 'Cursando'}`);
+
 
             // Verificar si hay formaciones para mostrar
             if (allFormaciones.length > 0 && allFormaciones.some(formacion => formacion.trim() !== '.')) {
                 doc.setFont('Times', 'bold');
                 doc.setFontSize(12);
                 doc.setTextColor(...secondaryColor);
-                doc.text('FORMACIÓN', 70, yPositionV);
+                doc.text('FORMACIÓN ACADÉMICA', 70, yPositionV);
                 doc.line(70, yPositionV + 2, 200, yPositionV + 2);
 
                 doc.setFont('Times', 'normal');
@@ -392,8 +428,9 @@ const openReport = async () => {
                 });
 
                 // Actualizar yPositionV al final de la sección de formación
-                yPositionV = Math.max(yPositionV, formY + 10);
+                yPositionV = Math.max(yPositionV, formY + 3);
             }
+
 
 
 
@@ -423,7 +460,7 @@ const openReport = async () => {
                 allCertificados.forEach(certificado => {
                     if (!certificadosSet.has(certificado)) {
                         const lines = doc.splitTextToSize(certificado, 120); // Ajusta el ancho si es necesario
-                        lines.forEach(line => { 
+                        lines.forEach(line => {
                             if (certY <= 297) {
                                 doc.text(line, 70, certY);
                                 certY += 6;
@@ -436,23 +473,33 @@ const openReport = async () => {
                 // Actualizar yPositionV al final de la sección de certificados
                 yPositionV = Math.max(yPositionV, certY + 10);
             }
-            // Generar el PDF
-            const pdfOutput = doc.output('dataurlnewwindow'); // Utilizando 'dataurlnewwindow'
 
-            // Crear una URL de Blob
-            const blob = new Blob([pdfOutput], { type: 'application/pdf' });
+
+
+            const pdfOutput = doc.output('dataurlnewwindow'); // Genera un Blob en lugar de una URL
 
             // Crear una URL del Blob
-            const blobURL = URL.createObjectURL(blob);
+            const blobURL = URL.createObjectURL(pdfOutput);
 
-            // Abrir el PDF en una nueva pestaña
-            window.open(blobURL, '_blank');
+            // Abrir el PDF en una nueva pestaña o ventana
+            if (!window.pdfWindow || window.pdfWindow.closed) {
+                window.pdfWindow = window.open(blobURL, '_blank');
+            } else {
+                window.pdfWindow.location.href = blobURL; // Actualiza la URL existente
+            }
 
             // Limpiar la URL del Blob después de abrir la nueva pestaña
             URL.revokeObjectURL(blobURL);
+
+            if (yPositionC > 260) {
+                doc.addPage(); // Agregar una nueva página
+                yPositionC = 10; // Reiniciar la posición vertical para el contenido
+            }
+
         });
     } else {
-        doc.text('No hay información para mostrar', 10, 10);
+
+        sweetAlert(2, DATA.error, false);
     }
 };
 
@@ -1052,6 +1099,8 @@ FORM_ESTUDIO.addEventListener('submit', async (e) => {
 
             OTRA_INSTITUCION.setAttribute('disabled', '');
 
+            $("#institucion").val('').trigger('change');
+
             cargarEstudios();
 
             sweetAlert(1, 'Estudio agregado', false);
@@ -1093,12 +1142,12 @@ FORM_EXPERIENCIA.addEventListener('submit', async (e) => {
 
     if (SELECT_RUBROS.value == "default") {
 
-        sweetAlert(3, "Asegúrese de seleccionar un rubro", false);
+        await sweetAlert(3, "Asegúrese de seleccionar un rubro", false);
 
         SELECT_RUBROS.focus();
     } else if (SELECT_AREAS.value == "default") {
 
-        sweetAlert(3, "Asegúrese de seleccionar un área");
+        await sweetAlert(3, "Asegúrese de seleccionar un área");
 
         SELECT_AREAS.focus();
     } else {
@@ -1122,11 +1171,7 @@ FORM_EXPERIENCIA.addEventListener('submit', async (e) => {
 
             FORM_EXPERIENCIA.reset();
 
-            SELECT_MES_INICIO.removeAttribute("disabled");
-
             SELECT_MES_FINAL.removeAttribute("disabled");
-
-            SELECT_YEAR_INICIO.removeAttribute("disabled");
 
             SELECT_YEAR_FINAL.removeAttribute("disabled");
 
@@ -1181,7 +1226,7 @@ FORM_IDIOMA.addEventListener('submit', async (e) => {
 
     if (SELECT_IDIOMAS.value == "default") {
 
-        sweetAlert(3, "Asegúrese de seleccionar un idioma", false);
+        await sweetAlert(3, "Asegúrese de seleccionar un idioma", false);
 
         SELECT_IDIOMAS.focus();
     } else {
@@ -1216,7 +1261,7 @@ FORM_HABILIDAD.addEventListener('submit', async (e) => {
 
     if (SELECT_HABILIDADES.value == "default") {
 
-        sweetAlert(3, 'Asegúrese de seleccionar una habilidad');
+        await sweetAlert(3, 'Asegúrese de seleccionar una habilidad');
 
         SELECT_HABILIDADES.focus();
     } else {
@@ -1272,8 +1317,7 @@ FORM_CURRICULUM.addEventListener('submit', async (e) => {
 
         editarCv ? accion = 'actualizarCurriculum' : accion = 'agregarCurriculum';
 
-        // ENVIAR BOOLEANIMAGEN, VALIDAR TELEFONOS CON CHECKWITHID
-        FORM.append("booleanImagen", 1);
+        IMAGEN.value != "" ? FORM.append("booleanImagen", 0) : FORM.append("booleanImagen", 1);
 
         const DATA = await fetchData(API_CURRICULUM, accion, FORM);
 
@@ -1301,8 +1345,8 @@ FORM_CURRICULUM.addEventListener('submit', async (e) => {
 
             errorCurriculum ? async () => {
                 await sweetAlert(1, 'Currículum actualizado correctamente');
-                sweetAlert(3, 'Es posible que los apartados no se hayan actualizado correctamente, se recomienda verificar el currículum', false);
-            } : sweetAlert(1, 'Currículum actualizado correctamente', true, 'curriculum.html');
+                await sweetAlert(3, 'Es posible que los apartados no se hayan actualizado correctamente, se recomienda verificar el currículum', false, 'curriculum.html');
+            } : sweetAlert(1, 'Currículum actualizado correctamente', false, 'curriculum.html');
         }
         else if (DATA.status) {
 
@@ -1326,7 +1370,7 @@ FORM_CURRICULUM.addEventListener('submit', async (e) => {
 
             errorCurriculum ? async () => {
                 await sweetAlert(1, 'Currículum agregado correctamente');
-                sweetAlert(3, 'Es posible que los apartados no se hayan agregado correctamente, se recomienda verificar el currículum', false);
+                await sweetAlert(3, 'Es posible que los apartados no se hayan agregado correctamente, se recomienda verificar el currículum', false, 'curriculum.html');
             } : sweetAlert(1, 'Currículum agregado correctamente', true, 'curriculum.html');
         } else if (DATA.error == "Debe agregar por lo menos 1 estudio a su currículum") {
 
@@ -1338,6 +1382,9 @@ FORM_CURRICULUM.addEventListener('submit', async (e) => {
             });
 
             stepperCv.to(1);
+
+            // Se restablece el scroll de la pantalla.
+            window.scrollTo(0, 0);
         } else if (DATA.error == "El teléfono móvil ya está siendo utilizado en otro currículum") {
 
             await sweetAlert(3, DATA.error + ". Digite un número de teléfono diferente", false);
@@ -1377,7 +1424,6 @@ const agregarEstudios = async (FORM) => {
 
     if (DATA.status) {
 
-        console.log(DATA.status);
     } else {
 
         errorCurriculum = true;
@@ -1449,32 +1495,37 @@ const agregarHabilidades = async (FORM) => {
 }
 
 
+// Función que permite crear un id para los apartados del currículum.
 function crearId(longitud) {
-
+    // Variable donde se almacenará el id.
     let resultado = '';
-
+    // Se definen los caracteres que se utilizarán en el id.
     const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-
+    // Se almacena la longitud de la cadena de caracteres en el string.
     const longitudCaracteres = caracteres.length;
-
+    // Se inicializa la variable.
     let contador = 0;
-
+    // Se realiza una iteración para obtener un nuevo caracter por cada iteración.
     while (contador < longitud) {
-
+        // Se almacena el caracter random en la variable.
         resultado += caracteres.charAt(Math.floor(Math.random() * longitudCaracteres));
-
         contador += 1;
     }
-
+    // Se retorna el id.
     return resultado;
 }
 
-SELECT_INSTITUCIONES.addEventListener('change', () => {
-
-    if (SELECT_INSTITUCIONES.value == 0) {
+// Evento que se ejecuta al cambiar la opción seleccionada.
+$('#institucion').on('change', function (e) {
+    // Se verifica si el array está vacío.
+    if ($("#institucion").select2('data').length == 0) {
+    }
+    // Si el valor seleccionado es 0 se ejecuta el código.
+    else if ($("#institucion").select2('data')[0].id == 0) {
 
         OTRA_INSTITUCION.removeAttribute("disabled");
     } else {
+        // Se activa el campo de otra institución.
         OTRA_INSTITUCION.setAttribute("disabled", "");
         OTRA_INSTITUCION.value = '';
     }
@@ -1604,7 +1655,7 @@ BOTON_EDITAR.addEventListener('click', async () => {
         // Si la respuesta no es satisfactoria se ejecuta el código.
         if (!DATA.status) {
             // Se muestra la advertencia.
-            sweetAlert(3, 'Es posible que algunos apartados no contengan la información real del currículum', false);
+            sweetAlert(3, 'Es posible que algunos apartados no contengan la información exacta del currículum', true);
         }
     } else {
         // Se muestra el error.
@@ -1630,13 +1681,13 @@ const almacenarEstudios = async (arrayEstudios) => {
 
         if (row.id_institucion == null) {
 
-            FORM.append('institucion', 0)
-            FORM.append('booleanoInstitucion', 1)
+            FORM.append('institucion', 0);
+            FORM.append('booleanoInstitucion', 1);
             FORM.append('otraInstitucion', row.nombre_institucion);
         } else {
 
             FORM.append('institucion', row.id_institucion);
-            FORM.append('booleanoInstitucion', 0)
+            FORM.append('booleanoInstitucion', 0);
             FORM.append('otraInstitucion', '');
         }
 
@@ -1782,7 +1833,7 @@ BOTON_REGRESAR.addEventListener('click', async () => {
 
     const RESPONSE = await confirmAction('¿Está seguro que desea regresar?\nSe perderán los cambios realizados');
     // Se verifica la opción seleccionada (true si selecciona sí).
-    if(RESPONSE){
+    if (RESPONSE) {
         // Se oculta el contenedor con las opciones.
         CONTENEDOR_OPCIONES_CV.classList.remove('d-none');
         // Se muestra el contenedor con el stepper.

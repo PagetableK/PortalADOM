@@ -9,7 +9,7 @@ if (isset($_GET['action'])) {
     // Se instancia la clase correspondiente.
     $administradores = new AdministradoresData;
     // Se declara e inicializa un arreglo para guardar el resultado que retorna la API.
-    $result = array('status' => 0, 'session' => 0, 'message' => null, 'dataset' => null, 'error' => null, 'exception' => null, 'correoAdmin' => null);
+    $result = array('status' => 0, 'session' => 0, 'message' => null, 'dataset' => null, 'error' => null, 'exception' => null, 'correoAdmin' => null, 'nombre' => null, 'apellido' => null);
     // Se verifica si existe una sesión iniciada como administrador, de lo contrario se finaliza el script con un mensaje de error.
     if (isset($_SESSION['idAdministrador'])) {
         // Se cambia el valor de la session, 1 = sesión iniciada.
@@ -117,6 +117,8 @@ if (isset($_GET['action'])) {
                 if (isset($_SESSION['correoAdministrador'])) {
                     $result['status'] = 1;
                     $result['correoAdmin'] = $_SESSION['correoAdministrador'];
+                    $result['nombre'] = $_SESSION['nombreAdmin'];
+                    $result['apellido'] = $_SESSION['apellidoAdmin'];
                 } else {
                     $result['error'] = 'Correo no definido';
                 }
@@ -138,7 +140,7 @@ if (isset($_GET['action'])) {
         switch ($_GET['action']) {
                 // La acción logIn verifica las credenciales del administrador para poder ingresar al programa.
             case 'logIn':
-                // Se validan los campos del form que se encuentran en el array $_POST.
+                // Se eliminan los campos vacíos que se encuentran en los elementos del array $_POST.
                 $_POST = Validator::validateForm($_POST);
                 // Se valida el estado del administrador.
                 if ($administradores->checkUser($_POST['correo'], $_POST['clave']) == 'Estado inactivo') {
@@ -148,22 +150,53 @@ if (isset($_GET['action'])) {
                     // Si el estado del administrador es activo se ejecuta el código.
                     // Se asigna el valor de status.
                     $result['status'] = 1;
+                    // Se almacena el conjunto de datos proveniente de la función dentro de la variable $info.
+                    $info = $administradores->checkUser($_POST['correo'], $_POST['clave']);
                     // Se asigna el id del administrador proveniente de la función checkUser()
                     // dentro del array de la sesión $_SESSION.
-                    $_SESSION['idAdministrador'] = $administradores->checkUser($_POST['correo'], $_POST['clave'])[0];
+                    $_SESSION['idAdministrador'] = $info[0];
                     // Se asigna el correo del administrador proveniente de la función checkUser()
                     // dentro del array de la sesión $_SESSION.
-                    $_SESSION['correoAdministrador'] = $administradores->checkUser($_POST['correo'], $_POST['clave'])[1];
+                    $_SESSION['correoAdministrador'] = $info[1];
+                    // Se asigna el nombre y el apellido del administrador proveniente de la función checkUser()
+                    // dentro del array de la sesión $_SESSION.
+                    $_SESSION['nombreAdmin'] = $info[2];
+                    $_SESSION['apellidoAdmin'] = $info[3];
                     // Se devuelve el mensaje del resultado de la acción logIn.
                     $result['message'] = 'Autenticación correcta';
                 } else {
                     $result['error'] = 'Credenciales incorrectas';
                 }
                 break;
+                // La acción signUp permite registrar el primer administrador del programa.
+            case 'signUp':
+                // Se eliminan los campos vacíos que se encuentran en los elementos del array $_POST.
+                $_POST = Validator::validateForm($_POST);
+                if(
+                    !$administradores->setNombre($_POST['nombre']) or
+                    !$administradores->setApellido($_POST['apellido']) or
+                    !$administradores->setCorreo($_POST['correoSignup']) or
+                    !$administradores->setClave($_POST['claveSignup'])
+                ) {
+                    $result['error'] = $administradores->getDataError();
+                } elseif($administradores->signUp()){
+                    $result['status'] = 1;
+                } else{
+                    $result['error'] = 'Ocurrió un error al completar el registro';
+                }
+                break;
+            case 'readUsers':
+                if($administradores->readUsers()){
+                    $result['status'] = 1;
+                } else{
+                    $result['message'] = 'No se han registrado administradores';
+                }
+                break;
                 // Si el usuario no ha iniciado sesión no permite realizar las acciones updateRow, createRow,
                 // deleteRow (Acciones que si están permitidas cuando el usuario ha iniciado sesión).
             default:
                 $result['error'] = 'Acción no disponible fuera de la sesión';
+                break;
         }
     }
     // Se obtiene la excepción del servidor de base de datos por si ocurrió un problema.

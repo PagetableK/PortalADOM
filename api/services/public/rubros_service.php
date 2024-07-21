@@ -14,7 +14,6 @@ if (isset($_GET['action'])) {
     if (isset($_SESSION['idAspirante'])) {
         // Se compara la acción a realizar cuando un aspirante ha iniciado sesión.
         switch ($_GET['action']) {
-
             case 'readAll':
                 if ($result['dataset'] = $rubro->readAll()) {
                     $result['status'] = 1;
@@ -25,6 +24,7 @@ if (isset($_GET['action'])) {
                 break;
             default:
                 $result['error'] = 'Acción no disponible dentro de la sesión';
+                break;
         }
         // Se obtiene la excepción del servidor de base de datos por si ocurrió un problema.
         $result['exception'] = Database::getException();

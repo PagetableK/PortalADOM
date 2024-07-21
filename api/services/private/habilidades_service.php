@@ -31,7 +31,7 @@ if (isset($_GET['action'])) {
             case 'createRow':
                 $_POST = Validator::validateForm($_POST);
                 if (
-                    !$habilidad->setNombre($_POST['nombreHabilidad'])  
+                    !$habilidad->setNombre($_POST['nombreHabilidad'])
                 ) {
                     $result['error'] = $habilidad->getDataError();
                 } elseif ($habilidad->createRow()) {
@@ -60,12 +60,12 @@ if (isset($_GET['action'])) {
                     $result['error'] = 'Habilidad inexistente';
                 }
                 break;
-                 // Actualizar
+                // Actualizar
             case 'updateRow':
                 $_POST = Validator::validateForm($_POST);
                 if (
                     !$habilidad->setId($_POST['idHabilidad']) or
-                    !$habilidad->setNombre($_POST['nombreHabilidad']) 
+                    !$habilidad->setNombre($_POST['nombreHabilidad'])
                 ) {
                     $result['error'] = $habilidad->getDataError();
                 } elseif ($habilidad->updateRow()) {
@@ -90,7 +90,7 @@ if (isset($_GET['action'])) {
                 break;
             default:
                 $result['error'] = 'Acción no disponible dentro de la sesión';
-            break;
+                break;
         }
     } else {
         print(json_encode('Acceso denegado'));

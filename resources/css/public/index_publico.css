@@ -68,12 +68,19 @@ button {
         height: 75%;
         overflow-y: auto;
         padding-top: 25px;
-        padding-left: 5vh;
-        padding-right: 5vh;
+        padding-left: 30px;
+        padding-right: 30px;
         position: fixed;
         right: 0;
         bottom: 0;
         left: 0;
         z-index: 1030;
+    }
+}
+
+@media screen and (max-width: 375px) {
+    #contenedorForm{
+        padding-left: 10px;
+        padding-right: 10px;
     }
 }

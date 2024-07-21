@@ -28,7 +28,7 @@ class InstitucionData extends InstitucionesHandler
         }
     }
 
-    public function setInstitucion($value, $min = 2, $max = 150)
+    public function setInstitucion($value, $min = 2, $max = 100)
     {
         if (!Validator::validateAlphabetic($value)) {
             $this->data_error = 'El nombre debe ser un valor alfanumérico';

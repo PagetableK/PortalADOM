@@ -20,10 +20,9 @@ class RubroHandler
     public function searchRows()
     {
         $value = '%' . Validator::getSearchValue() . '%';
-            $sql = 'SELECT i.id_rubro, i.nombre_rubro,
-                LEFT JOIN areas_laborales e ON i.id_rubro = e.id_rubro
-                WHERE i.nombre_rubro LIKE ?
-                GROUP BY i.id_rubro, i.nombre_rubro';
+            $sql = 'SELECT id_rubro, nombre_rubro, (SELECT COUNT(experiencias_aspirantes.id_rubro) FROM experiencias_aspirantes WHERE experiencias_aspirantes.id_rubro = rubros_empresas.id_rubro) AS usos 
+	            FROM rubros_empresas
+                WHERE nombre_rubro LIKE ?';
         $params = array($value);
         return Database::getRows($sql, $params);
     }
@@ -76,10 +75,8 @@ class RubroHandler
 
      public function cantidadRubros()
      {
-         $sql = 'SELECT i.id_rubro, i.nombre_rubro,
-                COUNT(e.id_rubro) AS veces_utilizadas FROM rubros_empresas i
-                LEFT JOIN areas_laborales e ON i.id_rubro = e.id_rubro
-                GROUP BY i.id_rubro, i.nombre_rubro;';
+         $sql = 'SELECT id_rubro, nombre_rubro, (SELECT COUNT(experiencias_aspirantes.id_rubro) FROM experiencias_aspirantes WHERE experiencias_aspirantes.id_rubro = rubros_empresas.id_rubro) AS usos 
+	            FROM rubros_empresas';
          return Database::getRows($sql);
      }
      

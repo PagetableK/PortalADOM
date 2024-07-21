@@ -33,6 +33,10 @@
     font-size: 1rem;  /* Ajusta el tamaño de la fuente si es necesario */
 }
 
+#curriculumModalEmail{
+    word-break: break-all;
+}
+
 .table th, .table td {
     vertical-align: middle;  /* Centra el contenido verticalmente */
 }

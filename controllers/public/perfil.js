@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Se cambia el color del apartado donde se encuentra el usuario y se restablecen los otros colores.
     cambiarColor('Perfil');
     // Llamada a la función para validar sesiones activas.
-    cargarPlantilla();  
+    cargarPlantilla();
 });
 
 async function openProfile() {
@@ -24,9 +24,32 @@ async function openProfile() {
     const DATA = await fetchData(PERFIL_API, 'readProfile');
     // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
     if (DATA.status) {
+
+        let nombres = DATA.dataset.NOMBRE;
+
+        let apellidos = DATA.dataset.APELLIDO;
+
+        let nombreArray = nombres.split(" ");
+
+        let apellidoArray = apellidos.split(" ");
+
+        let nombreCapitalizado = "";
+
+        let apellidoCapitalizado = "";
+
+        for (var i = 0; i < nombreArray.length; i++) {
+
+            nombreCapitalizado += " " + nombreArray[i].charAt(0).toUpperCase() + nombreArray[i].substring(1);
+        }
+
+        for (var i = 0; i < apellidoArray.length; i++) {
+
+            apellidoCapitalizado += " " + apellidoArray[i].charAt(0).toUpperCase() + apellidoArray[i].substring(1);
+        }
+
         // Se colocan los datos en la página web de acuerdo con el usuario seleccionado previamente.
-        document.getElementById('nombres').value = DATA.dataset.NOMBRE;
-        document.getElementById('apellidos').value = DATA.dataset.APELLIDO;
+        document.getElementById('nombres').value = nombreCapitalizado;
+        document.getElementById('apellidos').value = apellidoCapitalizado;
         document.getElementById('fechaNacimiento').value = DATA.dataset.FECHA;
         document.getElementById('correo').value = DATA.dataset.CORREO;
     } else {

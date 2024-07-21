@@ -27,7 +27,7 @@ class HabilidadesData extends HabilidadesHandler
         }
     }
 
-    public function setNombre($valor, $min = 2, $max = 30)
+    public function setNombre($valor, $min = 1, $max = 75)
     {
         if (HabilidadesHandler::checkDuplicate($valor)) {
             $this->info_error = 'La habilidad ya ha sido agregada';
