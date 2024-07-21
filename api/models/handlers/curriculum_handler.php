@@ -304,14 +304,14 @@ class CurriculumHandler
         if (empty($this->telefono_fijo) && empty($this->imagen)) {
             // Se establece la estructura de la sentencia.
             $sql = "UPDATE curriculum_aspirantes 
-                    SET telefono_movil = ?, correo_curriculum = ?
+                    SET telefono_movil = ?, correo_curriculum = ?, telefono_fijo = null
                     WHERE id_aspirante = ?";
             // Se almacenan los parámetros en el array.
             $params = array($this->telefono_movil, $this->correo, $_SESSION['idAspirante']);
         } elseif (empty($this->telefono_fijo) && !empty($this->imagen)) {
             // Se establece la estructura de la sentencia.
             $sql = "UPDATE curriculum_aspirantes 
-                    SET telefono_movil = ?, correo_curriculum = ?, imagen_aspirante = ?
+                    SET telefono_movil = ?, correo_curriculum = ?, imagen_aspirante = ?, telefono_fijo = null
                     WHERE id_aspirante = ?";
             // Se almacenan los parámetros en el array.
             $params = array($this->telefono_movil, $this->correo, $this->imagen, $_SESSION['idAspirante']);
