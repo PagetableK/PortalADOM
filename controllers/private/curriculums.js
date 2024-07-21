@@ -134,6 +134,9 @@ const fillTable = async (form = null) => {
     } else if (DATA.error == "No se han agregado currículums") {
 
         sweetAlert(3, DATA.error, false);
+    } else if (DATA.error == "No hay coincidencias") {
+
+        sweetAlert(3, DATA.error, false);
     } else {
         sweetAlert(2, DATA.error, true);
     }
@@ -148,6 +151,7 @@ const openCreate = () => {
     // Se redirige hacia la interfaz.
     location.href = "gestionar_curriculum.html";
 }
+
 const openVerCurriculum = async (id) => {
     idCurriculum = id;
     const FORM = new FormData();
@@ -250,10 +254,10 @@ const openVerCurriculum = async (id) => {
                 row.id_institucion != null ? nombreInstitucion = row.institucion_estudio : nombreInstitucion = row.otra_institucion;
 
                 CM_TB_ESTUDIOS.innerHTML += `
-        <div>
-            <p><strong>${nombreInstitucion}</strong></p>
-            <p>${row.titulo_estudio} - ${final}</p>
-        </div>`;
+                <div>
+                    <p><strong>${nombreInstitucion}</strong></p>
+                    <p>${row.nombre_grado} - ${row.titulo_estudio}, ${final}</p>
+                </div>`;
             }
         }
 
@@ -282,7 +286,7 @@ const openUpdate = () => {
 */
 const openDelete = async (id) => {
     // Llamada a la función para mostrar un mensaje de confirmación, capturando la respuesta en una constante.
-    const RESPONSE = await confirmAction('¿Desea eliminar el curriculum de forma permanente?');
+    const RESPONSE = await confirmAction('¿Desea eliminar el currículum de forma permanente?');
     // Se verifica la respuesta del mensaje.
     if (RESPONSE) {
         // Se define una constante tipo objeto con los datos del registro seleccionado.
@@ -366,7 +370,7 @@ const openReport = async (id) => {
             const contactFields = [
                 rowCurriculum['correo_curriculum'],
                 `(+503) ${rowCurriculum['telefono_movil']}`,
-                rowCurriculum['telefono_fijo'] != null ? `(+503) ${rowCurriculum['telefono_fijo']}` : "" ,
+                rowCurriculum['telefono_fijo'] != null ? `(+503) ${rowCurriculum['telefono_fijo']}` : "",
             ];
             let yPositionC = 70;
             contactFields.forEach(field => {
@@ -506,7 +510,7 @@ const openReport = async (id) => {
                 yPositionC = Math.max(yPositionC, yPositionReferencias + 10);
             }
 
-
+            var meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
             let yPositionV = 40;
             const allExperiencias = dataCurriculum.dataset.filter(item =>
@@ -519,7 +523,7 @@ const openReport = async (id) => {
                 // Función para formatear la fecha en 'yyyy, mm, dd' usando split
                 const formatDate = (dateString) => {
                     const [year, month] = dateString.split('-');
-                    return `${year}, ${month}`;
+                    return `${meses[month - 1]} ${year}`;
                 };
 
                 return {

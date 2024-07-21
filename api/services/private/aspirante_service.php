@@ -36,7 +36,7 @@ if (isset($_GET['action'])) {
                     !$aspirante->setClave($_POST['claveAspirante']) or
                     !$aspirante->setCorreo($_POST['correoAspirante'], 0) or
                     !$aspirante->setGenero($_POST['generoAspirante']) or
-                    !$aspirante->setFechaNacimiento($_POST['fechanacimientoAspirante']) 
+                    !$aspirante->setFechaNacimiento($_POST['fechanacimientoAspirante'])
                 ) {
                     $result['error'] = $aspirante->getDataError();
                 } elseif ($_POST['claveAspirante'] != $_POST['repetirClaveAspirante']) {
@@ -67,7 +67,7 @@ if (isset($_GET['action'])) {
                     $result['error'] = 'Aspirante inexistente';
                 }
                 break;
-                 // Actualizar
+                // Actualizar
             case 'updateRow':
                 $_POST = Validator::validateForm($_POST);
                 if (
@@ -76,7 +76,7 @@ if (isset($_GET['action'])) {
                     !$aspirante->setApellido($_POST['apellidoAspirante']) or
                     !$aspirante->setCorreo($_POST['correoAspirante'], 1) or
                     !$aspirante->setFechaNacimiento($_POST['fechanacimientoAspirante']) or
-                    !$aspirante->setGenero($_POST['generoAspirante']) 
+                    !$aspirante->setGenero($_POST['generoAspirante'])
                 ) {
                     $result['error'] = $aspirante->getDataError();
                 } elseif ($aspirante->updateRow()) {
@@ -114,6 +114,7 @@ if (isset($_GET['action'])) {
                 break;
             default:
                 $result['error'] = 'Acción no disponible dentro de la sesión';
+                break;
         }
     } else {
         print(json_encode('Acceso denegado'));

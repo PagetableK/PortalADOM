@@ -27,7 +27,7 @@ if (isset($_GET['action'])) {
             case 'createRow':
                 $_POST = Validator::validateForm($_POST);
                 if (
-                    !$area->setArea($_POST['nombreArea']) 
+                    !$area->setArea($_POST['nombreArea'])
                 ) {
                     $result['error'] = $area->getDataError();
                 } elseif ($area->createRow()) {
@@ -58,7 +58,7 @@ if (isset($_GET['action'])) {
                 $_POST = Validator::validateForm($_POST);
                 if (
                     !$area->setId($_POST['idArea']) or
-                    !$area->setArea($_POST['nombreArea']) 
+                    !$area->setArea($_POST['nombreArea'])
                 ) {
                     $result['error'] = $area->getDataError();
                 } elseif ($area->updateRow()) {
@@ -70,7 +70,7 @@ if (isset($_GET['action'])) {
                 break;
             case 'deleteRow':
                 if (
-                    !$area->setId($_POST['idArea']) 
+                    !$area->setId($_POST['idArea'])
                 ) {
                     $result['error'] = $area->getDataError();
                 } elseif ($area->deleteRow()) {
@@ -82,6 +82,7 @@ if (isset($_GET['action'])) {
                 break;
             default:
                 $result['error'] = 'Acción no disponible dentro de la sesión';
+                break;
         }
         // Se obtiene la excepción del servidor de base de datos por si ocurrió un problema.
         $result['exception'] = Database::getException();

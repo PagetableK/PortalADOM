@@ -140,7 +140,7 @@ if (isset($_GET['action'])) {
         switch ($_GET['action']) {
                 // La acción logIn verifica las credenciales del administrador para poder ingresar al programa.
             case 'logIn':
-                // Se validan los campos del form que se encuentran en el array $_POST.
+                // Se eliminan los campos vacíos que se encuentran en los elementos del array $_POST.
                 $_POST = Validator::validateForm($_POST);
                 // Se valida el estado del administrador.
                 if ($administradores->checkUser($_POST['correo'], $_POST['clave']) == 'Estado inactivo') {
@@ -168,10 +168,35 @@ if (isset($_GET['action'])) {
                     $result['error'] = 'Credenciales incorrectas';
                 }
                 break;
+                // La acción signUp permite registrar el primer administrador del programa.
+            case 'signUp':
+                // Se eliminan los campos vacíos que se encuentran en los elementos del array $_POST.
+                $_POST = Validator::validateForm($_POST);
+                if(
+                    !$administradores->setNombre($_POST['nombre']) or
+                    !$administradores->setApellido($_POST['apellido']) or
+                    !$administradores->setCorreo($_POST['correoSignup']) or
+                    !$administradores->setClave($_POST['claveSignup'])
+                ) {
+                    $result['error'] = $administradores->getDataError();
+                } elseif($administradores->signUp()){
+                    $result['status'] = 1;
+                } else{
+                    $result['error'] = 'Ocurrió un error al completar el registro';
+                }
+                break;
+            case 'readUsers':
+                if($administradores->readUsers()){
+                    $result['status'] = 1;
+                } else{
+                    $result['message'] = 'No se han registrado administradores';
+                }
+                break;
                 // Si el usuario no ha iniciado sesión no permite realizar las acciones updateRow, createRow,
                 // deleteRow (Acciones que si están permitidas cuando el usuario ha iniciado sesión).
             default:
                 $result['error'] = 'Acción no disponible fuera de la sesión';
+                break;
         }
     }
     // Se obtiene la excepción del servidor de base de datos por si ocurrió un problema.

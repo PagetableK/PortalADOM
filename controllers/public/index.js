@@ -29,6 +29,10 @@ FORM_LOGIN.addEventListener('submit', async (event) => {
     else if(DATA.error == "Su cuenta ha sido desactivada") {
         sweetAlert(3, DATA.error, false);
     }
+    // Si se muestra el error se ejecuta el código.
+    else if(DATA.error == "Credenciales incorrectas") {
+        sweetAlert(3, DATA.error, false);
+    }
     // Si la respuesta no es satisfactoria se muestra el error.
     else {
         sweetAlert(2, DATA.error, false);

@@ -27,7 +27,7 @@ if (isset($_GET['action'])) {
             case 'createRow':
                 $_POST = Validator::validateForm($_POST);
                 if (
-                    !$instituciones->setInstitucion($_POST['nombreInstitucion']) 
+                    !$instituciones->setInstitucion($_POST['nombreInstitucion'])
                 ) {
                     $result['error'] = $instituciones->getDataError();
                 } elseif ($instituciones->createRow()) {
@@ -58,7 +58,7 @@ if (isset($_GET['action'])) {
                 $_POST = Validator::validateForm($_POST);
                 if (
                     !$instituciones->setId($_POST['idInstitucion']) or
-                    !$instituciones->setInstitucion($_POST['nombreInstitucion']) 
+                    !$instituciones->setInstitucion($_POST['nombreInstitucion'])
                 ) {
                     $result['error'] = $instituciones->getDataError();
                 } elseif ($instituciones->updateRow()) {
@@ -68,13 +68,13 @@ if (isset($_GET['action'])) {
                     $result['error'] = 'Ocurrió un problema al modificar la institución';
                 }
                 break;
-                case 'cantidadInstituciones':
-                    if ($result['dataset'] = $instituciones->cantidadInstituciones()) {
-                        $result['status'] = 1;
-                    } else {
-                        $result['exception'] = 'No hay datos registrados';
-                    }
-                    break;
+            case 'cantidadInstituciones':
+                if ($result['dataset'] = $instituciones->cantidadInstituciones()) {
+                    $result['status'] = 1;
+                } else {
+                    $result['error'] = 'No se han registrado instituciones';
+                }
+                break;
             case 'deleteRow':
                 if (
                     !$instituciones->setId($_POST['idInstitucion'])
@@ -89,6 +89,7 @@ if (isset($_GET['action'])) {
                 break;
             default:
                 $result['error'] = 'Acción no disponible dentro de la sesión';
+                break;
         }
         // Se obtiene la excepción del servidor de base de datos por si ocurrió un problema.
         $result['exception'] = Database::getException();

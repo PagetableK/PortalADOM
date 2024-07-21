@@ -353,8 +353,20 @@ const cargarAspirantes = async () => {
     if (DATA.status) {
         // Se recorren las entradas del conjunto de datos y se agrega una opción dentro del select por cada una.
         DATA.dataset.forEach(row => {
+
+            let nombreCompleto = row.nombre_aspirante + ' ' + row.apellido_aspirante;
+
+            let nombreArray = nombreCompleto.split(" ");
+
+            let nombreCapitalizado = "";
+
+            for (var i = 0; i < nombreArray.length; i++) {
+
+                nombreCapitalizado += " " + nombreArray[i].charAt(0).toUpperCase() + nombreArray[i].substring(1);
+            }
+
             SELECT_ASPIRANTES.innerHTML += `
-                <option value="${row.id_aspirante}">${row.nombre_aspirante} ${row.apellido_aspirante} - ${row.correo_aspirante}</option>
+                <option value="${row.id_aspirante}">${nombreCapitalizado} - ${row.correo_aspirante}</option>
             `;
         });
     } else {
@@ -1508,14 +1520,14 @@ const almacenarExperiencias = async (arrayExperiencias) => {
         if (row.fecha_fin == null) {
 
             mesFinal = "";
-    
+
             yearFinal = "";
         } else {
 
             fechaFinal = row.fecha_fin.split('-');
 
             mesFinal = fechaFinal[1];
-    
+
             yearFinal = fechaFinal[0];
         }
 

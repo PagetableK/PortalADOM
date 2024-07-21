@@ -76,6 +76,9 @@ SAVE_FORM.addEventListener('submit', async (event) => {
         sweetAlert(3, 'El correo del aspirante ya está siendo utilizado', false);
     } else if(DATA.error == "El correo ya está siendo utilizado por otro aspirante"){
         sweetAlert(3, DATA.error, false);
+    } else if(DATA.error == "Contraseñas diferentes"){
+
+        sweetAlert(3, "Las contraseñas no coinciden", false);
     } else {
         sweetAlert(2, DATA.error, false);
     }

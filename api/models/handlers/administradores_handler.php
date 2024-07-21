@@ -52,8 +52,8 @@ class AdministradoresHandler
             return false;
         }
     }
-    
-   // La función checkDuplicate permite buscar un correo específico de la tabla.
+
+    // La función checkDuplicate permite buscar un correo específico de la tabla.
     public function checkDuplicate($correo)
     {
         $sql = 'SELECT id_administrador
@@ -63,7 +63,7 @@ class AdministradoresHandler
         return Database::getRow($sql, $params);
     }
 
-   // La función checkDuplicateWithId permite buscar un correo específico de la tabla excluyendo un registro específico.
+    // La función checkDuplicateWithId permite buscar un correo específico de la tabla excluyendo un registro específico.
     public function checkDuplicateWithId($correo)
     {
         $sql = 'SELECT id_administrador
@@ -149,6 +149,27 @@ class AdministradoresHandler
     {
         $sql = 'UPDATE administradores SET estado_administrador = NOT estado_administrador WHERE id_administrador = ?;';
         $params = array($this->id);
+        return Database::executeRow($sql, $params);
+    }
+
+    // Función que permite verificar si se han registrado administradores.
+    public function readUsers()
+    {
+        // Se establece la estructura de la sentencia.
+        $sql = 'SELECT * FROM administradores LIMIT 1';
+        // Se ejecuta el query y se retorna el conjunto de datos.
+        return Database::getRow($sql);
+    }
+
+    // Función que permite registrar el primer administrador.
+    public function signUp()
+    {
+        // Se establece la estructura de la sentencia.
+        $sql = 'INSERT INTO administradores(nombre_administrador, apellido_administrador, correo_administrador, clave_administrador) 
+                VALUES(?, ?, ?, ?)';
+        // Se almacenan los parámetros en el array.
+        $params = array($this->nombre, $this->apellido, $this->correo, $this->clave);    
+        // Se ejecuta la sentencia y se retorna el estado del query.
         return Database::executeRow($sql, $params);
     }
 }

@@ -101,7 +101,6 @@ const fillTable = async (form = null) => {
     } else {
         // Se muestra el mensaje.
         sweetAlert(3, DATA.error, true);
-        BUSCADOR.focus();
     }
 }
 

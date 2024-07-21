@@ -206,9 +206,9 @@ if (isset($_GET['action'])) {
                 $_POST = Validator::validateForm($_POST);
                 if (!$aspirantes->setId($_POST['idAspirante'])) {
                     $result['error'] = $aspirantes->getDataError();
-                } elseif($_POST['contra'] != $_POST['contraRepetir']){
+                } elseif ($_POST['contra'] != $_POST['contraRepetir']) {
                     $result['error'] = 'Las contraseñas no coinciden';
-                } elseif(strlen($_POST['contra']) < 8){
+                } elseif (strlen($_POST['contra']) < 8) {
                     $result['error'] = 'La contraseña debe tener mínimo 8 caracteres';
                 } elseif ($result['dataset'] = $aspirantes->restablecerContra($_POST['contra'])) {
                     $result['status'] = 1;

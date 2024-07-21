@@ -89,7 +89,7 @@ if (isset($_GET['action'])) {
                     $result['error'] = $curriculum->getDataError();
                 } elseif ($curriculum->deleteRow()) {
                     $result['status'] = 1;
-                    $result['message'] = 'curriculum eliminada correctamente';
+                    $result['message'] = 'Currículum eliminado correctamente';
                 } else {
                     $result['error'] = 'Ocurrió un problema al eliminar el currículum';
                 }

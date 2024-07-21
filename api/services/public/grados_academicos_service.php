@@ -15,7 +15,7 @@ if (isset($_GET['action'])) {
         $result['session'] = 1;
         // Se compara la acción a realizar cuando un aspirante ha iniciado sesión.
         switch ($_GET['action']) {
-            // La acción readAll retorna los grados académicos obtenidos.
+                // La acción readAll retorna los grados académicos obtenidos.
             case 'readAll':
                 // Se valida que el conjunto de datos que retorna la función se almacena en el array.
                 if ($result['dataset'] = $grado->readAll()) {
@@ -26,10 +26,10 @@ if (isset($_GET['action'])) {
                     $result['error'] = 'No existen grados académicos registrados';
                 }
                 break;
-            // Si no se encuentra la acción se retorna el error.
+                // Si no se encuentra la acción se retorna el error.
             default:
                 $result['error'] = 'Acción no disponible dentro de la sesión';
-            break;
+                break;
         }
     } else {
         print(json_encode('Acceso denegado'));

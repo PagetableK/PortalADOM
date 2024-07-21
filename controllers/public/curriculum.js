@@ -329,7 +329,7 @@ const openReport = async () => {
                 yPositionC = Math.max(yPositionC, yPositionReferencias + 10);
             }
 
-
+            var meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
             let yPositionV = 40;
             const allExperiencias = dataCurriculum.dataset.filter(item =>
@@ -342,7 +342,7 @@ const openReport = async () => {
                 // Función para formatear la fecha en 'yyyy, mm, dd' usando split
                 const formatDate = (dateString) => {
                     const [year, month] = dateString.split('-');
-                    return `${year}, ${month}`;
+                    return `${meses[month - 1]} ${year}`;
                 };
 
                 return {
