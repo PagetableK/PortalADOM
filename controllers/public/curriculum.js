@@ -55,7 +55,7 @@ $(".select2-single").select2({
     maximumSelectionSize: 6,
     containerCssClass: ':all:',
     "language": {
-        "noResults": function(){
+        "noResults": function () {
             return "No se encontraron resultados";
         }
     },
@@ -159,11 +159,11 @@ const openReport = async () => {
             let nombreCompleto = rowCurriculum['NOMBRE'];
 
             let nombreArray = nombreCompleto.split(" ");
-        
+
             let nombreCapitalizado = "";
-        
-            for(var i = 0; i < nombreArray.length; i++){
-        
+
+            for (var i = 0; i < nombreArray.length; i++) {
+
                 nombreCapitalizado += nombreArray[i].charAt(0).toUpperCase() + nombreArray[i].substring(1) + " ";
             }
 
@@ -171,7 +171,7 @@ const openReport = async () => {
             doc.setFont('Times', 'bold');
             doc.setFontSize(28);
             doc.setTextColor(...secondaryColor);
-            doc.text(nombreCapitalizado, 70, 15, {maxWidth: 140});
+            doc.text(nombreCapitalizado, 70, 15, { maxWidth: 140 });
             doc.setFontSize(16);
             doc.setTextColor(0, 0, 0);
 
@@ -284,7 +284,19 @@ const openReport = async () => {
             dataCurriculum.dataset.forEach(item => {
                 if (item['id_curriculum'] === rowCurriculum['id_curriculum'] &&
                     item['APELLIDO'] && item['puesto_trabajo'] && item['telefono_referencia']) {
-                    const referencia = `- ${item['APELLIDO']},\n${item['puesto_trabajo']},\n(+503) ${item['telefono_referencia']}`;
+
+                    let nombreCompleto = item['APELLIDO'];
+
+                    let nombreArray = nombreCompleto.split(" ");
+
+                    let nombreCapitalizado = "";
+
+                    for (var i = 0; i < nombreArray.length; i++) {
+
+                        nombreCapitalizado += " " + nombreArray[i].charAt(0).toUpperCase() + nombreArray[i].substring(1);
+                    }
+
+                    const referencia = `- ${nombreCapitalizado},\n${item['puesto_trabajo']},\n(+503) ${item['telefono_referencia']}`;
                     referencias.add(referencia);
                 }
             });
@@ -332,14 +344,14 @@ const openReport = async () => {
                     const [year, month] = dateString.split('-');
                     return `${year}, ${month}`;
                 };
-            
+
                 return {
-                    title: `- ${item['nombre_cargo']}, ${item['nombre_empresa']} | ${formatDate(item['fecha_inicio'])} - ${item['fecha_fin'] ? formatDate(item['fecha_fin']) : 'Trabajo actual'}` ,
+                    title: `- ${item['nombre_cargo']}, ${item['nombre_empresa']} | ${formatDate(item['fecha_inicio'])} - ${item['fecha_fin'] ? formatDate(item['fecha_fin']) : 'Trabajo actual'}`,
                     details: `${item['descripcion_puesto']}`
                 };
             });
-            
-            
+
+
 
             if (allExperiencias.length > 0 && allExperiencias.some(exp => exp.title && exp.details)) {
 
@@ -360,13 +372,13 @@ const openReport = async () => {
                     const experienciaString = `${exp.title} ${exp.details}`;
                     if (!experienciasSet.has(experienciaString)) {
                         doc.setFont('Times', 'normal');
-                        doc.text(exp.title, 70, expY, {maxWidth :140});
+                        doc.text(exp.title, 70, expY, { maxWidth: 140 });
                         doc.setFont('Times', 'normal');
                         expY += 9;
 
                         const detalles = exp.details.split('\n');
                         detalles.forEach(detail => {
-                            doc.text(`${detail}`, 70, expY, {maxWidth :140});
+                            doc.text(`${detail}`, 70, expY, { maxWidth: 140 });
                             expY += 5;
                         });
 
@@ -375,7 +387,7 @@ const openReport = async () => {
 
                     }
                 });
-                yPositionV = Math.max(yPositionV, expY );
+                yPositionV = Math.max(yPositionV, expY);
             }
 
 
@@ -462,7 +474,7 @@ const openReport = async () => {
                 yPositionV = Math.max(yPositionV, certY + 10);
             }
 
-            
+
 
             const pdfOutput = doc.output('dataurlnewwindow'); // Genera un Blob en lugar de una URL
 
@@ -486,7 +498,8 @@ const openReport = async () => {
 
         });
     } else {
-        doc.text('No hay información para mostrar', 10, 10);
+
+        sweetAlert(2, DATA.error, false);
     }
 };
 
@@ -1369,7 +1382,7 @@ FORM_CURRICULUM.addEventListener('submit', async (e) => {
             });
 
             stepperCv.to(1);
-            
+
             // Se restablece el scroll de la pantalla.
             window.scrollTo(0, 0);
         } else if (DATA.error == "El teléfono móvil ya está siendo utilizado en otro currículum") {
@@ -1505,7 +1518,7 @@ function crearId(longitud) {
 // Evento que se ejecuta al cambiar la opción seleccionada.
 $('#institucion').on('change', function (e) {
     // Se verifica si el array está vacío.
-    if($("#institucion").select2('data').length == 0){
+    if ($("#institucion").select2('data').length == 0) {
     }
     // Si el valor seleccionado es 0 se ejecuta el código.
     else if ($("#institucion").select2('data')[0].id == 0) {

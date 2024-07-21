@@ -245,8 +245,15 @@ class CurriculumHandler
         $sql = 'SELECT id_curriculum
                 FROM curriculum_aspirantes
                 WHERE (correo_curriculum = ? OR telefono_movil = ? OR telefono_fijo = ?) AND id_curriculum != ?';
-        // Se almacenan los parámetros en el array.
-        $params = array($value, $value, $value, $this->id);
+        // Se almacenan los parámetros en el array cuando se ejecuta el query desde el sitio privado.
+        if($this->id != null){
+            $params = array($value, $value, $value, $this->id);
+        } 
+        // Se almacenan los parámetros en el array cuando se ejecuta el query desde el sitio público.
+        else{
+            $params = array($value, $value, $value, $_SESSION['idAspirante']);
+        }
+
         // Se obtiene la fila y se devuelve el dato.
         return Database::getRow($sql, $params);
     }

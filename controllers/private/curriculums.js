@@ -8,7 +8,7 @@ const SEARCH_FORM = document.getElementById('searchForm');
 const TABLE_BODY = document.getElementById('tabla_aspirante');
 // Constantes para establecer los elementos del componente Modal.
 //const SAVE_MODAL = new bootstrap.Modal('#saveModal'),
-    MODAL_TITLE = document.getElementById('modalTitle');
+MODAL_TITLE = document.getElementById('modalTitle');
 // Constantes para establecer los elementos del formulario de guardar.
 const SAVE_FORM = document.getElementById('saveForm'),
     ID_CURRICULUM = document.getElementById('idCurriculum'),
@@ -26,7 +26,7 @@ const CURRICULUM_MODAL = new bootstrap.Modal('#curriculumModalViewer'),
     CM_EMAIL = document.getElementById("curriculumModalEmail"),
     CM_TB_EXPERIENCIA = document.getElementById("curriculumModalExperienciaLaboral"),
     CM_TB_ESTUDIOS = document.getElementById("curriculumModalEstudios");
-    CM_ELIMINAR = document.getElementById("cmEliminarBoton");
+CM_ELIMINAR = document.getElementById("cmEliminarBoton");
 let idCurriculum = 0;
 
 // Método del evento para cuando el documento ha cargado.
@@ -42,12 +42,12 @@ SEARCH_FORM.addEventListener('submit', (event) => {
     // Se evita recargar la página web después de enviar el formulario.
     event.preventDefault();
     // Se verifica que el campo de búsqueda no esté vacío.
-    if(SEARCH_FORM['search'].value.trim() != ""){
+    if (SEARCH_FORM['search'].value.trim() != "") {
         // Constante tipo objeto con los datos del formulario.
         const FORM = new FormData(SEARCH_FORM);
         // Llamada a la función para llenar la tabla con los resultados de la búsqueda.
         fillTable(FORM);
-    } else{
+    } else {
         sweetAlert(3, 'Ingrese un valor para buscar', false);
     }
 });
@@ -90,29 +90,29 @@ const fillTable = async (form = null) => {
     const DATA = await fetchData(CURRICULUM_API, action, form);
     // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
     if (DATA.status) {
-        const addedIds = new Set(); 
+        const addedIds = new Set();
         // Se recorre el conjunto de registros fila por fila.
         DATA.dataset.forEach(row => {
 
-            if(row.imagen_aspirante == null){
+            if (row.imagen_aspirante == null) {
                 row.imagen_aspirante = "default.webp"
             }
 
             let nombreCompleto = row.NOMBRE;
 
             let nombreArray = nombreCompleto.split(" ");
-            
+
             let nombreCapitalizado = "";
-            
-            for(var i = 0; i < nombreArray.length; i++){
-            
-                nombreCapitalizado += " "+nombreArray[i].charAt(0).toUpperCase() + nombreArray[i].substring(1);
+
+            for (var i = 0; i < nombreArray.length; i++) {
+
+                nombreCapitalizado += " " + nombreArray[i].charAt(0).toUpperCase() + nombreArray[i].substring(1);
             }
 
             // Se crean y concatenan las filas de la tabla con los datos de cada registro.
             if (!addedIds.has(row.id_curriculum)) {
                 addedIds.add(row.id_curriculum);
-            TABLE_BODY.innerHTML += `
+                TABLE_BODY.innerHTML += `
                 <tr>
                     <td><img class="rounded-circle" src="${SERVER_URL}images/aspirantes/${row.IMAGEN}" height="50"></td>
                     <td>${nombreCapitalizado}</td>
@@ -131,8 +131,11 @@ const fillTable = async (form = null) => {
             `;
             }
         });
+    } else if (DATA.error == "No se han agregado currículums") {
+
+        sweetAlert(3, DATA.error, false);
     } else {
-        sweetAlert(3, DATA.error, true);
+        sweetAlert(2, DATA.error, true);
     }
 }
 
@@ -152,41 +155,41 @@ const openVerCurriculum = async (id) => {
     const DATA = await fetchData(CURRICULUM_API, 'readOneData', FORM);
 
     CM_ELIMINAR.classList.remove("d-none")
-    CM_ELIMINAR.addEventListener('click', function() {
+    CM_ELIMINAR.addEventListener('click', function () {
         openDelete(id);
         CURRICULUM_MODAL.hide();
     })
 
     // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
     if (DATA.status) {
-        
+
         const ROW = DATA.dataset;
-        CM_IMAGEN.src= SERVER_URL+"images/aspirantes/"+ROW.imagen_aspirante;
-        if(ROW.imagen_aspirante == null){
-            CM_IMAGEN.src= SERVER_URL+"images/aspirantes/default.webp";
+        CM_IMAGEN.src = SERVER_URL + "images/aspirantes/" + ROW.imagen_aspirante;
+        if (ROW.imagen_aspirante == null) {
+            CM_IMAGEN.src = SERVER_URL + "images/aspirantes/default.webp";
         }
 
         let nombreCompleto = ROW.nombre_aspirante + ' ' + ROW.apellido_aspirante;
 
         let nombreArray = nombreCompleto.split(" ");
-        
+
         let nombreCapitalizado = "";
-        
-        for(var i = 0; i < nombreArray.length; i++){
-        
-            nombreCapitalizado += " "+nombreArray[i].charAt(0).toUpperCase() + nombreArray[i].substring(1);
+
+        for (var i = 0; i < nombreArray.length; i++) {
+
+            nombreCapitalizado += " " + nombreArray[i].charAt(0).toUpperCase() + nombreArray[i].substring(1);
         }
 
         CM_NOMBRE.textContent = nombreCapitalizado;
-        CM_EDAD.textContent = "Edad: " +ROW.Edad + " años";
+        CM_EDAD.textContent = "Edad: " + ROW.Edad + " años";
         CM_GENERO.textContent = "Género: " + ROW.genero_aspirante;
         CM_TELEFONO_MOVIL.textContent = "Teléfono móvil: " + ROW.telefono_movil;
 
-        if(ROW.telefono_fijo != null){
+        if (ROW.telefono_fijo != null) {
 
             CM_TELEFONO_FIJO.classList.remove('d-none');
             CM_TELEFONO_FIJO.textContent = "Teléfono fijo: " + ROW.telefono_fijo;
-        } else{
+        } else {
 
             CM_TELEFONO_FIJO.classList.add('d-none');
         }
@@ -198,19 +201,19 @@ const openVerCurriculum = async (id) => {
             const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
             return `${meses[month - 1]}, ${year}`;
         }
-        
+
         const FORME = new FormData();
         FORME.append('idCurriculum', id);
         const DATAE = await fetchData(CURRICULUM_API, 'readOneDataExperiencias', FORME);
-        
+
         if (DATAE.status) {
 
             CONTENEDOR_EXPERIENCIAS.classList.remove('d-none');
-            
+
             CM_TB_EXPERIENCIA.innerHTML = '';
             DATAE.dataset.forEach(row => {
                 var final;
-                if (row.fecha_fin == null) { 
+                if (row.fecha_fin == null) {
                     final = `Inicio en ${formatoFecha(row.fecha_inicio)} - Trabajo actual`;
                 } else {
                     final = `${formatoFecha(row.fecha_inicio)} - ${formatoFecha(row.fecha_fin)}`;
@@ -228,34 +231,34 @@ const openVerCurriculum = async (id) => {
         }
 
         const FORMS = new FormData();
-FORMS.append('idCurriculum', id);
-const DATAS = await fetchData(CURRICULUM_API, 'readOneDataEstudios', FORMS);
+        FORMS.append('idCurriculum', id);
+        const DATAS = await fetchData(CURRICULUM_API, 'readOneDataEstudios', FORMS);
 
-if (DATAS.status) { 
-    CM_TB_ESTUDIOS.innerHTML = '';
-    
-    for (const row of DATAS.dataset) {
-        let final = row.fecha_finalizacion;
-        if (final == null) {
-            final = "Cursando";
-        } else {
-            final = `${row.fecha_finalizacion}`;
-        }
+        if (DATAS.status) {
+            CM_TB_ESTUDIOS.innerHTML = '';
 
-        let nombreInstitucion = "";
-        
-        row.id_institucion != null ? nombreInstitucion = row.institucion_estudio : nombreInstitucion = row.otra_institucion;
+            for (const row of DATAS.dataset) {
+                let final = row.fecha_finalizacion;
+                if (final == null) {
+                    final = "Cursando";
+                } else {
+                    final = `${row.fecha_finalizacion}`;
+                }
 
-        CM_TB_ESTUDIOS.innerHTML += `
+                let nombreInstitucion = "";
+
+                row.id_institucion != null ? nombreInstitucion = row.institucion_estudio : nombreInstitucion = row.otra_institucion;
+
+                CM_TB_ESTUDIOS.innerHTML += `
         <div>
             <p><strong>${nombreInstitucion}</strong></p>
             <p>${row.titulo_estudio} - ${final}</p>
         </div>`;
-    }
-}
+            }
+        }
 
 
-        CURRICULUM_MODAL.show(); 
+        CURRICULUM_MODAL.show();
 
     } else {
         sweetAlert(2, DATA.error, false);
@@ -333,11 +336,11 @@ const openReport = async (id) => {
             let nombreCompleto = rowCurriculum['NOMBRE'];
 
             let nombreArray = nombreCompleto.split(" ");
-        
+
             let nombreCapitalizado = "";
-        
-            for(var i = 0; i < nombreArray.length; i++){
-        
+
+            for (var i = 0; i < nombreArray.length; i++) {
+
                 nombreCapitalizado += nombreArray[i].charAt(0).toUpperCase() + nombreArray[i].substring(1) + " ";
             }
 
@@ -345,7 +348,7 @@ const openReport = async (id) => {
             doc.setFont('Times', 'bold');
             doc.setFontSize(28);
             doc.setTextColor(...secondaryColor);
-            doc.text(nombreCapitalizado, 70, 15, {maxWidth: 140});
+            doc.text(nombreCapitalizado, 70, 15, { maxWidth: 140 });
             doc.setFontSize(16);
             doc.setTextColor(0, 0, 0);
 
@@ -362,7 +365,8 @@ const openReport = async (id) => {
             doc.setTextColor(0, 0, 0);
             const contactFields = [
                 rowCurriculum['correo_curriculum'],
-                `(+503) ${rowCurriculum['telefono_movil']}`
+                `(+503) ${rowCurriculum['telefono_movil']}`,
+                rowCurriculum['telefono_fijo'] != null ? `(+503) ${rowCurriculum['telefono_fijo']}` : "" ,
             ];
             let yPositionC = 70;
             contactFields.forEach(field => {
@@ -457,7 +461,19 @@ const openReport = async (id) => {
             dataCurriculum.dataset.forEach(item => {
                 if (item['id_curriculum'] === rowCurriculum['id_curriculum'] &&
                     item['APELLIDO'] && item['puesto_trabajo'] && item['telefono_referencia']) {
-                    const referencia = `- ${item['APELLIDO']},\n${item['puesto_trabajo']},\n(+503) ${item['telefono_referencia']}`;
+
+                    let nombreCompleto = item['APELLIDO'];
+
+                    let nombreArray = nombreCompleto.split(" ");
+
+                    let nombreCapitalizado = "";
+
+                    for (var i = 0; i < nombreArray.length; i++) {
+
+                        nombreCapitalizado += " " + nombreArray[i].charAt(0).toUpperCase() + nombreArray[i].substring(1);
+                    }
+
+                    const referencia = `- ${nombreCapitalizado},\n${item['puesto_trabajo']},\n(+503) ${item['telefono_referencia']}`;
                     referencias.add(referencia);
                 }
             });
@@ -505,14 +521,14 @@ const openReport = async (id) => {
                     const [year, month] = dateString.split('-');
                     return `${year}, ${month}`;
                 };
-            
+
                 return {
-                    title: `- ${item['nombre_cargo']}, ${item['nombre_empresa']} | ${formatDate(item['fecha_inicio'])} - ${item['fecha_fin'] ? formatDate(item['fecha_fin']) : 'Trabajo actual'}` ,
+                    title: `- ${item['nombre_cargo']}, ${item['nombre_empresa']} | ${formatDate(item['fecha_inicio'])} - ${item['fecha_fin'] ? formatDate(item['fecha_fin']) : 'Trabajo actual'}`,
                     details: `${item['descripcion_puesto']}`
                 };
             });
-            
-            
+
+
 
             if (allExperiencias.length > 0 && allExperiencias.some(exp => exp.title && exp.details)) {
 
@@ -533,13 +549,13 @@ const openReport = async (id) => {
                     const experienciaString = `${exp.title} ${exp.details}`;
                     if (!experienciasSet.has(experienciaString)) {
                         doc.setFont('Times', 'normal');
-                        doc.text(exp.title, 70, expY, {maxWidth :140});
+                        doc.text(exp.title, 70, expY, { maxWidth: 140 });
                         doc.setFont('Times', 'normal');
                         expY += 9;
 
                         const detalles = exp.details.split('\n');
                         detalles.forEach(detail => {
-                            doc.text(`${detail}`, 70, expY, {maxWidth :140});
+                            doc.text(`${detail}`, 70, expY, { maxWidth: 140 });
                             expY += 5;
                         });
 
@@ -548,7 +564,7 @@ const openReport = async (id) => {
 
                     }
                 });
-                yPositionV = Math.max(yPositionV, expY );
+                yPositionV = Math.max(yPositionV, expY);
             }
 
 
@@ -635,7 +651,7 @@ const openReport = async (id) => {
                 yPositionV = Math.max(yPositionV, certY + 10);
             }
 
-            
+
 
             const pdfOutput = doc.output('dataurlnewwindow'); // Genera un Blob en lugar de una URL
 
