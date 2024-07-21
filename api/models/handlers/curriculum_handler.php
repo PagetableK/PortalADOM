@@ -975,7 +975,7 @@ class CurriculumHandler
     public function readCurriculums()
     {
         $sql = 'SELECT * FROM vista_tabla_curriculum
-        WHERE id_curriculum LIKE ?';
+        WHERE id_curriculum = ?';
         $params = array($this->id);
         return Database::getRows($sql, $params);
     }
