@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Llamada a la función para validar sesiones activas.
     cargarPlantilla();
     // Se verifica que la ruta actual sea el archivo index.html.
-    if (location.href.substring(42) != 'index.html') {
+    if (location.href.substring(location.href.length - 10) != 'index.html') {
         location.href = 'index.html';
     }
     // Petición para consultar los usuarios registrados.
