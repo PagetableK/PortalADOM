@@ -64,6 +64,7 @@
                     <thead>
                         <tr class="text-center">
                             <th>Nombre</th>
+                            <th>Apellido</th>
                             <th>Correo</th>
                             <th>Fecha de nacimiento</th>
                             <th>Género</th>
@@ -78,13 +79,13 @@
         </div>
 
         <!-- Componente Modal para guardar un registro -->
-        <div class="modal fade" id="saveModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        <div class="modal fade" id="saveModal" data-bs-backdrop="static" data-bs-keyboard="false"
             aria-labelledby="modalTitle" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header ">
                         <h1 class="modal-title fs-5 text-dark" id="modalTitle"></h1>
-                        <button type="button" class="btn-close btn-close-dark" data-bs-dismiss="modal"
+                        <button type="button" class="btn-close btn-close-dark" data-bs-dismiss="modal" tabindex="-1"
                             aria-label="Close"></button>
                     </div>
                     <!-- Formulario para crear o actualizar un registro -->
@@ -119,13 +120,13 @@
                             </div>
                             <div class="col-sm-12 col-md-6">
                                 <label for="claveAspirante" class="form-label fw-semibold">Contraseña</label>
-                                <input id="claveAspirante" type="password" name="claveAspirante" class="form-control"
+                                <input id="claveAspirante" type="password" name="claveAspirante" class="form-control" minlength="8"
                                     placeholder="Ingrese la clave del aspirante" autocomplete="off" required>
                             </div>
                             <div class="col-sm-12 col-md-6">
                                 <label for="repetirClaveAspirante" class="form-label fw-semibold">Repetir
                                     contraseña</label>
-                                <input id="repetirClaveAspirante" type="password" name="repetirClaveAspirante"
+                                <input id="repetirClaveAspirante" type="password" name="repetirClaveAspirante" minlength="8"
                                     class="form-control" placeholder="Repita la clave del aspirante" autocomplete="off"
                                     required>
                             </div>

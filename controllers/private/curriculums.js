@@ -577,7 +577,7 @@ const openReport = async (id) => {
                 item['id_curriculum'] === rowCurriculum['id_curriculum'] &&
                 item['nombre_grado'] &&
                 item['titulo_estudio']
-            ).map(item => `. ${item['nombre_grado']} en ${item['titulo_estudio']}, ${item['nombre_institucion'] ? item['nombre_institucion'] : ''} ${item['nombre_institucion_estudio'] ? item['nombre_institucion_estudio'] : ''} ${item['fecha_finalizacion_estudio'] ? item['fecha_finalizacion_estudio'] : 'Cursando'}`);
+            ).map(item => `. ${item['nombre_grado']} en ${item['titulo_estudio']}, ${item['nombre_institucion'] ? item['nombre_institucion'] : ''} ${item['nombre_institucion_estudio'] ? item['nombre_institucion_estudio'] : ''} - ${item['fecha_finalizacion_estudio'] ? item['fecha_finalizacion_estudio'] : 'Cursando'}`);
 
 
             // Verificar si hay formaciones para mostrar

@@ -7,6 +7,10 @@ body{
     overflow-x: auto;
 }
 
+.iconoCeleste{
+    color: #3699FF;
+}
+
 .rounded-4{
     background-color: #E5E6EB;
 }

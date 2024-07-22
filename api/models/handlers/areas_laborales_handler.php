@@ -78,10 +78,17 @@ class AreaslaboralesHandler
 
     public function checkDuplicateWithId($area)
     {
-        $sql = 'SELECT id_area
-                 FROM areas_laborales
-                 WHERE nombre_area = ?';
-        $params = array($area);
+        if($this->id == null){
+            $sql = 'SELECT id_area
+                     FROM areas_laborales
+                     WHERE nombre_area = ?';
+            $params = array($area);
+        } else{
+            $sql = 'SELECT id_area
+                     FROM areas_laborales
+                     WHERE nombre_area = ? AND id_area != ?';
+            $params = array($area, $this->id);
+        }
         return Database::getRow($sql, $params);
     }
 }

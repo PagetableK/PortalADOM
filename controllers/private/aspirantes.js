@@ -78,7 +78,14 @@ SAVE_FORM.addEventListener('submit', async (event) => {
         sweetAlert(3, DATA.error, false);
     } else if(DATA.error == "Contraseñas diferentes"){
 
-        sweetAlert(3, "Las contraseñas no coinciden", false);
+        await sweetAlert(3, "Las contraseñas no coinciden", false);
+
+        SAVE_FORM['claveAspirante'].focus();
+    } else if(DATA.error == "La contraseña es menor a 8 caracteres"){
+
+        await sweetAlert(3, "La contraseña debe tener 8 caracteres como mínimo", false);
+
+        SAVE_FORM['claveAspirante'].focus();
     } else {
         sweetAlert(2, DATA.error, false);
     }
@@ -101,9 +108,9 @@ const fillTable = async (form = null) => {
         // Se recorre el conjunto de registros fila por fila.
         DATA.dataset.forEach(row => {
 
-            let nombreCompleto = row.NOMBRE + ' ' + row.APELLIDO;
+            let nombre = row.NOMBRE;
 
-            let nombreArray = nombreCompleto.split(" ");
+            let nombreArray = nombre.split(" ");
         
             let nombreCapitalizado = "";
         
@@ -111,10 +118,22 @@ const fillTable = async (form = null) => {
         
                 nombreCapitalizado += " "+nombreArray[i].charAt(0).toUpperCase() + nombreArray[i].substring(1);
             }
+
+            let apellido = row.APELLIDO;
+
+            let apellidoArray = apellido.split(" ");
+        
+            let apellidoCapitalizado = "";
+        
+            for(var i = 0; i < apellidoArray.length; i++){
+        
+                apellidoCapitalizado += " "+apellidoArray[i].charAt(0).toUpperCase() + apellidoArray[i].substring(1);
+            }
             // Se crean y concatenan las filas de la tabla con los datos de cada registro.
             TABLE_BODY.innerHTML += `
                 <tr class="${getRowBackgroundColor(row.ESTADO)}">
                     <td>${nombreCapitalizado}</td>
+                    <td>${apellidoCapitalizado}</td>
                     <td>${row.CORREO}</td>
                     <td>${formatDate(row.FECHA)}</td>
                     <td>${row.GENERO}</td>

@@ -132,9 +132,9 @@ class AspirantesHandler
     {
         $value = '%' . Validator::getSearchValue() . '%';
         $sql = 'SELECT * FROM vista_tabla_aspirantes
-        WHERE NOMBRE LIKE ? OR APELLIDO LIKE ? OR CORREO LIKE ?
+        WHERE NOMBRE LIKE ? OR APELLIDO LIKE ? OR CORREO LIKE ? OR GENERO LIKE ? OR CONCAT(NOMBRE, " ", APELLIDO) LIKE ?
         ORDER BY NOMBRE;';
-        $params = array($value, $value, $value);
+        $params = array($value, $value, $value, $value, $value);
         return Database::getRows($sql, $params);
     }
 

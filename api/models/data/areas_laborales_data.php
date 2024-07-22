@@ -35,7 +35,7 @@ class AreaslaboralesData extends AreaslaboralesHandler
             return false;
         }
         elseif (AreaslaboralesHandler::checkDuplicateWithId($value)) {
-            $this->data_error = 'El área laboral ya ha sido agregado';
+            $this->data_error = 'El área laboral ya ha sido agregada';
             return false;
         } elseif (Validator::validateLength($value, $min, $max)) {
             $this->area = $value;

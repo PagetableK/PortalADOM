@@ -45,10 +45,17 @@ class HabilidadesHandler
 
     public function checkDuplicate($nombre)
     {
-        $sql = 'SELECT id_habilidad
-                FROM habilidades
-                WHERE nombre_habilidad = ?';
-        $params = array($nombre);
+        if($this->id == null){
+            $sql = 'SELECT id_habilidad
+                    FROM habilidades
+                    WHERE nombre_habilidad = ?';
+            $params = array($nombre);
+        } else{
+            $sql = 'SELECT id_habilidad
+                    FROM habilidades
+                    WHERE nombre_habilidad = ? AND id_habilidad != ?';
+            $params = array($nombre, $this->id);
+        }
         return Database::getRow($sql, $params);
     }
 

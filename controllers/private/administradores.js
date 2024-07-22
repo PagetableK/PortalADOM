@@ -83,11 +83,34 @@ const fillTable = async (form = null) => {
     if (DATA.status) {
         // Se recorre el conjunto de registros fila por fila.
         DATA.dataset.forEach(row => {
+
+            let nombre = row.NOMBRE;
+
+            let nombreArray = nombre.split(" ");
+        
+            let nombreCapitalizado = "";
+        
+            for(var i = 0; i < nombreArray.length; i++){
+        
+                nombreCapitalizado += " "+nombreArray[i].charAt(0).toUpperCase() + nombreArray[i].substring(1);
+            }
+
+            let apellido = row.APELLIDO;
+
+            let apellidoArray = apellido.split(" ");
+        
+            let apellidoCapitalizado = "";
+        
+            for(var i = 0; i < apellidoArray.length; i++){
+        
+                apellidoCapitalizado += " "+apellidoArray[i].charAt(0).toUpperCase() + apellidoArray[i].substring(1);
+            }
+
             // Se crean y concatenan las filas de la tabla con los datos de cada registro.
             TABLE_BODY.innerHTML += `
                 <tr class="${getRowBackgroundColor(row.ESTADO)}">
-                    <td>${row.NOMBRE}</td>
-                    <td>${row.APELLIDO}</td>
+                    <td>${nombreCapitalizado}</td>
+                    <td>${apellidoCapitalizado}</td>
                     <td>${row.CORREO}</td>
                     <td class="${getRowColor(row.ESTADO)}">${row.ESTADO}</td>
                     <td>

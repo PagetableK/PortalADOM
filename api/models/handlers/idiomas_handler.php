@@ -48,10 +48,17 @@ class IdiomasHandler
 
     public function checkDuplicateWithId($nombre)
     {
-        $sql = 'SELECT id_idioma
-                FROM idiomas
-                WHERE nombre_idioma = ?';
-        $params = array($nombre);
+        if($this->id == null){
+            $sql = 'SELECT id_idioma
+                    FROM idiomas
+                    WHERE nombre_idioma = ?';
+            $params = array($nombre);
+        } else{
+            $sql = 'SELECT id_idioma
+                    FROM idiomas
+                    WHERE nombre_idioma = ? AND id_idioma != ?';
+            $params = array($nombre, $this->id);
+        }
         return Database::getRow($sql, $params);
     }
 

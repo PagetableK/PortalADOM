@@ -367,7 +367,7 @@ class CurriculumData extends CurriculumHandler
     public function setDescripcion($valor, $min = 20, $max = 300)
     {
         // Se valida que el valor sea de tipo alfanumérico.
-        if (!Validator::validateAlphanumeric($valor)) {
+        if (!Validator::validateString($valor)) {
             // En caso de no serlo se devuelve el error.
             $this->info_error = 'La descripción solo puede contener caracteres alfanuméricos';
             return false;

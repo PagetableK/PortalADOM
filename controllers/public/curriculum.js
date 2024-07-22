@@ -396,7 +396,7 @@ const openReport = async () => {
                 item['id_curriculum'] === rowCurriculum['id_curriculum'] &&
                 item['nombre_grado'] &&
                 item['titulo_estudio']
-            ).map(item => `. ${item['nombre_grado']} en ${item['titulo_estudio']}, ${item['nombre_institucion'] ? item['nombre_institucion'] : ''} ${item['nombre_institucion_estudio'] ? item['nombre_institucion_estudio'] : ''} ${item['fecha_finalizacion_estudio'] ? item['fecha_finalizacion_estudio'] : 'Cursando'}`);
+            ).map(item => `. ${item['nombre_grado']} en ${item['titulo_estudio']}, ${item['nombre_institucion'] ? item['nombre_institucion'] : ''} ${item['nombre_institucion_estudio'] ? item['nombre_institucion_estudio'] : ''} - ${item['fecha_finalizacion_estudio'] ? item['fecha_finalizacion_estudio'] : 'Cursando'}`);
 
 
             // Verificar si hay formaciones para mostrar
@@ -524,11 +524,11 @@ const cargarEstudios = async () => {
 
             let institucion = '';
 
-            row.nombre_institucion != "" ? institucion = row.nombre_institucion : institucion = DATA_INSTITUCIONES.dataset.filter(function (entry) { return entry.id_institucion === row.id_institucion })[0].nombre_institucion;
+            row.nombre_institucion != "" ? institucion = row.nombre_institucion : institucion = DATA_INSTITUCIONES.dataset.filter(function (entry) { return entry.id_institucion == row.id_institucion })[0].nombre_institucion;
 
             CONTENEDOR_ESTUDIOS.innerHTML += `
             <div class="d-flex gap-2 contenedorElementoCV rounded-5 p-2 align-items-center">
-                <p class="psinmargen tex-center"><span class="fw-bold">${DATA_GRADOS.dataset.filter(function (entry) { return entry.ID === row.id_grado; })[0].NOMBRE}</span> en <span class="fw-bold"> <span class="fw-bold">${row.titulo_estudio}</span>, ${institucion}</span> - <span class="fw-bold">${row.fecha_finalizacion_estudio != "" ? row.fecha_finalizacion_estudio : "Cursando"}</span></p>
+                <p class="psinmargen tex-center"><span class="fw-bold">${DATA_GRADOS.dataset.filter(function (entry) { return entry.ID == row.id_grado; })[0].NOMBRE}</span> en <span class="fw-bold"> <span class="fw-bold">${row.titulo_estudio}</span>, ${institucion}</span> - <span class="fw-bold">${row.fecha_finalizacion_estudio != "" ? row.fecha_finalizacion_estudio : "Cursando"}</span></p>
                 <i class="bi bi-x-square text-danger" onclick="eliminarEstudio('${row.identificador}')"></i>
             </div>`;
         });
@@ -648,7 +648,7 @@ const cargarIdiomasCV = async () => {
 
             CONTENEDOR_IDIOMAS.innerHTML += `
             <div class="d-flex gap-2 contenedorElementoCV rounded-5 p-2 align-items-center">
-                <p class="psinmargen tex-center"><span class="fw-bold">${DATA_IDIOMAS.dataset.filter(function (entry) { return entry.ID === row.idioma; })[0].NOMBRE}</span> - <span class="fw-bold">${row.nivel}</span></p>
+                <p class="psinmargen tex-center"><span class="fw-bold">${DATA_IDIOMAS.dataset.filter(function (entry) { return entry.ID == row.idioma; })[0].NOMBRE}</span> - <span class="fw-bold">${row.nivel}</span></p>
                 <i class="bi bi-x-square text-danger" onclick="eliminarIdioma('${row.identificador}')"></i>
             </div>`;
         });
@@ -676,7 +676,7 @@ const cargarHabilidadesCV = async () => {
         Object.values(ROW).forEach(row => {
             CONTENEDOR_HABILIDADES.innerHTML += `
             <div class="d-flex gap-2 contenedorElementoCV rounded-5 p-2 align-items-center">
-                <p class="psinmargen tex-center"><span class="fw-bold">${DATA_HABILIDADES.dataset.filter(function (entry) { return entry.id_habilidad === row.habilidad; })[0].nombre_habilidad}</span> - <span class="fw-bold">${row.nivel}</span></p>
+                <p class="psinmargen tex-center"><span class="fw-bold">${DATA_HABILIDADES.dataset.filter(function (entry) { return entry.id_habilidad == row.habilidad; })[0].nombre_habilidad}</span> - <span class="fw-bold">${row.nivel}</span></p>
                 <i class="bi bi-x-square text-danger" onclick="eliminarHabilidad('${row.identificador}')"></i>
             </div>`;
         });
@@ -1597,7 +1597,7 @@ BOTON_EDITAR.addEventListener('click', async () => {
         // Se muestra el contenedor con el botón para regresar.
         CONTENEDOR_BOTON.classList.remove('d-none');
         // Se oculta el mensaje.
-        CONTENEDOR_MENSAJE.classList.add('d-none');
+        MENSAJE_INFO.innerHTML = `<i class="bi bi-info-circle-fill iconoCeleste"></i>La información se almacenará hasta que haga click en el botón del apartado 4: Información de contacto.`;
         // Se cambia el valor de la variable global (Se utiliza en el evento submit del FORM_CURRICULUM);
         editarCv = true;
         // Se inicializa la constante dónde se almacenará el idCurriculum.

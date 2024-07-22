@@ -62,7 +62,7 @@ SAVE_FORM.addEventListener('submit', async (event) => {
             sweetAlert(1, DATA.message, true);
             // Se carga nuevamente la tabla para visualizar los cambios.
             fillTable();
-        } else if(DATA.error == "El área laboral ya ha sido agregado"){
+        } else if(DATA.error == "El área laboral ya ha sido agregada"){
     
             sweetAlert(3, DATA.error, false);
             

@@ -331,7 +331,7 @@ function configurarTelefonos() {
 
             // Para el guión.
             for (var i = 0; i < telefono.length; i++) {
-                if (i === 4) {
+                if (i == 4) {
                     formattedTelefono += '-';
                 }
                 formattedTelefono += telefono[i];
@@ -579,11 +579,11 @@ const cargarEstudios = async () => {
 
             let institucion = '';
 
-            row.nombre_institucion != "" ? institucion = row.nombre_institucion : institucion = DATA_INSTITUCIONES.dataset.filter(function (entry) { return entry.id_institucion === parseInt(row.id_institucion) })[0].nombre_institucion;
+            row.nombre_institucion != "" ? institucion = row.nombre_institucion : institucion = DATA_INSTITUCIONES.dataset.filter(function (entry) { return entry.id_institucion == parseInt(row.id_institucion) })[0].nombre_institucion;
 
             CONTENEDOR_ESTUDIOS.innerHTML += `
             <div class="d-flex gap-2 contenedorElementoCV rounded-5 p-2 align-items-center">
-                <p class="psinmargen tex-center"><span class="fw-bold">${DATA_GRADOS.dataset.filter(function (entry) { return entry.ID === parseInt(row.id_grado); })[0].NOMBRE}</span> en <span class="fw-bold"> <span class="fw-bold">${row.titulo_estudio}</span>, ${institucion}</span> - <span class="fw-bold">${row.fecha_finalizacion_estudio != "" ? row.fecha_finalizacion_estudio : "Cursando"}</span></p>
+                <p class="psinmargen tex-center"><span class="fw-bold">${DATA_GRADOS.dataset.filter(function (entry) { return entry.ID == parseInt(row.id_grado); })[0].NOMBRE}</span> en <span class="fw-bold"> <span class="fw-bold">${row.titulo_estudio}</span>, ${institucion}</span> - <span class="fw-bold">${row.fecha_finalizacion_estudio != "" ? row.fecha_finalizacion_estudio : "Cursando"}</span></p>
                 <i class="bi bi-x-square text-danger" onclick="eliminarEstudio('${row.identificador}')"></i>
             </div>`;
         });
@@ -683,7 +683,7 @@ const cargarIdiomasCV = async () => {
 
             CONTENEDOR_IDIOMAS.innerHTML += `
             <div class="d-flex gap-2 contenedorElementoCV rounded-5 p-2 align-items-center">
-                <p class="psinmargen tex-center"><span class="fw-bold">${DATA_IDIOMAS.dataset.filter(function (entry) { return entry.ID === parseInt(row.idioma); })[0].NOMBRE}</span> - <span class="fw-bold">${row.nivel}</span></p>
+                <p class="psinmargen tex-center"><span class="fw-bold">${DATA_IDIOMAS.dataset.filter(function (entry) { return entry.ID == parseInt(row.idioma); })[0].NOMBRE}</span> - <span class="fw-bold">${row.nivel}</span></p>
                 <i class="bi bi-x-square text-danger" onclick="eliminarIdioma('${row.identificador}')"></i>
             </div>`;
         });
@@ -707,7 +707,7 @@ const cargarHabilidadesCV = async () => {
 
             CONTENEDOR_HABILIDADES.innerHTML += `
             <div class="d-flex gap-2 contenedorElementoCV rounded-5 p-2 align-items-center">
-                <p class="psinmargen tex-center"><span class="fw-bold">${DATA_HABILIDADES.dataset.filter(function (entry) { return entry.id_habilidad === parseInt(row.habilidad); })[0].nombre_habilidad}</span> - <span class="fw-bold">${row.nivel}</span></p>
+                <p class="psinmargen tex-center"><span class="fw-bold">${DATA_HABILIDADES.dataset.filter(function (entry) { return entry.id_habilidad == parseInt(row.habilidad); })[0].nombre_habilidad}</span> - <span class="fw-bold">${row.nivel}</span></p>
                 <i class="bi bi-x-square text-danger" onclick="eliminarHabilidad('${row.identificador}')"></i>
             </div>`;
         });
@@ -989,7 +989,7 @@ FORM_REFERENCIA.addEventListener('submit', async (e) => {
             telefonoReferencia = [];
         } else {
 
-            telefonoReferencia = REFERENCIAS.filter(function (entry) { return entry.telefono === FORM_REFERENCIA['telefonoReferencia'].value });
+            telefonoReferencia = REFERENCIAS.filter(function (entry) { return entry.telefono == FORM_REFERENCIA['telefonoReferencia'].value });
         }
 
         const FORM = new FormData(FORM_REFERENCIA);
@@ -1056,7 +1056,7 @@ FORM_IDIOMA.addEventListener('submit', async (e) => {
             idioma = [];
         } else {
 
-            idioma = IDIOMAS.filter(function (entry) { return entry.idioma === FORM_IDIOMA['idioma'].value });
+            idioma = IDIOMAS.filter(function (entry) { return entry.idioma == FORM_IDIOMA['idioma'].value });
         }
 
         const FORM = new FormData(FORM_IDIOMA);
@@ -1120,7 +1120,7 @@ FORM_HABILIDAD.addEventListener('submit', async (e) => {
             habilidad = [];
         } else {
 
-            habilidad = HABILIDADES.filter(function (entry) { return entry.habilidad === FORM_HABILIDAD['nombreHabilidad'].value });
+            habilidad = HABILIDADES.filter(function (entry) { return entry.habilidad == FORM_HABILIDAD['nombreHabilidad'].value });
         }
 
         const FORM = new FormData(FORM_HABILIDAD);
