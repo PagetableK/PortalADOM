@@ -11,8 +11,6 @@ CREATE TABLE administradores(
 	estado_administrador TINYINT(1) NOT NULL DEFAULT 1
 );
 
-INSERT INTO administradores (correo_administrador,clave_administrador,nombre_administrador,apellido_administrador,estado_administrador) VALUES ('joel@gmail.com', '$2y$10$1RwTuaRZaRgGwPbYh5jUvupLahtu8Y7T2Ps8TO/eeoT1t0lQkn4Ca', 'joel', 'mena',1);
-
 CREATE TABLE aspirantes(
 	id_aspirante INT PRIMARY KEY AUTO_INCREMENT,
 	nombre_aspirante VARCHAR(50) NOT NULL,
