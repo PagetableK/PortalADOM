@@ -300,7 +300,6 @@ const openState = async (id) => {
             FORM.append('idAspirante', id);
             // Petición para eliminar el registro seleccionado.
             const DATA = await fetchData(ASPIRANTE_API, 'changeState', FORM);
-            console.log(DATA.status);
             // Se comprueba si la respuesta es satisfactoria, de lo contrario se muestra un mensaje con la excepción.
             if (DATA.status) {
                 // Se muestra un mensaje de éxito.

@@ -176,7 +176,6 @@ const cargarApartados = async (id) => {
         // Se carga el correo del currículum en el campo.
         CORREO_ASPIRANTE.value = DATA.dataset.correo_curriculum;
         // Se define la ruta de la imagen almacenada en la API.
-        console.log(DATA.dataset.imagen_aspirante);
         IMAGEN_ASPIRANTE.src = "../../api/images/aspirantes/" + DATA.dataset.imagen_aspirante;
         // Se desactiva el atributo required del input imgAspirante.
         ARCHIVO_IMAGEN.required = false;

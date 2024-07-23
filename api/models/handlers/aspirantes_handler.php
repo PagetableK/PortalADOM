@@ -17,7 +17,6 @@ class AspirantesHandler
     protected $fecha_nacimiento = null;
     protected $genero = null;
     protected $estado = null;
-    protected $idAmin = null;
 
     /*
     *   Métodos para gestionar la cuenta del aspirante.

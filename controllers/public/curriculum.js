@@ -131,7 +131,6 @@ const getCurriculums = async () => {
 
 
 const openReport = async () => {
-    console.log("openReport llamado");
     // Asegúrate de que la biblioteca jsPDF esté cargada
     const { jsPDF } = window.jspdf;
 

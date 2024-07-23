@@ -6,7 +6,7 @@ require_once('../../models/handlers/areas_laborales_handler.php');
 /*
  *  Clase para manejar el encapsulamiento de los datos de la tabla AREAS_LABORALES.
  */
-class AreaslaboralesData extends AreaslaboralesHandler
+class AreasLaboralesData extends AreasLaboralesHandler
 {
     /*
      *  Atributos adicionales.
@@ -34,7 +34,7 @@ class AreaslaboralesData extends AreaslaboralesHandler
             $this->data_error = 'El nombre del área debe ser un valor alfanumérico';
             return false;
         }
-        elseif (AreaslaboralesHandler::checkDuplicateWithId($value)) {
+        elseif (AreasLaboralesHandler::checkDuplicateWithId($value)) {
             $this->data_error = 'El área laboral ya ha sido agregada';
             return false;
         } elseif (Validator::validateLength($value, $min, $max)) {

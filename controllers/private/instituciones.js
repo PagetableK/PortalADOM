@@ -140,7 +140,6 @@ const openUpdate = async (id) => {
         SAVE_FORM.reset();
         // Se inicializan los campos con los datos.
         const ROW = DATA.dataset;
-        console.log(DATA)
         ID_INSTITUCION.value = ROW.id_institucion;
         NOMBRE_INSTITUCION.value = ROW.nombre_institucion;
         // Se muestra el botón de actualizar y se oculta el de agregar.

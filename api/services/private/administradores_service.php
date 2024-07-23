@@ -134,6 +134,7 @@ if (isset($_GET['action'])) {
                 break;
             default:
                 $result['error'] = 'Acción no disponible dentro de la sesión';
+                break;
         }
     } else {
         // Se compara la acción a realizar cuando un administrador no ha iniciado sesión.

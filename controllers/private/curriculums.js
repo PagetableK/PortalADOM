@@ -307,7 +307,6 @@ const openDelete = async (id) => {
 }
 
 const openReport = async (id) => {
-    console.log("openReporta llamado");
     // Asegúrate de que la biblioteca jsPDF esté cargada
     const { jsPDF } = window.jspdf;
 
@@ -317,8 +316,6 @@ const openReport = async (id) => {
     const FORM = new FormData();
 
     FORM.append('idCurriculum', id);
-
-    console.log(id);
 
     // Fetch data from your API or data source
     const dataCurriculum = await fetchData(CURRICULUM_API, 'readCurriculums', FORM);
@@ -654,8 +651,6 @@ const openReport = async (id) => {
                 // Actualizar yPositionV al final de la sección de certificados
                 yPositionV = Math.max(yPositionV, certY + 10);
             }
-
-
 
             const pdfOutput = doc.output('dataurlnewwindow'); // Genera un Blob en lugar de una URL
 
