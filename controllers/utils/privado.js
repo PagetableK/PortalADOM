@@ -100,6 +100,13 @@ const cargarPlantilla = async () => {
                             <span>Cerrar sesión</span>
                         </a>
                     </li>
+                    <!-- Sobre licencia Creative Commons -->
+                    <li class="sidebar-item d-none">
+                        <a class="sidebar-link text-light bg-info" href="creative_commons.html">
+                            <i class="bi bi-info-circle"></i>
+                            <span>Cerrar sesión</span>
+                        </a>
+                    </li>
                 </ul>
             </aside>`
             );
