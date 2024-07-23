@@ -1,7 +1,12 @@
+-- Elimina la base de datos si ya existe.
 DROP DATABASE IF EXISTS dbadom;
 
-CREATE DATABASE IF NOT EXISTS dbadom; USE dbadom;
+-- Crea la base de datos si no existe y la usa.
+CREATE DATABASE IF NOT EXISTS dbadom; 
 
+USE dbadom;
+
+-- Almacena la información de los administradores.
 CREATE TABLE administradores(
 	id_administrador INT PRIMARY KEY AUTO_INCREMENT,
 	correo_administrador VARCHAR(100) UNIQUE NOT NULL,
@@ -11,6 +16,7 @@ CREATE TABLE administradores(
 	estado_administrador TINYINT(1) NOT NULL DEFAULT 1
 );
 
+-- Almacena la información de los aspirantes.
 CREATE TABLE aspirantes(
 	id_aspirante INT PRIMARY KEY AUTO_INCREMENT,
 	nombre_aspirante VARCHAR(50) NOT NULL,
@@ -26,36 +32,44 @@ CREATE TABLE aspirantes(
 	REFERENCES administradores(id_administrador)
 );
 
+-- Almacena los grados académicos.
 CREATE TABLE grados_academicos(
 	id_grado INT PRIMARY KEY AUTO_INCREMENT,
 	nombre_grado VARCHAR(60) NOT NULL UNIQUE
 );
 
+-- Almacena las instituciones educativas.
 CREATE TABLE instituciones(
 	id_institucion INT PRIMARY KEY AUTO_INCREMENT,
 	nombre_institucion VARCHAR(100) NOT NULL UNIQUE
 );
 
+-- Almacena los idiomas.
 CREATE TABLE idiomas(
 	id_idioma INT PRIMARY KEY AUTO_INCREMENT,
 	nombre_idioma VARCHAR(30) NOT NULL UNIQUE
 );
 
+-- Almacena los rubros de las empresas.
 CREATE TABLE rubros_empresas(
 	id_rubro INT PRIMARY KEY AUTO_INCREMENT,
 	nombre_rubro VARCHAR(150) NOT NULL UNIQUE
 );
 
+-- Almacena las áreas laborales.
 CREATE TABLE areas_laborales(
 	id_area INT PRIMARY KEY AUTO_INCREMENT,
 	nombre_area VARCHAR(150) UNIQUE
 );
 
+-- Almacena las habilidades.
 CREATE TABLE habilidades(
 	id_habilidad INT PRIMARY KEY AUTO_INCREMENT,
 	nombre_habilidad VARCHAR(75) NOT NULL UNIQUE
 );
 
+-- Almacena la información de contacto del currículum de los aspirantes,
+-- además de servir como tabla padre para los diversos apartados del currículum.
 CREATE TABLE curriculum_aspirantes(
 	id_curriculum INT PRIMARY KEY AUTO_INCREMENT,
 	imagen_aspirante VARCHAR(200) NULL,
@@ -68,6 +82,7 @@ CREATE TABLE curriculum_aspirantes(
 	REFERENCES aspirantes(id_aspirante)
 );
 
+-- Almacena los estudios del currículum de los aspirantes.
 CREATE TABLE estudios_aspirantes(
 	id_estudio INT PRIMARY KEY AUTO_INCREMENT,
 	titulo_estudio VARCHAR(70) NOT NULL,
@@ -87,6 +102,7 @@ CREATE TABLE estudios_aspirantes(
 	REFERENCES instituciones(id_institucion)
 );
 
+-- Almacena los certificados del currículum de los aspirantes.
 CREATE TABLE certificados_aspirantes(
 	id_certificado INT PRIMARY KEY AUTO_INCREMENT,
 	titulo_certificado VARCHAR(70) NOT NULL,
@@ -98,6 +114,7 @@ CREATE TABLE certificados_aspirantes(
 	REFERENCES curriculum_aspirantes(id_curriculum)
 );
 
+-- Almacena las experiencias laborales del currículum de los aspirantes.
 CREATE TABLE experiencias_aspirantes(
 	id_experiencia INT PRIMARY KEY AUTO_INCREMENT,
 	nombre_empresa VARCHAR(100) NOT NULL,
@@ -119,6 +136,7 @@ CREATE TABLE experiencias_aspirantes(
 	REFERENCES curriculum_aspirantes(id_curriculum)
 );
 
+-- Almacena los idiomas que dominan los aspirantes.
 CREATE TABLE idiomas_aspirantes(
 	id_idioma_aspirante INT PRIMARY KEY AUTO_INCREMENT,
 	nivel_idioma ENUM('Básico', 'Intermedio', 'Avanzado') NOT NULL,
@@ -132,6 +150,7 @@ CREATE TABLE idiomas_aspirantes(
 	REFERENCES curriculum_aspirantes(id_curriculum)
 );
 
+-- Almacena las habilidades del currículum que poseen los aspirantes.
 CREATE TABLE habilidades_aspirantes(
 	id_habilidad_aspirante INT PRIMARY KEY AUTO_INCREMENT,
 	nivel_habilidad ENUM('Básico', 'Intermedio', 'Avanzado') NOT NULL,
@@ -144,6 +163,8 @@ CREATE TABLE habilidades_aspirantes(
 	FOREIGN KEY (id_habilidad) 
 	REFERENCES habilidades(id_habilidad)
 );
+
+-- Almacena las referencias del currículum de los aspirantes.
 CREATE TABLE referencias_aspirantes(
 	id_referencia INT PRIMARY KEY AUTO_INCREMENT,
 	nombre_referencia VARCHAR(50) NOT NULL,
