@@ -28,3 +28,10 @@ Todas las librerías se encuentran instaladas de manera local en la carpeta reso
     -HeidiSQL.
     -MySQL Workbench.
     -phpMyAdmin.
+
+•Servidor utilizado para correr el proyecto de manera local: Apache XAMPP Control Panel v3.3.0.
+
+Para ejecutar el proyecto de manera local:
+1. Navegar hacia la dirección de instalación de xampp y abrir la carpeta "xampp".
+2. Una vez dentro de la carpeta abrir la carpeta "htdocs" y pegar el contenido del repositorio.
+NOTA: La carpeta que se agrega dentro de htdocs debe tener como nombre PortalADOM (Dentro de esta carpeta deben estar las carpetas que se encuentran en este repositorio).
